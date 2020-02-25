@@ -1,0 +1,76 @@
+/////////////////////////////
+////    Misc Helpers    ////
+///////////////////////////
+// Ignore class makes invisible while keeping bounds - ignores click
+.ignore{
+	opacity: 0;
+	pointer-events: none;
+	transition: var(--transition);
+}
+
+// Display block
+.block{
+	display: block;
+}
+////////////////////////////////
+////    Spacing Helpers    ////
+//////////////////////////////
+
+// Global
+.make-space(@suffix: xs; @value:10;);
+.make-space(@suffix: sm; @value:20;);
+.make-space(@suffix: md; @value:35;);
+.make-space(@suffix: lg; @value:60;);
+.make-space(@suffix: xl; @value:100;);
+.make-space(@suffix: xxl; @value:180;);
+
+// Make smaller on mobile
+@media (max-width: @screenMD) {
+	.make-space(@suffix: xs; @value:8;);
+	.make-space(@suffix: sm; @value:16;);
+	.make-space(@suffix: md; @value:30;);
+	.make-space(@suffix: lg; @value:50;);
+	.make-space(@suffix: xl; @value:80;);
+	.make-space(@suffix: xxl; @value:140;);
+}
+
+// Create responsive classes to use spacing
+// Ex mtop-xs, mbottom-lg, pleft-xl, etc...
+.make-space(@suffix; @value) {
+
+	// Margin
+	.mtop-@{suffix} {
+		margin-top: ~"@{value}px";
+	}
+	.mright-@{suffix} {
+		margin-right: ~"@{value}px";
+	}
+	.mbottom-@{suffix} {
+		margin-bottom: ~"@{value}px";
+	}
+	.mleft-@{suffix} {
+		margin-left: ~"@{value}px";
+	}
+
+	// Padding
+	.ptop-@{suffix} {
+		box-sizing: border-box;
+		padding-top: ~"@{value}px";
+	}
+	.pright-@{suffix} {
+		box-sizing: border-box;
+		padding-right: ~"@{value}px";
+	}
+	.pbottom-@{suffix} {
+		box-sizing: border-box;
+		padding-bottom: ~"@{value}px";
+	}
+	.pleft-@{suffix} {
+		box-sizing: border-box;
+		padding-left: ~"@{value}px";
+	}
+	.padding-@{suffix}{
+		box-sizing: border-box;
+		padding: ~"@{value}px";
+	}
+}

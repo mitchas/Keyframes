@@ -1,0 +1,231 @@
+////////////////////////////
+// Responsive Variables must be less variables
+// because CSS variables can't be used in @media
+////////////////////////////
+@screenXS: 380px;
+@screenSM: 480px;
+@screenMD: 768px;
+@screenLG: 992px;
+@screenXL: 1400px;
+// Screen Mobile same as MD
+@screenMobile: @screenMD;
+
+
+
+
+//////////////////////////////////////////////////////////
+//////  Root variables can be toggled by themes  //////
+////////////////////////////////////////////////////////
+:root {
+
+	///////////////////////////////////
+	///////////////////////////////////
+	// Global variables
+	// Not specific to light theme
+	///////////////////////////////////
+	///////////////////////////////////
+
+	//////////////
+	// Fonts
+	//////////////
+	--sans: 'Space Grotesk', sans-serif;
+	--fontAwesome: 'Font Awesome 5 Pro';
+	--fontAwesomeBrands: 'Font Awesome 5 Brands';
+	--systemFont: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+
+	//////////////
+	// Misc
+	//////////////
+	--transition: 0.2s;
+	--transitionFast: 0.1s;
+	--bezierTransition: all 0.18s cubic-bezier(0.5, 0.1, 0.75, 1.35);
+	--bezierTransitionSlow: all 0.28s cubic-bezier(0.5, 0.1, 0.75, 1.35);
+	--borderRadius: 12px;
+	--borderRadiusSmall: 6px;
+	--borderRadiusLarge: 50px;
+
+
+
+	////////////////////
+	//  Light Theme  //
+	////////////////////
+
+	// Background Colors
+	--lightbox: rgba(31,58,56,0.12);
+	--background: #b6fcfa;
+		--backgroundLayer: #D7FDFC;
+		--navBackground: #b6fcfa;
+		--absolute: #FFFFFF;
+
+	// Inputs
+	--inputBackground: #DDFDFC;
+		--inputDisabled: rgba(166, 234, 232, 0.55);
+		--inputDisabledText: #79ABA9;
+
+	// Text
+	--text: #204a4b;
+		--textLight: #486A6B;
+		--textLighter: #718B8C;
+		--textLightest: #8AA0A0;
+		--textInvert: #CBF1F2;
+
+	// Links
+	// Same as primary
+	--links: #1a636c;
+		--linksHover: #185A63;
+
+	// Primary color - lighter version of background
+	--primary: #1a636c;
+		--primaryHover: #185A63;
+		--primaryFade: #2E7179;
+
+	// Secondary color
+	--secondary: #594855;
+		--secondaryHover: #51424E;
+		--secondaryFade: #685864;
+
+	// Blue
+	// Same as "Primary"
+	--blue: #0055FB;
+		--blueHover: #004EE5;
+		--blueFade: #1764fb;
+
+	// Green
+	--green: #3CD278;
+		--greenHover: #37BF6E;
+		--greenFade: #4DD684;
+
+	// Red
+	--red: #e5583f;
+		--redHover: #D1503A;
+		--redFade: #E76750;
+		--redTransparent: rgba(229, 88, 63, 0.11);
+
+	// Yellow
+	// Same as primary
+	--yellow: #FBBE00;
+
+	// Grey
+	--grey: #C5CCD6;
+		--greyHover: #B4BAC3;
+	// Also gray
+	--gray: #C5CCD6;
+		--grayHover: #B4BAC3;
+
+	// Borders
+	--border: #8FE0DD;
+		--borderHover: #59B2AF;
+		--borderFade: rgba(89, 178, 175,0.5);
+	--outline: rgba(99, 170, 168, 0.25);
+
+	// Other
+	--floatingButtonBackground: #0B101E;
+		--floatingButtonIcon: #FFFFFF;
+
+	// Box Shadows
+	--shadow:
+		0px -30px 45px -18px rgba(40,60,100,0.0415),
+		0px 30px 45px -18px rgba(40,60,100,0.0415);
+  
+	--shadowSmall: 
+		0 0.5px 0.4px -5px rgba(0, 0, 0, 0.028),
+		0 1.8px 1.3px -5px rgba(0, 0, 0, 0.042),
+		0 8px 6px -5px rgba(0, 0, 0, 0.07);
+
+}
+
+////////////////////
+//  Dark Theme  //
+////////////////////
+[data-theme="dark"] {
+
+	// Background Colors
+	--lightbox: rgba(0,0,0,0.4);
+	--background: #0D0D0F;
+		--backgroundLayer: #1F1E23;
+		--navBackground: #0D0D0F;
+		--absolute: #000000;
+
+	// Inputs
+	--inputBackground: #2D2C35;
+		--inputDisabled: rgba(62, 61, 70, 0.7);
+		--inputDisabledText: rgb(110, 109, 117);
+
+	// Text
+	--text: #FFFFFF;
+		--textLight: #DFDEE5;
+		--textLighter: #C6C5CC;
+		--textLightest: rgb(127, 127, 129);
+		--textInvert: #0D0D0F;
+
+	// Links
+	--links: #5C79B5;
+		--linksHover: #546EA5;
+
+	// Primary color
+	--primary: #0055FB;
+		--primaryHover: #004EE5;
+		--primaryFade: #1764fb;
+
+	// Secondary color
+	--secondary: #BA8B00;
+		--secondaryHover: #AA7F00;
+		--secondaryFade: #C09157;
+
+	// Blue
+	// Same as "Primary"
+	--blue: #0055FB;
+		--blueHover: #004EE5;
+		--blueFade: #1764fb;
+
+	// Green
+	--green: #048591;
+		--greenHover: #047984;
+		--greenFade: #1A909B;
+
+	// Borders
+	--border: #403F49;
+		--borderHover: #666470;
+		--borderFade: rgba(64, 63, 73, 0.5);
+	--outline: rgba(96, 94, 109,0.35);
+
+	// Red
+	--red: #C1322A;
+		--redHover: #B02E27;
+		--redFade: #C6443D;
+		--redTransparent: rgba(253,71,82,0.18);
+
+	// Grey
+	--grey: #778393;
+		--greyHover: #6F7A89;
+	// Also gray
+	--gray: #778393;
+		--grayHover: #6F7A89;
+
+	// Yellow
+	--yellow: #BA8B00;
+
+	// Other
+	--floatingButtonBackground: #2D2C35;
+		--floatingButtonIcon: #B1B7BF;
+
+	// Box Shadows
+	// --shadow:
+	// 	0 1.4px 2.7px -15px rgba(0, 0, 0, 0.404),
+	// 	0 4.7px 8.9px -15px rgba(0, 0, 0, 0.596),
+	// 	0 21px 40px -15px rgba(0, 0, 0, 1);
+
+	--shadow:
+		0px 20px 30px -6px rgba(0,0,0,0.35),
+		0px -20px 30px -6px rgba(0,0,0,0.35);
+
+
+	// --shadowBig: 0 10px 35px -2px rgba(30, 16, 84, .1);
+	--shadowSmall: 
+		0 0.8px 1.4px -15px rgba(0, 0, 0, 0.404),
+		0 2.7px 4.7px -15px rgba(0, 0, 0, 0.596),
+		0 12px 21px -15px rgba(0, 0, 0, 1);
+	
+}
+

@@ -1,0 +1,135 @@
+@import '../assets/SpaceGrotesk/stylesheet.css';
+@import 'variables';
+@import 'reset';
+@import 'helpers';
+@import 'forms';
+@import 'modals';
+@import 'typography';
+@import 'animations';
+
+body, html{
+	margin: 0 auto;
+	font-family: var(--sans);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	min-height: 100%;
+	width: 100%;
+	color: var(--text);
+	background-color: var(--background);
+	max-height: 100%;
+}
+html{
+	display: flex;
+}
+body{
+	max-height: none;
+	box-sizing: border-box;
+	min-height: 100%;
+	flex-grow: 3;
+
+	&.scroll-lock{
+		overflow: hidden;
+		max-height:100%;
+	}
+
+	&.no-animations{
+		*{
+			transition-duration: 0s !important;
+			animation-duration: 0s !important;
+		}
+	}
+}
+
+input,button,textarea,a,select{
+	outline: 2px dashed transparent;
+	outline-offset: 4px;
+	transition: outline 0.1s ease, outline-offset 0.2s ease;
+	
+	// Focus, show outline
+	&:focus{
+		outline: 2px dashed var(--outline) !important;
+		outline-offset: 4px;
+		transition: outline 0.1s ease, outline-offset 0.2s ease;
+
+		// Disable outline on mobile
+		@media (max-width: @screenMD) {
+			outline: none;
+		}
+	}
+	
+	// Acttive
+	&:active{
+		outline: 2px dashed transparent;
+    }
+}
+
+*{
+
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
+	text-rendering: optimizeLegibility;
+
+    @media (max-width: 550px) {
+        &:not([contenteditable="true"]),
+        &:not(input){
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    }
+}
+
+::-webkit-scrollbar{
+	width: 8px;
+	height: 8px;
+	// width: 0px;
+	// display: none;
+	width: 0px;
+}
+
+::-webkit-scrollbar-track{
+	display: none;
+	width: 0px;
+
+}
+
+::-webkit-scrollbar-thumb{
+	background: rgba(0,0,0,0.15);
+	box-sizing: border-box;
+	border-radius: 3px;
+	display: none;
+	width: 0px;
+
+}
+
+::selection {
+	background: #1857EF; /* Gecko Browsers */
+	color: #E0EAF9;
+}
+::-moz-selection {
+	background: rgb(187, 189, 194); /* Gecko Browsers */
+	color: #E0EAF9;
+}
+
+// Default page styles
+// Don't use class .page for pages that need custom headers, etc
+.page{
+	box-sizing: border-box;
+	padding: 20px 0 50px 0;
+	overflow: auto;
+	height: 100%;
+
+	@media (max-width: @screenMD) {
+		padding: 30px 30px 70px 30px;
+	}
+
+	h1{
+		font-weight: 900;
+	}
+}
+
+

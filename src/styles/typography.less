@@ -1,0 +1,182 @@
+h1,h2,h3,h4,h5,h6,a,p,label{
+	font-family: var(--sans);
+}
+
+///////////////////
+//   Headings   //
+/////////////////
+h1,h2,h3,h4,h5,h6{
+	max-width: 700px;
+
+	&.unset{
+		max-width: none;
+	}
+}
+h1,h2{
+}
+h1{
+	font-size: 42px;	
+	color: var(--text);
+	padding: 0 0 4px 0;
+	line-height: 48px;
+	font-weight: 900;
+	letter-spacing: 0.5px;
+}
+h2{
+	font-size: 30px;
+	line-height: 38px;
+	color: var(--text);
+	padding: 0 0 2px 0;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+}
+h3, h4, h5{
+	color: var(--textLight);
+}
+h3{
+	font-size: 26px;
+	line-height: 34px;
+
+	// Adjust Mobile
+	@media (max-width: @screenMD) {
+		letter-spacing: -1px;
+	}
+}
+h4{
+	font-size: 22px;
+	font-weight: 500;
+	line-height: 30px;
+	letter-spacing: 0.5px;
+
+	// Adjust Mobile
+	@media (max-width: @screenMD) {
+		letter-spacing: -1px;
+	}
+}
+h5{
+	font-size: 18px;
+	font-weight: 900;
+	text-transform: uppercase;
+	line-height: 22px;
+	letter-spacing: 0.5px;
+}
+h6{
+	font-size: 14px;
+	color: var(--textLight);
+	font-weight: 800;
+	text-transform: uppercase;
+	line-height: 18px;
+	letter-spacing: 0.6px;
+}
+
+
+////////////////////////
+//   Text Elements   //
+//////////////////////
+// Paragraphs
+
+p{
+	font-size: 15px;
+	line-height: 26px;
+	max-width: 700px;
+	padding: 8px 0;
+	color: var(--textLight);
+	letter-spacing: 0.4px;
+	font-family: var(--systemFont);
+
+	@media (max-width: @screenMD) {
+		letter-spacing: 0.425px;
+	}
+
+	&.unset{
+		max-width: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	&.tight{
+		line-height: 20px;
+		@media (max-width: @screenMD) {
+			line-height: 18px;
+		}
+	}
+
+	// Decrease sizing
+	&.small{
+		font-size: 13px;
+		line-height: 20px;
+	}
+	// Increase sizing
+	&.big{
+		font-size: 20px;
+		line-height: 36px;
+
+		@media (max-width: @screenMD) {
+			font-size: 22px;
+			line-height: 36px;
+		}
+	}
+	
+	// Bold
+	b{
+		font-weight: 900;
+		letter-spacing: 0.7px;
+	}
+}
+
+// Default Links
+a{
+	color: var(--links);
+	transition: var(--transition);
+	letter-spacing: 0.3px;
+	font-weight: bold;
+
+	&:hover{
+		cursor: pointer;
+		color: var(--linksHover);
+		transition: var(--transition);
+	}
+}
+
+// Listts
+ul{
+	list-style-type: disc;
+	display: block;
+	box-sizing: border-box;
+	padding: 6px 0 6px 25px;
+
+	li{
+		line-height: 140%;
+		padding: 2px 0;
+	}
+}
+ol{
+	list-style-type: decimal;
+}
+ul{
+	list-style-type: disc;
+}
+
+
+////////////////////
+//   Modifiers   //
+//////////////////
+
+.accent{
+}
+.text-bright{
+	color: var(--text);
+}
+.text-dim{
+	color: var(--textLight);
+}
+
+// Horizontal Rule
+hr{
+	border: none;
+	border-top: 1px solid;
+	border-color: var(--border);
+	height: 1px;
+	overflow: hidden;
+	margin: 8px auto
+}

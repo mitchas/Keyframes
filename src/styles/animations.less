@@ -1,0 +1,91 @@
+//////////////////////////////////
+////    Page  Animations ////////
+////////////////////////////////
+// On **INITIAL** page load
+// Fade animation 0% to 100% opacity
+.load-enter-active {
+	animation: page-load .75s ease-out;
+}
+.load-leave-active {
+	animation: page-load .75s ease-in reverse;
+}
+
+@keyframes page-load {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+// Page animation
+// On page transition / route change
+.page-enter-active {
+	animation: page-in .2s ease;
+	// Change animation for mobile
+	// @media (max-width: @screenSM) {
+	// 	animation: page-in-mobile .22s;
+	// }
+}
+.page-leave-active {
+	animation: page-out .2s ease;
+}
+
+// Animation "page-in" and "page-out"
+// Translates from top of page into pace while also 0% -> 100% opacity
+@keyframes page-in {
+	0% {
+		opacity: 0;
+		transform: translateY(-80vh);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+@keyframes page-out {
+	0% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(80vh);
+	}
+}
+// Unused blur page transition
+// Blurs pages together when switching
+// @keyframes page-blur-in {
+// 	0% {
+// 		filter: blur(50px);
+// 	}
+// 	100% {
+// 		filter: blur(0px);
+// 	}
+// }
+// @keyframes page-blur-out {
+// 	0% {
+// 		filter: blur(0px);
+// 	}
+// 	100% {
+// 		filter: blur(50px);
+// 	}
+// }
+
+
+//////////////////////////////////
+////    Other  Animations ///////
+////////////////////////////////
+// Basic animation - fade and translate from bottom
+.basic-enter-active {
+	transition: all .2s ease;
+}
+.basic-leave-active {
+	transition: all .2s ease;
+}
+.basic-enter, .basic-leave-to{
+	transform: translateY(10px);
+	opacity: 0;
+}
+

@@ -1,0 +1,579 @@
+////////////////////////
+//      Fields       //
+//////////////////////
+// These are wrappers for input/label combos. 
+
+
+// Vertical fields
+.basic-field{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	max-width: 320px;
+	padding: 0 0 0 0;
+	position: relative;
+
+	@media (max-width: @screenMD) {
+		width: 100%;
+		max-width: none;
+	}
+
+	// Labels inside basic fields use default styling
+
+	// Field body
+	// Set standard text size, small text
+	.field-body{
+		font-weight: 600;
+		font-size: 18px;
+		letter-spacing: 0.4px;
+		padding: 2px 0;
+		line-height: 22px;
+
+		small{
+			display: block;
+			font-size: 12px;
+			font-weight: 600;
+			padding-top: 2px;
+			line-height: 14px;
+			letter-spacing: 0.5px;
+			color: var(--textLightest);
+			// opacity: 0.5;
+			text-transform: capitalize;
+		}
+
+		// Inputs full width of field
+		input{
+			width: 100%;
+		}
+	}
+}
+////////////////////////////
+//      Field Sett       //
+//////////////////////////
+// Horizontatl label:input display for the apps
+.field-set{
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	padding: 0 0 8px 0;
+	
+	label{
+		width: 45%;
+		min-width: 45%;
+		max-width: 45%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 12px;
+		font-weight: 500;
+		box-sizing: border-box;
+		padding-top: 5px;
+	}
+	.input-wrapper{
+		flex-grow: 3;
+		display: block;
+		max-width: 55%;
+		min-width: 55%;
+
+		input{
+			border-radius: 3px;
+			background-color: var(--absolute);
+			height: 30px;
+			font-size: 12px;
+			width: 100%;
+
+			// Increase size on mobile
+			@media (max-width: @screenMD) {
+				height: 40px;
+			}
+		}
+
+	}
+
+}
+
+
+////////////////////////
+//      Text        //
+//////////////////////
+
+// Links
+a{
+	text-decoration: none;
+
+	&:hover{
+		text-decoration: underline;
+	}
+}
+
+// Labels
+label{
+    font-size: 13px;
+	padding: 2px 0 4px 0px;
+	letter-spacing: 0.3px;
+	display: block;
+	color: var(--textLight);
+	font-weight: 500;
+
+	// Increase size on mobile
+	@media (max-width: @screenMD) {
+		font-size: 15px;
+	}
+
+	// Form errors next to labels
+	.label-error{
+		color: var(--redTransparent);
+	}
+
+	&.label-large{
+		font-size: 15px;
+		font-weight: 600;
+		padding: 4px 0 4px 0;
+		letter-spacing: 0.5px;
+
+		// Increase size on mobile
+		@media (max-width: @screenMD) {
+			font-size: 17px;
+		}
+	}
+}
+
+
+
+////////////////////////
+//      Inputs       //
+//////////////////////
+// Hide invalid red dropshadow
+input:invalid{
+	box-shadow: none;
+}
+// Text Input
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+input[type='search'],
+input[type='tel'],
+input[type='url'],
+textarea{
+    font-size: 14px;
+	background-color: var(--inputBackground);
+	box-sizing: border-box;
+	padding-bottom: 1px;
+    padding-left: 8px;
+    padding-right: 8px;
+	color: var(--text);
+	max-width: 100%;
+	font-family: var(--systemFont);
+	font-weight: 500;
+	letter-spacing: 0.55px;
+	border-radius: var(--borderRadiusSmall);
+	border: 1px solid var(--border);
+	transition: all 0.1s ease, border-color 0.15s ease;
+
+	// Increase size on mobile
+	@media (max-width: @screenMD) {
+		font-size: 18px;
+		padding-left: 12px;
+		padding-right: 12px;
+		padding-bottom: 0px;
+	}
+	
+	// Hover and focus states
+	&:hover,
+	&:focus{
+		border-color: var(--borderHover);
+		transition: all 0.1s ease, border-color 0.15s ease;
+	}
+	
+	// Placeholder
+	&::placeholder{
+		opacity: 0.3;
+	}
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+input[type='search'],
+input[type='tel'],
+input[type='url']{
+    display: inline-flex;
+    height: 40px;
+    flex-direction: column;
+	justify-content: center;
+	
+	// Increase size on mobile
+	@media (max-width: @screenMD) {
+		height: 50px;
+	}
+}
+textarea{
+    line-height: 20px;
+	padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+
+////////////////////////
+//      Buttons      //
+//////////////////////
+button{
+	background-color: transparent;
+	border: none;
+}
+.button{
+	border: none;
+	background-color: var(--primary);
+	color: white;
+	height: 36px;
+	border-radius: var(--borderRadiusSmall);
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	transition: var(--transitionFast);
+	font-weight: 600;
+	padding: 0px 14px 2px 14px;
+
+	// Increase size on mobile
+	@media (max-width: @screenMD) {
+		font-size: 15px;
+		height: 42px;
+		font-weight: 500;
+		letter-spacing: 1px;
+		padding: 0px 14px;
+	}
+
+	&:hover{
+		cursor: pointer;
+		text-decoration: underline;
+		transition: var(--transitionFast);
+		background-color: var(--primaryHover);
+	}
+
+	i{
+		margin-left: 10px;
+		transform: scale(1.2);
+		transform-origin: center center;
+	}
+
+	
+	// Size Variations
+	// small
+	&.small{
+		height: 28px;
+		font-size: 12px;
+		font-weight: 600;
+		padding: 2px 10px 3px 10px;
+
+		// Increase size on mobile
+		@media (max-width: @screenMD) {
+			font-size: 13px;
+			padding: 0px 10px;
+			height: 32px;
+		}
+	}
+
+
+	// Color Variations
+	// Green
+	&.green{
+		background-color: var(--green);
+
+		&:hover{
+			background-color: var(--greenHover);
+		}
+	}
+	// Red
+	&.red{
+		background-color: var(--red);
+
+		&:hover{
+			background-color: var(--redHover);
+		}
+	}
+	// Grey
+	&.grey,
+	&.gray{
+		background-color: var(--grey);
+
+		&:hover{
+			background-color: var(--greyHover);
+		}
+	}
+	// Transparent
+	&.transparent{
+		background-color: transparent;
+		color: var(--textLight);
+
+		&:hover{
+			color: var(--text);
+			background-color: transparent;
+		}
+	}
+	// Inverted colors from background
+	&.invert{
+		background-color: var(--textLight);
+		color: var(--textInvert);
+
+		&:hover{
+			background-color: var(--text);
+			color: var(--backgroundLayer);
+		}
+	}
+
+	// Disabled
+	&:disabled{
+		background-color: var(--inputDisabled);
+		color: var(--inputDisabledText);
+		opacity: 0.8;
+
+		&:hover{
+			cursor: default;
+			background-color: var(--inputDisabled);
+			color: var(--inputDisabledText);
+			opacity: 0.8;
+			text-decoration:none;
+		}
+	}
+}
+
+
+
+/////////////////////////
+//     Checkboxes     //
+///////////////////////
+input[type="checkbox"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	-webkit-tap-highlight-color: transparent;
+	cursor: pointer;
+}
+input[type="checkbox"]:focus {
+	outline: 0;
+}
+
+// Turn into checks
+.check {
+	height: 28px;
+	min-height: 28px;
+	max-height: 28px;
+	width: 28px;
+	min-width: 28px;
+	max-width: 28px;
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	border-radius: var(--borderRadiusSmall);
+	box-sizing: border-box;
+	border: 1px solid var(--border);
+	transition: all 0.2s ease;
+	background: var(--inputBackground);
+	font-size: 16px;
+	font-weight: 800;
+
+	// Increase size on mobile
+	@media (max-width: @screenMD) {
+		height: 34px;
+		min-height: 34px;
+		max-height: 34px;
+		width: 34px;
+		min-width: 34px;
+		max-width: 34px;
+	}
+
+	&:hover{
+		transition: all 0.2s ease;
+		border-color: var(--borderHover);
+	}
+
+	&:focus{
+		transition: all 0.2s ease;
+	}
+
+	&:after {
+		//28x28 dimensions
+		content: "\f00c";
+		position: relative;
+		font-family: var(--fontAwesome);
+		font-weight: 900;
+		transition: var(--bezierTransition);
+		transform: scale(0.75);
+		color: var(--text);
+		opacity: 0.3;
+		font-size: 16px;
+		left: 5px;
+		top: 4px;
+
+		// Increase size on mobile
+		@media (max-width: @screenMD) {
+			// 34x34 dimensions
+			font-size: 20px;
+			left: 6px;
+			top: 5.5px;
+		}
+	}
+
+	&:checked {
+		border-color: var(--borderHover);
+		&:hover{
+			&:after{
+				opacity: 1;
+			}
+		}
+	}
+
+	&:checked:after {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+// Toggle 
+.toggle{
+	height: 33px;
+	width: 52px;
+	border-radius: 16px;
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	border: 1px solid var(--border);
+	transition: all .2s ease;
+	background-color: var(--backgroundLayer);
+	&:after{
+		content: '';
+		position: absolute;
+		top: 3px;
+		left: 4px;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: var(--primary);
+		box-shadow: 0 1px 2px rgba(34,44,64,.13);
+		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
+		opacity: 0.15;
+	}
+	&:checked{
+		border: 1px solid var(--border);
+		background: var(--backgroundLayer);
+		&:after{
+			background: var(--primary);
+			transform: translatex(17px);
+			opacity: 1;
+		}
+	}
+}
+// Agreement div 
+// Checkbox with longer label on side
+.agreement{
+	display: flex;
+	box-sizing: border-box;
+	// padding: 10px 0 10px 0;
+	margin: 8px 0;
+	height: 28px;
+
+	// Increase size on small screens
+	@media (max-width: @screenMD) {
+		height: 34px;
+	}
+
+	.check{
+	}
+
+	label{
+		flex-grow: 3;
+		box-sizing: border-box;
+		line-height: 14px;
+		font-size: 12px;
+		padding-left: 10px;
+		vertical-align: middle;
+		letter-spacing: 0.3px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-top: 7px;
+
+		// Fix padding on mobile
+		@media (max-width: @screenMD) {
+			font-size: 14px;
+		}
+
+		a{
+			font-weight: 600;
+			&:focus{
+				text-decoration-style: dashed;
+			}
+		}
+	}
+}
+
+
+
+/////////////////////////
+//    VALIDATION      //
+///////////////////////
+.form-message{
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 8px 10px;
+	border-radius: var(--borderRadiusSmall);
+	margin: 5px auto 5px auto;
+	border: 1px solid var(--red);
+	background-color: var(--redTransparent);
+	color: var(--red);
+
+	span{
+		font-size: 13px;
+		display: block;
+		padding-top: 2px;
+		line-height: 15px;
+		font-weight: 500;
+		letter-spacing: 0.3px;
+
+		// Increase size on mobile
+		@media (max-width: @screenMD) {
+			font-size: 14px;
+			line-height: 16px;
+		}
+	}
+}
+
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+// Cool unused code 
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+
+// Invalid input
+input.xinvalid:invalid{
+	box-shadow: none;
+
+	~ label{
+		pointer-events: none;
+
+		&:after{
+			content: '\f12a';
+			font-family: var(--fontAwesome);
+			display: block;
+			font-weight: 600;
+			font-size: 15px;
+			height: 0px;
+			overflow: visible;
+			color: var(--red);
+			float: right;
+			position: relative;
+			top: 26px;
+			left: -10px;
+		}
+	}
+
+	
+}
+input.xinvalid:placeholder-shown{
+}
