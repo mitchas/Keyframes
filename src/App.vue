@@ -29,6 +29,7 @@
 				<!-- Toast Component -->
 				<Toast ref="toastComponent"></Toast>
 
+
 			</div>
 		</transition>
 	</div>

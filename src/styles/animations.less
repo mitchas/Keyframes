@@ -89,3 +89,23 @@
 	opacity: 0;
 }
 
+
+// Top settings bar on animation page 
+.settings-enter-active {
+	animation: settings-animation .2s ease;
+}
+.settings-leave-active {
+	animation: settings-animation .23s ease reverse;
+}
+@keyframes settings-animation {
+	0% {
+		display: none;
+		margin-top: -300px;
+	}
+	1%{
+		display: block;
+	}
+	100% {
+		margin-top: 0px;
+	}
+}

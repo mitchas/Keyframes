@@ -1,27 +1,53 @@
 <template>
-	<div id="animateApp">
+	<div id="animateApp">	
 
 		<!-- HeaderBar -->
 		<div id="animateTop">
 			<!-- left siide, export, settings, etc. -->
 			<div class="left">
-				<button aria-label="Adjust Stage" class="button icon-left ui-button">
-					<i class="far fa-adjust"></i>
-					<span>Adjust Stage</span>
+				<button id="showOutputButton" aria-label="Show Output CSS" class="button icon-left ui-button" @click="viewOutput()">
+					<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
+					<span v-if="!showOutput">Output CSS</span>
+					<span v-else>Hide CSS</span>
 				</button>
-				<button aria-label="Show Output CSS" class="button icon-left ui-button" @click="showOutput = !showOutput">
-					<i class="far fa-file-code"></i>
-					<span>Show Output CSS</span>
+<!-- Output Modal -->
+<!-- Leave way over here because it's pre formatted -->
+<div id="outputModal" v-bind:class="{'visible':showOutput}">
+
+<!-- ////////////////////
+/////////////////////////
+		Output CSS 
+/////////////////////////
+/////////////////////////-->
+<pre id="outputCSS">
+@keyframes yourAnimation {
+<span v-for="(data, index) in steps" v-bind:key="index">
+  {{data.timelinePosition.left}}{
+    <span v-for="(prop, index) in data.properties" v-bind:key="index" v-if="index != 'transformProps'">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}:{{prop}};
+    </span>
+  }
+  </span>
+}
+<span>
+#elementToAnimate{
+  /* animation: [name] [duration] [timing-function] [delay] [iteration-count] [direction] [fill-mode]; */
+  animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+}
+</span>
+</pre>
+</div> <!-- End output modal -->
+
+
+				<button aria-label="More Settings" class="button icon-left ui-button" @click="showSettings()" id="showSettingsButton">
+					<i class="far fa-adjust" v-bind:class="{'fa-chevron-circle-down': !showingMoreSettings, 'fa-chevron-circle-up': showingMoreSettings}"></i>
+					<span v-if="!showingMoreSettings">More Settings</span>
+					<span v-else>Hide Settings</span>
 				</button>
 			</div>
 			<!-- right side - info, tips, etc. -->
 			<div class="right">
 				
 				<div class="keyframe-data">
-					<button aria-label="Delete current step" class="button icon-left ui-button" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
-						<i class="far fa-trash-alt"></i>
-						<span>Delete Step</span>
-					</button>
 					Properties at {{roundValue(currentStep.left)}}%
 				</div>
 			</div>
@@ -29,16 +55,29 @@
 		
 		<!-- Main stage with animated element -->
 		<div id="animateMain">
-			<div id="animateStage" v-bind:class="{'tabs-hidden': cssTab == 0}">
-				<span id="targetElement" v-bind:style="allProperties">Hello</span>
-				<!-- <span id="targetElement" :style="fullCSS"></span> -->
-			</div>
+
+			<!-- Settings contatiner -->
+			<!--  show/hide with  showingMoreSettings -->
+			<transition name="settings">
+				<div id="animateSettings" v-if="showingMoreSettings">
+					<h2>Settings</h2>
+				</div>
+			</transition>
+
+			<!-- Stage wrapper -->
+			<transition name="settings">
+				<div id="animateStage" v-bind:class="{'tabs-hidden': cssTab == 0}" v-if="!showingMoreSettings">
+					<span id="targetElement" v-bind:style="allProperties">Hello</span>
+					<!-- <span id="targetElement" :style="fullCSS"></span> -->
+				</div>
+			</transition>
+
 			<!-- Element property editor -->
 			<div id="elementProperties">
 				
 				<div class="side-tab-display">
 					<div class="side-tabs">
-						<button class="tab" @click="cssTab = 1" v-bind:class="{'active':cssTab==1}">
+						<button class="tab" @click="cssTab = 1;" v-bind:class="{'active':cssTab==1}">
 							<i class="far fa-external-link-alt"></i>
 						</button>
 						<button class="tab" @click="cssTab = 2" v-bind:class="{'active':cssTab==2}">
@@ -255,10 +294,14 @@
 			<div id="animationControls">
 				<!-- Left side, add step -->
 				<div class="left">
-					<button class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'red' : addingStep}">
+					<button id="addStepButton"  aria-label="Add new step" class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'red' : addingStep}">
 						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
 						<span v-if="!addingStep">Add Step</span>
-						<span v-else>Done</span>
+						<span v-else>Cancel</span>
+					</button>
+					<button id="deleteStepButton" aria-label="Delete current step" class="button icon-left ui-button" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
+						<i class="far fa-trash-alt"></i>
+						<span>Delete Step</span>
 					</button>
 					
 				</div>
@@ -266,30 +309,30 @@
 				<!-- Right side, Timing, play/pause -->
 				<div class="right">
 					<div class="animation-prop">
-						<input type="text" placeholder="3s" v-model="animationProperties.duration"/>
+						<input type="text" placeholder="3s" v-model="animationProperties.duration" @input="saveStep()"/>
 						<label>Duration</label>
 					</div>
 					<div class="animation-prop">
-						<input type="text" placeholder="infinite" v-model="animationProperties.iterations" :disabled="animationPlaying"/>
+						<input type="text" placeholder="infinite" v-model="animationProperties.iterations" @input="saveStep()"/>
 						<label>Iterations</label>
 					</div>
 					<div class="animation-prop">
-						<input type="text" placeholder="0s" v-model="animationProperties.delay" :disabled="animationPlaying"/>
+						<input type="text" placeholder="0s" v-model="animationProperties.delay" @input="saveStep()"/>
 						<label>Delay</label>
 					</div>
 					<div class="animation-prop">
-						<input type="text" placeholder="linear" v-model="animationProperties.timing" :disabled="animationPlaying"/>
+						<input type="text" placeholder="linear" v-model="animationProperties.timing" @input="saveStep()"/>
 						<label>Timing</label>
 					</div>
-					<div class="animation-prop">
-						<input type="text" placeholder="normal" v-model="animationProperties.direction" :disabled="animationPlaying"/>
+					<div class="animation-prop" @click="toggleTiming('direction')">
+						<button class="fake-input" aria-label="Change animation direction">{{animationProperties.direction}}</button>
 						<label>Direction</label>
 					</div>
-					<div class="animation-prop">
-						<input type="text" placeholder="normal" v-model="animationProperties.fillMode" :disabled="animationPlaying"/>
+					<div class="animation-prop" @click="toggleTiming('fill')">
+						<button class="fake-input" aria-label="Change animation fill mode">{{animationProperties.fillMode}}</button>
 						<label>Fill Mode</label>
 					</div>
-					<button class="button icon-left icon-left ui-button" @click="runAnimation()" v-bind:class="{'pause': animationPlaying}">
+					<button class="button icon-left icon-left ui-button" @click="runAnimation()" v-bind:class="{'pause': animationPlaying}" @input="saveStep()">
 						<i class="fas" v-bind:class="{'fa-play': !animationPlaying, 'fa-pause': animationPlaying}"></i>
 						<span v-if="!animationPlaying">Play</span>
 						<span v-else>Pause</span>
@@ -300,7 +343,11 @@
 
 			<!-- Timeline -->
 			<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}">
-				<!-- Marker that shows current step location -->
+				<!-- Animated marker that progresses with animation -->
+				<div class="timeline-marker animated" v-if="animationPlaying">
+				</div>
+
+				<!-- Marker that shows current/selected step location -->
 				<div class="timeline-marker current" v-bind:style="currentStep" 
 					v-if="currentStep.left != null"
 					@mouseenter="hideAddStep = true" 
@@ -326,49 +373,28 @@
 			</div>
 		</div>
 
-		<!-- ////////////////////
-		/////////////////////////
-			   Output CSS 
-		/////////////////////////
-		/////////////////////////-->
-<pre id="outputCSS" v-bind:class="{'visible':showOutput}">
-@keyframes yourAnimation {
-	<span v-for="(data, index) in steps" v-bind:key="index">
-	{{data.timelinePosition.left}}{
-		<span v-for="(prop, index) in data.properties" v-bind:key="index" v-if="index != 'transformProps'">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}:{{prop}};
-		</span>
-	}
-	</span>
-}
-<span>
-#targetElement{
-	/* animation: [name] [duration] [timing-function] [delay] [iteration-count] [direction] [fill-mode]; */
-	animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
-}
-</span>
-</pre>
+
 <!-- steps:
 <span>
 {{steps}}
 </span> -->
 
-
-
-				<v-style>
-					#targetElement{
-						animation: 
-							animationName 
-							{{ this.animationProperties.duration ? this.animationProperties.duration : 'hi' }}
-							{{ this.animationProperties.timing ? this.animationProperties.timing : '' }}
-							{{ this.animationProperties.delay ? this.animationProperties.delay : '' }}
-							{{ this.animationProperties.iterations ? this.animationProperties.iterations : '' }}
-							{{ this.animationProperties.direction ? this.animationProperties.direction : '' }}
-							{{ this.animationProperties.fillMode ? this.animationProperties.fillMode : '' }};
-					}
-					{{this.outputAnimation}}
-
-
-				</v-style>
+<!-- Append Styles to page -->
+<v-style>
+	{{rawOutputCSS}}
+	.timeline-marker.animated{
+		animation: animationTicker {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
+	}
+</v-style>
+<!-- Only add animation if it's playing -->
+<!-- Otherwise  -->
+<v-style v-if="animationPlaying">
+	#targetElement{
+		animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
+	}
+</v-style>
 
 	</div>
 </template>
@@ -396,9 +422,6 @@ export default {
 			// Show Output modal or not
 			showOutput: false,
 			// Hold css output generated
-			animationOutput: null,
-			keyframeOutput: null,
-			outputAnimation: null,
 			rawOutputCSS: null,
 			// Enable hover timeline to add step
 			addingStep: false,
@@ -406,6 +429,8 @@ export default {
 			hideAddStep: false,
 			// Animation currently playing
 			animationPlaying: false,
+			// Collapsible settings
+			showingMoreSettings: false,
 			// Selected step position
 			currentStep: {
 				left: "0.0",
@@ -452,6 +477,17 @@ export default {
 				timing: "ease",
 				direction: "normal",
 				fillMode: "none"
+			},
+			// Timing options so users can toggle instead of type
+			timingProps: {
+				directionSelected: 0,
+				fillModeSelectetd: 0,
+				directions: [
+					"normal", "reverse", "alternate", "alternate-reverse"
+				],
+				fillModes: [
+					"normal", "none", "forwards", "backwards", "both"
+				],
 			},
 			// Animation steps,
 			// Holds all css at each step
@@ -519,7 +555,7 @@ export default {
 				// Add timeline position
 				var propsToSave = {
 					timelinePosition: {
-						left: this.currentStep.left + "%"
+						left: parseFloat(this.currentStep.left).toFixed(1) + "%"
 					},
 					properties: cleanProps
 				}
@@ -529,7 +565,7 @@ export default {
 
 				// Get text content of output to apply to targetElement
 				var _this = this;
-				
+
 				setTimeout(function(){
 					var fullCSSString = document.getElementById("outputCSS").textContent;
 					_this.rawOutputCSS = fullCSSString;
@@ -612,69 +648,11 @@ export default {
 
 			// If it's already playing
 			if(this.animationPlaying){
-				// Remove temporary style element
-				document.getElementById("temporaryStyles").outerHTML = "";
 				// Set to false
 				this.animationPlaying = false;
 			}else{
 				// Start it
 				this.animationPlaying = true;
-
-				// Generatet @keyframes animation CSS
-				// For each step
-				var keyframeOutputString = "@keyframes animationName {";
-				for (let key in this.steps) {
-
-					var stepPercent = this.steps[key].timelinePosition.left;
-					var props = this.steps[key].properties;
-
-					keyframeOutputString = keyframeOutputString + stepPercent + "{"
-					
-					// And each 
-					for (let key in props) {
-						console.log(key)
-						if(key == "transformProps"){
-							// Do nothing, just used for saving
-						}else{
-							// Convert from CamelCase to dash so it's proper CSS.
-							var dashCase = key.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()
-							keyframeOutputString = keyframeOutputString + " " + dashCase + ":" + props[key] + ";";
-						}
-					}
-					// Close step tag
-					keyframeOutputString = keyframeOutputString + "}"
-				}
-				// Close end tag
-				keyframeOutputString = keyframeOutputString + "}"
-				this.keyframeOutput = keyframeOutputString;
-
-
-				// Generate animationCSS
-				// animation: animationName .22s;
-				// animation: name duration timing-function delay iteration-count direction fill-mode play-state;
-				var animationOutputString = 
-					"animation: animationName " 
-					+ this.animationProperties.duration 
-					+ " " + this.animationProperties.timing
-					+ " " + this.animationProperties.delay 
-					+ " " + this.animationProperties.iterations 
-					+ " " + this.animationProperties.direction
-					+ " " + this.animationProperties.fillMode + ";"
-
-				this.animationOutput = animationOutputString;
-
-				// Append to targetElement
-				// Append to targetElement
-				var css = this.keyframeOutput;
-
-				var el = document.getElementById('targetElement');
-				var style = document.createElement('style');
-
-				el.appendChild(style);
-				style.type = 'text/css';
-				style.id = 'temporaryStyles';
-				style.appendChild(document.createTextNode(css));
-
 
 			} // End if animation playing
 		},
@@ -684,31 +662,7 @@ export default {
 				this.runAnimation();
 			}
 		},
-		// Update Transform: css
-		updateTransform: function(){
-
-			// Debounce 250ms
-			if (this.timeout) clearTimeout(this.timeout); 
-			this.timeout = setTimeout(() => {
-				var transformString = "";
-				var transform = this.allProperties.transformProps;
-				// If any transform value exists
-				if(transform.rotate || transform.scale || transform.translate || transform.skew){
-					// transformString = "transform:"
-
-					// Format CSS for each transform with value: ex rotate(val)
-					for (let key in transform) {
-						if(transform[key]){
-							transformString = transformString + " " + key + "(" + transform[key] + ")"
-						}
-					}
-				}
-				// Save to main string
-				this.allProperties.transform = transformString;
-				console.log("transform: "+ transformString + ";");
-			},250);
-
-		},
+		
 
 		////////////////////////
 		// Other Functions
@@ -727,7 +681,7 @@ export default {
 			var result = ((offset / _event.toElement.offsetWidth) * 100).toFixed(1);
 			
 			// Set
-			_this.timelinePosition.left = result + "%";
+			_this.timelinePosition.left = parseFloat(result).toFixed(1) + "%";
 		},
 		// Round decimal value to 0 decimal places
 		// To dispaly on hover
@@ -740,7 +694,49 @@ export default {
 			}else{
 				return float.toFixed(0);
 			}
-		}
+		},
+
+		// Timing toggles
+		toggleTiming: function(type){
+			// Cycles through available options when clicked
+			if(type == "direction"){
+				if(this.timingProps.directionSelected == this.timingProps.directions.length - 1){
+					this.timingProps.directionSelected = 0;
+				}else{
+					this.timingProps.directionSelected++;
+				}
+				this.animationProperties.direction = this.timingProps.directions[this.timingProps.directionSelected];
+			}else if(type == "fill"){
+				if(this.timingProps.fillModeSelectetd == this.timingProps.fillModes.length - 1){
+					this.timingProps.fillModeSelectetd = 0;
+				}else{
+					this.timingProps.fillModeSelectetd++;
+				}
+				this.animationProperties.fillMode = this.timingProps.fillModes[this.timingProps.fillModeSelectetd];
+			}
+		},
+
+		// Output
+		viewOutput: function(){
+			// If not already viewing output
+			if(!this.showOutput){
+				this.showOutput = true;
+				this.$store.commit('showLightbox', true);
+			}else{
+				// Close it
+				this.showOutput = false;
+				this.$store.commit('showLightbox', false);
+			}
+		},
+
+		// Settings
+		showSettings: function(){
+			if(this.showingMoreSettings){
+				this.showingMoreSettings = false;
+			}else{
+				this.showingMoreSettings = true;
+			}
+		},
 
 	}
 };
@@ -769,18 +765,33 @@ export default {
 		#animateTop{
 			display: flex;
 			justify-content: space-between;
+			height: 50px;
 
 			// Left side - export, adjustments, etc
 			.left{
 				display: flex;
+				position: relative;
 
-				
+				// Show output button - set width so it doesn't bounce around
+				#showOutputButton{
+					width: 110px;
+					padding-right: 0;
+					text-align: left;
+					margin-right: 15px;
+				}
+				#showSettingsButton{
+					width: 130px;
+					padding-right: 0;
+					text-align: left;
+				}
 			}
 			// Right side - info, tips, etc
 			.right{
 				.keyframe-data{
 					text-align: right;
 					font-size: 16px;
+					box-sizing: border-box;
+					padding-top: 15px;
 					font-weight: 600;
 					color: var(--text);
 				}
@@ -792,6 +803,24 @@ export default {
 			flex-grow: 3;
 			display: flex;
 			justify-content: space-between;
+			/////////////////////
+			//    Settings    //
+			///////////////////
+			// Toggle-able settings over stage
+			#animateSettings{
+				display: flex;
+				width: 50%;
+				width: calc(~'100% - 450px');
+				background-color: var(--backgroundLayer);
+				border: 1px solid var(--border);
+				height: 160px;
+				transform-origin: top center;
+				border-radius: var(--borderRadiusSmall);
+				box-shadow: var(--shadow);
+				margin-bottom: 15px;
+				box-sizing: border-box;
+				padding: 15px;
+			}
 			//////////////////
 			//    Stage    //
 			////////////////
@@ -992,7 +1021,12 @@ export default {
 				justify-content: space-between;
 
 				.left, .right{
-					button{
+					#addStepButton{
+						margin: 0 15px 0 0;
+						width: 100px;
+						padding: 0;
+					}
+					#deleteStepButton{
 						margin: 0 0 0 0;
 					}
 				}
@@ -1040,14 +1074,15 @@ export default {
 							color: var(--textLight);
 						}
 
-						input{
+						input,
+						.fake-input{
 							border-radius: 3px;
 							padding: 0 0;
-							letter-spacing: 0.1px;
+							letter-spacing: 0px;
 							height: 30px;
 							max-width: 56px;
 							min-width: 56px;
-							font-size: 14px;
+							font-size: 13px;
 							font-weight: 700;
 							background-color: transparent;
 							border: none;							
@@ -1071,6 +1106,20 @@ export default {
 								}
 							}
 						}
+						.fake-input{
+							overflow: visible;
+							text-overflow: ellipsis;
+							display: flex;
+							flex-direction: column;
+							justify-content: flex-end;
+							box-sizing: border-box;
+							padding-bottom: 0px;
+							margin: 0;
+
+							&:hover{
+								cursor: pointer;
+							}
+						}
 					}
 				}
 				
@@ -1092,6 +1141,7 @@ export default {
 				// Hover timeline, show position and percentage
 				.timeline-marker.step,
 				.timeline-marker.new,
+				.timeline-marker.animated,
 				.timeline-marker.current{
 					display: flex;
 					flex-direction: column;
@@ -1187,13 +1237,26 @@ export default {
 				}
 				.timeline-marker.current{
 					z-index: 12;
+					background-color: var(--blue);
 
 					b{
-
+						background-color: var(--blue);
 					}
 					&:hover{
 						cursor: default;
 					}
+				}
+
+				// Animated marker
+				.timeline-marker.animated{
+					height: 100%;
+					border-radius: 2px;
+					width: 8px;
+					left: 50%;
+					margin-left: -4px;
+					z-index: 20;
+					background-color: var(--red);
+					opacity: 0.5;
 				}
 
 				// Hover timeline, show new marker
@@ -1210,11 +1273,9 @@ export default {
 		}
 	}
 
-
-
-
+	// Pre tweaks to fix output
+	// Contained witthin #outputModal
 	pre{
-
 		// Display inline last two rows, and first - 
 		// This makes the ending semicolon stay on the last row
 		// Also makes single-rows when necessary
@@ -1230,48 +1291,75 @@ export default {
 		}
 	}
 
+	////////////////////
+	// Output modal
+	////////////////////
+	#outputModal{
+		position: absolute;
+		background-color: var(--primary);
+		color: var(--textInvert);
+		width: 90vw;
+		max-width: 300px;
+		height: 200px;
+		top: 40px;
+		transition: 0.15s ease-in;
+		transform: scaleY(0);
+		transform-origin: top center;
+		pointer-events: none;
+		border-radius: var(--borderRadiusSmall);
+		box-shadow: var(--shadow);
 
-	// CSS Output
-	#outputCSS{
-		position: fixed;
-		width: 300px;
-		height: hidden;
-		min-height: 15px;
-		box-sizing: border-box;
-		padding: 0;
-		background-color: red;
-		margin-top: 50px;
-		font-size: 12px;
-		max-height: 0px;
-		overflow: auto;
-		white-space: pre-line;
-
-		// if visible
 		&.visible{
-			overflow: auto;
-			padding: 15px;
-			max-height: 300px;
+			transition: 0.15s ease-out;
+			transform: scaleY(1);
+			pointer-events: all;
 		}
 
-		span{
-			line-height: 15px;
-			letter-spacing: 0.3px;
-			white-space: pre;
-			position: relative;
-			span{
+		// CSS Output
+		#outputCSS{
+			position: fixed;
+			width: 100%;
+			height: hidden;
+			box-sizing: border-box;
+			padding: 15px;
+			font-size: 12px;
+			overflow: auto;
+			white-space: pre-line;
+			font-family: monospace;
 
-				&:last-child{
-					position: absolute;
+			span{
+				line-height: 15px;
+				letter-spacing: 0.3px;
+				white-space: pre;
+				position: relative;
+				span{
+
+					&:last-child{
+						position: absolute;
+					}
 				}
 			}
+			pre{
+				line-height: 15px;
+				letter-spacing: 0.3px;
+				white-space: pre-line;
+				background-color: pink;
+			}
 		}
-		pre{
-			line-height: 15px;
-			letter-spacing: 0.3px;
-			white-space: pre-line;
-			background-color: pink;
+
+	}
+
+
+	// Keyframes for red animated ticker
+	@keyframes animationTicker{
+		0%{
+			left: 0%;
+		}
+		100%{
+			left: 100%;
 		}
 	}
+	
 
 
 
