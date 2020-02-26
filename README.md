@@ -66,6 +66,7 @@ The docs were written for a site with authentication that collects user data. Th
 I tried to use as few as possible. Apart from Vue and everything required by it, this project includes:
  * [VueMoment](https://www.npmjs.com/package/vue-moment) (MomentJS) for time formatting
  * [FontAwesome](http://fontawesome.com/) (Pro) for icons. You'll have to switch out icons if you don't have pro.
+ * [Vue Lodash](https://www.npmjs.com/package/vue-lodash) For working with the data.
 
 
 ## Other Features

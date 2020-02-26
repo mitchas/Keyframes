@@ -256,6 +256,12 @@ button{
 		transform: scale(1.2);
 		transform-origin: center center;
 	}
+	&.icon-left{
+		i{
+			margin-right: 10px;
+			margin-left: 0;
+		}
+	}
 
 	
 	// Size Variations
@@ -320,6 +326,36 @@ button{
 			background-color: var(--text);
 			color: var(--backgroundLayer);
 		}
+	}
+
+	// Specific UI button
+
+	// UI button
+	// Used throughout animate page
+	&.ui-button{
+		background-color: transparent;
+		box-sizing: border-box;
+		border: 1px solid var(--border);
+		font-size: 12px;
+		font-weight: 600;
+		padding: 0 10px;
+		height: 34px;
+		color: var(--text);
+
+		i{
+			transform: scale(1.4);
+			margin: 0 8px 1px 0;
+		}
+		span{
+			position: relative;
+			top: -0.5px;
+		}
+
+		&:hover{
+			border-color: var(--borderHover);
+			background-color: var(--backgroundLayer);
+		}
+
 	}
 
 	// Disabled
