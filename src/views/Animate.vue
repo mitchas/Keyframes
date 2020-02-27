@@ -44,10 +44,9 @@
 				<div class="settings-display save-load" v-if="showSaveLoad">
 					<h3>Save your animation</h3>
 					<p>You can save your animation configuration and come back to it later.</p>
-					<label>Name</label>
 					<div id="saveAnimationField">
-						<input type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
-						<button aria-label="Save Animation" class="button icon-left ui-button" @click="saveAnimation()">
+						<input id="newAnimationSaveName" aria-label="Save as Name" type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
+						<button aria-label="Save Animation" class="button" @click="saveAnimation()">
 							<i class="far fa-save"></i>
 							<span>Save</span>
 						</button>
@@ -64,7 +63,7 @@
 			<!--  CSS output -->
 			<!--  show/hide with  showOutput -->
 			<transition name="settings">
-				<div class="settings-display" v-if="showOutput">
+				<div class="settings-display" v-show="showOutput">
 <!-- ////////////////////
 /////////////////////////
 		Output CSS 
@@ -112,17 +111,17 @@
 				
 				<div class="side-tab-display">
 					<div class="side-tabs">
-						<button class="tab" @click="cssTab = 1;" v-bind:class="{'active':cssTab==1}">
-							<i class="far fa-external-link-alt"></i>
+						<button class="tab" @click="cssTab == 1 ? cssTab = 0 : cssTab = 1" v-bind:class="{'active':cssTab==1}">
+							<i v-bind:class="cssTab == 1 ? 'far fa-times' : 'far fa-external-link-alt'"></i>
 						</button>
-						<button class="tab" @click="cssTab = 2" v-bind:class="{'active':cssTab==2}">
-							<i class="far fa-pencil-paintbrush"></i>
+						<button class="tab" @click="cssTab == 2 ? cssTab = 0 : cssTab = 2" v-bind:class="{'active':cssTab==2}">
+							<i v-bind:class="cssTab == 2 ? 'far fa-times' : 'far fa-pencil-paintbrush'"></i>
 						</button>
-						<button class="tab" @click="cssTab = 3" v-bind:class="{'active':cssTab==3}">
-							<i class="far fa-expand-arrows"></i>
+						<button class="tab" @click="cssTab == 3 ? cssTab = 0 : cssTab = 3" v-bind:class="{'active':cssTab==3}">
+							<i v-bind:class="cssTab == 3 ? 'far fa-times' : 'far fa-expand-arrows'"></i>
 						</button>
-						<button class="tab" @click="cssTab = 4" v-bind:class="{'active':cssTab==4}">
-							<i class="far fa-border-style"></i>
+						<button class="tab" @click="cssTab == 4 ? cssTab = 0 : cssTab = 4" v-bind:class="{'active':cssTab==4}">
+							<i v-bind:class="cssTab == 4 ? 'far fa-times' : 'far fa-border-style'"></i>
 						</button>
 					</div>
 					<!-- ////////////
@@ -130,14 +129,10 @@
 					/////////////// -->
 					<transition name="tab">
 						<div class="tab-content"  v-if="cssTab == 1">
-							<!-- Close tab -->
-							<button class="close-tab" type="button" @click="cssTab = 0">
-								<i class="fas fa-chevron-double-right"></i>
-							</button>
+							
 							<!-- Title -->
 							<div class="tab-title">
-								<span>Transform {{roundValue(currentStep.left)}}%</span>
-								<i class="far fa-external-link-alt"></i>
+								<span>Transform: {{roundValue(currentStep.left)}}%</span>
 							</div>
 							<!-- Rotate -->
 							<div class="field-set">
@@ -171,7 +166,7 @@
 							<div class="field-set">
 								<label>Transform Origin</label>
 								<div class="input-wrapper">
-									<input type="text" placeholder="50% 50%" v-model="allProperties.transformProps.transformOrigin" @input="saveStep()">
+									<input type="text" placeholder="50% 50%" v-model="allProperties.transformOrigin" @input="saveStep()">
 								</div>
 							</div>
 						</div>
@@ -181,14 +176,9 @@
 					/////////////// -->
 					<transition name="tab">
 						<div class="tab-content"  v-if="cssTab == 2">
-							<!-- Close tab -->
-							<button class="close-tab" type="button" @click="cssTab = 0">
-								<i class="fas fa-chevron-double-right"></i>
-							</button>
 							<!-- Title -->
 							<div class="tab-title">
-								<span>Colors & Fonts {{roundValue(currentStep.left)}}%</span>
-								<i class="far fa-pencil-paintbrush"></i>
+								<span>Colors & Fonts: {{roundValue(currentStep.left)}}%</span>
 							</div>
 							<!-- Background -->
 							<div class="field-set">
@@ -225,14 +215,9 @@
 					/////////////// -->
 					<transition name="tab">
 						<div class="tab-content" v-if="cssTab == 3">
-							<!-- Close tab -->
-							<button class="close-tab" type="button" @click="cssTab = 0">
-								<i class="fas fa-chevron-double-right"></i>
-							</button>
 							<!-- Title -->
 							<div class="tab-title">
-								<span>Sizing {{roundValue(currentStep.left)}}%</span>
-								<i class="far fa-expand-arrows"></i>
+								<span>Sizing: {{roundValue(currentStep.left)}}%</span>
 							</div>
 							<!-- Width -->
 							<div class="field-set">
@@ -241,73 +226,11 @@
 									<input type="text" placeholder="100px" v-model="allProperties.width" @input="saveStep()">
 								</div>
 							</div>
-							<!-- Max Width -->
-							<div class="field-set">
-								<label>Max-Width</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="50px" v-model="allProperties.maxWidth" @input="saveStep()">
-								</div>
-							</div>
-							<!-- Min Width -->
-							<div class="field-set">
-								<label>Min-Width</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="22%" v-model="allProperties.minWidth" @input="saveStep()">
-								</div>
-							</div>
 							<!-- Height -->
 							<div class="field-set">
 								<label>Height</label>
 								<div class="input-wrapper">
 									<input type="text" placeholder="100px" v-model="allProperties.height" @input="saveStep()">
-								</div>
-							</div>
-							<!-- Max Height -->
-							<div class="field-set">
-								<label>Max-Height</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="50px" v-model="allProperties.maxHeight" @input="saveStep()">
-								</div>
-							</div>
-							<!-- Min Height -->
-							<div class="field-set">
-								<label>Min-Height</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="22%" v-model="allProperties.minHeight" @input="saveStep()">
-								</div>
-							</div>
-						</div>
-					</transition>
-					<transition name="tab">
-						<div class="tab-content" v-if="cssTab == 4">
-							<!-- Close tab -->
-							<button class="close-tab" type="button" @click="cssTab = 0">
-								<i class="fas fa-chevron-double-right"></i>
-							</button>
-							<!-- Title -->
-							<div class="tab-title">
-								<span>Borders & Spacing {{roundValue(currentStep.left)}}%</span>
-								<i class="far fa-border-style"></i>
-							</div>
-							<!-- Border -->
-							<div class="field-set">
-								<label>Border</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.border" @input="saveStep()">
-								</div>
-							</div>
-							<!-- Box Shadow -->
-							<div class="field-set">
-								<label>Box Shadow</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.boxShadow" @input="saveStep()">
-								</div>
-							</div>
-							<!-- Outline -->
-							<div class="field-set">
-								<label>Outline</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.outline" @input="saveStep()">
 								</div>
 							</div>
 							<!-- Margin -->
@@ -322,6 +245,42 @@
 								<label>Padding</label>
 								<div class="input-wrapper">
 									<input type="text" placeholder="10px 0 0 0" v-model="allProperties.padding" @input="saveStep()">
+								</div>
+							</div>
+						</div>
+					</transition>
+					<transition name="tab">
+						<div class="tab-content" v-if="cssTab == 4">
+							<!-- Title -->
+							<div class="tab-title">
+								<span>Borders & Spacing: {{roundValue(currentStep.left)}}%</span>
+							</div>
+							<!-- Border -->
+							<div class="field-set">
+								<label>Border</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="1px solid red" v-model="allProperties.border" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Border Radius -->
+							<div class="field-set">
+								<label>Border Radius</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="50%" v-model="allProperties.borderRadius" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Box Shadow -->
+							<div class="field-set">
+								<label>Box Shadow</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="5px 5px 10px 5px rgba(0,0,0,0.2)" v-model="allProperties.boxShadow" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Outline -->
+							<div class="field-set">
+								<label>Outline</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="2px solid rgba(0,0,0,0.2)" v-model="allProperties.outline" @input="saveStep()">
 								</div>
 							</div>
 						</div>
@@ -516,14 +475,11 @@ export default {
 				color: null,
 				fontSize: null,
 				width: null,
-				minWidth: null,
-				maxWidth: null,
 				height: null,
-				minHeight: null,
-				maxHeight: null,
 				margin: null,
 				padding: null,
 				border: null,
+				borderRadius: null,
 				boxShadow: null,
 				outline: null,
 				transform: null,
@@ -569,8 +525,9 @@ export default {
 			this.cssTab = 0;
 		}
 
+		// Create date and format (remove spaces, remove year)
 		var dateName = new Date().toDateString().replace(/\s/g, '');
-		this.animationToSaveName =  "Animation-" + dateName.substring(0,dateName.length - 4).substring(3,dateName.length - 4);
+		this.animationToSaveName =  "" + dateName.substring(0,dateName.length - 4).substring(3,dateName.length - 4) + "-x" + (Math.floor(Math.random() * 666)+100).toString();
 	},
 
 	computed: {
@@ -621,6 +578,18 @@ export default {
 					},
 					properties: cleanProps
 				}
+
+				// String to generate transform: prop
+				var transformString = "";
+				if(cleanProps['transformProps']){
+					for(var prop in cleanProps['transformProps']) {
+						transformString = transformString + " " + prop + "(" + cleanProps['transformProps'][prop] + ")"
+					}
+					// Set prop in cleanprops
+					this.allProperties.transform = transformString;
+					cleanProps.transform = transformString;
+				}
+
 				
 				// Save changes to steps at current step 
 				this.steps[this.currentStep.left] = propsToSave;
@@ -632,8 +601,6 @@ export default {
 					var fullCSSString = document.getElementById("outputCSS").textContent;
 					_this.rawOutputCSS = fullCSSString;
 				}, 500)
-
-				
 
 			// },500);
 
@@ -824,7 +791,8 @@ export default {
 		////////////////////
 		////////////////////
 		saveAnimation: function(){
-
+			var newAnimation = this.allProperties;
+			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), "test");
 		},
 
 	}
@@ -943,12 +911,19 @@ export default {
 							flex-grow: 3;
 							border-top-right-radius: 0;
 							border-bottom-right-radius: 0;
+							border-right: none;
 						}
 
 						button{
 							height: 100%;
 							border-top-left-radius: 0;
 							border-bottom-left-radius: 0;
+							border-left: 1px solid var(--text);
+							padding-left: 6px;
+							
+							i{
+								margin-right: 10px;
+							}
 						}
 					}
 				}
@@ -1093,36 +1068,24 @@ export default {
 						max-width: 300px;
 						width: 70vw;
 						border: 1px solid var(--border);
-
-						// Close tab button
-						// Element needed in each tab (for now)
-						.close-tab{
-							position: absolute;
-							top: 0;
-							left: -46px;
-							width: 50px;
-							height: 50px;
-							font-size: 22px;
-							color: var(--border);
-							transition: var(--transition);
-
-							&:hover{
-								color: var(--borderHover);
-								transition: var(--transition);
-								width: 60px;
-							}
-						}
+						z-index: 30;
 
 						// Header
 						.tab-title{
 							font-size: 16px;
-							font-weight: bolder !important;
+							font-weight: bolder;
 							letter-spacing: 0.5px;
 							color: var(--text);
-							display: flex;
-							justify-content: space-between;
-							padding-bottom: 15px;
-							padding-top: 3px;
+							display: block;
+							padding: 5px 0 15px 0;
+							text-align: center;
+
+							span{
+								display: flex;
+								flex-direction: column;
+								justify-content: center;
+								flex-grow: 3;
+							}
 						}
 					}
 				}
@@ -1147,6 +1110,7 @@ export default {
 				
 				.left{
 					display: flex;
+					flex-grow: 3;
 					// Button width
 					#addStepButton{
 						width: 100px;
@@ -1186,6 +1150,8 @@ export default {
 				.middle{
 					display: flex;
 					justify-content: center;
+					box-sizing: border-box;
+					padding-right: 25px;
 					// Animation props
 					.animation-prop{
 						display: flex;
@@ -1193,15 +1159,16 @@ export default {
 						height: 34px;
 						width: fit-content;
 						position: relative;
-						justify-content: flex-end;
-						margin: 0 5px;
+						justify-content: center;
+						margin: 0 4px;
+						top: -2px;
 
 						// Label hidden until hover
 						label{
 							font-size: 12px;
 							display: block;
 							box-sizing: border-box;
-							padding: 2px 0px 0 0;
+							padding: 0 0px 0 0;
 							color: var(--textLighter);
 							user-select: none;
 							position: absolute;
