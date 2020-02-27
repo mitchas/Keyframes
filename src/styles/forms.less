@@ -341,19 +341,55 @@ button{
 		padding: 0 10px;
 		height: 34px;
 		color: var(--text);
+		text-align: center;
+		padding-right: 5px;
+		display: flex;
+		margin-right: 15px;
 
+		&:last-child{
+			margin-right: 0;
+		}
+
+		// Icon floats left
 		i{
 			transform: scale(1.4);
-			margin: 0 8px 1px 0;
+			float: left;
+			padding-top: 1px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			width: 12px;
+			text-align: left;
 		}
+		// Span grows, centers text
 		span{
 			position: relative;
 			top: -0.5px;
+			text-align: center;
+			flex-grow: 3;
+			padding-right: 12px;
+			white-space: pre;
+			display: inline-flex;
+			flex-direction: column;
+			justify-content: center;
+			font-weight: 600;
 		}
 
 		&:hover{
 			border-color: var(--borderHover);
 			background-color: var(--backgroundLayer);
+			text-decoration: none;
+
+			span{
+				text-decoration: underline;
+			}
+		}
+
+		// When waiting for action
+		&.active{
+			background-color: var(--primary);
+			color: var(--background);
+			border-color: var(--primaryHover);
 		}
 
 	}

@@ -5,21 +5,75 @@
 		<div id="animateTop">
 			<!-- left siide, export, settings, etc. -->
 			<div class="left">
-				<button id="showOutputButton" aria-label="Show Output CSS" class="button icon-left ui-button" @click="viewOutput()">
-					<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
-					<span v-if="!showOutput">Output CSS</span>
-					<span v-else>Hide CSS</span>
+				<!-- Show settings -->
+				<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button icon-left ui-button" @click="viewSaveLoad()" v-bind:class="{'active': showSaveLoad}">
+					<i class="far fa-adjust" v-bind:class="{'fa-save': !showSaveLoad, 'fa-chevron-circle-up': showSaveLoad}"></i>
+					<span>Save/Load</span>
 				</button>
-<!-- Output Modal -->
-<!-- Leave way over here because it's pre formatted -->
-<div id="outputModal" v-bind:class="{'visible':showOutput}">
+				<!-- Edit Target -->
+				<button id="showEditTargetButton" aria-label="Edit Target Element" class="button icon-left ui-button" @click="editTarget()" v-bind:class="{'active': showEditTarget}">
+					<i class="far" v-bind:class="{'fa-bullseye': !showEditTarget, 'fa-chevron-circle-up': showEditTarget}"></i>
+					<span>Target Element</span>
+				</button>
+				<!-- Show output -->
+				<button id="showOutputButton" aria-label="Show Output CSS" class="button icon-left ui-button" @click="viewOutput()" v-bind:class="{'active': showOutput}">
+					<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
+					<span>Output CSS</span>
+				</button>
+			</div>
+			<!-- right side - info, tips, etc. -->
+			<div class="right">
+				
+				<div class="keyframe-data">
+					<!-- Properties at {{roundValue(currentStep.left)}}% -->
+				</div>
+			</div>
+		</div>
+		
+		<!-- Main stage with animated element -->
+		<div id="animateMain">
 
+			<!-- 
+				========================
+				Settings contatiners
+				========================
+			-->
+			<!--  Basic settings -->
+			<!--  show/hide with  showSaveLoad -->
+			<transition name="settings">
+				<div class="settings-display save-load" v-if="showSaveLoad">
+					<h3>Save your animation</h3>
+					<p>You can save your animation configuration and come back to it later.</p>
+					<label>Name</label>
+					<div id="saveAnimationField">
+						<input type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
+						<button aria-label="Save Animation" class="button icon-left ui-button" @click="saveAnimation()">
+							<i class="far fa-save"></i>
+							<span>Save</span>
+						</button>
+					</div>
+				</div>
+			</transition>
+			<!--  Edit Target -->
+			<!--  show/hide with showEditTarget -->
+			<transition name="settings">
+				<div class="settings-display" v-if="showEditTarget">
+					<h3>Edit Target Element</h3>
+				</div>
+			</transition>
+			<!--  CSS output -->
+			<!--  show/hide with  showOutput -->
+			<transition name="settings">
+				<div class="settings-display" v-if="showOutput">
 <!-- ////////////////////
 /////////////////////////
 		Output CSS 
 /////////////////////////
 /////////////////////////-->
+<!-- leave over here because pre formatting -->
 <pre id="outputCSS">
+<b>/* Copy this @keyframes block to your CSS*/</b>
+
 @keyframes yourAnimation {
 <span v-for="(data, index) in steps" v-bind:key="index">
   {{data.timelinePosition.left}}{
@@ -28,49 +82,30 @@
   }
   </span>
 }
+
+<b>/* Add the animation: property to whichever element you want to animate */</b>
 <span>
 #elementToAnimate{
-  /* animation: [name] [duration] [timing-function] [delay] [iteration-count] [direction] [fill-mode]; */
-  animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+  animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};
 }
 </span>
 </pre>
-</div> <!-- End output modal -->
-
-
-				<button aria-label="More Settings" class="button icon-left ui-button" @click="showSettings()" id="showSettingsButton">
-					<i class="far fa-adjust" v-bind:class="{'fa-chevron-circle-down': !showingMoreSettings, 'fa-chevron-circle-up': showingMoreSettings}"></i>
-					<span v-if="!showingMoreSettings">More Settings</span>
-					<span v-else>Hide Settings</span>
-				</button>
-			</div>
-			<!-- right side - info, tips, etc. -->
-			<div class="right">
-				
-				<div class="keyframe-data">
-					Properties at {{roundValue(currentStep.left)}}%
-				</div>
-			</div>
-		</div>
-		
-		<!-- Main stage with animated element -->
-		<div id="animateMain">
-
-			<!-- Settings contatiner -->
-			<!--  show/hide with  showingMoreSettings -->
-			<transition name="settings">
-				<div id="animateSettings" v-if="showingMoreSettings">
-					<h2>Settings</h2>
 				</div>
 			</transition>
 
 			<!-- Stage wrapper -->
-			<transition name="settings">
-				<div id="animateStage" v-bind:class="{'tabs-hidden': cssTab == 0}" v-if="!showingMoreSettings">
-					<span id="targetElement" v-bind:style="allProperties">Hello</span>
-					<!-- <span id="targetElement" :style="fullCSS"></span> -->
-				</div>
-			</transition>
+			<div id="animateStage" v-bind:class="{'tabs-hidden': cssTab == 0}">
+				<!-- 
+					////////////////////////
+					////////////////////////
+					Target Element
+					////////////////////////
+					////////////////////////
+				 -->
+				<span id="targetElement" v-bind:style="allProperties">
+					<i class="fal fa-hand-peace"></i>
+				</span>
+			</div>
 
 			<!-- Element property editor -->
 			<div id="elementProperties">
@@ -93,196 +128,204 @@
 					<!-- ////////////
 						Transform 
 					/////////////// -->
-					<div class="tab-content" v-bind:class="{'visible': cssTab == 1}">
-						<!-- Close tab -->
-						<button class="close-tab" type="button" @click="cssTab = 0">
-							<i class="fas fa-chevron-double-right"></i>
-						</button>
-						<!-- Title -->
-						<div class="tab-title">
-							<span>Transform</span>
-							<i class="far fa-external-link-alt"></i>
-						</div>
-						<!-- Rotate -->
-						<div class="field-set">
-							<label>Rotate</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()">
+					<transition name="tab">
+						<div class="tab-content"  v-if="cssTab == 1">
+							<!-- Close tab -->
+							<button class="close-tab" type="button" @click="cssTab = 0">
+								<i class="fas fa-chevron-double-right"></i>
+							</button>
+							<!-- Title -->
+							<div class="tab-title">
+								<span>Transform {{roundValue(currentStep.left)}}%</span>
+								<i class="far fa-external-link-alt"></i>
+							</div>
+							<!-- Rotate -->
+							<div class="field-set">
+								<label>Rotate</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Scale -->
+							<div class="field-set">
+								<label>Scale</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="1.5" v-model="allProperties.transformProps.scale" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Translate -->
+							<div class="field-set">
+								<label>Translate</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="50px, 100px" v-model="allProperties.transformProps.translate" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Skew -->
+							<div class="field-set">
+								<label>Skew</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="-45deg" v-model="allProperties.transformProps.skew" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Transform Origin -->
+							<div class="field-set">
+								<label>Transform Origin</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="50% 50%" v-model="allProperties.transformProps.transformOrigin" @input="saveStep()">
+								</div>
 							</div>
 						</div>
-						<!-- Scale -->
-						<div class="field-set">
-							<label>Scale</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="1.5" v-model="allProperties.transformProps.scale" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Translate -->
-						<div class="field-set">
-							<label>Translate</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="50px, 100px" v-model="allProperties.transformProps.translate" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Skew -->
-						<div class="field-set">
-							<label>Skew</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="-45deg" v-model="allProperties.transformProps.skew" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Transform Origin -->
-						<div class="field-set">
-							<label>Transform Origin</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="50% 50%" v-model="allProperties.transformProps.transformOrigin" @input="saveStep()">
-							</div>
-						</div>
-					</div>
+					</transition>
 					<!-- ////////////
 						Colors & Fonts 
 					/////////////// -->
-					<div class="tab-content" v-bind:class="{'visible': cssTab == 2}">
-						<!-- Close tab -->
-						<button class="close-tab" type="button" @click="cssTab = 0">
-							<i class="fas fa-chevron-double-right"></i>
-						</button>
-						<!-- Title -->
-						<div class="tab-title">
-							<span>Colors & Fonts</span>
-							<i class="far fa-pencil-paintbrush"></i>
-						</div>
-						<!-- Background -->
-						<div class="field-set">
-							<label>Background</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="red" v-model="allProperties.background" @input="saveStep()">
+					<transition name="tab">
+						<div class="tab-content"  v-if="cssTab == 2">
+							<!-- Close tab -->
+							<button class="close-tab" type="button" @click="cssTab = 0">
+								<i class="fas fa-chevron-double-right"></i>
+							</button>
+							<!-- Title -->
+							<div class="tab-title">
+								<span>Colors & Fonts {{roundValue(currentStep.left)}}%</span>
+								<i class="far fa-pencil-paintbrush"></i>
+							</div>
+							<!-- Background -->
+							<div class="field-set">
+								<label>Background</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="red" v-model="allProperties.background" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Opacity -->
+							<div class="field-set">
+								<label>Opacity</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="0.5" v-model="allProperties.opacity" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Color (Text) -->
+							<div class="field-set">
+								<label>Color (Text)</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="#0000FF" v-model="allProperties.color" @input="saveStep()">
+								</div>
+							</div>
+							<!-- FontSize -->
+							<div class="field-set">
+								<label>Font Size</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="14px" v-model="allProperties.fontSize" @input="saveStep()">
+								</div>
 							</div>
 						</div>
-						<!-- Opacity -->
-						<div class="field-set">
-							<label>Opacity</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="0.5" v-model="allProperties.opacity" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Color (Text) -->
-						<div class="field-set">
-							<label>Color (Text)</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="#0000FF" v-model="allProperties.color" @input="saveStep()">
-							</div>
-						</div>
-						<!-- FontSize -->
-						<div class="field-set">
-							<label>Font Size</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="14px" v-model="allProperties.fontSize" @input="saveStep()">
-							</div>
-						</div>
-					</div>
+					</transition>
 					<!-- ////////////
 						Sizing and Spacing 
 					/////////////// -->
-					<div class="tab-content" v-bind:class="{'visible': cssTab == 3}">
-						<!-- Close tab -->
-						<button class="close-tab" type="button" @click="cssTab = 0">
-							<i class="fas fa-chevron-double-right"></i>
-						</button>
-						<!-- Title -->
-						<div class="tab-title">
-							<span>Size & Spacing</span>
-							<i class="far fa-expand-arrows"></i>
-						</div>
-						<!-- Width -->
-						<div class="field-set">
-							<label>Width</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="100px" v-model="allProperties.width" @input="saveStep()">
+					<transition name="tab">
+						<div class="tab-content" v-if="cssTab == 3">
+							<!-- Close tab -->
+							<button class="close-tab" type="button" @click="cssTab = 0">
+								<i class="fas fa-chevron-double-right"></i>
+							</button>
+							<!-- Title -->
+							<div class="tab-title">
+								<span>Sizing {{roundValue(currentStep.left)}}%</span>
+								<i class="far fa-expand-arrows"></i>
+							</div>
+							<!-- Width -->
+							<div class="field-set">
+								<label>Width</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="100px" v-model="allProperties.width" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Max Width -->
+							<div class="field-set">
+								<label>Max-Width</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="50px" v-model="allProperties.maxWidth" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Min Width -->
+							<div class="field-set">
+								<label>Min-Width</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="22%" v-model="allProperties.minWidth" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Height -->
+							<div class="field-set">
+								<label>Height</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="100px" v-model="allProperties.height" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Max Height -->
+							<div class="field-set">
+								<label>Max-Height</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="50px" v-model="allProperties.maxHeight" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Min Height -->
+							<div class="field-set">
+								<label>Min-Height</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="22%" v-model="allProperties.minHeight" @input="saveStep()">
+								</div>
 							</div>
 						</div>
-						<!-- Max Width -->
-						<div class="field-set">
-							<label>Max-Width</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="50px" v-model="allProperties.maxWidth" @input="saveStep()">
+					</transition>
+					<transition name="tab">
+						<div class="tab-content" v-if="cssTab == 4">
+							<!-- Close tab -->
+							<button class="close-tab" type="button" @click="cssTab = 0">
+								<i class="fas fa-chevron-double-right"></i>
+							</button>
+							<!-- Title -->
+							<div class="tab-title">
+								<span>Borders & Spacing {{roundValue(currentStep.left)}}%</span>
+								<i class="far fa-border-style"></i>
+							</div>
+							<!-- Border -->
+							<div class="field-set">
+								<label>Border</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.border" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Box Shadow -->
+							<div class="field-set">
+								<label>Box Shadow</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.boxShadow" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Outline -->
+							<div class="field-set">
+								<label>Outline</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.outline" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Margin -->
+							<div class="field-set">
+								<label>Margin</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="15px 15px" v-model="allProperties.margin" @input="saveStep()">
+								</div>
+							</div>
+							<!-- Padding -->
+							<div class="field-set">
+								<label>Padding</label>
+								<div class="input-wrapper">
+									<input type="text" placeholder="10px 0 0 0" v-model="allProperties.padding" @input="saveStep()">
+								</div>
 							</div>
 						</div>
-						<!-- Min Width -->
-						<div class="field-set">
-							<label>Min-Width</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="22%" v-model="allProperties.minWidth" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Height -->
-						<div class="field-set">
-							<label>Height</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="100px" v-model="allProperties.height" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Max Height -->
-						<div class="field-set">
-							<label>Max-Height</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="50px" v-model="allProperties.maxHeight" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Min Height -->
-						<div class="field-set">
-							<label>Min-Height</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="22%" v-model="allProperties.minHeight" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Margin -->
-						<div class="field-set">
-							<label>Margin</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="15px 15px" v-model="allProperties.margin" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Padding -->
-						<div class="field-set">
-							<label>Padding</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="10px 0 0 0" v-model="allProperties.padding" @input="saveStep()">
-							</div>
-						</div>
-					</div>
-					<div class="tab-content" v-bind:class="{'visible': cssTab == 4}">
-						<!-- Close tab -->
-						<button class="close-tab" type="button" @click="cssTab = 0">
-							<i class="fas fa-chevron-double-right"></i>
-						</button>
-						<!-- Title -->
-						<div class="tab-title">
-							<span>Borders & Spacing</span>
-							<i class="far fa-border-style"></i>
-						</div>
-						<!-- Border -->
-						<div class="field-set">
-							<label>Border</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="45deg" v-model="allProperties.transformProps.border" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Box Shadow -->
-						<div class="field-set">
-							<label>Box Shadow</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="45deg" v-model="allProperties.transformProps.boxShadow" @input="saveStep()">
-							</div>
-						</div>
-						<!-- Outline -->
-						<div class="field-set">
-							<label>Outline</label>
-							<div class="input-wrapper">
-								<input type="text" placeholder="45deg" v-model="allProperties.transformProps.outline" @input="saveStep()">
-							</div>
-						</div>
-					</div>
+					</transition>
 				</div>
 			</div>
 		</div>
@@ -294,7 +337,7 @@
 			<div id="animationControls">
 				<!-- Left side, add step -->
 				<div class="left">
-					<button id="addStepButton"  aria-label="Add new step" class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'red' : addingStep}">
+					<button id="addStepButton"  aria-label="Add new step" class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
 						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
 						<span v-if="!addingStep">Add Step</span>
 						<span v-else>Cancel</span>
@@ -306,34 +349,46 @@
 					
 				</div>
 
-				<!-- Right side, Timing, play/pause -->
-				<div class="right">
+				<!-- Middle, timing -->
+				<div class="middle">
 					<div class="animation-prop">
 						<input type="text" placeholder="3s" v-model="animationProperties.duration" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.duration}}</div>
 						<label>Duration</label>
 					</div>
 					<div class="animation-prop">
 						<input type="text" placeholder="infinite" v-model="animationProperties.iterations" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.iterations}}</div>
 						<label>Iterations</label>
 					</div>
 					<div class="animation-prop">
 						<input type="text" placeholder="0s" v-model="animationProperties.delay" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.delay}}</div>
 						<label>Delay</label>
 					</div>
 					<div class="animation-prop">
 						<input type="text" placeholder="linear" v-model="animationProperties.timing" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.timing}}</div>
 						<label>Timing</label>
 					</div>
-					<div class="animation-prop" @click="toggleTiming('direction')">
-						<button class="fake-input" aria-label="Change animation direction">{{animationProperties.direction}}</button>
+					<div class="animation-prop fake">
+						<button class="click-toggle" @click="toggleTiming('direction')" aria-label="Change animation direction">
+							{{animationProperties.direction}}
+						</button>
 						<label>Direction</label>
 					</div>
-					<div class="animation-prop" @click="toggleTiming('fill')">
-						<button class="fake-input" aria-label="Change animation fill mode">{{animationProperties.fillMode}}</button>
+					<div class="animation-prop fake">
+						<button class="click-toggle" @click="toggleTiming('fill')" aria-label="Change animation fill mode">
+							{{animationProperties.fillMode}}
+						</button>
 						<label>Fill Mode</label>
 					</div>
-					<button class="button icon-left icon-left ui-button" @click="runAnimation()" v-bind:class="{'pause': animationPlaying}" @input="saveStep()">
-						<i class="fas" v-bind:class="{'fa-play': !animationPlaying, 'fa-pause': animationPlaying}"></i>
+				</div>
+
+				<!-- Right side, play/pause -->
+				<div class="right">
+					<button class="button icon-left icon-left ui-button" id="animationButton" @click="runAnimation()" v-bind:class="{'pause': animationPlaying}" @input="saveStep()">
+						<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-pause': animationPlaying}"></i>
 						<span v-if="!animationPlaying">Play</span>
 						<span v-else>Pause</span>
 					</button>
@@ -430,7 +485,11 @@ export default {
 			// Animation currently playing
 			animationPlaying: false,
 			// Collapsible settings
-			showingMoreSettings: false,
+			showSaveLoad: false,
+			// Show modal to edit target
+			showEditTarget: false,
+			// Animation name to save
+			animationToSaveName: null,
 			// Selected step position
 			currentStep: {
 				left: "0.0",
@@ -509,6 +568,9 @@ export default {
 		if(window.innerWidth < 993){
 			this.cssTab = 0;
 		}
+
+		var dateName = new Date().toDateString().replace(/\s/g, '');
+		this.animationToSaveName =  "Animation-" + dateName.substring(0,dateName.length - 4).substring(3,dateName.length - 4);
 	},
 
 	computed: {
@@ -718,24 +780,51 @@ export default {
 
 		// Output
 		viewOutput: function(){
+			// Hide others
+			this.showSaveLoad = false;
+			this.showEditTarget = false;
+
 			// If not already viewing output
 			if(!this.showOutput){
 				this.showOutput = true;
-				this.$store.commit('showLightbox', true);
 			}else{
 				// Close it
 				this.showOutput = false;
-				this.$store.commit('showLightbox', false);
 			}
 		},
 
-		// Settings
-		showSettings: function(){
-			if(this.showingMoreSettings){
-				this.showingMoreSettings = false;
+		// Save/Load
+		viewSaveLoad: function(){
+			// Hide others
+			this.showOutput = false;
+			this.showEditTarget = false;
+
+			if(this.showSaveLoad){
+				this.showSaveLoad = false;
 			}else{
-				this.showingMoreSettings = true;
+				this.showSaveLoad = true;
 			}
+		},
+
+		editTarget: function(){			
+			// Hide others
+			this.showSaveLoad = false;
+			this.showOutput = false;
+
+			if(this.showEditTarget){
+				this.showEditTarget = false;
+			}else{
+				this.showEditTarget = true;
+			}
+		},
+
+		////////////////////
+		////////////////////
+		// Save / Load
+		////////////////////
+		////////////////////
+		saveAnimation: function(){
+
 		},
 
 	}
@@ -755,14 +844,12 @@ export default {
 		justify-content: space-between;
 		height: 100%;
 		box-sizing: border-box;
-		padding-bottom: 35px;
 
-		@media (max-width: @screenMD) {
-			padding-bottom: 0px;
-		}
 
 		// Top bar - control buttons
 		#animateTop{
+			position: absolute;
+			z-index: 10;
 			display: flex;
 			justify-content: space-between;
 			height: 50px;
@@ -772,17 +859,14 @@ export default {
 				display: flex;
 				position: relative;
 
-				// Show output button - set width so it doesn't bounce around
-				#showOutputButton{
-					width: 110px;
-					padding-right: 0;
+				button{
 					text-align: left;
+					padding-right: 0;
 					margin-right: 15px;
-				}
-				#showSettingsButton{
-					width: 130px;
-					padding-right: 0;
-					text-align: left;
+
+					&:last-child{
+						margin-right: 0;
+					}
 				}
 			}
 			// Right side - info, tips, etc
@@ -803,23 +887,71 @@ export default {
 			flex-grow: 3;
 			display: flex;
 			justify-content: space-between;
+			position: relative;
+			border-radius: var(--borderRadius);
+			margin-bottom: 15px;
+
 			/////////////////////
 			//    Settings    //
 			///////////////////
 			// Toggle-able settings over stage
-			#animateSettings{
+			.settings-display{
 				display: flex;
-				width: 50%;
-				width: calc(~'100% - 450px');
+				flex-direction: column;
+				width: 400px;
+				bottom: border-box;
+				padding: 15px;
+				max-height: 90%;
+				max-height: calc(~'100% - 50px');
+				height: fit-content;
 				background-color: var(--backgroundLayer);
 				border: 1px solid var(--border);
-				height: 160px;
 				transform-origin: top center;
 				border-radius: var(--borderRadiusSmall);
 				box-shadow: var(--shadow);
-				margin-bottom: 15px;
 				box-sizing: border-box;
-				padding: 15px;
+				position: absolute;
+				top: 44px;
+				z-index: 50;
+
+				// Settings headers
+				h3{
+					font-size: 16px;
+					line-height: 16px;
+					margin: 0;
+					padding: 0;
+					font-weight: 600;
+				}
+
+				// Generic text
+				p{
+					font-size: 12px;
+					line-height: 14px;
+				}
+
+				// Save/load display
+				&.save-load{
+					width: 310px;
+
+					// Input/button for save field
+					#saveAnimationField{
+						display: flex;
+						width: 100%;
+						overflow: hidden;
+
+						input{
+							flex-grow: 3;
+							border-top-right-radius: 0;
+							border-bottom-right-radius: 0;
+						}
+
+						button{
+							height: 100%;
+							border-top-left-radius: 0;
+							border-bottom-left-radius: 0;
+						}
+					}
+				}
 			}
 			//////////////////
 			//    Stage    //
@@ -856,12 +988,16 @@ export default {
 					display: inline-flex;
 					flex-direction: column;
 					justify-content: center;
-					width: 50px;
-					height: 50px;
+					width: 80px;
+					height: 80px;
 					background-color: var(--primary);
+					color: var(--background);
+					letter-spacing: 0.5px;
 					text-align: center;
-					border-radius: var(--borderRadiusSmall);
+					border-radius: 50%;
+					font-size: 42px;
 					transition: 0.5s ease;
+					box-shadow: var(--shadow);
 				}
 			}
 			////////////////////////////
@@ -946,30 +1082,17 @@ export default {
 						border-radius: var(--borderRadiusSmall);
 						box-sizing: border-box;
 						flex-grow: 3;
-						border: 0px solid transparent;
-						padding: 0px;
-						transition: all 0.2s;
 						position: absolute;
 						right: 65px;
-						padding: 10px 0;
 						box-shadow: var(--shadow);
 						min-height: 200px;
 						max-height: 500px;
-						transform-origin: right center;
-						transform: scaleX(0);
-						overflow: 0;
-
-						// Add class visible to show
-						&.visible{
-							display: block;
-							padding: 10px;
-							max-width: 300px;
-							width: 70vw;
-							border: 1px solid var(--border);
-							transition: all 0.2s 0.08s;
-							transform: scaleX(1);
-							opacity: 1;
-						}
+						transform-origin: top center;
+						display: block;
+						padding: 10px;
+						max-width: 300px;
+						width: 70vw;
+						border: 1px solid var(--border);
 
 						// Close tab button
 						// Element needed in each tab (for now)
@@ -992,13 +1115,14 @@ export default {
 
 						// Header
 						.tab-title{
-							font-size: 20px;
+							font-size: 16px;
 							font-weight: bolder !important;
 							letter-spacing: 0.5px;
 							color: var(--text);
 							display: flex;
 							justify-content: space-between;
 							padding-bottom: 15px;
+							padding-top: 3px;
 						}
 					}
 				}
@@ -1020,29 +1144,31 @@ export default {
 				display: flex;
 				justify-content: space-between;
 
-				.left, .right{
-					#addStepButton{
-						margin: 0 15px 0 0;
-						width: 100px;
-						padding: 0;
-					}
-					#deleteStepButton{
-						margin: 0 0 0 0;
-					}
-				}
+				
 				.left{
 					display: flex;
+					// Button width
+					#addStepButton{
+						width: 100px;
+					}
+					#deleteStepButton{
+						width: 114px;
+					}
 				}
 				.right{
 					display: flex;
-					flex-wrap: wrap;
 					justify-content: flex-end;
 
-					button{
-						margin-left: 10px;
-						width: 90px;
+					// Play/pause animation
+					#animationButton{
+						width: 82px;
 						font-weight: bolder;
 
+						i{
+							margin-left: 2px;
+						}
+
+						// Make pause red
 						&.pause{
 							background-color: var(--red);
 							color: var(--backgroundLayer);
@@ -1053,72 +1179,128 @@ export default {
 							}
 						}
 					}
+					
+				}
 
+				// Middle, timing
+				.middle{
+					display: flex;
+					justify-content: center;
 					// Animation props
 					.animation-prop{
 						display: flex;
-						margin: 0 10px 0 0;
 						flex-direction: column;
+						height: 34px;
+						width: fit-content;
+						position: relative;
+						justify-content: flex-end;
+						margin: 0 5px;
 
+						// Label hidden until hover
 						label{
-							font-size: 11.5px;
-							display: flex;
-							letter-spacing: 0.1px;
-							flex-direction: column;
-							justify-content: center;
-							font-weight: 500;
-							opacity: 0.5;
+							font-size: 12px;
+							display: block;
 							box-sizing: border-box;
-							max-width: 75px;
 							padding: 2px 0px 0 0;
-							color: var(--textLight);
+							color: var(--textLighter);
+							user-select: none;
+							position: absolute;
+							top: -4px;
+							width: fit-content;
+							white-space: pre;
+							width: 100%;
+							text-align: center;
+							opacity: 0;
+							transition: var(--transition);
+							pointer-events: none;
 						}
 
+						// the text elements that show the value
+						// either input or click toggle depending on field
 						input,
-						.fake-input{
+						.set-width,
+						.click-toggle{
 							border-radius: 3px;
-							padding: 0 0;
-							letter-spacing: 0px;
-							height: 30px;
-							max-width: 56px;
-							min-width: 56px;
-							font-size: 13px;
+							height: 26px;
+							font-size: 14px;
 							font-weight: 700;
 							background-color: transparent;
 							border: none;							
 							color: var(--textLight);
 							padding: 0;
-							height: 20px;
+							width: 100%;
+							text-align: center;
+							// text-decoration: underline;
+							overflow: visible;
+							text-overflow: ellipsis;
 							border-bottom: 2px dashed var(--border);
 
 							&:hover,
 							&:focus{
 								border-color: var(--borderHover);
 							}
-
-							// Disabled
-							&:disabled{
-								border-color: transparent;
-
-								&:hover{
-									border-color: transparent;
-									cursor: default;
-								}
-							}
 						}
-						.fake-input{
-							overflow: visible;
-							text-overflow: ellipsis;
-							display: flex;
-							flex-direction: column;
-							justify-content: flex-end;
-							box-sizing: border-box;
-							padding-bottom: 0px;
-							margin: 0;
+
+						// Position absolute inputs
+						input{
+							position: absolute;
+						}
+						
+						// Changes for buttons
+						.click-toggle{
+							text-align: center;
+							padding: 0 5px;
+							user-select: none;
 
 							&:hover{
 								cursor: pointer;
 							}
+						}
+
+						// Hidden text element that expands width of input
+						.set-width{
+							opacity: 0;
+							color: transparent;
+							border: none;
+							padding: 0 5px;
+							pointer-events: none
+						}
+
+						//Adjust width of each
+						// duration, delay
+						&:nth-child(1),
+						&:nth-child(3){
+							input,
+							.set-width{ 
+								min-width: 34px;
+							}
+						}
+						// iterations, timing
+						&:nth-child(2){
+							input,
+							.set-width{ 
+								min-width:50px;
+							}
+						}
+						&:nth-child(4){
+							input,
+							.set-width{ 
+								min-width: 35px;
+							}
+						}
+						// Direction and fill
+						// They're toggles, so fit width
+						&:nth-child(5),
+						&:nth-child(6){
+							width: fit-content;
+						}
+					}
+
+					// Hover any field to show label
+					&:hover{
+						label{
+							opacity: 1;
+							transition: var(--transition);
 						}
 					}
 				}
@@ -1134,7 +1316,7 @@ export default {
 				box-sizing: border-box;
 				padding: 15px;
 				border: 1px solid var(--border);
-				margin: 15px 0 0 0;
+				margin: 15px 0 15px 0;
 				position: relative;
 				transition: 0s ease;
 
@@ -1273,80 +1455,55 @@ export default {
 		}
 	}
 
-	// Pre tweaks to fix output
-	// Contained witthin #outputModal
-	pre{
-		// Display inline last two rows, and first - 
-		// This makes the ending semicolon stay on the last row
-		// Also makes single-rows when necessary
-		&:first-child,
-		&:last-child,
-		&:nth-last-child(2){
-			display: inline;
-		}
-
-		// Override with class block
-		&.block{
-			display: block;
-		}
-	}
-
 	////////////////////
-	// Output modal
+	// Output Code
 	////////////////////
-	#outputModal{
-		position: absolute;
-		background-color: var(--primary);
-		color: var(--textInvert);
-		width: 90vw;
-		max-width: 300px;
-		height: 200px;
-		top: 40px;
-		transition: 0.15s ease-in;
-		transform: scaleY(0);
-		transform-origin: top center;
-		pointer-events: none;
-		border-radius: var(--borderRadiusSmall);
-		box-shadow: var(--shadow);
+	#outputCSS{
+		width: 100%;
+		height: hidden;
+		box-sizing: border-box;
+		padding: 15px 15px 0 15px;
+		font-size: 13px;
+		overflow: auto;
+		white-space: pre-line;
+		font-family: monospace;
+		color: var(--text);
+		font-weight: 600;
 
-		&.visible{
-			transition: 0.15s ease-out;
-			transform: scaleY(1);
-			pointer-events: all;
-		}
-
-		// CSS Output
-		#outputCSS{
-			position: fixed;
-			width: 100%;
-			height: hidden;
-			box-sizing: border-box;
-			padding: 15px;
-			font-size: 12px;
-			overflow: auto;
-			white-space: pre-line;
-			font-family: monospace;
-
+		span{
+			line-height: 13px;
+			letter-spacing: 0.3px;
+			white-space: pre;
+			position: relative;
 			span{
-				line-height: 15px;
-				letter-spacing: 0.3px;
-				white-space: pre;
-				position: relative;
-				span{
-
-					&:last-child{
-						position: absolute;
-					}
+				&:last-child{
+					position: absolute;
 				}
 			}
-			pre{
-				line-height: 15px;
-				letter-spacing: 0.3px;
-				white-space: pre-line;
-				background-color: pink;
+		}
+		pre{
+			letter-spacing: 0.3px;
+			white-space: pre-line;
+
+			// Display inline last two rows, and first - 
+			// This makes the ending semicolon stay on the last row
+			// Also makes single-rows when necessary
+			&:first-child,
+			&:last-child,
+			&:nth-last-child(2){
+				display: inline;
+			}
+
+			// Override with class block
+			&.block{
+				display: block;
 			}
 		}
-
+		// B tags are comments
+		b{
+			font-weight: 500;
+			color: var(--textLightest);
+		}
 	}
 
 
