@@ -4,30 +4,21 @@
 		<!-- HeaderBar -->
 		<div id="animateTop">
 			<!-- left siide, export, settings, etc. -->
-			<div class="left">
-				<!-- Show settings -->
-				<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button icon-left ui-button" @click="viewSaveLoad()" v-bind:class="{'active': showSaveLoad}">
-					<i class="far fa-adjust" v-bind:class="{'fa-save': !showSaveLoad, 'fa-chevron-circle-up': showSaveLoad}"></i>
-					<span>Save/Load</span>
-				</button>
-				<!-- Edit Target -->
-				<button id="showEditTargetButton" aria-label="Edit Target Element" class="button icon-left ui-button" @click="editTarget()" v-bind:class="{'active': showEditTarget}">
-					<i class="far" v-bind:class="{'fa-bullseye': !showEditTarget, 'fa-chevron-circle-up': showEditTarget}"></i>
-					<span>Target Element</span>
-				</button>
-				<!-- Show output -->
-				<button id="showOutputButton" aria-label="Show Output CSS" class="button icon-left ui-button" @click="viewOutput()" v-bind:class="{'active': showOutput}">
-					<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
-					<span>Output CSS</span>
-				</button>
-			</div>
-			<!-- right side - info, tips, etc. -->
-			<div class="right">
-				
-				<div class="keyframe-data">
-					<!-- Properties at {{roundValue(currentStep.left)}}% -->
-				</div>
-			</div>
+			<!-- Show settings -->
+			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button icon-left ui-button" @click="viewSaveLoad()" v-bind:class="{'active': showSaveLoad}">
+				<i class="far fa-adjust" v-bind:class="{'fa-save': !showSaveLoad, 'fa-chevron-circle-up': showSaveLoad}"></i>
+				<span>Save/Load</span>
+			</button>
+			<!-- Edit Target -->
+			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button icon-left ui-button" @click="editTarget()" v-bind:class="{'active': showEditTarget}">
+				<i class="far" v-bind:class="{'fa-bullseye': !showEditTarget, 'fa-chevron-circle-up': showEditTarget}"></i>
+				<span>Target Element</span>
+			</button>
+			<!-- Show output -->
+			<button id="showOutputButton" aria-label="Show Output CSS" class="button icon-left ui-button" @click="viewOutput()" v-bind:class="{'active': showOutput}">
+				<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
+				<span>Output CSS</span>
+			</button>
 		</div>
 		
 		<!-- Main stage with animated element -->
@@ -40,7 +31,7 @@
 			-->
 			<!--  Basic settings -->
 			<!--  show/hide with  showSaveLoad -->
-			<transition name="settings">
+			<transition name="fromtop">
 				<div class="settings-display save-load" v-if="showSaveLoad">
 					<h3>Save your animation</h3>
 					<p>You can save your animation configuration and come back to it later.</p>
@@ -51,18 +42,22 @@
 							<span>Save</span>
 						</button>
 					</div>
+					<h3>Load saved animation</h3>
+					<div v-for="name in savedAnimations">
+						{{name.substr(10)}}
+					</div>
 				</div>
 			</transition>
 			<!--  Edit Target -->
 			<!--  show/hide with showEditTarget -->
-			<transition name="settings">
+			<transition name="fromtop">
 				<div class="settings-display" v-if="showEditTarget">
 					<h3>Edit Target Element</h3>
 				</div>
 			</transition>
 			<!--  CSS output -->
 			<!--  show/hide with  showOutput -->
-			<transition name="settings">
+			<transition name="fromtop">
 				<div class="settings-display" v-show="showOutput">
 <!-- ////////////////////
 /////////////////////////
@@ -93,7 +88,7 @@
 			</transition>
 
 			<!-- Stage wrapper -->
-			<div id="animateStage" v-bind:class="{'tabs-hidden': cssTab == 0}">
+			<div id="animateStage">
 				<!-- 
 					////////////////////////
 					////////////////////////
@@ -101,39 +96,31 @@
 					////////////////////////
 					////////////////////////
 				 -->
-				<span id="targetElement" v-bind:style="allProperties">
-					<i class="fal fa-hand-peace"></i>
-				</span>
+				<div id="targetStage">
+					<div id="targetCenterAlign">
+						<span id="targetElement" v-bind:style="allProperties" v-bind:class="{'pause': animationPaused}">
+							<i class="fal fa-hand-peace"></i>
+						</span>
+					</div>
+				</div>
 			</div>
 
 			<!-- Element property editor -->
-			<div id="elementProperties">
-				
-				<div class="side-tab-display">
-					<div class="side-tabs">
-						<button class="tab" @click="cssTab == 1 ? cssTab = 0 : cssTab = 1" v-bind:class="{'active':cssTab==1}">
-							<i v-bind:class="cssTab == 1 ? 'far fa-times' : 'far fa-external-link-alt'"></i>
-						</button>
-						<button class="tab" @click="cssTab == 2 ? cssTab = 0 : cssTab = 2" v-bind:class="{'active':cssTab==2}">
-							<i v-bind:class="cssTab == 2 ? 'far fa-times' : 'far fa-pencil-paintbrush'"></i>
-						</button>
-						<button class="tab" @click="cssTab == 3 ? cssTab = 0 : cssTab = 3" v-bind:class="{'active':cssTab==3}">
-							<i v-bind:class="cssTab == 3 ? 'far fa-times' : 'far fa-expand-arrows'"></i>
-						</button>
-						<button class="tab" @click="cssTab == 4 ? cssTab = 0 : cssTab = 4" v-bind:class="{'active':cssTab==4}">
-							<i v-bind:class="cssTab == 4 ? 'far fa-times' : 'far fa-border-style'"></i>
-						</button>
-					</div>
-					<!-- ////////////
-						Transform 
-					/////////////// -->
+			<div id="animateSidebar">
+				<!-- Top of sidebar - 50px height to match buttons on left -->
+				<div id="animateSidebarTop">
+					<span>CSS Properties</span> 
+					<span>{{roundValue(currentStep.left)}}%</span>
+				</div>
+
+				<div id="animateSidebarProperties">
+					<button class="property-header" @click="cssTab == 1 ? cssTab = 0 : cssTab = 1" v-bind:class="{'active':cssTab==1}">
+						<span>Transform</span>
+						<i v-bind:class="cssTab == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+					</button>
+					<!-- Transform fields -->
 					<transition name="tab">
-						<div class="tab-content"  v-if="cssTab == 1">
-							
-							<!-- Title -->
-							<div class="tab-title">
-								<span>Transform: {{roundValue(currentStep.left)}}%</span>
-							</div>
+						<div class="property-group" v-if="cssTab == 1">
 							<!-- Rotate -->
 							<div class="field-set">
 								<label>Rotate</label>
@@ -169,6 +156,37 @@
 									<input type="text" placeholder="50% 50%" v-model="allProperties.transformOrigin" @input="saveStep()">
 								</div>
 							</div>
+						</div>
+					</transition> <!-- End transform: -->
+				</div>
+
+				<!-- Property editor -->
+				<div class="side-tab-display">
+					<div class="side-tabs">
+						<button class="tab" @click="cssTab == 1 ? cssTab = 0 : cssTab = 1" v-bind:class="{'active':cssTab==1}">
+							<i v-bind:class="cssTab == 1 ? 'far fa-times' : 'far fa-external-link-alt'"></i>
+						</button>
+						<button class="tab" @click="cssTab == 2 ? cssTab = 0 : cssTab = 2" v-bind:class="{'active':cssTab==2}">
+							<i v-bind:class="cssTab == 2 ? 'far fa-times' : 'far fa-pencil-paintbrush'"></i>
+						</button>
+						<button class="tab" @click="cssTab == 3 ? cssTab = 0 : cssTab = 3" v-bind:class="{'active':cssTab==3}">
+							<i v-bind:class="cssTab == 3 ? 'far fa-times' : 'far fa-expand-arrows'"></i>
+						</button>
+						<button class="tab" @click="cssTab == 4 ? cssTab = 0 : cssTab = 4" v-bind:class="{'active':cssTab==4}">
+							<i v-bind:class="cssTab == 4 ? 'far fa-times' : 'far fa-border-style'"></i>
+						</button>
+					</div>
+					<!-- ////////////
+						Transform 
+					/////////////// -->
+					<transition name="tab">
+						<div class="tab-content"  v-if="cssTab == 1">
+							
+							<!-- Title -->
+							<div class="tab-title">
+								<span>Transform: {{roundValue(currentStep.left)}}%</span>
+							</div>
+							
 						</div>
 					</transition>
 					<!-- ////////////
@@ -290,102 +308,111 @@
 		</div>
 		
 		<!-- Footer -->
-		<div id="animateFooter">
+		<transition name="modal">
+			<div id="animateFooter" v-if="!$store.getters.softKeyboard">
 
-			<!-- Controls -->
-			<div id="animationControls">
-				<!-- Left side, add step -->
-				<div class="left">
-					<button id="addStepButton"  aria-label="Add new step" class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
-						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
-						<span v-if="!addingStep">Add Step</span>
-						<span v-else>Cancel</span>
-					</button>
-					<button id="deleteStepButton" aria-label="Delete current step" class="button icon-left ui-button" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
-						<i class="far fa-trash-alt"></i>
-						<span>Delete Step</span>
-					</button>
+				<!-- Controls -->
+				<div id="animationControls">
+					<!-- Left side, add step -->
+					<div class="steps">
+						<button id="addStepButton"  aria-label="Add new step" class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
+							<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
+							<span v-if="!addingStep">Add Step</span>
+							<span v-else>Cancel</span>
+						</button>
+						<button id="deleteStepButton" aria-label="Delete current step" class="button icon-left ui-button" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
+							<i class="far fa-trash-alt"></i>
+							<span>Delete {{roundValue(currentStep.left)}}%</span>
+						</button>
+					</div>
+
+					<!-- Edit timing -->
+					<div class="timing">
+						<div class="animation-prop">
+							<input type="text" placeholder="3s" v-model="animationProperties.duration" @input="saveStep()"/>
+							<div class="set-width">{{animationProperties.duration}}</div>
+							<label>Duration</label>
+						</div>
+						<div class="animation-prop">
+							<input type="text" placeholder="infinite" v-model="animationProperties.iterations" @input="saveStep()"/>
+							<div class="set-width">{{animationProperties.iterations}}</div>
+							<label>Iterations</label>
+						</div>
+						<div class="animation-prop">
+							<input type="text" placeholder="0s" v-model="animationProperties.delay" @input="saveStep()"/>
+							<div class="set-width">{{animationProperties.delay}}</div>
+							<label>Delay</label>
+						</div>
+						<div class="animation-prop">
+							<input type="text" placeholder="linear" v-model="animationProperties.timing" @input="saveStep()"/>
+							<div class="set-width">{{animationProperties.timing}}</div>
+							<label>Timing</label>
+						</div>
+						<div class="animation-prop fake">
+							<button class="click-toggle" @click="toggleTiming('direction')" aria-label="Change animation direction">
+								{{animationProperties.direction}}
+							</button>
+							<label>Direction</label>
+						</div>
+						<div class="animation-prop fake">
+							<button class="click-toggle" @click="toggleTiming('fill')" aria-label="Change animation fill mode">
+								{{animationProperties.fillMode}}
+							</button>
+							<label>Fill Mode</label>
+						</div>
+					</div>
+
+					<!-- Right side, pause -->
+					<div class="preview-button" v-if="animationPlaying">
+						<button class="button ui-button" id="pauseAnimationButton" @click="pauseAnimation()" v-bind:class="{'pause-button': animationPaused}">
+							<i v-bind:class="{'far fa-pause': !animationPaused, 'far fa-play': animationPaused}"></i>
+							<span v-if="!animationPaused">Pause</span>
+							<span v-else>Resume</span>
+						</button>
+					</div>
+					<!-- Right side, play/stop -->
+					<div class="preview-button">
+						<button class="button ui-button" id="playAnimationButton" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying}">
+							<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-stop-circle': animationPlaying}"></i>
+							<span v-if="!animationPlaying">Play</span>
+							<span v-else>Stop</span>
+						</button>
+					</div>
 					
 				</div>
 
-				<!-- Middle, timing -->
-				<div class="middle">
-					<div class="animation-prop">
-						<input type="text" placeholder="3s" v-model="animationProperties.duration" @input="saveStep()"/>
-						<div class="set-width">{{animationProperties.duration}}</div>
-						<label>Duration</label>
+				<!-- Timeline -->
+				<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}">
+					<!-- Animated marker that progresses with animation -->
+					<div class="timeline-marker animated" v-if="animationPlaying" v-bind:class="{'pause': animationPaused}">
 					</div>
-					<div class="animation-prop">
-						<input type="text" placeholder="infinite" v-model="animationProperties.iterations" @input="saveStep()"/>
-						<div class="set-width">{{animationProperties.iterations}}</div>
-						<label>Iterations</label>
+
+					<!-- Marker that shows current/selected step location -->
+					<div class="timeline-marker current" v-bind:style="currentStep" 
+						v-if="currentStep.left != null"
+						@mouseenter="hideAddStep = true" 
+						@mouseleave="hideAddStep = false">
+
+						<b>{{roundValue(currentStep.left)}}</b>
 					</div>
-					<div class="animation-prop">
-						<input type="text" placeholder="0s" v-model="animationProperties.delay" @input="saveStep()"/>
-						<div class="set-width">{{animationProperties.delay}}</div>
-						<label>Delay</label>
+
+					<!-- V-for all other steps -->
+					<div class="timeline-marker step" v-for="(step, index) in steps" 
+						v-bind:style="step.timelinePosition" :key="step.id" 
+						@mouseenter="hideAddStep = true" 
+						@mouseleave="hideAddStep = false" 
+						@click="changeStep(index)">
+
+						<b>{{roundValue(step.timelinePosition.left)}}</b>
 					</div>
-					<div class="animation-prop">
-						<input type="text" placeholder="linear" v-model="animationProperties.timing" @input="saveStep()"/>
-						<div class="set-width">{{animationProperties.timing}}</div>
-						<label>Timing</label>
+
+					<!-- Marker that shows location when hovering - must be in after other makers so it responds to ~ sibling css selector -->
+					<div class="timeline-marker new" v-bind:style="timelinePosition">
+						<b>{{roundValue(timelinePosition.left)}}</b>
 					</div>
-					<div class="animation-prop fake">
-						<button class="click-toggle" @click="toggleTiming('direction')" aria-label="Change animation direction">
-							{{animationProperties.direction}}
-						</button>
-						<label>Direction</label>
-					</div>
-					<div class="animation-prop fake">
-						<button class="click-toggle" @click="toggleTiming('fill')" aria-label="Change animation fill mode">
-							{{animationProperties.fillMode}}
-						</button>
-						<label>Fill Mode</label>
-					</div>
-				</div>
-
-				<!-- Right side, play/pause -->
-				<div class="right">
-					<button class="button icon-left icon-left ui-button" id="animationButton" @click="runAnimation()" v-bind:class="{'pause': animationPlaying}" @input="saveStep()">
-						<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-pause': animationPlaying}"></i>
-						<span v-if="!animationPlaying">Play</span>
-						<span v-else>Pause</span>
-					</button>
-				</div>
-				
-			</div>
-
-			<!-- Timeline -->
-			<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}">
-				<!-- Animated marker that progresses with animation -->
-				<div class="timeline-marker animated" v-if="animationPlaying">
-				</div>
-
-				<!-- Marker that shows current/selected step location -->
-				<div class="timeline-marker current" v-bind:style="currentStep" 
-					v-if="currentStep.left != null"
-					@mouseenter="hideAddStep = true" 
-					@mouseleave="hideAddStep = false">
-
-					<b>{{roundValue(currentStep.left)}}</b>
-				</div>
-
-				<!-- V-for all other steps -->
-				<div class="timeline-marker step" v-for="(step, index) in steps" 
-					v-bind:style="step.timelinePosition" :key="step.id" 
-					@mouseenter="hideAddStep = true" 
-					@mouseleave="hideAddStep = false" 
-					@click="changeStep(index)">
-
-					<b>{{roundValue(step.timelinePosition.left)}}</b>
-				</div>
-
-				<!-- Marker that shows location when hovering - must be in after other makers so it responds to ~ sibling css selector -->
-				<div class="timeline-marker new" v-bind:style="timelinePosition">
-					<b>{{roundValue(timelinePosition.left)}}</b>
 				</div>
 			</div>
-		</div>
+		</transition>
 
 
 <!-- steps:
@@ -417,6 +444,8 @@
 // @ is an alias to /src
 import toastMixin from "@/components/mixins/ui/toastMixin.js";
 import metaMixin from "@/components/mixins/metaMixin.js";
+import preferencesMixin from "@/components/mixins/preferencesMixin.js";
+import softKeyboardMixin from "@/components/mixins/ui/softKeyboardMixin.js";
 
 export default {
 	name: "home",
@@ -427,6 +456,8 @@ export default {
 	mixins: [
 		toastMixin,
 		metaMixin,
+		softKeyboardMixin,
+		preferencesMixin,
 	],
 
 	data() {
@@ -441,14 +472,17 @@ export default {
 			addingStep: false,
 			// When hovering an existing step
 			hideAddStep: false,
-			// Animation currently playing
+			// Animation currently playing, and/or paused
 			animationPlaying: false,
+			animationPaused: false,
 			// Collapsible settings
 			showSaveLoad: false,
 			// Show modal to edit target
 			showEditTarget: false,
 			// Animation name to save
 			animationToSaveName: null,
+			// Previously saved animations
+			savedAnimations: null,
 			// Selected step position
 			currentStep: {
 				left: "0.0",
@@ -551,6 +585,13 @@ export default {
 			// this.timeout = setTimeout(() => {
  
  
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
+				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
 				var copyProps = _.cloneDeep(this.allProperties);
 				var cleanProps = this.removeObjectsWithNull(copyProps);
 
@@ -674,6 +715,7 @@ export default {
 		// Play/Pause animation
 		runAnimation: function(){
 			this.addingStep = false;
+			this.animationPaused = false;
 
 			// If it's already playing
 			if(this.animationPlaying){
@@ -687,8 +729,18 @@ export default {
 		},
 		// Stop animation
 		stopAnimation: function(){
+			this.animationPaused = false;
 			if(this.animationPlaying){
 				this.runAnimation();
+			}
+		},
+
+		// Pause animation temporarily
+		pauseAnimation: function(){
+			if(this.animationPaused){
+				this.animationPaused = false;
+			}else{
+				this.animationPaused = true;
 			}
 		},
 		
@@ -769,6 +821,7 @@ export default {
 			if(this.showSaveLoad){
 				this.showSaveLoad = false;
 			}else{
+				this.loadAllSaved();
 				this.showSaveLoad = true;
 			}
 		},
@@ -792,8 +845,27 @@ export default {
 		////////////////////
 		saveAnimation: function(){
 			var newAnimation = this.allProperties;
-			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), "test");
+			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), JSON.stringify(this.allProperties));
 		},
+		// Load saved
+		loadAllSaved: function(){
+			// Get all saved animations
+			// Loop through all local storage, save sttorage names of animattions
+			// Animations begin with "animation_"
+			var values = [];
+			var keys = Object.keys(localStorage);
+			var i = keys.length;
+			while( i-- ){
+				if(keys[i].startsWith("animation_")){
+					values.push(keys[i]);
+				}
+
+			}
+			console.log(values);
+
+			this.savedAnimations = values;
+
+		}
 
 	}
 };
@@ -805,6 +877,10 @@ export default {
 
 	@import '~@/styles/variables.less';
 
+	// Use this to toggle **Pause** on animations. Not full stops.
+	.pause{
+		animation-play-state: paused !important;
+	}
 	// Component wrapper
 	#animateApp{
 		display: flex;
@@ -819,33 +895,17 @@ export default {
 			position: absolute;
 			z-index: 10;
 			display: flex;
-			justify-content: space-between;
+			justify-content: flex-start;
 			height: 50px;
+			display: flex;
 
-			// Left side - export, adjustments, etc
-			.left{
-				display: flex;
-				position: relative;
+			button{
+				text-align: left;
+				padding-right: 0;
+				margin-right: 15px;
 
-				button{
-					text-align: left;
-					padding-right: 0;
-					margin-right: 15px;
-
-					&:last-child{
-						margin-right: 0;
-					}
-				}
-			}
-			// Right side - info, tips, etc
-			.right{
-				.keyframe-data{
-					text-align: right;
-					font-size: 16px;
-					box-sizing: border-box;
-					padding-top: 15px;
-					font-weight: 600;
-					color: var(--text);
+				&:last-child{
+					margin-right: 0;
 				}
 			}
 		}
@@ -879,7 +939,7 @@ export default {
 				box-shadow: var(--shadow);
 				box-sizing: border-box;
 				position: absolute;
-				top: 44px;
+				top: 50px;
 				z-index: 50;
 
 				// Settings headers
@@ -937,48 +997,96 @@ export default {
 				flex-direction: column;
 				justify-content: center;
 				margin: 0 auto;
-				width: fit-content;
-				max-width: fit-content;
 				box-sizing: border-box;
-				padding-left: 65px;
+				padding: 50px 50px 0 0;
 				transition: var(--transition);
-				padding-right: 30px;
 
-				// Add 300px padding right above Large desktop since there's enough space
-				// Makes animated element look more centered
-				@media (min-width: @screenLG) {
-					padding-right: 365px;
+				#targetStage{
+					border-radius: var(--borderRadiusSmall);
+					width: 100%;
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					margin-right: 50px;
+
+					// To flex align the target elementt center without effecting margin
+					#targetCenterAlign{
+						display: flex;
+						justify-content: center;
+						
+						// Element that's being animated
+						#targetElement{
+							display: inline-flex;
+							flex-direction: column;
+							justify-content: center;
+							width: 80px;
+							height: 80px;
+							background-color: var(--primary);
+							color: var(--background);
+							letter-spacing: 0.5px;
+							text-align: center;
+							border-radius: 50%;
+							font-size: 42px;
+							transition: 0.5s ease;
+							box-shadow: var(--shadow);
+						}
+					}
+				}
+			}
+			///////////////////////////////
+			//    Sidebar/Properties    //
+			/////////////////////////////
+			#animateSidebar{
+				width: 300px;
+				background-color: var(--backgroundLayer);
+				border-radius: var(--borderRadiusSmall);
+				border: 1px solid var(--border);
+
+				@media (max-width: @screenMD) {
+					position: relative;
+					right: -15px;
 				}
 
-				// If user collapses tabs, remove large right padding
-				&.tabs-hidden{
-					@media (min-width: @screenLG) {
-						padding-right: 0px;
-						transition: var(--transition);
+				// Top of sidebar, title
+				#animateSidebarTop{
+					display: flex;
+					width: 100%;
+					justify-content: space-between;
+					font-size: 18px;
+					font-weight: 600;
+					box-sizing: border-box;
+					padding: 15px;
+					letter-spacing: 0.3px;
+
+					span{
+						&:last-child{
+							font-family: var(--systemFont);
+							font-weight: 800;
+							letter-spacing: 0.8px;
+						}
 					}
 				}
 
-				// Element that's being animated
-				#targetElement{
-					display: inline-flex;
-					flex-direction: column;
-					justify-content: center;
-					width: 80px;
-					height: 80px;
-					background-color: var(--primary);
-					color: var(--background);
-					letter-spacing: 0.5px;
-					text-align: center;
-					border-radius: 50%;
-					font-size: 42px;
-					transition: 0.5s ease;
-					box-shadow: var(--shadow);
+				// Collapsible CSS property fields
+				#animateSidebarProperties{
+
+					// Section header - click to collapse
+					.property-header{
+						display: flex;
+						justify-content: space-between;
+						width: 100%;
+						box-sizing: border-box;
+						padding: 10px 15px;
+						font-size: 16px;
+					}
+
+					// Collapsible group that holds related properties
+					.property-group{
+						box-sizing: border-box;
+						padding: 10px 15px;
+					}
 				}
-			}
-			////////////////////////////
-			//    Property Editor    //
-			//////////////////////////
-			#elementProperties{
 
 				// Tabs and tabs display
 				// Tabs and tabs display
@@ -989,6 +1097,8 @@ export default {
 					max-width: 50px;
 					min-width: 50px;
 					position: relative;
+					display: none;
+
 					// Make wider on mobile to match top dropdown
 					@media (max-width: @screenMD) {
 						width: 54px;
@@ -1106,9 +1216,10 @@ export default {
 			#animationControls{
 				display: flex;
 				justify-content: space-between;
+				flex-wrap: wrap;
 
-				
-				.left{
+				// Add and delete step buttons
+				.steps{
 					display: flex;
 					flex-grow: 3;
 					// Button width
@@ -1119,13 +1230,15 @@ export default {
 						width: 114px;
 					}
 				}
-				.right{
+				// Play/pause buttons
+				.preview-button{
 					display: flex;
 					justify-content: flex-end;
+					margin-left: 15px;
 
 					// Play/pause animation
-					#animationButton{
-						width: 82px;
+					#playAnimationButton,
+					#pauseAnimationButton{
 						font-weight: bolder;
 
 						i{
@@ -1133,7 +1246,7 @@ export default {
 						}
 
 						// Make pause red
-						&.pause{
+						&.stop-button{
 							background-color: var(--red);
 							color: var(--backgroundLayer);
 							border-color: var(--redHover);
@@ -1142,16 +1255,40 @@ export default {
 								background-color: var(--redHover);
 							}
 						}
+						// Resume from pause - green
+						&.pause-button{
+							background-color: var(--green);
+							border-color: var(--greenHover);
+							color: var(--backgroundLayer);
+
+							&:hover{
+								background-color: var(--greenHover);
+							}
+						}
+					}
+
+					#playAnimationButton{
+						width: 82px;
+					}
+					#pauseAnimationButton{
+						width: 94px;
 					}
 					
 				}
 
-				// Middle, timing
-				.middle{
+				// Timing inputs
+				.timing{
 					display: flex;
 					justify-content: center;
 					box-sizing: border-box;
-					padding-right: 25px;
+
+					// Move timing to top on mobile
+					@media (max-width: @screenMD) {
+						order: -1;
+						width: 100%;
+						padding: 5px 0 10px 0;
+					}
+
 					// Animation props
 					.animation-prop{
 						display: flex;

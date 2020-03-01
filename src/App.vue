@@ -12,10 +12,6 @@
 
 				<!-- All page contetnt contained within main -->
 				<main id="content">
-
-					<!-- Sidebar Component -->
-					<Sidebar></Sidebar>
-				
 					<!-- Center/Main Content -->
 					<div class="body-content">
 						<!-- page transition defined in base.less -->
@@ -150,20 +146,14 @@ export default {
 		// Main body content
 		.body-content{
 			box-sizing: border-box;
-			padding: 0;
+			padding: 0 15px;
 			flex-grow: 3;
 			// to account for header
 			
 
 			@media (min-width: @screenMD) {
-				padding-left: 50px;
+				padding-left: 35px;
 				padding-right: 35px;
-			}
-			@media (min-width: @screenLG) {
-				padding-left: 60px;
-			}
-			@media (min-width: @screenXL) {
-				padding-left: 70px;
 			}
 		}
 	}

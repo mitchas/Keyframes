@@ -32,10 +32,29 @@ body{
 		max-height:100%;
 	}
 
+	// Disable vue enter and leave animations
+	// Normally all/wildcard (*) animations would be disabled, but that would break the animation apps
 	&.no-animations{
-		*{
+		.toast-enter-active,
+		.toast-leave-active,
+		.load-enter-active,
+		.load-leave-active,
+		.page-enter-active,
+		.page-leave-active,
+		.basic-enter-active,
+		.basic-leave-active,
+		.settings-enter-active,
+		.settings-leave-active,
+		.tab-enter-active,
+		.tab-leave-active,
+		.modal-enter-active,
+		.modal-leave-active,
+		.lightbox,
+		.settings-nav-popover
+		{
 			transition-duration: 0s !important;
 			animation-duration: 0s !important;
+			animation: none !important;
 		}
 	}
 }

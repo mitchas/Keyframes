@@ -1,6 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# compiled output
+# Build/Dist
 /dist
 /tmp
 /out-tsc
@@ -12,6 +12,7 @@
 
 # dependencies
 /node_modules
+bower_components
 
 # profiling files
 chrome-profiler-events.json
@@ -43,6 +44,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+**/*npm-debug.log.*
+**/*yarn-error.log.*
 
 # System Files
 .DS_Store

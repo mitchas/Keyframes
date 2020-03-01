@@ -45,7 +45,7 @@
 							<!-- Start Page Selector -->
 							<label class="setting-label-large mtop-xs">
 								Start Page {{test}}
-								<small>Select the page you'd like to load first when you visit this site.</small>
+								<small>Select the page you'd like to load first when you visit keyframes.app.</small>
 							</label>
 							<div class="options-display">
 								<!-- v-for over all options defined in startPages -->
