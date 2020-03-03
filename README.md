@@ -3,16 +3,7 @@
 ### Demo this at [mitchs.co/vuelocal](https://mitchs.co/vuelocal)
 
 
-This is a template for a Vue app. It's the same as [VueFirebase](https://github.com/mitchas/VueFirebase), without the firebase. Instead, preferences are saved in Local Storage, and no database is required.
-
-It includes the basic structure for a Vue webapp.
- * Toast notifications.
- * Super responsive, smooth animations, feels native on mobile.
- * Auto dark-mode based on device settings. Users can toggle their preference.
- * Settings modal with other preference toggles.
- * PWA ready.
- * Terms of Service & Privacy policy.
-
+This is a collection of web apps to live preview and generate various CSS styles. It originally started as a tool just for creating CSS animations (hence the name Keyframes), but I'm working to add more tools.
  
 
 # Project Installation & Development
