@@ -114,90 +114,69 @@
 				</div>
 
 				<div id="animateSidebarProperties">
-					<button class="property-header" @click="cssTab == 1 ? cssTab = 0 : cssTab = 1" v-bind:class="{'active':cssTab==1}">
+					<button class="property-header" @click="propertiesToggles.transform = !propertiesToggles.transform" v-bind:class="{'active':propertiesToggles.transform}">
 						<span>Transform</span>
-						<i v-bind:class="cssTab == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+						<i v-bind:class="propertiesToggles.transform == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
 					</button>
 					<!-- Transform fields -->
 					<transition name="tab">
-						<div class="property-group" v-if="cssTab == 1">
+						<div class="property-group" v-if="propertiesToggles.transform">
 							<!-- Rotate -->
-							<div class="field-set">
-								<label>Rotate</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()">
+							<label class="prop-field" for="transformRotate">
+								<span>rotate(</span>
+								<div class="prop-val">
+									<span class="prop-val-copy">{{allProperties.transformProps.rotate ? allProperties.transformProps.rotate : "45deg"}}</span>
+									<input type="text" id="transformRotate" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()" maxlength="10">
 								</div>
-							</div>
+								<span>)</span>
+							</label>
 							<!-- Scale -->
-							<div class="field-set">
-								<label>Scale</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="1.5" v-model="allProperties.transformProps.scale" @input="saveStep()">
+							<label class="prop-field" for="transformScale">
+								<span>scale(</span>
+								<div class="prop-val">
+									<span class="prop-val-copy">{{allProperties.transformProps.scale ? allProperties.transformProps.scale : "1.5"}}</span>
+									<input type="text" id="transformScale" placeholder="1.5" v-model="allProperties.transformProps.scale" @input="saveStep()" maxlength="6">
 								</div>
-							</div>
+								<span>)</span>
+							</label>
 							<!-- Translate -->
-							<div class="field-set">
-								<label>Translate</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="50px, 100px" v-model="allProperties.transformProps.translate" @input="saveStep()">
+							<label class="prop-field" for="transformTranslate">
+								<span>translate(</span>
+								<div class="prop-val">
+									<span class="prop-val-copy">{{allProperties.transformProps.translate ? allProperties.transformProps.translate : "50px, 100px"}}</span>
+									<input type="text" id="transformTranslate" placeholder="50px, 100px" v-model="allProperties.transformProps.translate" @input="saveStep()" maxlength="12">
 								</div>
-							</div>
+								<span>)</span>
+							</label>
 							<!-- Skew -->
-							<div class="field-set">
-								<label>Skew</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="-45deg" v-model="allProperties.transformProps.skew" @input="saveStep()">
+							<label class="prop-field" for="transformSkew">
+								<span>skew(</span>
+								<div class="prop-val">
+									<span class="prop-val-copy">{{allProperties.transformProps.skew ? allProperties.transformProps.skew : "-45deg"}}</span>
+									<input type="text" id="transformSkew" placeholder="-45deg" v-model="allProperties.transformProps.skew" @input="saveStep()">
 								</div>
-							</div>
+								<span>)</span>
+							</label>
 							<!-- Transform Origin -->
-							<div class="field-set">
-								<label>Transform Origin</label>
-								<div class="input-wrapper">
-									<input type="text" placeholder="50% 50%" v-model="allProperties.transformOrigin" @input="saveStep()">
+							<label class="prop-field" for="transformOrigin">
+								<span>transform-origin: </span>
+								<div class="prop-val">
+									<span class="prop-val-copy">{{allProperties.transformOrigin ? allProperties.transformOrigin : "bottom left"}}</span>
+									<input type="text" id="transformOrigin" placeholder="bottom left" v-model="allProperties.transformOrigin" @input="saveStep()" maxlength="22">
 								</div>
-							</div>
+							</label>
 						</div>
 					</transition> <!-- End transform: -->
-				</div>
-
-				<!-- Property editor -->
-				<div class="side-tab-display">
-					<div class="side-tabs">
-						<button class="tab" @click="cssTab == 1 ? cssTab = 0 : cssTab = 1" v-bind:class="{'active':cssTab==1}">
-							<i v-bind:class="cssTab == 1 ? 'far fa-times' : 'far fa-external-link-alt'"></i>
-						</button>
-						<button class="tab" @click="cssTab == 2 ? cssTab = 0 : cssTab = 2" v-bind:class="{'active':cssTab==2}">
-							<i v-bind:class="cssTab == 2 ? 'far fa-times' : 'far fa-pencil-paintbrush'"></i>
-						</button>
-						<button class="tab" @click="cssTab == 3 ? cssTab = 0 : cssTab = 3" v-bind:class="{'active':cssTab==3}">
-							<i v-bind:class="cssTab == 3 ? 'far fa-times' : 'far fa-expand-arrows'"></i>
-						</button>
-						<button class="tab" @click="cssTab == 4 ? cssTab = 0 : cssTab = 4" v-bind:class="{'active':cssTab==4}">
-							<i v-bind:class="cssTab == 4 ? 'far fa-times' : 'far fa-border-style'"></i>
-						</button>
-					</div>
-					<!-- ////////////
-						Transform 
-					/////////////// -->
+					<!-- 
+						Colors & Text
+					 -->
+					<button class="property-header" @click="propertiesToggles.colors = !propertiesToggles.colors" v-bind:class="{'active':propertiesToggles.colors}">
+						<span>Colors & Text</span>
+						<i v-bind:class="propertiesToggles.colors ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+					</button>
+					<!-- Colors & Text Fields-->
 					<transition name="tab">
-						<div class="tab-content"  v-if="cssTab == 1">
-							
-							<!-- Title -->
-							<div class="tab-title">
-								<span>Transform: {{roundValue(currentStep.left)}}%</span>
-							</div>
-							
-						</div>
-					</transition>
-					<!-- ////////////
-						Colors & Fonts 
-					/////////////// -->
-					<transition name="tab">
-						<div class="tab-content"  v-if="cssTab == 2">
-							<!-- Title -->
-							<div class="tab-title">
-								<span>Colors & Fonts: {{roundValue(currentStep.left)}}%</span>
-							</div>
+						<div class="property-group" v-if="propertiesToggles.colors">
 							<!-- Background -->
 							<div class="field-set">
 								<label>Background</label>
@@ -227,16 +206,18 @@
 								</div>
 							</div>
 						</div>
-					</transition>
-					<!-- ////////////
-						Sizing and Spacing 
-					/////////////// -->
+					</transition> <!-- End colorors & Fonts -->
+
+					<!-- 
+						Sizing and spacing
+					 -->
+					<button class="property-header" @click="propertiesToggles.sizing = !propertiesToggles.sizing" v-bind:class="{'active':propertiesToggles.sizing}">
+						<span>Sizing & Spacing</span>
+						<i v-bind:class="propertiesToggles.sizing ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+					</button>
+					<!-- Sizing and spacing -->
 					<transition name="tab">
-						<div class="tab-content" v-if="cssTab == 3">
-							<!-- Title -->
-							<div class="tab-title">
-								<span>Sizing: {{roundValue(currentStep.left)}}%</span>
-							</div>
+						<div class="property-group" v-if="propertiesToggles.sizing">
 							<!-- Width -->
 							<div class="field-set">
 								<label>Width</label>
@@ -266,13 +247,18 @@
 								</div>
 							</div>
 						</div>
-					</transition>
+					</transition> <!-- End Sizing & Spacing -->
+
+					<!-- 
+						Borders
+					 -->
+					<button class="property-header" @click="propertiesToggles.borders = !propertiesToggles.borders" v-bind:class="{'active':propertiesToggles.borders}">
+						<span>Borders</span>
+						<i v-bind:class="propertiesToggles.borders ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+					</button>
+					<!-- Borders -->
 					<transition name="tab">
-						<div class="tab-content" v-if="cssTab == 4">
-							<!-- Title -->
-							<div class="tab-title">
-								<span>Borders & Spacing: {{roundValue(currentStep.left)}}%</span>
-							</div>
+						<div class="property-group" v-if="propertiesToggles.borders">
 							<!-- Border -->
 							<div class="field-set">
 								<label>Border</label>
@@ -463,7 +449,12 @@ export default {
 	data() {
 		return {
 			// Which tab are they editing
-			cssTab: 1,
+			propertiesToggles: {
+				transform: true,
+				colors: false,
+				sizing: false,
+				borders: false
+			},
 			// Show Output modal or not
 			showOutput: false,
 			// Hold css output generated
@@ -918,6 +909,9 @@ export default {
 			position: relative;
 			border-radius: var(--borderRadius);
 			margin-bottom: 15px;
+			overflow: auto;
+			box-sizing: border-box;
+			padding: 4px 0;
 
 			/////////////////////
 			//    Settings    //
@@ -1042,6 +1036,12 @@ export default {
 				background-color: var(--backgroundLayer);
 				border-radius: var(--borderRadiusSmall);
 				border: 1px solid var(--border);
+				height: 100%;
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: column;
+				box-sizing: border-box;
+				padding: 0 15px;
 
 				@media (max-width: @screenMD) {
 					position: relative;
@@ -1056,7 +1056,7 @@ export default {
 					font-size: 18px;
 					font-weight: 600;
 					box-sizing: border-box;
-					padding: 15px;
+					padding: 15px 0 10px 0;
 					letter-spacing: 0.3px;
 
 					span{
@@ -1070,6 +1070,8 @@ export default {
 
 				// Collapsible CSS property fields
 				#animateSidebarProperties{
+					flex-grow: 3;
+					overflow: auto;
 
 					// Section header - click to collapse
 					.property-header{
@@ -1077,14 +1079,88 @@ export default {
 						justify-content: space-between;
 						width: 100%;
 						box-sizing: border-box;
-						padding: 10px 15px;
+						padding: 10px 0 10px 0;
 						font-size: 16px;
+						font-weight: 600;
+						border-bottom: 1px solid var(--border);
 					}
 
 					// Collapsible group that holds related properties
 					.property-group{
 						box-sizing: border-box;
-						padding: 10px 15px;
+						padding: 10px 0 10px 0;
+						overflow: hidden;
+
+						// Adjust fields
+						.field-set{
+							padding: 2px 0;
+							box-sizing: border-box;
+						}
+
+						.prop-field{
+							display: flex;
+							font-size: 14px;
+							font-weight: 600;
+							height: auto;
+							overflow: hidden;
+							font-family: monospace;
+
+							span{
+								display: inline-block;
+								width: fit-width;
+								white-space: pre;
+							}
+
+
+							.prop-val{
+								position: relative;
+
+								// Hide copy text - takes up same space to expand, but isn't visible.
+								.prop-val-copy{
+									opacity: 0;
+									display: inline-block;
+									min-width: 20px;
+									box-sizing: border-box;
+									letter-spacing: 0px;
+									padding: 0 2px;
+									height: 100%;
+									border-bottom: 1px solid var(--border);
+								}
+
+								// Change input to exactly match regular text
+								input{
+									padding: 0;
+									margin: 0;
+									border: none;
+									outline: none;
+									line-height: 100%;
+									height: fit-content;
+									position: absolute;
+									left: 0;							
+									font-size: 14px;
+									letter-spacing: 0px;
+									font-weight: 600;
+									font-family: monospace;
+									display: inline-block;
+									width: 100%;
+									height: 24px;
+									border-bottom: 2px dashed var(--border);
+									border-radius: 0;
+									background-color: transparent;
+									height: 100%;
+									
+									&:focus{
+										outline: none !important;
+										border-color: var(--text);
+									}
+
+									&:hover{
+										border-bottom: 2px solid var(--text);
+									}
+
+								}
+							}
+						}
 					}
 				}
 
