@@ -1114,6 +1114,7 @@ export default {
 
 							.prop-val{
 								position: relative;
+								overflow: visible;
 
 								// Hide copy text - takes up same space to expand, but isn't visible.
 								.prop-val-copy{
@@ -1125,6 +1126,8 @@ export default {
 									padding: 0 2px;
 									height: 100%;
 									border-bottom: 1px solid var(--border);
+									height: 0px;
+									overflow: hidden;
 								}
 
 								// Change input to exactly match regular text
@@ -1135,7 +1138,7 @@ export default {
 									outline: none;
 									line-height: 100%;
 									height: fit-content;
-									position: absolute;
+									// position: absolute;
 									left: 0;							
 									font-size: 14px;
 									letter-spacing: 0px;
