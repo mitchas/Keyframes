@@ -159,7 +159,7 @@
 							</label>
 							<!-- Transform Origin -->
 							<label class="prop-field" for="transformOrigin">
-								<span>transform-origin: </span>
+								<span>transform-<br/>origin: </span>
 								<div class="prop-val">
 									<span class="prop-val-copy">{{allProperties.transformOrigin ? allProperties.transformOrigin : "bottom left"}}</span>
 									<input type="text" id="transformOrigin" placeholder="bottom left" v-model="allProperties.transformOrigin" @input="saveStep()" maxlength="22">
@@ -1104,6 +1104,8 @@ export default {
 							height: auto;
 							overflow: hidden;
 							font-family: monospace;
+							white-space: pre; 
+							justify-content: flex-start;
 
 							span{
 								display: inline-block;
@@ -1151,6 +1153,7 @@ export default {
 									border-radius: 0;
 									background-color: transparent;
 									height: 100%;
+									position: absolute;
 									
 									&:focus{
 										outline: none !important;
