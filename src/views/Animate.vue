@@ -122,13 +122,14 @@
 					<transition name="tab">
 						<div class="property-group" v-if="propertiesToggles.transform">
 							<!-- Rotate -->
+							<div class="prop-field">
+								<label>Rotate</label>
+								<input type="text" placeholder="0.5" v-model="allProperties.opacity" @input="saveStep()">
+							</div>
+
 							<label class="prop-field" for="transformRotate">
-								<span>rotate(</span>
-								<div class="prop-val">
-									<span class="prop-val-copy">{{allProperties.transformProps.rotate ? allProperties.transformProps.rotate : "45deg"}}</span>
-									<input type="text" id="transformRotate" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()" maxlength="10">
-								</div>
-								<span>)</span>
+								<span>Rotate:</span>
+								<input type="text" id="transformRotate" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()" maxlength="10">
 							</label>
 							<!-- Scale -->
 							<label class="prop-field" for="transformScale">
@@ -1098,74 +1099,8 @@ export default {
 						}
 
 						.prop-field{
-							display: flex;
-							font-size: 14px;
-							font-weight: 600;
-							height: auto;
-							overflow: hidden;
-							font-family: monospace;
-							white-space: pre; 
-							justify-content: flex-start;
-
-							span{
-								display: inline-block;
-								width: fit-width;
-								white-space: pre;
-							}
 
 
-							.prop-val{
-								position: relative;
-								overflow: visible;
-
-								// Hide copy text - takes up same space to expand, but isn't visible.
-								.prop-val-copy{
-									opacity: 0;
-									display: inline-block;
-									min-width: 20px;
-									box-sizing: border-box;
-									letter-spacing: 0px;
-									padding: 0 2px;
-									height: 100%;
-									border-bottom: 1px solid var(--border);
-									height: 0px;
-									overflow: hidden;
-								}
-
-								// Change input to exactly match regular text
-								input{
-									padding: 0;
-									margin: 0;
-									border: none;
-									outline: none;
-									line-height: 100%;
-									height: fit-content;
-									// position: absolute;
-									left: 0;							
-									font-size: 14px;
-									letter-spacing: 0px;
-									font-weight: 600;
-									font-family: monospace;
-									display: inline-block;
-									width: 100%;
-									height: 24px;
-									border-bottom: 2px dashed var(--border);
-									border-radius: 0;
-									background-color: transparent;
-									height: 100%;
-									position: absolute;
-									
-									&:focus{
-										outline: none !important;
-										border-color: var(--text);
-									}
-
-									&:hover{
-										border-bottom: 2px solid var(--text);
-									}
-
-								}
-							}
 						}
 					}
 				}
