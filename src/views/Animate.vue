@@ -5,17 +5,17 @@
 		<div id="animateTop">
 			<!-- left siide, export, settings, etc. -->
 			<!-- Show settings -->
-			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button icon-left ui-button" @click="viewSaveLoad()" v-bind:class="{'active': showSaveLoad}">
+			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button grey small" @click="viewSaveLoad()" v-bind:class="{'active': showSaveLoad}">
 				<i class="far fa-adjust" v-bind:class="{'fa-save': !showSaveLoad, 'fa-chevron-circle-up': showSaveLoad}"></i>
 				<span>Save/Load</span>
 			</button>
 			<!-- Edit Target -->
-			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button icon-left ui-button" @click="editTarget()" v-bind:class="{'active': showEditTarget}">
+			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button grey small" @click="editTarget()" v-bind:class="{'active': showEditTarget}">
 				<i class="far" v-bind:class="{'fa-bullseye': !showEditTarget, 'fa-chevron-circle-up': showEditTarget}"></i>
 				<span>Target Element</span>
 			</button>
 			<!-- Show output -->
-			<button id="showOutputButton" aria-label="Show Output CSS" class="button icon-left ui-button" @click="viewOutput()" v-bind:class="{'active': showOutput}">
+			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="{'active': showOutput}">
 				<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
 				<span>Output CSS</span>
 			</button>
@@ -42,17 +42,27 @@
 							<span>Save</span>
 						</button>
 					</div>
-					<h3>Load saved animation</h3>
-					<div v-for="name in savedAnimations">
-						{{name.substr(10)}}
+					<!-- Load -->
+					<h3 class="mbottom-xs">Load saved animation</h3>
+					<div id="savedAnimationsList">
+						<div class="animation" v-for="(name, index) in savedAnimations" :key="index">
+							<span @click="loadAnimation(name)">{{name.substr(10)}}</span>
+							<i class="far fa-times" @click.self.prevent="deleteAnimationFromStorage(name)"></i>
+						</div>
 					</div>
+					
 				</div>
 			</transition>
 			<!--  Edit Target -->
 			<!--  show/hide with showEditTarget -->
 			<transition name="fromtop">
 				<div class="settings-display" v-if="showEditTarget">
-					<h3>Edit Target Element</h3>
+					<h3>Content</h3>
+					<p>Change the content inside the target element</p>
+					<input type="text" v-model="customTargetCode" class="mbottom-sm code"/>
+					<h3>CSS</h3>
+					<p>Add CSS to modify the target element.</p>
+					<textarea class="code" v-model="customTargetStyles"></textarea>
 				</div>
 			</transition>
 			<!--  CSS output -->
@@ -99,13 +109,18 @@
 				<div id="targetStage">
 					<div id="targetCenterAlign">
 						<span id="targetElement" v-bind:style="allProperties" v-bind:class="{'pause': animationPaused}">
-							<i class="fal fa-hand-peace"></i>
+							<span v-html="customTargetCode"></span>
 						</span>
 					</div>
 				</div>
 			</div>
 
-			<!-- Element property editor -->
+			<!-- 
+				//////////////////////////
+				Right hand side
+				Element property editor 
+				//////////////////////////
+			-->
 			<div id="animateSidebar">
 				<!-- Top of sidebar - 50px height to match buttons on left -->
 				<div id="animateSidebarTop">
@@ -115,65 +130,56 @@
 
 				<div id="animateSidebarProperties">
 					<button class="property-header" @click="propertiesToggles.transform = !propertiesToggles.transform" v-bind:class="{'active':propertiesToggles.transform}">
-						<span>Transform</span>
 						<i v-bind:class="propertiesToggles.transform == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+						<span>Transform</span>
 					</button>
 					<!-- Transform fields -->
 					<transition name="tab">
 						<div class="property-group" v-if="propertiesToggles.transform">
-							<!-- Rotate -->
-							<div class="prop-field">
-								<label>Rotate</label>
-								<input type="text" placeholder="0.5" v-model="allProperties.opacity" @input="saveStep()">
-							</div>
 
-							<label class="prop-field" for="transformRotate">
-								<span>Rotate:</span>
-								<input type="text" id="transformRotate" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()" maxlength="10">
-							</label>
+							<!-- Rotate -->
+							<div class="field-set">
+								<label>Rotate</label>
+								<div class="input-wrapper">
+									<input type="text" id="transformRotate" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()" maxlength="10">
+								</div>
+							</div>
 							<!-- Scale -->
-							<label class="prop-field" for="transformScale">
-								<span>scale(</span>
-								<div class="prop-val">
-									<span class="prop-val-copy">{{allProperties.transformProps.scale ? allProperties.transformProps.scale : "1.5"}}</span>
+							<div class="field-set">
+								<label>Scale</label>
+								<div class="input-wrapper">
 									<input type="text" id="transformScale" placeholder="1.5" v-model="allProperties.transformProps.scale" @input="saveStep()" maxlength="6">
 								</div>
-								<span>)</span>
-							</label>
+							</div>
 							<!-- Translate -->
-							<label class="prop-field" for="transformTranslate">
-								<span>translate(</span>
-								<div class="prop-val">
-									<span class="prop-val-copy">{{allProperties.transformProps.translate ? allProperties.transformProps.translate : "50px, 100px"}}</span>
+							<div class="field-set">
+								<label>Translate</label>
+								<div class="input-wrapper">
 									<input type="text" id="transformTranslate" placeholder="50px, 100px" v-model="allProperties.transformProps.translate" @input="saveStep()" maxlength="12">
 								</div>
-								<span>)</span>
-							</label>
+							</div>
 							<!-- Skew -->
-							<label class="prop-field" for="transformSkew">
-								<span>skew(</span>
-								<div class="prop-val">
-									<span class="prop-val-copy">{{allProperties.transformProps.skew ? allProperties.transformProps.skew : "-45deg"}}</span>
+							<div class="field-set">
+								<label>Skew</label>
+								<div class="input-wrapper">
 									<input type="text" id="transformSkew" placeholder="-45deg" v-model="allProperties.transformProps.skew" @input="saveStep()">
 								</div>
-								<span>)</span>
-							</label>
+							</div>
 							<!-- Transform Origin -->
-							<label class="prop-field" for="transformOrigin">
-								<span>transform-<br/>origin: </span>
-								<div class="prop-val">
-									<span class="prop-val-copy">{{allProperties.transformOrigin ? allProperties.transformOrigin : "bottom left"}}</span>
+							<div class="field-set">
+								<label>Transform Origin</label>
+								<div class="input-wrapper">
 									<input type="text" id="transformOrigin" placeholder="bottom left" v-model="allProperties.transformOrigin" @input="saveStep()" maxlength="22">
 								</div>
-							</label>
+							</div>
 						</div>
 					</transition> <!-- End transform: -->
 					<!-- 
 						Colors & Text
 					 -->
 					<button class="property-header" @click="propertiesToggles.colors = !propertiesToggles.colors" v-bind:class="{'active':propertiesToggles.colors}">
-						<span>Colors & Text</span>
 						<i v-bind:class="propertiesToggles.colors ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+						<span>Colors & Text</span>
 					</button>
 					<!-- Colors & Text Fields-->
 					<transition name="tab">
@@ -213,8 +219,8 @@
 						Sizing and spacing
 					 -->
 					<button class="property-header" @click="propertiesToggles.sizing = !propertiesToggles.sizing" v-bind:class="{'active':propertiesToggles.sizing}">
-						<span>Sizing & Spacing</span>
 						<i v-bind:class="propertiesToggles.sizing ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+						<span>Sizing & Spacing</span>
 					</button>
 					<!-- Sizing and spacing -->
 					<transition name="tab">
@@ -254,8 +260,8 @@
 						Borders
 					 -->
 					<button class="property-header" @click="propertiesToggles.borders = !propertiesToggles.borders" v-bind:class="{'active':propertiesToggles.borders}">
-						<span>Borders</span>
 						<i v-bind:class="propertiesToggles.borders ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+						<span>Borders</span>
 					</button>
 					<!-- Borders -->
 					<transition name="tab">
@@ -294,7 +300,11 @@
 			</div>
 		</div>
 		
-		<!-- Footer -->
+		<!-- 
+			//////////////////////
+			Footer & Timeline
+			/////////////////////	
+		-->
 		<transition name="modal">
 			<div id="animateFooter" v-if="!$store.getters.softKeyboard">
 
@@ -302,12 +312,12 @@
 				<div id="animationControls">
 					<!-- Left side, add step -->
 					<div class="steps">
-						<button id="addStepButton"  aria-label="Add new step" class="button icon-left ui-button" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
+						<button aria-label="Add new step" class="button mright-sm" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
 							<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
 							<span v-if="!addingStep">Add Step</span>
 							<span v-else>Cancel</span>
 						</button>
-						<button id="deleteStepButton" aria-label="Delete current step" class="button icon-left ui-button" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
+						<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
 							<i class="far fa-trash-alt"></i>
 							<span>Delete {{roundValue(currentStep.left)}}%</span>
 						</button>
@@ -351,7 +361,7 @@
 
 					<!-- Right side, pause -->
 					<div class="preview-button" v-if="animationPlaying">
-						<button class="button ui-button" id="pauseAnimationButton" @click="pauseAnimation()" v-bind:class="{'pause-button': animationPaused}">
+						<button class="button green" @click="pauseAnimation()" v-bind:class="{'green': animationPaused}">
 							<i v-bind:class="{'far fa-pause': !animationPaused, 'far fa-play': animationPaused}"></i>
 							<span v-if="!animationPaused">Pause</span>
 							<span v-else>Resume</span>
@@ -359,7 +369,7 @@
 					</div>
 					<!-- Right side, play/stop -->
 					<div class="preview-button">
-						<button class="button ui-button" id="playAnimationButton" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying}">
+						<button class="button red" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying}">
 							<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-stop-circle': animationPlaying}"></i>
 							<span v-if="!animationPlaying">Play</span>
 							<span v-else>Stop</span>
@@ -414,6 +424,8 @@
 		animation: animationTicker {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
 		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
 	}
+
+	{{customTargetStyles}}
 </v-style>
 <!-- Only add animation if it's playing -->
 <!-- Otherwise  -->
@@ -471,6 +483,9 @@ export default {
 			showSaveLoad: false,
 			// Show modal to edit target
 			showEditTarget: false,
+			// Custom CSS for target
+			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #3a75f5;\n    color: #FFFFFF;\n   text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
+			customTargetCode: "<i class='fal fa-hand-peace'></i>",
 			// Animation name to save
 			animationToSaveName: null,
 			// Previously saved animations
@@ -837,7 +852,17 @@ export default {
 		////////////////////
 		saveAnimation: function(){
 			var newAnimation = this.allProperties;
-			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), JSON.stringify(this.allProperties));
+			var animationData = {
+				date: new Date(),
+				customTargetCode: this.customTargetCode,
+				customTargetStyles: this.customTargetStyles,
+				keyframeData: this.allProperties
+			}
+			var stringified = JSON.stringify(animationData)
+			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), stringified);
+
+			this.toast("Animation Saved", "Your animation has been saved into your browser's local storage.", "", "far fa-save");
+			this.showSaveLoad = false;
 		},
 		// Load saved
 		loadAllSaved: function(){
@@ -856,9 +881,26 @@ export default {
 			console.log(values);
 
 			this.savedAnimations = values;
+		},
 
-		}
+		// Load previously saved animation
+		loadAnimation: function(name){
+			var animation = localStorage.getItem(name);
 
+			var parsed = JSON.parse(animation)
+			this.allProperties = parsed.keyframeData;
+			this.customTargetStyles = parsed.customTargetStyles;
+			this.customTargetCode = parsed.customTargetCode;
+			// // this.allProperties = animation;
+
+			this.toast(name.substr(10) + " Loaded", "Your animation has been loaded.", "", "far fa-cloud-download");
+			this.viewSaveLoad();
+		},
+		// Delete saved animation
+		deleteAnimationFromStorage: function(name){
+			localStorage.removeItem(name);
+			this.viewSaveLoad();
+		},
 	}
 };
 
@@ -892,10 +934,7 @@ export default {
 			display: flex;
 
 			button{
-				text-align: left;
-				padding-right: 0;
 				margin-right: 15px;
-
 				&:last-child{
 					margin-right: 0;
 				}
@@ -928,10 +967,9 @@ export default {
 				max-height: calc(~'100% - 50px');
 				height: fit-content;
 				background-color: var(--backgroundLayer);
-				border: 1px solid var(--border);
 				transform-origin: top center;
 				border-radius: var(--borderRadiusSmall);
-				box-shadow: var(--shadow);
+				box-shadow: var(--shadowLight);
 				box-sizing: border-box;
 				position: absolute;
 				top: 50px;
@@ -961,6 +999,7 @@ export default {
 						display: flex;
 						width: 100%;
 						overflow: hidden;
+						margin-bottom: 15px;
 
 						input{
 							flex-grow: 3;
@@ -977,10 +1016,60 @@ export default {
 							padding-left: 6px;
 							
 							i{
-								margin-right: 10px;
+								margin-right: 5px;
+								margin-left: 5px;
 							}
 						}
 					}
+
+					// Previously saved animation list - with delete button
+					#savedAnimationsList{
+						display: block;
+						margin-top: 5px;
+						width: 100%;
+
+						.animation{
+							width: 100%;
+							display: flex;
+							justify-content: space-between;
+							padding: 0 10px 0 10px;
+							box-sizing: border-box;
+
+							span{
+								flex-grow: 3;
+								font-size: 15px;
+								font-weight: 500;
+								display: block;
+								padding: 4px 0;
+							}
+							i{
+								color: var(--red);
+								opacity: 0;
+								transition: var(--transition);
+								font-size: 14px;
+							}
+
+							// Hover
+							&:hover{
+								cursor: pointer;
+
+								span{
+									text-decoration: underline;
+								}
+
+								i{
+									opacity: 0.5; 
+									transition: var(--transition);
+
+									&:hover{
+										opacity: 1;
+										transition: var(--transition);
+									}
+								}
+							}
+						}
+					}
+					
 				}
 			}
 			//////////////////
@@ -1012,19 +1101,19 @@ export default {
 						
 						// Element that's being animated
 						#targetElement{
-							display: inline-flex;
-							flex-direction: column;
-							justify-content: center;
-							width: 80px;
-							height: 80px;
-							background-color: var(--primary);
-							color: var(--background);
-							letter-spacing: 0.5px;
-							text-align: center;
-							border-radius: 50%;
-							font-size: 42px;
-							transition: 0.5s ease;
-							box-shadow: var(--shadow);
+							// display: inline-flex;
+							// flex-direction: column;
+							// justify-content: center;
+							// width: 80px;
+							// height: 80px;
+							// background-color: var(--primary);
+							// color: var(--background);
+							// letter-spacing: 0.5px;
+							// text-align: center;
+							// border-radius: 50%;
+							// font-size: 42px;
+							// transition: 0.5s ease;
+							// box-shadow: var(--shadow);
 						}
 					}
 				}
@@ -1034,15 +1123,15 @@ export default {
 			/////////////////////////////
 			#animateSidebar{
 				width: 300px;
-				background-color: var(--backgroundLayer);
-				border-radius: var(--borderRadiusSmall);
-				border: 1px solid var(--border);
+				// background-color: var(--backgroundLayer);
+				border-radius: var(--borderRadius);
+				// box-shadow: var(--shadowLight);
 				height: 100%;
 				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
 				box-sizing: border-box;
-				padding: 0 15px;
+				padding: 0 0;
 
 				@media (max-width: @screenMD) {
 					position: relative;
@@ -1057,8 +1146,9 @@ export default {
 					font-size: 18px;
 					font-weight: 600;
 					box-sizing: border-box;
-					padding: 15px 0 10px 0;
+					padding: 0 0 10px 0;
 					letter-spacing: 0.3px;
+					color: var(--primary);
 
 					span{
 						&:last-child{
@@ -1077,143 +1167,61 @@ export default {
 					// Section header - click to collapse
 					.property-header{
 						display: flex;
-						justify-content: space-between;
+						justify-content: flex-start;
 						width: 100%;
 						box-sizing: border-box;
-						padding: 10px 0 10px 0;
-						font-size: 16px;
-						font-weight: 600;
-						border-bottom: 1px solid var(--border);
+						padding: 10px 15px 10px 15px;
+						font-size: 14px;
+						font-weight: 700;
+						// border-bottom: 1px solid var(--border);
+						color: var(--text);
+						transition: var(--transition);
+
+						span{
+							text-decoration: underline;
+						}
+
+						i{
+							position: relative;
+							top: 2px;
+							transform: scale(1.2);
+							margin-right: 8px;
+						}
+
+						&:hover{
+							color: var(--primary);
+							transition: var(--transition);
+
+							i{
+								font-weight: 900;
+							}
+						}
 					}
 
 					// Collapsible group that holds related properties
 					.property-group{
 						box-sizing: border-box;
-						padding: 10px 0 10px 0;
+						padding: 0px 0 18px 0;
 						overflow: hidden;
 
 						// Adjust fields
 						.field-set{
-							padding: 2px 0;
+							padding: 2px 0px 2px 40px;
 							box-sizing: border-box;
-						}
+							// background-color: var(--altBackground);
 
-						.prop-field{
-
-
-						}
-					}
-				}
-
-				// Tabs and tabs display
-				// Tabs and tabs display
-				.side-tab-display{
-					display: flex;
-					flex-direction: row-reverse;
-					width: 50px;
-					max-width: 50px;
-					min-width: 50px;
-					position: relative;
-					display: none;
-
-					// Make wider on mobile to match top dropdown
-					@media (max-width: @screenMD) {
-						width: 54px;
-						max-width: 54px;
-						min-width: 54px;
-					}
-
-					// Sidebar conaining the tab buttons
-					.side-tabs{
-						display: flex;
-						flex-direction: column;
-						min-width: 100%;
-						box-sizing: border-box;
-
-						// Clickable atbs
-						.tab{
-							height: 50px;
-							display: flex;
-							justify-content: center;
-							border: none;
-							padding: 0;
-							background-color: var(--backgroundLayer);
-							border: 1px solid var(--border);
-							border-bottom: 1px solid transparent;
-							transition: var(--transition);
-							font-size: 18px;
-							color: var(--text);
-
-							&:first-child{
-								border-top-left-radius: var(--borderRadiusSmall);
-								border-top-right-radius: var(--borderRadiusSmall);
-								// No top rightt border on mobile
-								@media (max-width: @screenMD) {
-									border-top-right-radius: 0px;
-								}
-							}
-							&:last-child{
-								border-bottom-left-radius: var(--borderRadiusSmall);
-								border-bottom-right-radius: var(--borderRadiusSmall);
-								border-bottom: 1px solid var(--border);
-								// No bottom rightt border on mobile
-								@media (max-width: @screenMD) {
-									border-bottom-right-radius: 0px;
-								}
+							label{
+								font-size: 14px;
+								margin-top: 3px;
 							}
 
-							// Hover
-							&:hover{
-								background-color: var(--background);
-								transition: var(--transition);
-								border-color: var(--primary);
-								border-bottom: 1px solid var(--primary);
-							}
-							// Active ttab
-							&.active{
-								border-color: var(--primary);
-								background-color: var(--primary);
-								color: var(--background);
-								transition: var(--transition);
+							input{
+								font-family: monospace;
+								font-weight: bold;
+								// background-color: var(--background);
 							}
 						}
-					}
-					// Content for each tab
-					.tab-content{
-						background-color: var(--backgroundLayer);
-						border-radius: var(--borderRadiusSmall);
-						box-sizing: border-box;
-						flex-grow: 3;
-						position: absolute;
-						right: 65px;
-						box-shadow: var(--shadow);
-						min-height: 200px;
-						max-height: 500px;
-						transform-origin: top center;
-						display: block;
-						padding: 10px;
-						max-width: 300px;
-						width: 70vw;
-						border: 1px solid var(--border);
-						z-index: 30;
 
-						// Header
-						.tab-title{
-							font-size: 16px;
-							font-weight: bolder;
-							letter-spacing: 0.5px;
-							color: var(--text);
-							display: block;
-							padding: 5px 0 15px 0;
-							text-align: center;
-
-							span{
-								display: flex;
-								flex-direction: column;
-								justify-content: center;
-								flex-grow: 3;
-							}
-						}
 					}
 				}
 			}
@@ -1240,57 +1248,12 @@ export default {
 					display: flex;
 					flex-grow: 3;
 					// Button width
-					#addStepButton{
-						width: 100px;
-					}
-					#deleteStepButton{
-						width: 114px;
-					}
 				}
 				// Play/pause buttons
 				.preview-button{
 					display: flex;
 					justify-content: flex-end;
 					margin-left: 15px;
-
-					// Play/pause animation
-					#playAnimationButton,
-					#pauseAnimationButton{
-						font-weight: bolder;
-
-						i{
-							margin-left: 2px;
-						}
-
-						// Make pause red
-						&.stop-button{
-							background-color: var(--red);
-							color: var(--backgroundLayer);
-							border-color: var(--redHover);
-
-							&:hover{
-								background-color: var(--redHover);
-							}
-						}
-						// Resume from pause - green
-						&.pause-button{
-							background-color: var(--green);
-							border-color: var(--greenHover);
-							color: var(--backgroundLayer);
-
-							&:hover{
-								background-color: var(--greenHover);
-							}
-						}
-					}
-
-					#playAnimationButton{
-						width: 82px;
-					}
-					#pauseAnimationButton{
-						width: 94px;
-					}
-					
 				}
 
 				// Timing inputs
@@ -1436,8 +1399,8 @@ export default {
 				border-radius: 3px;
 				box-sizing: border-box;
 				padding: 15px;
-				border: 1px solid var(--border);
 				margin: 15px 0 15px 0;
+				box-shadow: var(--shadowLight);
 				position: relative;
 				transition: 0s ease;
 
@@ -1583,8 +1546,8 @@ export default {
 		width: 100%;
 		height: hidden;
 		box-sizing: border-box;
-		padding: 15px 15px 0 15px;
-		font-size: 13px;
+		padding: 0 15px 0 0;
+		font-size: 14px;
 		overflow: auto;
 		white-space: pre-line;
 		font-family: monospace;

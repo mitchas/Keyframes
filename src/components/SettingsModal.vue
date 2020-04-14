@@ -158,10 +158,6 @@ export default {
 					path: '/animate',
 					icon: 'far fa-video',
 					label: 'Animate'
-				},{
-					path: '/terms',
-					icon: 'far fa-file-alt',
-					label: 'Terms'
 				}
 			]
 		};

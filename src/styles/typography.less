@@ -1,144 +1,217 @@
-h1,h2,h3,h4,h5,h6,a,p,label{
+///////////////////////// 
+////   Typography   ////
+///////////////////////
+// 
+// 		- Headings,
+// 			- <h1>, <h2>, <h3>, <h4>, <h5>, <h6>
+// 		- Text Elements,
+// 			- <p> also .big or .small 
+//			- <a>
+//			- <ul>, <ol>
+// 		- Modifiers,
+// 			- .text-fade - change to light text
+//			- .text-bright - change to full brightness text color
+//		- Custom Elements
+// 			- .quote-header - Split header with large text/quote and small text
+//
+
+// Set font, disable text selection
+h1,h2,h3,h4,h5,h6,a{
 	font-family: var(--sans);
 }
+label,a,p{
+	font-family: var(--systemFont);
+}
+
 
 ///////////////////
 //   Headings   //
 /////////////////
 h1,h2,h3,h4,h5,h6{
 	max-width: 700px;
-
-	&.unset{
-		max-width: none;
-	}
 }
-h1,h2{
-}
+// h1
 h1{
-	font-size: 42px;	
+	font-size: 40px;	
 	color: var(--text);
-	padding: 0 0 4px 0;
-	line-height: 48px;
-	font-weight: 900;
-	letter-spacing: 0.5px;
-}
-h2{
-	font-size: 30px;
-	line-height: 38px;
-	color: var(--text);
-	padding: 0 0 2px 0;
+	line-height: 44px;
 	font-weight: 700;
-	letter-spacing: 0.5px;
+	letter-spacing: 0.38px;
+	// Adjust Mobile
+	@media (max-width: @screenSM) {
+		font-size: 36px;
+		line-height: 38px;
+	}
 }
-h3, h4, h5{
-	color: var(--textLight);
+// h2
+h2{
+	font-size: 33px;
+	line-height: 36px;
+	color: var(--text);
+	font-weight: 700;
+	letter-spacing: 0.25px;
+	// Adjust Mobile
+	@media (max-width: @screenSM) {
+		font-size: 29px;
+		line-height: 32px;
+	}
 }
+// h3
 h3{
-	font-size: 26px;
-	line-height: 34px;
+	font-size: 28px;
+	line-height: 31px;
+	font-weight: 600;
+	letter-spacing: 0.25px;
 
 	// Adjust Mobile
-	@media (max-width: @screenMD) {
-		letter-spacing: -1px;
+	@media (max-width: @screenSM) {
+		font-size: 24px;
+		letter-spacing: 0.42px;
+		line-height: 27px;
 	}
 }
+// h4
 h4{
-	font-size: 22px;
-	font-weight: 500;
-	line-height: 30px;
-	letter-spacing: 0.5px;
-
+	font-size: 23px;
+	font-weight: 600;
+	line-height: 26px;
+	letter-spacing: 0.15px;
 	// Adjust Mobile
-	@media (max-width: @screenMD) {
-		letter-spacing: -1px;
+	@media (max-width: @screenSM) {
+		letter-spacing: 0.2px;
+		font-size: 21px;
+		line-height: 23px;
 	}
 }
+// h5
 h5{
-	font-size: 18px;
+	font-size: 20px;
 	font-weight: 900;
-	text-transform: uppercase;
-	line-height: 22px;
-	letter-spacing: 0.5px;
+	line-height: 24px;
+	letter-spacing: 0.25px;
+	// Adjust Mobile
+	@media (max-width: @screenSM) {
+		letter-spacing: 0.3px;
+		font-size: 18px;
+		line-height: 21px;
+	}
 }
+// h6
 h6{
-	font-size: 14px;
-	color: var(--textLight);
-	font-weight: 800;
-	text-transform: uppercase;
-	line-height: 18px;
-	letter-spacing: 0.6px;
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 21px;
+	letter-spacing: 0.24px;
+
+	// Adjust Mobile
+	@media (max-width: @screenSM) {
+		font-size: 15px;
+		line-height: 18px;
+		letter-spacing: 0.4px;
+	}
 }
+
+h1.section,
+h2.section,
+h3.section,
+h4.section,
+h5.section,
+h6.section{
+	position: relative;
+
+	&:after{
+		content: '';
+		height: 6px;
+		width: 80px;
+		background-color: var(--primary);
+		position: absolute;
+		bottom: -7px;
+		left: 0;
+		border-radius: 4px;
+	}
+}
+h1.section:after{height: 8px;}
+h2.section:after{height: 7px;}
+h3.section:after{height: 6px;}
+h4.section:after{height: 5px;}
+h5.section:after{height: 4px;}
+h6.section:after{height: 3px;}
 
 
 ////////////////////////
 //   Text Elements   //
 //////////////////////
 // Paragraphs
-
 p{
 	font-size: 15px;
 	line-height: 26px;
 	max-width: 700px;
-	padding: 8px 0;
+	padding: 12px 0;
 	color: var(--textLight);
 	letter-spacing: 0.4px;
 	font-family: var(--systemFont);
-
+	// Mobile changes
 	@media (max-width: @screenMD) {
-		letter-spacing: 0.425px;
+		letter-spacing: 0.25px;
+		font-size: 14.5px;
 	}
-
-	&.unset{
-		max-width: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	&.tight{
-		line-height: 20px;
-		@media (max-width: @screenMD) {
-			line-height: 18px;
-		}
+	@media (max-width: @screenSM) {
+		font-size: 14px;
+		line-height: 24px;
 	}
 
 	// Decrease sizing
 	&.small{
-		font-size: 13px;
-		line-height: 20px;
+		font-size: 13.5px;
+		line-height: 22px;
+		// Mobile changes
+		@media (max-width: @screenMD) {
+			font-size: 13px;
+		}
+		@media (max-width: @screenSM) {
+			line-height: 20px;
+			letter-spacing: 0.3px;
+		}
 	}
 	// Increase sizing
 	&.big{
 		font-size: 20px;
-		line-height: 36px;
-
-		@media (max-width: @screenMD) {
-			font-size: 22px;
-			line-height: 36px;
+		line-height: 31px;
+		// Mobile changes
+		@media (max-width: @screenSM) {
+			font-size: 17px;
+			line-height: 26px;
 		}
 	}
 	
 	// Bold
 	b{
-		font-weight: 900;
-		letter-spacing: 0.7px;
+		font-weight: 700;
+	}
+	// Emphasis
+	em{
+		font-style: italic;
 	}
 }
 
-// Default Links
+// Links
 a{
 	color: var(--links);
 	transition: var(--transition);
-	letter-spacing: 0.3px;
+	letter-spacing: 0.2px;
 	font-weight: bold;
-
+	text-decoration: none;
+	
 	&:hover{
 		cursor: pointer;
 		color: var(--linksHover);
+		text-decoration: underline;
 		transition: var(--transition);
+		outline-color: transparent;
 	}
 }
 
-// Listts
+// Lists
 ul{
 	list-style-type: disc;
 	display: block;
@@ -157,18 +230,14 @@ ul{
 	list-style-type: disc;
 }
 
-
 ////////////////////
 //   Modifiers   //
 //////////////////
-
-.accent{
+.text-fade{
+	color: var(--textLightest);
 }
 .text-bright{
 	color: var(--text);
-}
-.text-dim{
-	color: var(--textLight);
 }
 
 // Horizontal Rule
@@ -179,4 +248,10 @@ hr{
 	height: 1px;
 	overflow: hidden;
 	margin: 8px auto
+}
+
+// Small
+small{
+	font-size: 85%;
+	line-height: 120%;
 }

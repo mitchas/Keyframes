@@ -1,24 +1,37 @@
-////////////////////////
-//      Fields       //
-//////////////////////
-// These are wrappers for input/label combos. 
+////////////////////
+////   Forms   ////
+//////////////////
+// 
+// Styling for various form form tags (inputs, etc) and custom form elements and styling
+// 
+// 		.field
+// 			- Form field wrapper for consistent sizing and spacing
+// 		text classes
+// 			- label
+// 			- hint
+// 			- input character count
+// 		input elements & textarea
+// 		buttons
+// 			- colors: default (primary), .red, .green, .yellow, .purple, .grey
+// 		Checkboxes, Radios, Toggle Switches
+// 		custom-picker
+// 			custom visual radio or checkbox picker - icon with text, horizontal buttons
+// 		.input-validator
+// 			Spinner, Success, or Error icon shown in inputs that need validating
+// 			Currently used in inputs to check usernames, etc
+// 
 
 
-// Vertical fields
-.basic-field{
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	max-width: 320px;
-	padding: 0 0 0 0;
+// Simple form fields
+// Sets max width
+.field{
+	max-width: var(--formWidthDesktop);
 	position: relative;
 
 	@media (max-width: @screenMD) {
 		width: 100%;
-		max-width: none;
+		max-width: 600px;
 	}
-
-	// Labels inside basic fields use default styling
 
 	// Field body
 	// Set standard text size, small text
@@ -29,113 +42,140 @@
 		padding: 2px 0;
 		line-height: 22px;
 
-		small{
-			display: block;
-			font-size: 12px;
-			font-weight: 600;
-			padding-top: 2px;
-			line-height: 14px;
-			letter-spacing: 0.5px;
-			color: var(--textLightest);
-			// opacity: 0.5;
-			text-transform: capitalize;
-		}
+		// Horizontal field value display
+		// Action / buttons on right
+		.field-value{
+			box-sizing: border-box;
+			padding: 0 0 0 0;
 
-		// Inputs full width of field
-		input{
-			width: 100%;
+			.value,
+			.action{
+			}
+
+			.value{
+				flex-grow: 3;
+				box-sizing: border-box;
+				font-size: 18px;
+			}
+
+			small{
+				font-weight: 500;
+				font-family: var(--systemFont);
+				font-size: 14px;
+			}
+			// Right side, buttons/action
+			.action{
+				margin-top: 8px;
+
+				.button{
+					margin-right: 12px;
+				}
+			}
 		}
 	}
+
+	// Required asterisk 
+	.required{
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: var(--red);
+		font-size: 12px;
+		opacity: 0.75;
+	}
 }
-////////////////////////////
-//      Field Sett       //
-//////////////////////////
-// Horizontatl label:input display for the apps
-.field-set{
+
+// Horizontal field for radios, checkboxes, etc
+.field-horizontal{
 	display: flex;
-	justify-content: space-between;
-	width: 100%;
-	padding: 0 0 8px 0;
-	
-	label{
-		width: 45%;
-		min-width: 45%;
-		max-width: 45%;
+
+	.input{
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		font-size: 12px;
-		font-weight: 500;
-		box-sizing: border-box;
-		padding-top: 5px;
+		padding-right: 12px;
 	}
-	.input-wrapper{
-		flex-grow: 3;
-		display: block;
-		max-width: 55%;
-		min-width: 55%;
-
-		input{
-			border-radius: 3px;
-			background-color: var(--absolute);
-			height: 30px;
-			font-size: 12px;
-			width: 100%;
-
-			// Increase size on mobile
-			@media (max-width: @screenMD) {
-				height: 40px;
-			}
-		}
-
+	label{
+		padding: 14px 0 12px 0;
+		line-height: 15px;
+		font-size: 15px;
 	}
-
 }
-
 
 ////////////////////////
 //      Text        //
 //////////////////////
-
-// Links
-a{
-	text-decoration: none;
-
-	&:hover{
-		text-decoration: underline;
-	}
-}
-
 // Labels
 label{
-    font-size: 13px;
 	padding: 2px 0 4px 0px;
-	letter-spacing: 0.3px;
+	letter-spacing: 0.25px;
 	display: block;
-	color: var(--textLight);
+	color: var(--text);
+	font-size: 16px;
 	font-weight: 500;
+	font-family: var(--systemFont);
 
-	// Increase size on mobile
+	// Make smaller on mobile
 	@media (max-width: @screenMD) {
-		font-size: 15px;
+		font-size: 14px;
+	}
+	@media (max-width: @screenSM) {
+		font-size: 13px;
 	}
 
-	// Form errors next to labels
-	.label-error{
-		color: var(--redTransparent);
+	// Smaller and less visible
+	&.small{
+		font-size: 13px;
+		padding-bottom: 5px;
+		font-weight: 500;
+		letter-spacing: 0.1px;
+		color: var(--text);
 	}
 
-	&.label-large{
-		font-size: 15px;
+	// Invert color
+	&.invert{
+		color: var(--background);
+	}
+
+	// Reset to use with other elements (ie button)
+	&.reset{
+		display: block;
+	}
+}
+// Small label hint for more info
+.hint{
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 16px;
+	padding: 0 0 3px 0;
+	display: block;
+	color: var(--textLighter);
+	letter-spacing: 0.35px;
+
+	b{
 		font-weight: 600;
-		padding: 4px 0 4px 0;
-		letter-spacing: 0.5px;
-
-		// Increase size on mobile
-		@media (max-width: @screenMD) {
-			font-size: 17px;
-		}
 	}
+
+	// Make smaller on mobile
+	@media (max-width: @screenSM) {
+		font-size: 12px;
+		line-height: 12px;
+		padding: 2px 0 2px 0;
+	}
+}
+// Character Count Under inputs
+// Position absolute bottom, 17px below, so parent must be relative
+// Works great inside .field-body immediately following an input or textarea
+.character-count{
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 1px;
+	color: var(--textLightest);
+	position: absolute;
+	box-sizing: border-box;
+	padding-left: 2px;
+	bottom: -17px;
+	font-family: var(--systemFont);
 }
 
 
@@ -143,76 +183,165 @@ label{
 ////////////////////////
 //      Inputs       //
 //////////////////////
+// outline / accessibility styles for all inputs
+input,button,textarea,a,select{
+	outline: 2px dashed transparent;
+	outline-offset: 3px;
+	transition: outline 0.1s ease, outline-offset 0.2s ease;
+	
+	// Focus, show outline
+	&:focus{
+		outline: 2px dashed var(--outline) !important;
+		outline-offset: 4px;
+		transition: outline 0.1s ease, outline-offset 0.2s ease;
+
+		// Disable outline on mobile
+		@media (max-width: @screenMD) {
+			outline: none !important;
+		}
+	}
+	
+	// Acttive
+	&:active{
+		outline: 2px dashed transparent;
+    }
+}
 // Hide invalid red dropshadow
 input:invalid{
 	box-shadow: none;
 }
-// Text Input
+// Text Inputs
 input[type='text'],
+input[type='date'],
 input[type='email'],
 input[type='password'],
 input[type='number'],
 input[type='search'],
 input[type='tel'],
 input[type='url'],
+select,
 textarea{
-    font-size: 14px;
-	background-color: var(--inputBackground);
-	box-sizing: border-box;
-	padding-bottom: 1px;
-    padding-left: 8px;
-    padding-right: 8px;
-	color: var(--text);
 	max-width: 100%;
+	width: 100%;
+    font-size: 16px;
+	// background-color: var(--inputBackground);
+	box-sizing: border-box;
+	padding: 0 8px;
+	color: var(--text);
 	font-family: var(--systemFont);
 	font-weight: 500;
-	letter-spacing: 0.55px;
+	letter-spacing: 0.35px;
 	border-radius: var(--borderRadiusSmall);
-	border: 1px solid var(--border);
+	border: none;
 	transition: all 0.1s ease, border-color 0.15s ease;
+	font-weight: 500;
+	background-color: var(--inputBackground);
 
 	// Increase size on mobile
 	@media (max-width: @screenMD) {
-		font-size: 18px;
-		padding-left: 12px;
-		padding-right: 12px;
-		padding-bottom: 0px;
+		font-size: 14px;
+		padding: 0 12px;
+		// border-color: transparent;
 	}
 	
 	// Hover and focus states
 	&:hover,
 	&:focus{
-		border-color: var(--borderHover);
+		border-color: var(--border);
 		transition: all 0.1s ease, border-color 0.15s ease;
+		// Light border mobile
+		@media (max-width: @screenMD) {
+			border-color: var(--border);
+		}
 	}
 	
 	// Placeholder
 	&::placeholder{
-		opacity: 0.3;
+		opacity: 0.5;
+		color: var(--textLightest);
+		letter-spacing: 0.4px;
+		font-weight: 500;
 	}
 }
-
+// Single line text inputs
 input[type='text'],
 input[type='email'],
 input[type='password'],
 input[type='number'],
 input[type='search'],
+input[type='date'],
 input[type='tel'],
 input[type='url']{
-    display: inline-flex;
     height: 40px;
-    flex-direction: column;
-	justify-content: center;
 	
-	// Increase size on mobile
+	// decrease size on mobile
 	@media (max-width: @screenMD) {
-		height: 50px;
+		height: 38px;
 	}
 }
+// Textarea
 textarea{
     line-height: 20px;
 	padding-top: 8px;
-    padding-bottom: 8px;
+	padding-bottom: 8px;
+	line-height: 20px;
+	min-height: 100px;
+	
+	@media (max-width: @screenMD) {
+		font-size: 14px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		line-height: 26px;
+	}
+}
+// Select needs own height definition
+select{
+	height: 40px;
+	-moz-appearance: none;
+}
+
+
+// Input Group
+// Input Group
+.input-group{
+	display: flex;
+
+	.input-group-label{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background-color: var(--grey);
+		font-weight: 600;
+		padding: 0 10px;
+		border-radius: var(--borderRadiusSmall);
+		border: 1px solid var(--border);
+		font-size: 15px;
+		letter-spacing: 0.35px;
+	}
+	// input
+	input{
+		background-color: var(--background);
+		border: 1px solid var(--border);
+		border-left: none;
+	}
+
+	// Change border radii based on child position instead of class, so it can go on either side
+	:nth-child(1){
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+
+		&.input-group-label{
+			border-right-color: transparent;
+		}
+	}
+	:nth-child(2){
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+
+		&.input-group-label{
+			border-left-color: transparent;
+		}
+	}
 }
 
 
@@ -222,69 +351,79 @@ textarea{
 button{
 	background-color: transparent;
 	border: none;
+
+	&:hover{
+		text-decoration: underline;
+	}
 }
 .button{
 	border: none;
-	background-color: var(--primary);
 	color: white;
 	height: 36px;
-	border-radius: var(--borderRadiusSmall);
+	border-radius: 3px;
 	font-size: 14px;
-	letter-spacing: 0.5px;
-	transition: var(--transitionFast);
+	letter-spacing: 0.15px;
+	transition: var(--transition);
 	font-weight: 600;
 	padding: 0px 14px 2px 14px;
+	background-color: rgba(255,255,255,0.1);
+	background-color: var(--primary);
+	box-sizing: border-box;
+	transform: translateY(0px);
+	color: var(--white);
+	box-shadow: var(--shadowLight);
+	font-family: var(--systemFont);
 
 	// Increase size on mobile
 	@media (max-width: @screenMD) {
-		font-size: 15px;
-		height: 42px;
-		font-weight: 500;
-		letter-spacing: 1px;
+		letter-spacing: 0.4px;
+		padding: 0px 14px;
+	}
+	// Even more on small
+	@media (max-width: @screenSM) {
 		padding: 0px 14px;
 	}
 
+	// States
 	&:hover{
 		cursor: pointer;
 		text-decoration: underline;
-		transition: var(--transitionFast);
 		background-color: var(--primaryHover);
+		transition: var(--transition);
+		box-shadow: none;
+	}
+	&:active{
+		transform: translateY(1px);
+		transition: var(--transitionFast);
+	}
+	&:focus{
+		text-decoration: underline;
 	}
 
 	// Add spacing on first element (either i or span)
 	span:first-child,
 	i:first-child{
-		margin-right: 10px;
+		margin-right: 9px;
 	}
 
+	// Increase icon size without affecting button size
 	i{
-		transform: scale(1.2);
+		transform: scale(1.325);
 		transform-origin: center center;
 	}
 
-	
-	// Size Variations
-	// small
-	&.small{
-		height: 28px;
-		font-size: 12px;
-		font-weight: 600;
-		padding: 2px 10px 3px 10px;
-
-		// Increase size on mobile
-		@media (max-width: @screenMD) {
-			font-size: 13px;
-			padding: 0px 10px;
-			height: 32px;
+	// Color Variations
+	// Blue
+	&.blue{
+		background-color: var(--blue);
+		color: var(--text);
+		&:hover{
+			background-color: var(--blueHover);
 		}
 	}
-
-
-	// Color Variations
 	// Green
 	&.green{
 		background-color: var(--green);
-
 		&:hover{
 			background-color: var(--greenHover);
 		}
@@ -292,116 +431,106 @@ button{
 	// Red
 	&.red{
 		background-color: var(--red);
-
 		&:hover{
 			background-color: var(--redHover);
+		}
+	}
+	// Yellow
+	&.yellow{
+		background-color: var(--yellow);
+		color: var(--text);
+		&:hover{
+			background-color: var(--yellowHover);
+		}
+	}
+	// Purple
+	&.purple{
+		background-color: var(--purple);
+		&:hover{
+			background-color: var(--purpleHover);
 		}
 	}
 	// Grey
 	&.grey,
 	&.gray{
 		background-color: var(--grey);
-
+		color: var(--text);
 		&:hover{
 			background-color: var(--greyHover);
 		}
 	}
-	// Transparent
-	&.transparent{
-		background-color: transparent;
-		color: var(--textLight);
-
-		&:hover{
-			color: var(--text);
-			background-color: transparent;
-		}
-	}
-	// Inverted colors from background
-	&.invert{
-		background-color: var(--textLight);
-		color: var(--textInvert);
-
-		&:hover{
-			background-color: var(--text);
-			color: var(--backgroundLayer);
-		}
-	}
-
-	// Specific UI button
-
-	// UI button
-	// Used throughout animate page
-	&.ui-button{
-		background-color: transparent;
-		box-sizing: border-box;
-		border: 1px solid var(--border);
-		font-size: 12px;
-		font-weight: 600;
-		padding: 0 10px;
-		height: 34px;
+	// Background
+	// Same color button as background color
+	&.background{
+		background-color: var(--backgroundLayer);
 		color: var(--text);
-		text-align: center;
-		padding-right: 5px;
-		display: flex;
-		margin-right: 15px;
-
-		&:last-child{
-			margin-right: 0;
-		}
-
-		// Icon floats left
-		i{
-			transform: scale(1.4);
-			float: left;
-			padding-top: 1px;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			width: 12px;
-			text-align: left;
-		}
-		// Span grows, centers text
-		span{
-			position: relative;
-			top: -0.5px;
-			text-align: center;
-			flex-grow: 3;
-			padding-right: 12px;
-			white-space: pre;
-			display: inline-flex;
-			letter-spacing: 0.2px;
-			flex-direction: column;
-			justify-content: center;
-			font-weight: 600;
-			
-			@media (max-width: @screenMD) {
-				top: 0;
-			}
-		}
-
 		&:hover{
-			border-color: var(--borderHover);
-			background-color: var(--backgroundLayer);
-			text-decoration: none;
+			background-color: var(--background);
+		}
+	}
+	
 
-			span{
-				text-decoration: underline;
-			}
+	// Size Variations
+	// small
+	&.small{
+		height: 30px;
+		font-size: 13px;
+		letter-spacing: 0.26px;
+		font-weight: 600;
+		padding: 0 8px 0 8px;
+
+		// Increase size on mobile
+		@media (max-width: @screenMD) {
+			letter-spacing: 0.14px;
+			padding: 0px 10px;
+		}
+		// Even more on small
+		@media (max-width: @screenSM) {
+			font-weight: 500;
 		}
 
-		// When waiting for action
-		&.active{
-			background-color: var(--primary);
-			color: var(--background);
-			border-color: var(--primaryHover);
+		// Add spacing on first element (either i or span)
+		span:first-child,
+		i:first-child{
+			margin-right: 6px;
 		}
 
+		// Decrease icon size
+		i{
+			transform: scale(1.2);
+		}
+	}
+	// big
+	&.big{
+		height: 44px;
+		font-size: 18px;
+		font-weight: 600;
+		padding: 0 14px 2px 14px;
+		letter-spacing: 0.5px;
+
+		// Increase size on mobile
+		@media (max-width: @screenMD) {
+			letter-spacing: 0.4px;
+			padding: 0px 14px;
+		}
+		// Even more on small
+		@media (max-width: @screenSM) {
+			padding: 0px 12px;
+			font-size: 16px;
+		}
+
+		// Add spacing on first element (either i or span)
+		span:first-child,
+		i:first-child{
+			margin-right: 10px;
+		}
 	}
 
 	// Disabled
 	&:disabled{
 		background-color: var(--inputDisabled);
 		color: var(--inputDisabledText);
+		border-color: var(--border);
 		opacity: 0.8;
 
 		&:hover{
@@ -413,8 +542,6 @@ button{
 		}
 	}
 }
-
-
 
 /////////////////////////
 //     Checkboxes     //
@@ -443,31 +570,24 @@ input[type="checkbox"]:focus {
 	margin: 0;
 	border-radius: var(--borderRadiusSmall);
 	box-sizing: border-box;
-	border: 1px solid var(--border);
+	border: 1px solid transparent;
 	transition: all 0.2s ease;
 	background: var(--inputBackground);
 	font-size: 16px;
 	font-weight: 800;
-
-	// Increase size on mobile
+	box-shadow: var(--shadow);
+	// Remove border mobile
 	@media (max-width: @screenMD) {
-		height: 34px;
-		min-height: 34px;
-		max-height: 34px;
-		width: 34px;
-		min-width: 34px;
-		max-width: 34px;
+		border-color: transparent;
 	}
-
-	&:hover{
-		transition: all 0.2s ease;
-		border-color: var(--borderHover);
-	}
-
+	// States
+	&:hover,
 	&:focus{
 		transition: all 0.2s ease;
+		// Lighter border mobile
 	}
-
+	
+	// Check icon
 	&:after {
 		//28x28 dimensions
 		content: "\f00c";
@@ -475,38 +595,37 @@ input[type="checkbox"]:focus {
 		font-family: var(--fontAwesome);
 		font-weight: 900;
 		transition: var(--bezierTransition);
-		transform: scale(0.75);
-		color: var(--text);
+		color: var(--textLight);
 		opacity: 0.3;
 		font-size: 16px;
 		left: 5px;
 		top: 4px;
-
-		// Increase size on mobile
-		@media (max-width: @screenMD) {
-			// 34x34 dimensions
-			font-size: 20px;
-			left: 6px;
-			top: 5.5px;
-		}
 	}
 
+	// Darken border, 
 	&:checked {
-		border-color: var(--borderHover);
-		&:hover{
-			&:after{
-				opacity: 1;
-			}
-		}
+	}
+	// Full opacity icon
+	&:checked:after {
+		opacity: 1;
 	}
 
-	&:checked:after {
-		transform: scale(1);
-		opacity: 1;
+	// Icon variants
+	// Change to badge
+	&.badge:after{
+		content: '\f336';
+		font-weight: 400;
+		font-size: 20px;
+		top: 2px;
+		left: 3px;
+	}
+	&.badge:checked:after{
+		content: '\f336';
 	}
 }
 
-// Toggle 
+
+// Turn checkbox into toggle switch 
 .toggle{
 	height: 33px;
 	width: 52px;
@@ -516,140 +635,327 @@ input[type="checkbox"]:focus {
 	margin: 0;
 	border: 1px solid var(--border);
 	transition: all .2s ease;
-	background-color: var(--backgroundLayer);
+	background-color: var(--inputBackground);
+
+	// Remove border mobile
+	@media (max-width: @screenMD) {
+		border-color: transparent;
+	}
+
+	// Circle (switch that moves)
 	&:after{
 		content: '';
 		position: absolute;
 		top: 3px;
 		left: 4px;
-		width: 24px;
-		height: 24px;
+		width: 25px;
+		height: 25px;
 		border-radius: 50%;
-		background: var(--primary);
-		box-shadow: 0 1px 2px rgba(34,44,64,.13);
+		background: var(--text);
+		opacity: 0.22;
 		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
-		opacity: 0.15;
+		border: 1px solid var(--text);
+		box-sizing: border-box;
+		transition: var(--transition);
 	}
+
+	// Hover
+	&:hover:after{
+		opacity: 0.42;
+		transition: var(--transition);
+	}
+
+	// Checked, move circle to right, full color
 	&:checked{
 		border: 1px solid var(--border);
 		background: var(--backgroundLayer);
+
 		&:after{
 			background: var(--primary);
-			transform: translatex(17px);
+			transform: translateX(17px);
+			border-color: var(--primaryHover);
 			opacity: 1;
 		}
 	}
 }
-// Agreement div 
-// Checkbox with longer label on side
-.agreement{
+
+// Custom radio or checkbox group to select different options
+// Horizontal, icon with text
+// Check business profile settings to see example
+.custom-picker{
 	display: flex;
-	box-sizing: border-box;
-	// padding: 10px 0 10px 0;
-	margin: 8px 0;
-	height: 28px;
+	width: 100%;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	user-select: none;
+	overflow-x: auto;
 
-	// Increase size on small screens
+	// no wrap - horizontal scroll on mobile
 	@media (max-width: @screenMD) {
-		height: 34px;
+		flex-wrap: nowrap;
 	}
 
-	.check{
-	}
-
-	label{
-		flex-grow: 3;
-		box-sizing: border-box;
-		line-height: 14px;
-		font-size: 12px;
-		padding-left: 10px;
-		vertical-align: middle;
-		letter-spacing: 0.3px;
+	// Each option
+	.option{
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		padding-top: 7px;
+		text-align: center;
+		height: 65px;
+		box-sizing: border-box;
+		padding: 0 0px;
+		border-radius: var(--borderRadius);
+		background-color: var(--backgroundLayer);
+		max-width: 93px;
+		// border: 1px solid var(--border);
+		min-width: 93px;
+		flex-grow: 3;
+		color: var(--textLighter);
+		margin: 0 10px 6px 0;
+		position: relative;
+		transform: scale(0.9);
+		transition: var(--transition);
+		font-family: var(--systemFont);
 
-		// Fix padding on mobile
-		@media (max-width: @screenMD) {
-			font-size: 14px;
+		&:last-child{
+			&:before{
+				content: '';
+				height: 100%;
+				width: 1px;
+				position: absolute;
+				right: -15px;
+			}
 		}
 
-		a{
-			font-weight: 600;
-			&:focus{
-				text-decoration-style: dashed;
+		// Icon for option
+		i{
+			margin-bottom: 8px;
+			font-size: 24px;
+
+			// Custom icons
+			&.custom-icon{
+				opacity: 0.5;
+			}
+		}
+		// Option text
+		span{
+			letter-spacing: 0;
+			font-size: 13px;
+			font-weight: 500;
+			width: 100%;
+			text-transform: capitalize;
+
+			// Shrink on md
+			@media (max-width: @screenMD) {
+				font-size: 11.5px;
+				line-height: 13px;
+			}
+		}
+
+		// Check
+		&:after{
+			content: '\f111';
+			// content: '\f058';
+			font-family: var(--fontAwesome);
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			font-size: 18px;
+			font-weight: 500;
+			transition: var(--transition);
+			color: var(--border);
+		}
+
+			
+		// Hover state
+		&:hover{
+			cursor: pointer;
+			transition: var(--transition);
+			text-decoration: none;
+
+			span{
+				text-decoration: underline;
+			}
+			i{
+			}
+
+			// Custom icons
+			.custom-icon{
+				opacity: 1;
+			}
+			// Darken check
+			&:after{
+				color: var(--textLightest);
+				transition: var(--transition);
+			}
+		}
+
+	
+		// Option Selected
+		&.active{
+			color: var(--text);
+			border-color: var(--border);
+			position: relative;
+			transform: scale(1);
+			box-shadow: var(--shadowLight);
+
+			i{
+				// Custom icons
+				&.custom-icon{
+					opacity: 1;
+				}
+			}
+			&:after{
+				content: '\f058';
+				color: var(--text);
 			}
 		}
 	}
-}
 
+	// Large
+	// Increase size of everything a bit
+	&.large{
 
+		.option{
+			height: 85px;
+			border-radius: var(--borderRadiusSmall);
+			max-width: 124px;
+			flex-grow: 3;
+			margin-right: 12px !important;
+			i{
+				margin-bottom: 12px;
+			}
+			span{
+				line-height: 14px;
+			}
+		}
+	}
 
-/////////////////////////
-//    VALIDATION      //
-///////////////////////
-.form-message{
-	display: block;
-	width: 100%;
-	box-sizing: border-box;
-	padding: 8px 10px;
-	border-radius: var(--borderRadiusSmall);
-	margin: 5px auto 5px auto;
-	border: 1px solid var(--red);
-	background-color: var(--redTransparent);
-	color: var(--red);
+	// Scroll
+	// Scrolls horizontally overflowing page with larger options
+	&.horizontal{
+		overflow-x: auto;
 
-	span{
-		font-size: 13px;
-		display: block;
-		padding-top: 2px;
-		line-height: 15px;
-		font-weight: 500;
-		letter-spacing: 0.3px;
-
-		// Increase size on mobile
+		// no wrap - horizontal scroll on mobile
 		@media (max-width: @screenMD) {
-			font-size: 14px;
-			line-height: 16px;
+			padding-bottom: 6px;
+		}
+
+		.option{
+			height: 50px;
+			border-radius: var(--borderRadius);
+			flex-grow: 0;
+			margin: 0 10px 14px 0 !important;
+			flex-direction: row;
+			padding: 0 28px 0 0;
+			width: fit-content;
+			min-width: fit-content;
+			max-width: fit-content;
+			justify-content: flex-start;
+
+			// Adjust spacing
+			@media (max-width: @screenMD) {
+				margin: 0 10px 0 0 !important;
+				height: 46px;
+				padding: 0 30px 0 0;
+			}
+
+			i,span{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				height: 100%;
+			}
+			i{
+				position: relative;
+				top: -1px;
+				width: 52px;
+				&.fa-city{
+					font-size: 20px;
+				}
+				// Shrink on md
+				@media (max-width: @screenMD) {
+					font-size: 22px;
+					width: 58px;
+					top: 0;
+				}
+			}
+			span{
+				font-size: 12.5px;
+				text-align: left;
+				line-height: 15px;
+				font-weight: 500;
+				white-space: pre-line;
+				max-width: 134px;
+				position: relative;
+				top: -1px;
+				// min-width: 150px;
+
+				// Shrink on md
+				@media (max-width: @screenMD) {
+					font-size: 11.5px;
+					top: 0;
+					line-height: 13px;
+				}
+			}
+
+			// Move check to right center
+			&:after{
+				top: 0;
+				right: 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				font-size: 18px;
+				font-weight: 400;
+				height: 100%;
+				width: 30px;
+			}
+
+			// Color options for categories, etc
+			&.active.yellow i{color: var(--yellow);}
+			&.active.red i{color: var(--red);}
+			&.active.blue i{color: var(--blue);}
+			&.active.green i{color: var(--greenHover);}
+			&.active.purple i{color: var(--purple);}
+			&.active.orange i{color: var(--orange);}
+			&.active.pink i{color: var(--pink);}
+		}
+
+	}
+
+	// True / false toggle (buttons)
+	button{
+		width: fit-content;
+		span,i{
+			width: 94px;
 		}
 	}
 }
 
+// Prefernce toggle
+// Toggle on left, label on right
+.preference{
+	display: flex;
 
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-// Cool unused code 
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
+	.input{
+		box-sizing: border-box;
+		padding: 0 25px 0 0;
+		width: 80px;
+		max-width: 80px;
+		min-width: 80px;
+	}
 
+	label{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 
-// Invalid input
-input.xinvalid:invalid{
-	box-shadow: none;
-
-	~ label{
-		pointer-events: none;
-
-		&:after{
-			content: '\f12a';
-			font-family: var(--fontAwesome);
+		small{
 			display: block;
-			font-weight: 600;
-			font-size: 15px;
-			height: 0px;
-			overflow: visible;
-			color: var(--red);
-			float: right;
-			position: relative;
-			top: 26px;
-			left: -10px;
+			padding-top: 10px;
+			font-weight: 400;
 		}
 	}
+}
 
-	
-}
-input.xinvalid:placeholder-shown{
-}

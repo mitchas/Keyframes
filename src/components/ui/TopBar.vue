@@ -20,7 +20,7 @@
 				<!-- App Switcher -->
 				<div class="nav-dropdown" @click="toggleDropdown('apps')">
 					<button class="hover-label" aria-label="Show all apps">
-						<span>Apps</span>
+						<span>Tools</span>
 						<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-chevron-circle-up': showAppSwitcher}"></i>
 					</button>
 
@@ -31,6 +31,11 @@
 							<button class="popover-link" @click="navigate('/animate')">
 								<span>CSS Animations</span>
 								<i class="far fa-camera-movie"></i>
+							</button>
+							<!-- More coming soon -->
+							<button class="popover-link soon">
+								<span>More coming soon</span>
+								<i class="far fa-ellipsis-h"></i>
 							</button>
 						</div>
 					</transition>
@@ -271,13 +276,12 @@ export default {
 			right: 0;
 			max-height: 220px;
 			overflow: hidden;
-			background-color: var(--backgroundLayer);
-			box-shadow: var(--shadow);
+			background-color: var(--altBackground);
+			box-shadow: var(--shadowDark);
 			box-sizing: border-box;
 			border-radius: var(--borderRadiusSmall);
 			padding: 10px;
 			overflow: 0;
-			border: 1px solid var(--border);
 			// Increase size on mobile
 			@media (max-width: @screenMD) {
 				width: 220px;
@@ -296,7 +300,7 @@ export default {
 				color: var(--text);
 				height: 40px;
 				width: 100%;
-				padding: 0 10px;
+				padding: 0 6px;
 				box-sizing: border-box;
 
 				// Increase size on mobile
@@ -321,13 +325,7 @@ export default {
 					transition: var(--transitionFast);
 					padding-left: 0;
 					font-size: 14px;
-					letter-spacing: 0.5px;
-
-					// Increase size on mobile
-					@media (max-width: @screenMD) {
-						font-size: 15px;
-						padding-left: 10px;
-					}
+					letter-spacing: 0.25px;
 				}
 				i{
 					font-size: 18px;
@@ -361,6 +359,12 @@ export default {
 						text-decoration: underline;
 						padding-left: 6px;
 						transition: var(--transitionFast);
+					}
+				}
+
+				// Coming soon
+				&.soon{
+					span{
 					}
 				}
 
