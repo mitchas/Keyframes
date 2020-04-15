@@ -5,8 +5,8 @@
 			<div id="topBarLeft" @mouseleave="showAppSwitcher = false">
 				<div id="branding">
 					<div id="logo">
-						<img src="@/assets/branding/logo-light.png" @click="navigate('/')" title="ABCDEFG Logo" v-if="!$store.getters.userPreferences.darkMode"/>
-						<img src="@/assets/branding/logo-dark.png" @click="navigate('/')" title="ABCDEFG Logo" v-if="$store.getters.userPreferences.darkMode"/>
+						<img src="@/assets/branding/logo-light.png" @click="navigate('/')" title="Keyframes Logo" v-if="!$store.getters.userPreferences.darkMode"/>
+						<img src="@/assets/branding/logo-dark.png" @click="navigate('/')" title="Keyframes Logo" v-if="$store.getters.userPreferences.darkMode"/>
 					</div>
 				</div>
 			</div>
@@ -231,11 +231,11 @@ export default {
 			display: flex;
 			justify-content: flex-end;
 			margin-left: 15px;
-			font-weight: 500;
+			font-weight: 600;
 			height: 100%;
 			letter-spacing: 0.3px;
-			font-size: 16px;
-			font-weight: 700;
+			font-size: 15px;
+			font-family: var(--systemFont);
 			letter-spacing: 0.3px;
 
 			// Add spacing on first element (either i or span)
@@ -257,12 +257,6 @@ export default {
 		// Hover dropdown
 		&:hover{
 			cursor: pointer;
-
-			.hover-label{
-				span{
-					text-decoration: underline;
-				}
-			}
 		}
 
 

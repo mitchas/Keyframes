@@ -258,9 +258,13 @@ textarea{
 	// Placeholder
 	&::placeholder{
 		opacity: 0.5;
-		color: var(--textLightest);
+		color: var(--primary);
 		letter-spacing: 0.4px;
 		font-weight: 500;
+	}
+
+	&.light{
+		background-color: var(--backgroundLayer);
 	}
 }
 // Single line text inputs
@@ -352,7 +356,7 @@ button{
 	background-color: transparent;
 	border: none;
 
-	&:hover{
+	&:hover span{
 		text-decoration: underline;
 	}
 }

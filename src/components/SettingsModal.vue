@@ -109,7 +109,7 @@
 					<!-- Footer/Buttons -->
 					<div class="modal-footer center">
 						<!-- Close Modal -->
-						<button class="button invert" type="button" aria-label="Close Settings" @click="closeSettings()">
+						<button class="button grey" type="button" aria-label="Close Settings" @click="closeSettings()">
 							<span>Close Settings</span>
 							<i class="far fa-times"></i>
 						</button>
@@ -329,7 +329,7 @@ export default {
 		margin: 0 auto;
 
 		code{
-			font-family: monospace;
+			font-family: var(--mono);
 			display: block;
 			white-space: normal;
 			box-sizing: border-box;
@@ -359,6 +359,7 @@ export default {
 			border: 1px solid var(--border);
 			text-align: center;
 			color: var(--borderHover);
+			transition: var(--transitionFast);
 
 			// Icon
 			i{
@@ -378,6 +379,7 @@ export default {
 			&:hover{
 				cursor: pointer;
 				border-color: var(--text);
+				transition: var(--transitionFast);
 				color: var(--text);
 			}
 		}
@@ -385,15 +387,16 @@ export default {
 		// If checked 
 		input:checked + label{
 			border-color: var(--primaryHover);
-			background-color: var(--text);
+			background-color: var(--primary);
 
 			span,i{
-				color: var(--textInvert);
+				color: var(--white);
 			}
 
 			&:hover{
 				border-color: var(--primaryHover);
 				color: var(--primary);
+				transition: var(--transitionFast);
 			}
 		}
 	}

@@ -6,10 +6,6 @@ import Animate from './views/Animate.vue';
 // Etc
 import Error404 from './views/other/error404.vue';
 
-// Docs
-import TermsOfService from './views/other/docs/TermsOfService.vue';
-import PrivacyPolicy from './views/other/docs/PrivacyPolicy.vue';
-
 import { store } from '@/store/store'
 
 Vue.use(Router);
@@ -36,22 +32,6 @@ const router = new Router({
 			name: 'Animate',
 			component: Animate
 		},
-		//////////////////////////////
-		// Help & Docs
-		//////////////////////////////
-		// TOS
-		{
-			path: '/terms',
-			name: 'TermsOfService',
-			component: TermsOfService
-		},
-		// Privacy Policy
-		{
-			path: '/privacy',
-			name: 'PrivacyPolicy',
-			component: PrivacyPolicy
-		},
-
 		// 404
 		// 404
 		// 404

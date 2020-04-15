@@ -484,7 +484,7 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #3a75f5;\n    color: #FFFFFF;\n   text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
+			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #3a75f5;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
 			customTargetCode: "<i class='fal fa-hand-peace'></i>",
 			// Animation name to save
 			animationToSaveName: null,
@@ -631,7 +631,9 @@ export default {
 				var transformString = "";
 				if(cleanProps['transformProps']){
 					for(var prop in cleanProps['transformProps']) {
-						transformString = transformString + " " + prop + "(" + cleanProps['transformProps'][prop] + ")"
+						if(cleanProps['transformProps'][prop]){
+							transformString = transformString + " " + prop + "(" + cleanProps['transformProps'][prop] + ")"
+						}
 					}
 					// Set prop in cleanprops
 					this.allProperties.transform = transformString;
@@ -989,6 +991,16 @@ export default {
 					font-size: 12px;
 					line-height: 14px;
 				}
+				
+				// Textareas
+				textarea,input{
+					font-size: 14px;
+					font-family: var(--mono);
+					line-height: 15px;
+				}
+				textarea{
+					min-height: 180px;
+				}
 
 				// Save/load display
 				&.save-load{
@@ -1014,9 +1026,10 @@ export default {
 							border-bottom-left-radius: 0;
 							border-left: 1px solid var(--text);
 							padding-left: 6px;
+							white-space: pre;
 							
 							i{
-								margin-right: 5px;
+								margin-right: 8px;
 								margin-left: 5px;
 							}
 						}
@@ -1123,9 +1136,9 @@ export default {
 			/////////////////////////////
 			#animateSidebar{
 				width: 300px;
-				// background-color: var(--backgroundLayer);
+				background-color: var(--backgroundLayer);
 				border-radius: var(--borderRadius);
-				// box-shadow: var(--shadowLight);
+				box-shadow: var(--shadowLight);
 				height: 100%;
 				box-sizing: border-box;
 				display: flex;
@@ -1146,7 +1159,7 @@ export default {
 					font-size: 18px;
 					font-weight: 600;
 					box-sizing: border-box;
-					padding: 0 0 10px 0;
+					padding: 15px 15px 10px 15px;
 					letter-spacing: 0.3px;
 					color: var(--primary);
 
@@ -1206,20 +1219,36 @@ export default {
 
 						// Adjust fields
 						.field-set{
-							padding: 2px 0px 2px 40px;
+							padding: 2px 15px 2px 40px;
 							box-sizing: border-box;
 							// background-color: var(--altBackground);
+							display: flex;
+							justify-content: space-between;
+							width: 100%;
 
 							label{
 								font-size: 14px;
 								margin-top: 3px;
+								flex-grow: 3;
+								width: 100%;
+								display: flex;
+								flex-direction: column;
+								justify-content: center;
 							}
 
-							input{
-								font-family: monospace;
-								font-weight: bold;
-								// background-color: var(--background);
+							.input-wrapper{
+								width: 50%;
+								min-width: 50%;
+
+								input{
+									width: 100%;
+									font-family: var(--mono);
+									font-size: 14px;
+									letter-spacing: 0px;
+									// background-color: var(--background);
+								}
 							}
+							
 						}
 
 					}
@@ -1261,6 +1290,7 @@ export default {
 					display: flex;
 					justify-content: center;
 					box-sizing: border-box;
+					font-family: var(--systemFont);
 
 					// Move timing to top on mobile
 					@media (max-width: @screenMD) {
@@ -1289,7 +1319,7 @@ export default {
 							color: var(--textLighter);
 							user-select: none;
 							position: absolute;
-							top: -4px;
+							top: 34px;
 							width: fit-content;
 							white-space: pre;
 							width: 100%;
@@ -1381,7 +1411,7 @@ export default {
 					}
 
 					// Hover any field to show label
-					&:hover{
+					&:hover,&:focus-within{
 						label{
 							opacity: 1;
 							transition: var(--transition);
@@ -1550,7 +1580,7 @@ export default {
 		font-size: 14px;
 		overflow: auto;
 		white-space: pre-line;
-		font-family: monospace;
+		font-family: var(--mono);
 		color: var(--text);
 		font-weight: 600;
 
