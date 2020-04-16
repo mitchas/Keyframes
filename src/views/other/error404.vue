@@ -1,33 +1,48 @@
+<!--
+//  404 page
+// _________________________
+//
+//  Super simple 404 page with link home
+// 
+-->
+
 <template>
-	<div id="notFound" class="page">
-		<!-- Surprised face -->
-		<i class="far fa-surprise large-icon"></i>
-		<!-- Large 404 ttext -->
-		<div class="large-404">
-			404
+	<div class="page">
+
+		<div class="not-found">
+			<!-- Error Text -->
+			<div class="error-title">
+				Oops
+			</div>
+			<!-- Error text -->
+			<div class="error-text">
+				We can't find the page you're looking for...
+			</div>
+			<!-- Action -->
+			<div class="error-nav">
+				<button class="button" aria-label="Go Home" @click="navigate('/')">
+					<i class="far fa-home"></i>
+					<span>Try the Home Page</span>
+				</button>
+			</div>
 		</div>
-		<!-- Error textt -->
-		<div class="error-text">
-			Whoops, it looks like that page doesn't exist.
-		</div>
-		<div class="error-nav">
-			<button class="button blue" aria-label="Go Home" @click="navigate('/')">
-				Try the home page
-				<i class="far fa-home"></i>
-			</button>
-		</div>
+
 	</div>
 </template>
 
 <script>
-	import navigateMixin from "@/components/mixins/navigateMixin.js";
+	// Mixins
+	import metaMixin from "@/components/mixins/metaMixin.js";
 
 	export default {
 		name: 'error404',
 		mixins: [
-			navigateMixin,
+			metaMixin,
 		],
 		components: {
+		},
+		created: function () {
+			this.updateMeta("404 | Together.mn", "We couldn't find that page")
 		},
 		methods: {
 			
@@ -38,50 +53,43 @@
 <style lang="less">
 	@import '~@/styles/variables.less';
 
-	#notFound{
-		color: var(--text);
+	.not-found{
 
-		.large-icon{
-			font-size: 120px;
-			margin-bottom: 55px;
-			// Center on mobile
-			@media (max-width: @screenMD) {
-				margin: 35px auto;
-				text-align: center;
-				width: 100%;
-			}
+		// Remove padding for sidebar
+		@media (max-width: @screenMD) {
+			left: 0px;
 		}
 
-		.large-404{
-			font-size: 110px;
-			font-weight: 900;
+		.error-title{
+			font-size: 40px;
+			font-weight: 700;
 			position: relative;
 			z-index: 35;
-			line-height: 60px;
-			letter-spacing: 2px;
+			letter-spacing: 0.2px;
 			display: block;
-			width: fit-content;
-
-			@media (max-width: @screenMD) {
-				margin: 0 auto;
-				padding: 35px 0;
-			}
+			width: 100%;
 		}
 
 		// Actual text for error
 		.error-text{
 			font-size: 26px;
-			font-weight: 500;
+			font-weight: 540;
 			line-height: 32px;
-			padding: 45px 0 20px 0;
+			padding: 10px 0 20px 0;
 			display: block;
-			max-width: 450px;
+			max-width: 360px;
+			font-weight: bolder;
 
 			// Center, full width on mobile
 			@media (max-width: @screenMD) {
 				max-width: none;
 				text-align: center;
 				width: 100%;
+			}
+
+			small{
+				font-size: 18px;
+				font-weight: 500;
 			}
 		}
 

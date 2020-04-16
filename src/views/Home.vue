@@ -1,106 +1,80 @@
+<!--
+// 
+// Home.vue
+// _________________________
+//
+//	Home page view
+//
+// -->
+
 <template>
 	<div class="page">
 
-		<!-- If name has been saved in local storage, greet them by name -->
-		<h1 v-if="nameInStorage">Welcome back, {{user_name}}</h1>
-		<!-- Otherwise general hello  -->
-		<h1 v-else>Hello</h1>
+		<Callout
+			icon="far fa-shapes"
+			class="mbottom-sm"
+			color="purple"
+			size="fit">
+			<span>Hey, glad you still use this site :). I'm updating it for the first time in 2 years. I'm rebuilding it on Vue, and will be adding more tools besides animations. Extension update will come in a little bit. If you want the old version, <a href="https://keyframes.app/old/">click here</a>.</span>
+			<small>Also, I'll make a proper home page. For now, just enjoy the bare minimum...</small>
+		</Callout>
 
-		<!-- Form to enter name -->
-		<form @submit.prevent="saveName()" v-if="!nameSaved" class="mtop-md">
 
-			<!-- Name field -->
-			<div class="basic-field mbottom-sm">
-				<label for="name" v-if="!nameInStorage">
-					What's your name?
-				</label>
-				<label for="name" v-else>
-					Change your name:
-				</label>
-				<div class="field-body">
-					<input type="text" v-model="user_name" id="name" required>
-				</div>
-			</div>
+		<h1>
+			An insanely simple way to create CSS animations
+		</h1>
 
-			<!-- Save button -->
-			<button type="submit" class="button" :disabled="!user_name">
-				<span v-if="!nameInStorage">Save to Local Storage</span>
-				<span v-else>Update in Local Storage</span>
-				<i class="far fa-database"></i>
-			</button>
-		</form>
+		<p>
+			Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.
+		</p>
 
-		<!-- Explanation for local storage -->
-		<div v-if="nameSaved">
-			<p>
-				Your name has been saved into local storage to use next time you visit this site.
-			</p>
-			<p>
-				Refresh this page to see that your name has been saved.
-			</p>
-		</div>
+		<p>
+			And it gives you the CSS when you're done.
+		</p>
+
+		<button class="button mright-sm" @click="tab('https://chrome.google.com/webstore/detail/dalaiblmpeklkjnpeocmaojcfldmbfck')">
+			<i class="fab fa-chrome"></i>
+			<span>Download Chrome Extension</span>
+		</button>
+		<button class="button green" @click="navigate('/animate/')">
+			<i class="far fa-browser"></i>
+			<span>Use Web App</span>
+		</button>
 
 	</div>
 </template>
 
 <script>
-// @ is an alias to /src
-import toastMixin from "@/components/mixins/ui/toastMixin.js";
+// Components
+import Callout from "@/components/ui/Callout";
+// Mixins
 import metaMixin from "@/components/mixins/metaMixin.js";
 
 export default {
 	name: "home",
 
 	components: {
+		Callout
 	},
 
 	mixins: [
-		toastMixin,
 		metaMixin,
 	],
 
 	data() {
 		return {
-			user_name: "",
-			nameSaved: false,
-			nameInStorage: false
 		};
 	},
 
 	mounted() {
-		this.updateMeta("Home", "This is the home page description.")
-
-		// Get saved name:
-		this.getName();
+		this.updateMeta("Keyframes.app", "Do cool stuff with CSS.")
 	},
 
 	computed: {
 	},
 	
 	methods: {
-		// Save name to local storage
-		saveName: function(){
-			// Save name under `name` field in localstorage
-			localStorage.setItem("name", this.user_name);
-			console.log("Name saved to local storage")
-			// Save success
-			this.nameSaved = true;
-			// Toast
-			this.toast("Success!", "Your name has been saved to local storage.", "green", "far fa-laugh-wink");
-		},
-		// Get name from local storage
-		getName: function(){
-			// Get username from localstorage that we set with saveName()
-			this.user_name = localStorage.getItem("name");
-
-			if(this.user_name == null){
-				console.log("No user name in storage");
-				this.nameInStorage = false;
-			}else{
-				this.nameInStorage = true;
-				console.log(this.user_name + "'s name retrieved from storage");
-			}
-		}
+		
 	}
 };
 
@@ -109,6 +83,6 @@ export default {
 
 <style lang="less">
 
-	@import '~@/styles/variables.less';
+	// @import '~@/styles/variables.less';
 
 </style>

@@ -24,9 +24,8 @@
 	////////////////////////////////
 	
 	// Fonts
-	// --sans: 'Poppins', sans-serif;
-	--sans: 'Space Grotesk', sans-serif;
-	--mono: 'PT Mono', var(--mono);
+	--sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	--mono: 'Source Code Pro', monospace;
 	--fontAwesome: 'Font Awesome 5 Pro';
 	--fontAwesomeBrands: 'Font Awesome 5 Brands';
 	--systemFont: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -56,69 +55,64 @@
 	//  Light Theme  //
 	////////////////////
 	// Background Colors
-	--background: #ECF7FF;
-	--backgroundLayer: #ffffff;
+	--background: #ffffff;
+	--backgroundLayer: rgb(225, 234, 241);
 	--altBackground: #ffffff;
-	--navBackground: #ECF7FF;
+	--navBackground: #ffffff;
 	// Modal lightbox background/opacity
-	--lightbox: rgba(180,180,200,0.25);
+	--lightbox: rgba(220,220,240,0.25);
 
 
 	// Main Colors
-	--primary: #01298A; // Blue
-	--secondary: #FF9B04; // Yellow
-	--blue: rgb(97, 203, 252);
-	--green: #007775;
-	--red: rgb(255, 4, 4);
-	--yellow: #FF9B04;
-	--purple: #A83BF3;
-	--orange: #FFA63F;
-	--pink: #FF66BE;
-	--grey: rgb(210, 226, 238);
-	--gray: rgb(210, 226, 238);
+	--primary: rgb(36, 0, 194); // Blue
+	--secondary: rgb(255, 155, 4);
+	--blue: rgb(36, 0, 194);
+	--green: rgb(1, 182, 10);
+	--red: rgb(233, 2, 33);
+	--yellow: rgb(255, 230, 4);
+	--purple: rgb(168, 59, 243);
+	--orange: rgb(245, 138, 17);
+	--pink: rgb(255, 102, 190);
+	--grey: rgb(225, 234, 241);
+	--gray: rgb(225, 234, 241);
 
 	// Hover
-	--primaryHover: #2d20d3; // Blue
-	--secondaryHover: #f0c83e; // Yellow
-	--blueHover: #2d20d3;
-	--greenHover: #02caa6;
-	--redHover: #da3229;
-	--yellowHover: #f0c83e;
-	--greyHover: #dfe4eb;
-	--grayHover: #dfe4eb;
-
-	// Text
-	// Not all colors need a text color
-	--greenText: darken(rgb(1, 226, 185), 38%);
-	--yellowText: darken(rgb(252, 170, 63), 55%);
-	--active: #4437f5; // Blue
+	--primaryHover: rgb(68, 29, 240); // Blue
+	--secondaryHover: rgb(240, 200, 62); // Yellow
+	--blueHover: rgb(68, 29, 240);;
+	--greenHover: rgb(0, 207, 10);
+	--redHover: rgb(255, 25, 56);
+	--yellowHover: rgb(255, 238, 81);
+	--greyHover: rgb(206, 221, 233);
+	--grayHover: rgb(206, 221, 233);
 
 	// Light
-	--primaryLight: rgba(0,85,251,0.07);
-	--secondaryLight: rgba(241, 158, 53, 0.09);
-	--blueLight: rgba(0,85,251,0.07);
-	--greenLight: rgba(1, 226, 185, 0.09);
-	--redLight: rgba(253,71,82,0.09);
-	--yellowLight: rgba(241, 158, 53, 0.09);
+	--primaryLight: rgba(36, 0, 194,0.07);
+	--secondaryLight: rgba(255, 155, 4, 0.09);
+	--blueLight: rgba(36, 0, 194,0.07);
+	--greenLight: rgba(1, 182, 10, 0.09);
+	--redLight: rgba(233, 2, 33,0.09);
+	--yellowLight: rgba(255, 230, 4, 0.09);
 	--purpleLight: rgba(168, 59, 243, 0.07);
 
 	// Fade - ~35% opacity
-	--primaryFade: rgba(0,85,251,0.35);
-	--secondaryFade: rgba(241, 158, 53, 0.35);
-	--blueFade: rgba(0,85,251,0.35);
-	--greenFade: rgba(1, 226, 185, 0.35);
-	--redFade: rgba(253,71,82,0.35);
-	--yellowFade: rgba(241, 158, 53, 0.35);
+	--primaryFade: rgba(36, 0, 194,0.35);
+	--secondaryFade: rgba(255, 155, 4, 0.35);
+	--blueFade: rgba(36, 0, 194,0.35);
+	--greenFade: rgba(1, 182, 10, 0.35);
+	--redFade: rgba(233, 2, 33,0.35);
+	--yellowFade: rgba(255, 230, 4, 0.35);
 	--purpleFade: rgba(168, 59, 243, 0.35);
 
 
 	// Inputs
-	--inputBackground: #ECF7FF;
+	--inputBackground: rgb(244, 250, 255);
 	--inputDisabled: #f0f3f9;
 	--inputDisabledText: #828ea6;
 
 	// Borders
-	--border: rgb(184, 207, 228);
+	--border: rgb(72, 70, 122);
+	// --border: rgb(184, 207, 228);
 	--borderHover: rgb(160, 183, 204);
 	--borderFade: rgba(184, 207, 228, 0.6);
 	--outline: rgba(216, 227, 244, 0.45);
@@ -133,6 +127,9 @@
 	// Same as secondary
 	--links: #4437f5;
 	--linksHover: #2d20d3;
+
+	// Misc
+	--seeThrough: rgba(48, 0, 161,0.8);
 
 
 	// Percentage to invert black icons
@@ -173,67 +170,47 @@
 
 	// Background Colors
 	--background: #07070f;
-	--backgroundLayer: #151525;
+	--backgroundLayer: #333355;
 	--altBackground: #181829;
 	--navBackground: rgba(7, 7, 15, 0.84);
 	// Modal lightbox background/opacity
 	--lightbox: rgba(0,0,0,0.345);
 
 	// Main Colors
-	--primary: #3f36bb; // Blue
-	--secondary: #ac9b05; // Yellow
-	--blue: #3f36bb;
-	--green: #0e816c;
-	--red: #ad2018;
-	--yellow: #ac9b05;
-	--purple: #A83BF3;
-	--orange: #F3833B;
-	--pink: #FF66BE;
-	--grey: #20202f;
-	--gray: #20202f;
+	--grey: rgb(32, 32, 47);
+	--gray: rgb(32, 32, 47);
 
 	// Hover
-	--primaryHover: #483ecf; // Blue
-	--secondaryHover: #c5b312; // Yellow
-	--blueHover: #483ecf;
-	--greenHover: #22a58d;
-	--redHover: #da3229;
-
-	--yellowHover: #c5b312;
+	--: #c5b312;
 	--greyHover: #2b2b39;
 	--grayHover: #2b2b39;
 
-	// Text
-	// Not all colors need a text color
-	--greenText: #f7f8ff;
-	--yellowText: #f7f8ff;
-	--active: #f7f8ff; // Blue
 
 	// Light
-	--primaryLight: rgba(0, 84, 251, 0.11);
-	--secondaryLight: rgba(241, 158, 53, 0.13);
-	--blueLight: rgba(0,85,251,0.11);
-	--greenLight: rgba(1, 226, 185, 0.11);
-	--redLight: rgba(253,71,82,0.12);
-	--yellowLight: rgba(255, 227, 67, 0.13);
-	--purpleLight: rgba(168, 59, 243, 0.09);
+	--primaryLight: rgba(48, 0, 161,0.07);
+	--secondaryLight: rgba(172, 155, 5, 0.13);
+	--blueLight: rgba(48, 0, 161,0.07);
+	--greenLight: rgba(14, 129, 108, 0.11);
+	--redLight: rgba(173, 32, 24,0.12);
+	--yellowLight: rgba(172, 155, 5, 0.13);
+	--purpleLight: rgba(169, 58, 242, 0.09);
 	
 	// Fade - ~35% opacity
-	--primaryFade: rgba(0, 84, 251, 0.4);
-	--secondaryFade: rgba(241, 158, 53, 0.4);
-	--blueFade: rgba(0,85,251,0.4);
-	--greenFade: rgba(1, 226, 185, 0.34);
-	--redFade: rgba(253,71,82,0.4);
-	--yellowFade: rgba(241, 222, 53, 0.4);
-	--purpleFade: rgba(168, 59, 243, 0.4);
+	--primaryFade: rgba(48, 0, 161,0.35);
+	--secondaryFade: rgba(172, 155, 5, 0.4);
+	--blueFade: rgba(48, 0, 161,0.35);
+	--greenFade: rgba(14, 129, 108, 0.34);
+	--redFade: rgba(173, 32, 24,0.4);
+	--yellowFade: rgba(172, 155, 5, 0.4);
+	--purpleFade: rgba(169, 58, 242, 0.4);
 
 	// Inputs
-	--inputBackground: #262636;
+	--inputBackground: #313144;
 	--inputDisabled: #20202f;
 	--inputDisabledText: rgba(224, 227, 250, 0.38);
 
 	// Borders
-	--border: rgba(48, 48, 63, 0.5);
+	--border: rgba(48, 48, 63, 0.8);
 	--borderHover: rgb(73, 73, 94);
 	--borderFade: rgba(67,67,92, 0.5);
 	--outline: rgba(96, 94, 149,0.3);
@@ -256,29 +233,6 @@
 	// 100% invert on dark theme
 	--iconInvert: 100%;
 
-	// Box Shadows
-	--shadow:
-		0px 2px 15px -8px rgba(10,10,10,0.6),
-		0px 4px 20px -10px rgba(10,10,10,0.45);
-	--shadowLight:
-		0 0.2px 0.3px rgba(0, 0, 0, 0.21),
-		0 0.6px 0.8px rgba(0, 0, 0, 0.25),
-		0 1.5px 1.8px rgba(0, 0, 0, 0.2),
-		0 3px 4px rgba(0, 0, 20, 0.2);
-	// Shadow below, dark
-	--shadowDark:
-		0 0.4px 0.5px rgba(0, 0, 0, -0.011),
-		0 1px 1.5px rgba(0, 0, 0, -0.017),
-		0 2.4px 3.6px rgba(0, 0, 0, 0.28),
-		0 8px 12px rgba(0, 0, 0, 0.26);
-	--shadowDarker:
-		0 0.4px 0.5px rgba(0, 0, 0, -0.011),
-		0 1px 1.5px rgba(0, 0, 0, -0.017),
-		0 2.4px 3.6px rgba(0, 0, 0, 0.38),
-		0 8px 12px rgba(0, 0, 0, 0.36);
-	// Shadow top, dark
-	--shadowTop:
-		0px -2px 24px -13px rgba(0,0,20,0.15);
 
 }
 [data-theme="high-contrast-dark"] {

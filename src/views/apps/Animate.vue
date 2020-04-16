@@ -1,3 +1,15 @@
+<!--
+// 
+// Animate.vue
+// _________________________
+//
+//	Create CSS animation/keyframes
+//
+//		The Animate page uses it's own not-really-reusable CSS layout
+//			Most other pages use the page-split setup - looks similar, but this had to be specific with the timeline
+//
+// -->
+
 <template>
 	<div id="animateApp">	
 
@@ -5,17 +17,17 @@
 		<div id="animateTop">
 			<!-- left siide, export, settings, etc. -->
 			<!-- Show settings -->
-			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button grey small" @click="viewSaveLoad()" v-bind:class="{'active': showSaveLoad}">
+			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button small" @click="viewSaveLoad()" v-bind:class="[showSaveLoad ? 'red' : 'grey']">
 				<i class="far fa-adjust" v-bind:class="{'fa-save': !showSaveLoad, 'fa-chevron-circle-up': showSaveLoad}"></i>
 				<span>Save/Load</span>
 			</button>
 			<!-- Edit Target -->
-			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button grey small" @click="editTarget()" v-bind:class="{'active': showEditTarget}">
+			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button small" @click="editTarget()" v-bind:class="[showEditTarget ? 'red' : 'grey']">
 				<i class="far" v-bind:class="{'fa-bullseye': !showEditTarget, 'fa-chevron-circle-up': showEditTarget}"></i>
 				<span>Target Element</span>
 			</button>
 			<!-- Show output -->
-			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="{'active': showOutput}">
+			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="{'red': showOutput}">
 				<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
 				<span>Output CSS</span>
 			</button>
@@ -37,18 +49,19 @@
 					<p>You can save your animation configuration and come back to it later.</p>
 					<div id="saveAnimationField">
 						<input id="newAnimationSaveName" aria-label="Save as Name" type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
-						<button aria-label="Save Animation" class="button" @click="saveAnimation()">
+						<button aria-label="Save Animation" class="button green" @click="saveAnimation()">
 							<i class="far fa-save"></i>
 							<span>Save</span>
 						</button>
 					</div>
 					<!-- Load -->
-					<h3 class="mbottom-xs">Load saved animation</h3>
+					<h3 class="mbottom-xs mtop-sm">Load saved animation</h3>
 					<div id="savedAnimationsList">
 						<div class="animation" v-for="(name, index) in savedAnimations" :key="index">
 							<span @click="loadAnimation(name)">{{name.substr(10)}}</span>
 							<i class="far fa-times" @click.self.prevent="deleteAnimationFromStorage(name)"></i>
 						</div>
+						<p v-if="!savedAnimations.length" class="text-light">You don't have any saved</p>
 					</div>
 					
 				</div>
@@ -79,21 +92,27 @@
 <b>/* Copy this @keyframes block to your CSS*/</b>
 
 @keyframes yourAnimation {
-<span v-for="(data, index) in steps" v-bind:key="index">
-  {{data.timelinePosition.left}}{
-    <span v-for="(prop, index) in data.properties" v-bind:key="index" v-if="index != 'transformProps'">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}:{{prop}};
-    </span>
-  }
-  </span>
+<span v-for="(step, index) in computedCSSOutput" v-bind:key="index">
+    {{step.timelinePosition.left}}{
+        <span v-for="(prop, index) in step.properties" v-bind:key="index">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};
+        </span>
+    }
+</span>
 }
 
 <b>/* Add the animation: property to whichever element you want to animate */</b>
 <span>
 #elementToAnimate{
-  animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};
+    animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};
 }
 </span>
 </pre>
+
+				<!-- Copy to clipboard button -->
+				<button class="button small green" @click="copyOutput()">
+					<i class="far fa-copy"></i>
+					<span>Copy to Clipboard</span>
+				</button>
 				</div>
 			</transition>
 
@@ -121,7 +140,10 @@
 				Element property editor 
 				//////////////////////////
 			-->
-			<div id="animateSidebar">
+			<button id="toggleAnimateSidebar" @click="togglePropSidebar = !togglePropSidebar" v-bind:class="{'toggled': togglePropSidebar}">
+				<i class="fas" v-bind:class="{'fa-chevron-double-right': togglePropSidebar, 'fa-chevron-double-left': !togglePropSidebar}"></i>
+			</button>
+			<div id="animateSidebar" v-bind:class="{'toggled': togglePropSidebar}">
 				<!-- Top of sidebar - 50px height to match buttons on left -->
 				<div id="animateSidebarTop">
 					<span>CSS Properties</span> 
@@ -305,81 +327,81 @@
 			Footer & Timeline
 			/////////////////////	
 		-->
-		<transition name="modal">
-			<div id="animateFooter" v-if="!$store.getters.softKeyboard">
+		<div id="animateFooter">
 
-				<!-- Controls -->
-				<div id="animationControls">
-					<!-- Left side, add step -->
-					<div class="steps">
-						<button aria-label="Add new step" class="button mright-sm" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
-							<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
-							<span v-if="!addingStep">Add Step</span>
-							<span v-else>Cancel</span>
-						</button>
-						<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
-							<i class="far fa-trash-alt"></i>
-							<span>Delete {{roundValue(currentStep.left)}}%</span>
-						</button>
-					</div>
-
-					<!-- Edit timing -->
-					<div class="timing">
-						<div class="animation-prop">
-							<input type="text" placeholder="3s" v-model="animationProperties.duration" @input="saveStep()"/>
-							<div class="set-width">{{animationProperties.duration}}</div>
-							<label>Duration</label>
-						</div>
-						<div class="animation-prop">
-							<input type="text" placeholder="infinite" v-model="animationProperties.iterations" @input="saveStep()"/>
-							<div class="set-width">{{animationProperties.iterations}}</div>
-							<label>Iterations</label>
-						</div>
-						<div class="animation-prop">
-							<input type="text" placeholder="0s" v-model="animationProperties.delay" @input="saveStep()"/>
-							<div class="set-width">{{animationProperties.delay}}</div>
-							<label>Delay</label>
-						</div>
-						<div class="animation-prop">
-							<input type="text" placeholder="linear" v-model="animationProperties.timing" @input="saveStep()"/>
-							<div class="set-width">{{animationProperties.timing}}</div>
-							<label>Timing</label>
-						</div>
-						<div class="animation-prop fake">
-							<button class="click-toggle" @click="toggleTiming('direction')" aria-label="Change animation direction">
-								{{animationProperties.direction}}
-							</button>
-							<label>Direction</label>
-						</div>
-						<div class="animation-prop fake">
-							<button class="click-toggle" @click="toggleTiming('fill')" aria-label="Change animation fill mode">
-								{{animationProperties.fillMode}}
-							</button>
-							<label>Fill Mode</label>
-						</div>
-					</div>
-
-					<!-- Right side, pause -->
-					<div class="preview-button" v-if="animationPlaying">
-						<button class="button green" @click="pauseAnimation()" v-bind:class="{'green': animationPaused}">
-							<i v-bind:class="{'far fa-pause': !animationPaused, 'far fa-play': animationPaused}"></i>
-							<span v-if="!animationPaused">Pause</span>
-							<span v-else>Resume</span>
-						</button>
-					</div>
-					<!-- Right side, play/stop -->
-					<div class="preview-button">
-						<button class="button red" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying}">
-							<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-stop-circle': animationPlaying}"></i>
-							<span v-if="!animationPlaying">Play</span>
-							<span v-else>Stop</span>
-						</button>
-					</div>
-					
+			<!-- Controls -->
+			<div id="animationControls">
+				<!-- Left side, add step -->
+				<div class="steps">
+					<button aria-label="Add new step" class="button mright-sm" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
+						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
+						<span v-if="!addingStep">Add Step</span>
+						<span v-else>Cancel</span>
+					</button>
+					<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
+						<i class="far fa-trash-alt"></i>
+						<span>Delete {{roundValue(currentStep.left)}}%</span>
+					</button>
 				</div>
 
-				<!-- Timeline -->
-				<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}">
+				<!-- Edit timing -->
+				<div class="timing">
+					<div class="animation-prop">
+						<input type="text" placeholder="3s" v-model="animationProperties.duration" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.duration}}</div>
+						<label>Duration</label>
+					</div>
+					<div class="animation-prop">
+						<input type="text" placeholder="infinite" v-model="animationProperties.iterations" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.iterations}}</div>
+						<label>Iterations</label>
+					</div>
+					<div class="animation-prop">
+						<input type="text" placeholder="0s" v-model="animationProperties.delay" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.delay}}</div>
+						<label>Delay</label>
+					</div>
+					<div class="animation-prop">
+						<input type="text" placeholder="linear" v-model="animationProperties.timing" @input="saveStep()"/>
+						<div class="set-width">{{animationProperties.timing}}</div>
+						<label>Timing</label>
+					</div>
+					<div class="animation-prop fake">
+						<button class="click-toggle" @click="toggleTiming('direction')" aria-label="Change animation direction">
+							{{animationProperties.direction}}
+						</button>
+						<label>Direction</label>
+					</div>
+					<div class="animation-prop fake">
+						<button class="click-toggle" @click="toggleTiming('fill')" aria-label="Change animation fill mode">
+							{{animationProperties.fillMode}}
+						</button>
+						<label>Fill Mode</label>
+					</div>
+				</div>
+
+				<!-- Right side, pause -->
+				<div class="preview-button" v-if="animationPlaying">
+					<button class="button green" @click="pauseAnimation()" v-bind:class="{'green': animationPaused}">
+						<i v-bind:class="{'far fa-pause': !animationPaused, 'far fa-play': animationPaused}"></i>
+						<span v-if="!animationPaused">Pause</span>
+						<span v-else>Resume</span>
+					</button>
+				</div>
+				<!-- Right side, play/stop -->
+				<div class="preview-button">
+					<button class="button green" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying, 'red': animationPlaying}">
+						<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-stop-circle': animationPlaying}"></i>
+						<span v-if="!animationPlaying">Play</span>
+						<span v-else>Stop</span>
+					</button>
+				</div>
+				
+			</div>
+
+			<!-- Timeline -->
+			<transition name="modal">
+				<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}" v-if="!$store.getters.softKeyboard">
 					<!-- Animated marker that progresses with animation -->
 					<div class="timeline-marker animated" v-if="animationPlaying" v-bind:class="{'pause': animationPaused}">
 					</div>
@@ -408,8 +430,8 @@
 						<b>{{roundValue(timelinePosition.left)}}</b>
 					</div>
 				</div>
-			</div>
-		</transition>
+			</transition>
+		</div>
 
 
 <!-- steps:
@@ -441,21 +463,19 @@
 
 <script>
 // @ is an alias to /src
-import toastMixin from "@/components/mixins/ui/toastMixin.js";
 import metaMixin from "@/components/mixins/metaMixin.js";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
-import softKeyboardMixin from "@/components/mixins/ui/softKeyboardMixin.js";
+import screenResizeMixin from "@/components/mixins/ui/screenResizeMixin.js";
 
 export default {
-	name: "home",
+	name: "animateApp",
 
 	components: {
 	},
 
 	mixins: [
-		toastMixin,
 		metaMixin,
-		softKeyboardMixin,
+		screenResizeMixin,
 		preferencesMixin,
 	],
 
@@ -468,6 +488,8 @@ export default {
 				sizing: false,
 				borders: false
 			},
+			// Prop sidebar hides on mobile
+			togglePropSidebar: false,
 			// Show Output modal or not
 			showOutput: false,
 			// Hold css output generated
@@ -484,7 +506,7 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #3a75f5;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
+			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #2400c2;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
 			customTargetCode: "<i class='fal fa-hand-peace'></i>",
 			// Animation name to save
 			animationToSaveName: null,
@@ -554,17 +576,15 @@ export default {
 					},
 					"properties": {}
 				}
-			}
+			},
+
+			// Backdoor to reference to update computed property - not really actually used
+			backdoor: 0,
 		};
 	},
 
 	mounted() {
 		this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
-
-		// if LG or smaller (992px), collapse sidebar on load
-		if(window.innerWidth < 993){
-			this.cssTab = 0;
-		}
 
 		// Create date and format (remove spaces, remove year)
 		var dateName = new Date().toDateString().replace(/\s/g, '');
@@ -572,6 +592,39 @@ export default {
 	},
 
 	computed: {
+
+		// Clean steps to generate output
+		computedCSSOutput: function () {
+			// Reference backdoor var so it recomputes when that changes.
+			this.backdoor;
+
+			let _this = this;
+			// let css = _this.steps;
+			let css = [];
+
+			var copySteps = _this.steps;
+			// var copySteps = _.cloneDeep(_this.steps);
+
+			for (var step in copySteps) {
+				console.log(copySteps[step])
+				// transformProps
+				delete copySteps[step].properties.transformProps; 
+
+				// Remove erased props
+				for (var prop in copySteps[step].properties) {
+					// If prop doesn't have value, delete it
+					if(!copySteps[step].properties[prop]){
+						delete copySteps[step].properties[prop]; 
+					}
+				}
+				// Push cleaned prop to array
+				css.push(copySteps[step])
+			}
+
+			// Return
+			return css;
+		},
+
 	},
 
 	watch: {
@@ -585,83 +638,42 @@ export default {
 		///////////////////////
 		// Save current step
 		saveStep: function(){
-			console.log("SAVING STEP")
+			var copyProps = _.cloneDeep(this.allProperties);
 
-			// Debounce 500ms
-			// if (this.timeout) clearTimeout(this.timeout); 
-			// this.timeout = setTimeout(() => {
- 
- 
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				// Do I really need to clean the data/remove null/all this before saving? look into it. I might be able to just do it while rendering in the code block
-				var copyProps = _.cloneDeep(this.allProperties);
-				var cleanProps = this.removeObjectsWithNull(copyProps);
+			// Format to make it easier to read later,
+			// Add timeline position
+			var propsToSave = {
+				timelinePosition: {
+					left: parseFloat(this.currentStep.left).toFixed(1) + "%"
+				},
+				properties: copyProps
+			}
 
-				// Delete transform style string generated for targetElemetnt
-				// delete cleanProps['transform'];
-
-				// Delete transform nested object if no children (empty)
-				if(cleanProps['transformProps']){
-					// Count children
-					var count = 0;
-					for(var prop in cleanProps['transformProps']) {
-						count ++;
-					}
-					// Delete if no data
-					if(count == 0){
-						delete cleanProps['transformProps'];
+			// String to generate transform: prop
+			var transformString = "";
+			if(copyProps['transformProps']){
+				for(var prop in copyProps['transformProps']) {
+					if(copyProps['transformProps'][prop]){
+						transformString = transformString + " " + prop + "(" + copyProps['transformProps'][prop] + ")"
 					}
 				}
-
-				// Format to make it easier to read later,
-				// Add timeline position
-				var propsToSave = {
-					timelinePosition: {
-						left: parseFloat(this.currentStep.left).toFixed(1) + "%"
-					},
-					properties: cleanProps
-				}
-
-				// String to generate transform: prop
-				var transformString = "";
-				if(cleanProps['transformProps']){
-					for(var prop in cleanProps['transformProps']) {
-						if(cleanProps['transformProps'][prop]){
-							transformString = transformString + " " + prop + "(" + cleanProps['transformProps'][prop] + ")"
-						}
-					}
-					// Set prop in cleanprops
-					this.allProperties.transform = transformString;
-					cleanProps.transform = transformString;
-				}
+				// Set prop in cleanprops
+				this.allProperties.transform = transformString;
+				copyProps.transform = transformString;
+			}
 
 				
-				// Save changes to steps at current step 
-				this.steps[this.currentStep.left] = propsToSave;
+			// Save changes to steps at current step 
+			this.steps[this.currentStep.left] = propsToSave;
 
-				// Get text content of output to apply to targetElement
-				var _this = this;
+			// Get text content of output to apply to targetElement
+			var _this = this;
 
-				setTimeout(function(){
-					var fullCSSString = document.getElementById("outputCSS").textContent;
-					_this.rawOutputCSS = fullCSSString;
-				}, 500)
+			var fullCSSString = document.getElementById("outputCSS").textContent;
+			_this.rawOutputCSS = fullCSSString;
+			_this.backdoor++;
 
-			// },500);
 
-		},
-		removeObjectsWithNull: function(obj) {
-			return _(obj)
-			.pickBy(_.isObject) // get only objects
-			.mapValues(this.removeObjectsWithNull) // call only for values as objects
-			.assign(_.omitBy(obj, _.isObject)) // save back result that is not object
-			.omitBy(_.isNil) // remove null and undefined from object
-			.value(); // get value
 		},
 
 		// Save new step, duplicating last selected props
@@ -903,6 +915,15 @@ export default {
 			localStorage.removeItem(name);
 			this.viewSaveLoad();
 		},
+
+
+		// Copy output to clipboard
+		copyOutput: function(){
+			// Create input element, append text, copy text, remove element
+			var copyContent = document.getElementById('outputCSS').innerText;
+			this.copyToClipboard("The CSS", copyContent)
+		},
+
 	}
 };
 
@@ -933,7 +954,13 @@ export default {
 			display: flex;
 			justify-content: flex-start;
 			height: 50px;
-			display: flex;
+
+			// Center on mobile
+			@media (max-width: @screenMD) {
+				justify-content: center;
+				left: 0;
+				width: 100%;
+			}
 
 			button{
 				margin-right: 15px;
@@ -953,7 +980,8 @@ export default {
 			margin-bottom: 15px;
 			overflow: auto;
 			box-sizing: border-box;
-			padding: 4px 0;
+			padding: 0 0;
+			overflow: hidden;
 
 			/////////////////////
 			//    Settings    //
@@ -968,14 +996,24 @@ export default {
 				max-height: 90%;
 				max-height: calc(~'100% - 50px');
 				height: fit-content;
-				background-color: var(--backgroundLayer);
+				background-color: var(--primary);
 				transform-origin: top center;
 				border-radius: var(--borderRadiusSmall);
-				box-shadow: var(--shadowLight);
+				box-shadow: var(--shadow);
 				box-sizing: border-box;
 				position: absolute;
 				top: 50px;
 				z-index: 50;
+				border: 1px solid var(--border);
+
+				// Full with on sm
+				@media (max-width: @screenSM) {
+					width: 100%;
+				}
+
+				h3,p{
+					color: var(--white);
+				}
 
 				// Settings headers
 				h3{
@@ -985,11 +1023,11 @@ export default {
 					padding: 0;
 					font-weight: 600;
 				}
-
-				// Generic text
 				p{
-					font-size: 12px;
+					margin: 0;
+					padding: 4px 0 10px 0;
 					line-height: 14px;
+					font-size: 13px;
 				}
 				
 				// Textareas
@@ -1005,6 +1043,12 @@ export default {
 				// Save/load display
 				&.save-load{
 					width: 310px;
+
+					// Full with on sm
+					@media (max-width: @screenSM) {
+						width: 100%;
+					}
+
 
 					// Input/button for save field
 					#saveAnimationField{
@@ -1024,7 +1068,7 @@ export default {
 							height: 100%;
 							border-top-left-radius: 0;
 							border-bottom-left-radius: 0;
-							border-left: 1px solid var(--text);
+							border-left: 1px solid var(--greenHover);
 							padding-left: 6px;
 							white-space: pre;
 							
@@ -1047,16 +1091,19 @@ export default {
 							justify-content: space-between;
 							padding: 0 10px 0 10px;
 							box-sizing: border-box;
+							color: var(--white);
+							font-family: var(--mono);
 
 							span{
 								flex-grow: 3;
 								font-size: 15px;
+								letter-spacing: -0.2px;
 								font-weight: 500;
 								display: block;
-								padding: 4px 0;
+								padding: 3px 0;
 							}
 							i{
-								color: var(--red);
+								color: var(--white);
 								opacity: 0;
 								transition: var(--transition);
 								font-size: 14px;
@@ -1075,6 +1122,7 @@ export default {
 									transition: var(--transition);
 
 									&:hover{
+										color: var(--red);
 										opacity: 1;
 										transition: var(--transition);
 									}
@@ -1098,6 +1146,11 @@ export default {
 				padding: 50px 50px 0 0;
 				transition: var(--transition);
 
+				// Remove right padding on mobile
+				@media (max-width: @screenMD) {
+					padding-right: 0;
+				}
+
 				#targetStage{
 					border-radius: var(--borderRadiusSmall);
 					width: 100%;
@@ -1114,19 +1167,8 @@ export default {
 						
 						// Element that's being animated
 						#targetElement{
-							// display: inline-flex;
-							// flex-direction: column;
-							// justify-content: center;
-							// width: 80px;
-							// height: 80px;
-							// background-color: var(--primary);
-							// color: var(--background);
-							// letter-spacing: 0.5px;
-							// text-align: center;
-							// border-radius: 50%;
-							// font-size: 42px;
-							// transition: 0.5s ease;
 							// box-shadow: var(--shadow);
+							z-index: 3;
 						}
 					}
 				}
@@ -1134,21 +1176,76 @@ export default {
 			///////////////////////////////
 			//    Sidebar/Properties    //
 			/////////////////////////////
-			#animateSidebar{
-				width: 300px;
+			// Toggle sidebar button
+			#toggleAnimateSidebar{
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+				position: absolute;
+				font-size: 22px;
 				background-color: var(--backgroundLayer);
-				border-radius: var(--borderRadius);
+				top: 50%;
+				right: 0;
+				color: var(--textLighter);
 				box-shadow: var(--shadowLight);
+				transition: var(--transitionFast);
+				display: none;
+				@media (max-width: @screenMD) {
+					display: block;
+				}
+
+				i{
+					margin-right: 2px;
+				}
+
+				&.toggled{
+					right: 355px;
+					transition: var(--transitionFast);
+
+					@media (max-width: @screenSM) {
+						right: unset;
+						left: 8%;
+					}
+
+					i{
+						margin-right: 0;
+					}
+				}
+			}
+			#animateSidebar{
+				width: 340px;
+				background-color: var(--primary);
+				border-radius: var(--borderRadiusSmall);
+				box-shadow: var(--shadow);
+				border: 1px solid var(--border);
 				height: 100%;
 				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
 				box-sizing: border-box;
 				padding: 0 0;
+				transition: var(--transitionFast);
+				z-index: 10;
 
+				// Hide on mobile
 				@media (max-width: @screenMD) {
-					position: relative;
-					right: -15px;
+					position: absolute;
+					right: -375px;
+					width: 350px;
+					z-index: 50;
+					background-color: var(--seeThrough);
+				}
+				@media (max-width: @screenSM) {
+					position: absolute;
+					right: -100%;
+					width: 80%;
+				}
+
+				&.toggled{
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
+					right: 0;
+					transition: var(--transitionFast);
 				}
 
 				// Top of sidebar, title
@@ -1159,9 +1256,9 @@ export default {
 					font-size: 18px;
 					font-weight: 600;
 					box-sizing: border-box;
-					padding: 15px 15px 10px 15px;
+					padding: 15px 15px 15px 15px;
 					letter-spacing: 0.3px;
-					color: var(--primary);
+					color: var(--white);
 
 					span{
 						&:last-child{
@@ -1187,7 +1284,7 @@ export default {
 						font-size: 14px;
 						font-weight: 700;
 						// border-bottom: 1px solid var(--border);
-						color: var(--text);
+						color: var(--white);
 						transition: var(--transition);
 
 						span{
@@ -1202,7 +1299,7 @@ export default {
 						}
 
 						&:hover{
-							color: var(--primary);
+							color: var(--white);
 							transition: var(--transition);
 
 							i{
@@ -1228,12 +1325,12 @@ export default {
 
 							label{
 								font-size: 14px;
-								margin-top: 3px;
 								flex-grow: 3;
 								width: 100%;
 								display: flex;
 								flex-direction: column;
 								justify-content: center;
+								color: var(--white)
 							}
 
 							.input-wrapper{
@@ -1296,7 +1393,7 @@ export default {
 					@media (max-width: @screenMD) {
 						order: -1;
 						width: 100%;
-						padding: 5px 0 10px 0;
+						padding: 5px 0 22px 0;
 					}
 
 					// Animation props
@@ -1358,6 +1455,7 @@ export default {
 						// Position absolute inputs
 						input{
 							position: absolute;
+							border-radius: 0;
 						}
 						
 						// Changes for buttons
@@ -1429,10 +1527,16 @@ export default {
 				border-radius: 3px;
 				box-sizing: border-box;
 				padding: 15px;
-				margin: 15px 0 15px 0;
+				margin: 15px 0 10px 0;
 				box-shadow: var(--shadowLight);
 				position: relative;
 				transition: 0s ease;
+				border: 1px solid var(--border);
+
+				// Remove bottom padding on mobile
+				@media (max-width: @screenMD) {
+					padding: 15px 0 0 0;
+				}
 
 				// Hover timeline, show position and percentage
 				.timeline-marker.step,
@@ -1469,7 +1573,7 @@ export default {
 						border-radius: 2px;
 						display: flex;
 						flex-direction: column;
-						color: var(--backgroundLayer);
+						color: var(--white);
 						justify-content: center;
 						font-family: var(--systemFont);
 						pointer-events: none;
@@ -1479,12 +1583,12 @@ export default {
 				// No pointer events
 				.timeline-marker.new{
 					display: none;
-					background-color: var(--blue);
+					background-color: var(--green);
 					pointer-events: none;
 
 					b{
 						// color: var(--text);
-						background-color: var(--blue);
+						background-color: var(--green);
 					}
 				}
 				// Regular and current step
@@ -1533,10 +1637,10 @@ export default {
 				}
 				.timeline-marker.current{
 					z-index: 12;
-					background-color: var(--blue);
+					background-color: var(--primary);
 
 					b{
-						background-color: var(--blue);
+						background-color: var(--primary);
 					}
 					&:hover{
 						cursor: default;
@@ -1552,7 +1656,7 @@ export default {
 					margin-left: -4px;
 					z-index: 20;
 					background-color: var(--red);
-					opacity: 0.5;
+					opacity: 1;
 				}
 
 				// Hover timeline, show new marker
@@ -1580,9 +1684,9 @@ export default {
 		font-size: 14px;
 		overflow: auto;
 		white-space: pre-line;
-		font-family: var(--mono);
-		color: var(--text);
-		font-weight: 600;
+		font-family: var(--mono) !important;
+		color: var(--white);
+		font-weight: 500;
 
 		span{
 			line-height: 13px;
@@ -1595,28 +1699,12 @@ export default {
 				}
 			}
 		}
-		pre{
-			letter-spacing: 0.3px;
-			white-space: pre-line;
-
-			// Display inline last two rows, and first - 
-			// This makes the ending semicolon stay on the last row
-			// Also makes single-rows when necessary
-			&:first-child,
-			&:last-child,
-			&:nth-last-child(2){
-				display: inline;
-			}
-
-			// Override with class block
-			&.block{
-				display: block;
-			}
-		}
+		
 		// B tags are comments
 		b{
 			font-weight: 500;
-			color: var(--textLightest);
+			color: var(--white);
+			opacity: 0.6;
 		}
 	}
 

@@ -117,13 +117,13 @@ export default {
 	/////////////////
 	#toast{
 		position: fixed;
-		bottom: 25px;
+		bottom: 22px;
 		float: right;
 		opacity: 1;
 		right: 25px;
 		display: flex;
 		flex-direction: column;
-		background-color: var(--backgroundLayer);
+		background-color: var(--altBackground);
 		backdrop-filter: blur(3px);
 		border-radius: 12px;
 		transition: var(--transition);

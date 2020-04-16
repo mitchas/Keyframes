@@ -1,13 +1,22 @@
+<!-- 
+// 	Top Navigation bar
+// 	_________________________
+// 
+// 	 Bar at top of screen with logo and account/settings dropdown, and app switcher
+// 		Visible on all screen sizes
+// 			70px height 
+// 			Sticky, floating on top of most things (not modals)
+// 
+-->
+
 <template>
 	<span>
 		<div id="topBar">
-			<!-- Left side of nav - logo and app switcher butttotn -->
-			<div id="topBarLeft" @mouseleave="showAppSwitcher = false">
-				<div id="branding">
-					<div id="logo">
-						<img src="@/assets/branding/logo-light.png" @click="navigate('/')" title="Keyframes Logo" v-if="!$store.getters.userPreferences.darkMode"/>
-						<img src="@/assets/branding/logo-dark.png" @click="navigate('/')" title="Keyframes Logo" v-if="$store.getters.userPreferences.darkMode"/>
-					</div>
+			<!-- Branding - Logo -->
+			<div id="branding">
+				<div id="logo">
+					<img src="@/assets/branding/logo-light.png" @click="navigate('/')" title="Keyframes Logo" v-if="!$store.getters.userPreferences.darkMode"/>
+					<img src="@/assets/branding/logo-dark.png" @click="navigate('/')" title="Keyframes Logo" v-if="$store.getters.userPreferences.darkMode"/>
 				</div>
 			</div>
 
@@ -16,43 +25,50 @@
 				Settings Nav Floated right
 				Settings Nav
 			-->
-			<nav id="topBarRight" aria-label="Settings Menu" @mouseleave="closeDropdowns()">
-				<!-- App Switcher -->
-				<div class="nav-dropdown" @click="toggleDropdown('apps')">
-					<button class="hover-label" aria-label="Show all apps">
-						<span>Tools</span>
-						<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-chevron-circle-up': showAppSwitcher}"></i>
-					</button>
+			<nav id="settingsNav" aria-label="Settings Menu" @mouseleave="closeDropdowns()">
 
-					<!-- Popup on click -->
-					<transition name="fromtop">
-						<div class="settings-nav-popover" v-if="showAppSwitcher">
-							<!-- Animations -->
-							<button class="popover-link" @click="navigate('/animate')">
+
+				<!-- App Switcher -->
+				<div class="settings-nav">
+					<div class="settings-nav-dropdown" @click="toggleDropdown('apps')">
+						<!-- Hover label to show dropdown -->
+						<button class="hover-label">
+							<span>Apps</span>
+							<!-- Chevron down -->
+							<i v-bind:class="{'far fa-chevron-circle-down': !showAppSwitcher, 'far fa-chevron-circle-up': showAppSwitcher}"></i>
+						</button>
+						<!-- Popup on hover/focus -->
+						<div class="settings-nav-popover" v-bind:class="{'visible': showAppSwitcher}">
+							<!-- CSS Animations -->
+							<button class="popover-link" @click="navigate('/animate/')">
 								<span>CSS Animations</span>
-								<i class="far fa-camera-movie"></i>
+								<i class="far fa-video"></i>
 							</button>
-							<!-- More coming soon -->
-							<button class="popover-link soon">
+							<!-- CSS Shadows -->
+							<button class="popover-link" @click="navigate('/shadows/')">
+								<span>Shadows</span>
+								<i class="far fa-eclipse"></i>
+							</button>
+							<!-- More -->
+							<button class="popover-link">
 								<span>More coming soon</span>
 								<i class="far fa-ellipsis-h"></i>
 							</button>
 						</div>
-					</transition>
+					</div>
 				</div>
 
-				<!-- Settings dropdown -->
-				<div class="nav-dropdown" @click="toggleDropdown('settings')">
-					<!-- Hover label to show dropdown -->
-					<button class="hover-label" aria-label="Show Setings">
-						<span>Settings</span>
-						<i v-bind:class="{'far fa-chevron-circle-down': !showSettingsPopover, 'far fa-chevron-circle-up': showSettingsPopover}"></i>
-					</button>
-
-					<!-- Popup on click -->
-					<transition name="fromtop">
-						<div class="settings-nav-popover" v-if="showSettingsPopover">
-							<!-- Sign In -->
+				<!-- Settings -->
+				<div class="settings-nav">
+					<div class="settings-nav-dropdown" @click="toggleDropdown('settings')">
+						<!-- Hover label to show dropdown -->
+						<button class="hover-label">
+							<span>Settings</span>
+							<!-- Chevron down -->
+							<i v-bind:class="{'far fa-chevron-circle-down': !showSettingsPopover, 'far fa-chevron-circle-up': showSettingsPopover}"></i>
+						</button>
+						<!-- Popup on hover/focus -->
+						<div class="settings-nav-popover" v-bind:class="{'visible': showSettingsPopover}">
 							<!-- Toggle dark mode -->
 							<label for="topBarDarkModeToggle" class="popover-link" tabindex="1">
 								<span v-if="!$store.getters.userPreferences.darkMode">Dark Mode</span>
@@ -66,26 +82,27 @@
 								<i class="far fa-cog"></i>
 							</button>
 						</div>
-					</transition>
+					</div>
 				</div>
+
+
 			</nav>
+
 		</div>
 
 		<!-- Settings modal -->
-		<SettingsModal v-if="showSettingsModal" v-on:settingsModalClosed="showSettingsModal = false"></SettingsModal>
+		<SettingsModal :showSettings="showSettingsModal" v-on:settingsModalClosed="showSettingsModal = false"></SettingsModal>
 	</span>
 </template>
 
 <script>
 import SettingsModal from "@/components/SettingsModal";
-import navigateMixin from "@/components/mixins/navigateMixin.js";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 
 
 export default {
-	name: "Sidebar",
+	name: "TopBar",
 	mixins: [
-		navigateMixin,
 		preferencesMixin,
 	],
 	components: {
@@ -144,234 +161,296 @@ export default {
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-		padding: 0 15px;
+		padding: 0 25px 0 25px;
 		box-sizing: border-box;
-		height: 70px;
+		height: 64px;
 		position: sticky;
 		top: 0px;
+		backdrop-filter: blur(3px);
 		background: var(--navBackground);
-		z-index: 70;
+		z-index: 50;
+		// backdrop-filter: blur(3.3px);
+		// backdrop-filter:  grayscale(100%);
 
-		&:after{
-			content: ' ';
-			width: 0px;
-			height: 0px;
-			position: absolute;
-			opacity: 0;
-			transition: all 0s ease 0.22s, opacity 0.22s ease;
+		// Adjust padding and height on smaller screens
+		@media (max-width: @screenMD) {
+			padding: 0 20px;
+			background: var(--navBackground);
+			height: 60px;
+		}
+		@media (max-width: @screenSM) {
+			height: 54px;
+			padding: 0 15px;
 		}
 
-
-		// Adjust padding on larger screens
-		@media (min-width: @screenMD) {
-			padding: 0 35px;
-		}
-
-		// Left side of top bar
-		#topBarLeft{
+		// Logo
+		#branding{
 			display: flex;
+			flex-direction: column;
+			justify-content: center;
 
-			// Logo
-			#branding{
+			#logo{
+				transform: scale(1.0);
+				transition: var(--transition);
+
+				img{
+					height: 44px;
+					width: auto;
+					@media (max-width: @screenMD) {
+						display: block;
+						height: 38px;
+					}
+					@media (max-width: @screenSM) {
+						height: 32px;
+					}
+
+					&.desktop{
+						display: block;
+						@media (max-width: @screenMD) {
+							display: none;
+						}
+					}
+					&.mobile{
+						display: none;
+						
+					}
+				}
+
+				&:hover{
+					transition: var(--transition);
+					cursor: pointer;
+					transform: scale(0.975);
+				}
+			}
+		}
+	}
+
+
+	// settings Nav
+	// settings Nav
+	// settings Nav
+	// Contained inside top nav- wanted styling seperatet
+	nav#settingsNav{
+		display: flex;
+		box-sizing: border-box;
+		height: 100%;
+
+		// Username with dropdown
+		// For signed in users
+		.settings-nav{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.settings-nav-dropdown{
+				position: relative;
+				padding: 8px 0;
+				z-index: 100;
+				height: 100%;
 				display: flex;
 				flex-direction: column;
 				justify-content: center;
-				box-sizing: border-box;
-				padding-bottom: 3px;
 
-				#logo{
-					transform: scale(1.0);
-					transition: var(--transition);
-
-					img{
-						height: 38px;
-						width: auto;
-					}
-
-					&:hover{
-						transition: var(--transition);
-						cursor: pointer;
-						transform: scale(0.975);
-					}
-				}
-			}
-		}
-
-		
-	}
-
-
-	// Settings Nav
-	// Settings Nav
-	// Settings Nav
-	// Contained inside top nav- wanted styling seperatet
-	nav#topBarRight{
-		display: flex;
-		box-sizing: border-box;
-		height: 100%;
-	}
-
-
-	// Nav dropdowns to use on the top bar
-	.nav-dropdown{
-		position: relative;
-		padding: 8px 0;
-		box-sizing: border-box;
-		z-index: 100;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-
-		// Username and chevron down
-		.hover-label{
-			color: var(--text);
-			font-weight: 800;
-			box-sizing: border-box;
-			display: flex;
-			justify-content: flex-end;
-			margin-left: 15px;
-			font-weight: 600;
-			height: 100%;
-			letter-spacing: 0.3px;
-			font-size: 15px;
-			font-family: var(--systemFont);
-			letter-spacing: 0.3px;
-
-			// Add spacing on first element (either i or span)
-			*:first-child{
-				margin-right: 10px;
-			}
-
-			i{
-				transition: var(--transition);
-				transform: scale(1.25) translateY(1px);
-
-				// Decrease margin on mobile
-				@media (max-width: @screenMD) {
-					margin-left: 8px;
-				}
-			}
-		}
-
-		// Hover dropdown
-		&:hover{
-			cursor: pointer;
-		}
-
-
-		// Popup on hover
-		.settings-nav-popover{
-			display: block;
-			width: 200px;
-			position: absolute;
-			top: 56px;
-			transition: 0.1s ease;
-			right: 0;
-			max-height: 220px;
-			overflow: hidden;
-			background-color: var(--altBackground);
-			box-shadow: var(--shadowDark);
-			box-sizing: border-box;
-			border-radius: var(--borderRadiusSmall);
-			padding: 10px;
-			overflow: 0;
-			// Increase size on mobile
-			@media (max-width: @screenMD) {
-				width: 220px;
-			}
-
-			// Change spacing on default hr
-			hr{
-				border-color: var(--borderFade);
-				margin: 4px 0 3px 0;
-			}
-
-			// Links
-			.popover-link{
-				display: flex;
-				justify-content: space-between;
-				color: var(--text);
-				height: 40px;
-				width: 100%;
-				padding: 0 6px;
-				box-sizing: border-box;
-
-				// Increase size on mobile
-				@media (max-width: @screenMD) {
-					height: 44px;
-					padding: 0 2px;
-				}
-
-				span, i{
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					height: 40px;
-
-					@media (max-width: @screenMD) {
-						height: 44px;
-					}
-				}
-				span{
-					font-weight: 700;
+				// Username and chevron down
+				.hover-label{
+					color: var(--text);
+					font-weight: 800;
 					box-sizing: border-box;
-					transition: var(--transitionFast);
-					padding-left: 0;
-					font-size: 14px;
-					letter-spacing: 0.25px;
-				}
-				i{
-					font-size: 18px;
-					width: 30px;
-					text-align: center;
+					display: flex;
+					justify-content: flex-end;
+					user-select: none;
+					margin-left: 8px;
 
-					&.fa-user-cog,
-					&.fa-sign-out-alt,
-					&.fa-user-plus{
+					// Profile photo
+					.hover-label-photo{
+						display: block;
+						height: 34px;
+						width: 34px;
+						border-radius: var(--borderRadius);
+						margin-left: 10px;
+						background-size: cover;
 						position: relative;
-						left: 4px;
-					}
+						top: -2px;
 
-					// Increase size on mobile
-					@media (max-width: @screenMD) {
-						font-size: 22px;
-						padding-right: 10px;
+						// Adjust padding on larger screens
+						@media (min-width: @screenMD) {
+						}
+					}
+					// label and icon
+					span,i{
+						display: inline-flex;
+						flex-direction: column;
+						justify-content: center;
+					}
+					// Label text - either username or "Hey There!"
+					span{
+						letter-spacing: 0.3px;
+						font-size: 16px;
+						font-weight: 700;
+						letter-spacing: 0.3px;
+						@media (max-width: @screenSM) {
+							font-size: 14.5px;
+						}
+					}
+					// Caret down arrow
+					i{
+						margin-left: 6px;
+						font-size: 20px;
+						font-weight: 500;
+						padding-bottom: 2px;
+						transition: var(--transition);
+
+						// Decrease margin on mobile
+						@media (max-width: @screenMD) {
+							margin-left: 8px;
+						}
 					}
 				}
 
-				&:hover,
-				&:focus{
-					text-decoration: none;
+				// Hover dropdown
+				&:hover{
 					cursor: pointer;
-					span{
-						text-decoration: underline;
-					}
-				}
-				&:active{
-					span{
-						text-decoration: underline;
-						padding-left: 6px;
-						transition: var(--transitionFast);
+
+					.hover-label{
+						span{
+							text-decoration: underline;
+						}
 					}
 				}
 
-				// Coming soon
-				&.soon{
-					span{
+
+				// Popup on hover
+				.settings-nav-popover{
+					display: block;
+					width: 220px;
+					position: absolute;
+					top: 54px;
+					transition: 0.1s ease;
+					right: 0;
+					max-height: 0;
+					overflow: hidden;
+					background-color: var(--altBackground);
+					box-sizing: border-box;
+					border-radius: var(--borderRadiusSmall);
+					padding: 0px 10px;
+					overflow: 0;
+					border: 0px solid transparent;
+
+					@media (max-width: @screenMD) {
+						width: 220px;
+					}
+					@media (max-width: @screenSM) {
+						width: 210px;
+						padding: 0 6px;
+					}
+
+					// Visible Class
+					&.visible{
+						max-height: 220px;
+						transition: 0.15s ease;
+						padding: 8px 10px 10px 10px;
+						overflow: 1;
+						box-shadow: var(--shadow);
+						border: 1px solid var(--border);
+					}
+
+					// Change spacing on default hr
+					hr{
+						margin: 5px 0;
+						border-color: var(--border);
+					}
+
+					// Links
+					.popover-link{
+						display: flex;
+						justify-content: space-between;
+						color: var(--text);
+						height: 40px;
+						width: 100%;
+						padding: 0 10px;
+						box-sizing: border-box;
+						user-select: none;
+
+						// Increase size on mobile
+						@media (max-width: @screenMD) {
+							padding: 0 2px;
+						}
+
+						span, i{
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							height: 40px;
+						}
+						span{
+							font-weight: 700;
+							box-sizing: border-box;
+							transition: var(--transitionFast);
+							padding-left: 0;
+							font-size: 14px;
+							letter-spacing: 0.5px;
+
+							// Increase size on mobile
+							@media (max-width: @screenMD) {
+								font-size: 15px;
+								padding-left: 6px;
+							}
+							@media (max-width: @screenSM) {
+								font-size: 13px;
+								padding-left: 6px;
+							}
+						}
+						i{
+							font-size: 18px;
+							width: 30px;
+							text-align: center;
+
+							&.fa-user-cog,
+							&.fa-sign-out-alt,
+							&.fa-user-plus{
+								position: relative;
+								left: 4px;
+							}
+
+							// Increase size on mobile
+							@media (max-width: @screenMD) {
+								padding-right: 6px;
+							}
+						}
+
+						&:hover,
+						&:focus{
+							text-decoration: none;
+							cursor: pointer;
+							span{
+								text-decoration: underline;
+							}
+						}
+						&:active{
+							span{
+								text-decoration: underline;
+								padding-left: 6px;
+								transition: var(--transitionFast);
+							}
+						}
+
+						// Style variations
+						&.red{
+							span, i{
+								color: var(--red);
+							}
+						}
 					}
 				}
 
-				// Style variations
-				// Red for signout
-				&.red{
-					span, i{
-						color: var(--red);
-					}
-				}
 			}
 		}
-
 	}
-	
+
+	// Mozilla doesn't support backdrop-filter, set to white instead
+	@-moz-document url-prefix() {
+		#topBar {
+			background: var(--background) !important;
+		}
+	}
 </style>

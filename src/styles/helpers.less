@@ -1,29 +1,61 @@
-/////////////////////////////
-////    Misc Helpers    ////
-///////////////////////////
-// Ignore class makes invisible while keeping bounds - ignores click
-.ignore{
-	opacity: 0;
-	pointer-events: none;
-	transition: var(--transition);
-}
+////////////////////// 
+////   Helpers   ////
+//////////////////// 
+// 
+// Helper classes for modifying any element
+// 
+// 		.capitalize
+// 			capitalize text inside
+// 		.block
+// 			display block
+// 		Spacing helpers
+// 			.[m/p][side]-[size]
+// 			mtop-xs, mbottom-lg, pleft-xl, etc
+// 			also full padding with .padding-xl
+// 		Size helpers
+//			.max-width-large - max width large
+//			.max-width - max width normal size
+// 
 
+// Title case
+.capitalize{
+	text-transform: capitalize;
+}
 // Display block
 .block{
 	display: block;
 }
-
-// Code / monospace font
-.code{
-	font-family: var(--mono);
+.align-center{
+	text-align: center;
+}
+.align-right{
+	text-align: right;
+}
+.accent{
+	color: var(--primary);
+}
+.margin-auto{
+	margin: 0 auto;
 }
 
-
+// Displays
+.flex{
+	display: flex;
+}
+/////////////////////////////
+////    Size Helpers    ////
+///////////////////////////
+.max-width{
+	max-width: var(--maxWidth);
+}
+.max-width-large{
+	max-width: var(--maxWidthLarge);
+}
 ////////////////////////////////
 ////    Spacing Helpers    ////
 //////////////////////////////
-
 // Global
+.make-space(@suffix: none; @value:0;);
 .make-space(@suffix: xs; @value:10;);
 .make-space(@suffix: sm; @value:20;);
 .make-space(@suffix: md; @value:35;);
@@ -33,6 +65,7 @@
 
 // Make smaller on mobile
 @media (max-width: @screenMD) {
+	.make-space(@suffix: none; @value:0;);
 	.make-space(@suffix: xs; @value:8;);
 	.make-space(@suffix: sm; @value:16;);
 	.make-space(@suffix: md; @value:30;);
@@ -57,6 +90,9 @@
 	}
 	.mleft-@{suffix} {
 		margin-left: ~"@{value}px";
+	}
+	.margin-@{suffix}{
+		margin: ~"@{value}px"
 	}
 
 	// Padding

@@ -1,4 +1,25 @@
-// App Base 
+<!--
+// 
+// App.vue
+// _________________________
+//
+//	Main app component, present on all views
+//
+//		- Structure
+//			- Topbar
+//			- Body
+//			- Toast
+// 
+//		- Functions
+//			relayToast()
+//				Shows toast with message, called from global plugin method
+// 
+// 		- Styles
+// 			- #app
+// 			- main#content
+// 
+// -->
+
 <template>
 	<!-- <div id="app"> -->
 	<div id="app">
@@ -12,6 +33,7 @@
 
 				<!-- All page contetnt contained within main -->
 				<main id="content">
+				
 					<!-- Center/Main Content -->
 					<div class="body-content">
 						<!-- page transition defined in base.less -->
@@ -19,26 +41,21 @@
 							<router-view/>
 						</transition>
 					</div>
-					
 				</main>
 
 				<!-- Toast Component -->
 				<Toast ref="toastComponent"></Toast>
-
 
 			</div>
 		</transition>
 	</div>
 </template>
 
-
 <script>
 // Components
 import Toast from "@/components/ui/Toast";
 import TopBar from "@/components/ui/TopBar";
-import Sidebar from "@/components/ui/Sidebar";
 // Mixins
-import navigateMixin from "@/components/mixins/navigateMixin.js";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 
 
@@ -46,13 +63,11 @@ import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 export default {
 	name: "app",
 	mixins: [
-		navigateMixin,
 		preferencesMixin,
 	],
 	components: {
 		Toast,
 		TopBar,
-		Sidebar
 	},
 	data() {
 		return {
@@ -87,14 +102,6 @@ export default {
 	},
 	methods: {
 
-		//////////////////
-		//    Toast    //
-		////////////////
-		// This forwards the toast content to the component, which displays it
-		relayToast: function(title, body, color, icon) {
-			this.$refs.toastComponent.showToast(title, body, color, icon);
-		},
-
 	}
 };
 </script>
@@ -104,59 +111,62 @@ export default {
 	@import '~@/styles/variables.less';
 
 	#app {
-		display: block;
+		display: flex;
 		width: 100%;
 		margin: 0;
 		min-height: 100%;
 		box-sizing: border-box;
 		min-height: 100%;
-		position: relative;
-		height: 100%;
 
 		.app-wrapper{
 			width: 100%;
 			margin: 0 auto;
 			min-height: 100%;
 			display: block;
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			max-height: 100%;
-			height: 100%;
-			overflow: hidden;
-		}
+			max-height: calc(~'100vh - 70px');
 
-	}
-
-
-	//////////////////////////////
-	//    Main Content         //
-	////////////////////////////
-	main#content{
-		box-sizing: border-box;
-		padding-right: 0;
-		z-index: 60;
-		display: flex;
-		flex-grow: 3;
-		max-height: calc(~'100% - 70px');
+			//////////////////////////////
+			//    Main Content         //
+			////////////////////////////
+			main#content{
+				box-sizing: border-box;
+				padding-right: 0;
+				z-index: 60;
+				display: flex;
+				min-height: calc(~'100% - 70px');
+				height: 100%;
 
 
-		// Main body content
-		// Main body content
-		// Main body content
-		.body-content{
-			box-sizing: border-box;
-			padding: 0 15px;
-			flex-grow: 3;
-			// to account for header
-			
+				// Main body content
+				// Main body content
+				// Main body content
+				.body-content{
+					box-sizing: border-box;
+					padding: 0 15px;
+					flex-grow: 3;
+					min-height: 90vh;
+					// to account for header
+					min-height: calc(~'100% - 100px');
+					overflow-x: hidden;
 
-			@media (min-width: @screenMD) {
-				padding-left: 35px;
-				padding-right: 35px;
+					@media (min-width: @screenMD) {
+						padding-right: 25px;
+						padding-left: 25px;
+					}
+					@media (min-width: @screenXL) {
+						padding-left: 45px;
+						padding-right: 45px;
+					}
+				}
 			}
+
+
 		}
+
 	}
 
+
+
+	
 
 </style>

@@ -25,80 +25,21 @@
 // Simple form fields
 // Sets max width
 .field{
-	max-width: var(--formWidthDesktop);
-	position: relative;
 
-	@media (max-width: @screenMD) {
-		width: 100%;
-		max-width: 600px;
-	}
-
-	// Field body
-	// Set standard text size, small text
-	.field-body{
-		font-weight: 600;
-		font-size: 18px;
-		letter-spacing: 0.4px;
-		padding: 2px 0;
-		line-height: 22px;
-
-		// Horizontal field value display
-		// Action / buttons on right
-		.field-value{
-			box-sizing: border-box;
-			padding: 0 0 0 0;
-
-			.value,
-			.action{
-			}
-
-			.value{
-				flex-grow: 3;
-				box-sizing: border-box;
-				font-size: 18px;
-			}
-
-			small{
-				font-weight: 500;
-				font-family: var(--systemFont);
-				font-size: 14px;
-			}
-			// Right side, buttons/action
-			.action{
-				margin-top: 8px;
-
-				.button{
-					margin-right: 12px;
-				}
-			}
-		}
-	}
-
-	// Required asterisk 
-	.required{
-		position: absolute;
-		top: 0;
-		right: 0;
-		color: var(--red);
-		font-size: 12px;
-		opacity: 0.75;
-	}
-}
-
-// Horizontal field for radios, checkboxes, etc
-.field-horizontal{
-	display: flex;
-
-	.input{
+	&.horizontal{
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding-right: 12px;
-	}
-	label{
-		padding: 14px 0 12px 0;
-		line-height: 15px;
-		font-size: 15px;
+		width: 100%;
+
+		label{
+			width: 40%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		input{
+			flex-grow: 3;
+		}
 	}
 }
 
@@ -257,8 +198,8 @@ textarea{
 	
 	// Placeholder
 	&::placeholder{
-		opacity: 0.5;
-		color: var(--primary);
+		opacity: 0.35;
+		color: var(--text);
 		letter-spacing: 0.4px;
 		font-weight: 500;
 	}
@@ -276,11 +217,11 @@ input[type='search'],
 input[type='date'],
 input[type='tel'],
 input[type='url']{
-    height: 40px;
+    height: 36px;
 	
 	// decrease size on mobile
 	@media (max-width: @screenMD) {
-		height: 38px;
+		height: 34px;
 	}
 }
 // Textarea
@@ -650,15 +591,14 @@ input[type="checkbox"]:focus {
 	&:after{
 		content: '';
 		position: absolute;
-		top: 3px;
+		top: 2.5px;
 		left: 4px;
 		width: 25px;
 		height: 25px;
 		border-radius: 50%;
-		background: var(--text);
-		opacity: 0.22;
+		background: var(--grey);
 		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
-		border: 1px solid var(--text);
+		border: 1px solid var(--greyHover);
 		box-sizing: border-box;
 		transition: var(--transition);
 	}
@@ -672,7 +612,7 @@ input[type="checkbox"]:focus {
 	// Checked, move circle to right, full color
 	&:checked{
 		border: 1px solid var(--border);
-		background: var(--backgroundLayer);
+		background: var(--inputBackground);
 
 		&:after{
 			background: var(--primary);
@@ -709,17 +649,18 @@ input[type="checkbox"]:focus {
 		box-sizing: border-box;
 		padding: 0 0px;
 		border-radius: var(--borderRadius);
-		background-color: var(--backgroundLayer);
+		background-color: var(--altBackground);
 		max-width: 93px;
 		// border: 1px solid var(--border);
 		min-width: 93px;
 		flex-grow: 3;
-		color: var(--textLighter);
+		color: var(--textLightest);
 		margin: 0 10px 6px 0;
 		position: relative;
 		transform: scale(0.9);
-		transition: var(--transition);
+		transition: var(--transitionFast);
 		font-family: var(--systemFont);
+		border: 1px solid var(--borderFade);
 
 		&:last-child{
 			&:before{
@@ -766,16 +707,18 @@ input[type="checkbox"]:focus {
 			right: 5px;
 			font-size: 18px;
 			font-weight: 500;
-			transition: var(--transition);
-			color: var(--border);
+			transition: var(--transitionFast);
+			color: var(--textLightest);
 		}
 
 			
 		// Hover state
 		&:hover{
 			cursor: pointer;
-			transition: var(--transition);
+			transition: var(--transitionFast);
 			text-decoration: none;
+			// border-color: var(--border);
+			color: var(--textLight);
 
 			span{
 				text-decoration: underline;
@@ -787,11 +730,6 @@ input[type="checkbox"]:focus {
 			.custom-icon{
 				opacity: 1;
 			}
-			// Darken check
-			&:after{
-				color: var(--textLightest);
-				transition: var(--transition);
-			}
 		}
 
 	
@@ -802,6 +740,7 @@ input[type="checkbox"]:focus {
 			position: relative;
 			transform: scale(1);
 			box-shadow: var(--shadowLight);
+			border-color: var(--border);
 
 			i{
 				// Custom icons

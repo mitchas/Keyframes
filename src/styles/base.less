@@ -1,12 +1,30 @@
-@import '../assets/SpaceGrotesk/stylesheet.css';
+/////////////////// 
+////   Base   ////
+///////////////// 
+// 
+// Base body, html, and other global styles
+// 
+// 		- body classes
+// 			- scroll-lock - locks scrolling in all directions 
+// 			- no-animations - disables all CSS animations with duration:0
+// 
+// 		- Remove annoying things like tap highlighting
+// 
+// 		- Scroll bar styling and optional class to hide scroll bars
+// 
+// 		- Text Selection colors
+// 
+
 @import 'variables';
 @import 'reset';
 @import 'helpers';
 @import 'forms';
-@import 'modals';
 @import 'typography';
 @import 'animations';
 
+// ///////////////////////////////
+// Universal 
+// ///////////////////////////////
 body, html{
 	margin: 0 auto;
 	font-family: var(--sans);
@@ -16,22 +34,24 @@ body, html{
 	width: 100%;
 	color: var(--text);
 	background-color: var(--background);
-	max-height: 100%;
 }
+// html
 html{
 	display: flex;
 }
+
 body{
 	max-height: none;
 	box-sizing: border-box;
 	min-height: 100%;
 	flex-grow: 3;
 
+	// Prevent scrolling when full-screen elements, like modals, are visible
 	&.scroll-lock{
 		overflow: hidden;
 		max-height:100%;
 	}
-
+	
 	// Disable vue enter and leave animations
 	// Normally all/wildcard (*) animations would be disabled, but that would break the animation apps
 	&.no-animations{
@@ -59,37 +79,16 @@ body{
 	}
 }
 
-input,button,textarea,a,select{
-	outline: 2px dashed transparent;
-	outline-offset: 4px;
-	transition: outline 0.1s ease, outline-offset 0.2s ease;
-	
-	// Focus, show outline
-	&:focus{
-		outline: 2px dashed var(--outline) !important;
-		outline-offset: 4px;
-		transition: outline 0.1s ease, outline-offset 0.2s ease;
-
-		// Disable outline on mobile
-		@media (max-width: @screenMD) {
-			outline: none;
-		}
-	}
-	
-	// Acttive
-	&:active{
-		outline: 2px dashed transparent;
-    }
-}
-
+// Disable default browser tap highlighting, smooth text
+// Disable text selection on mobile 
 *{
-
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     -webkit-overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
 	text-rendering: optimizeLegibility;
-
-    @media (max-width: 550px) {
+	
+	// Disable user select on mobile
+    @media (max-width: @screenMD) {
         &:not([contenteditable="true"]),
         &:not(input){
             -webkit-touch-callout: none;

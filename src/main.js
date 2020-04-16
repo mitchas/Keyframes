@@ -1,3 +1,12 @@
+// main
+// _________________________
+//
+//	Sets up vue app
+//
+//		- Sets up app, imports, filters,
+// 
+// 
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -10,6 +19,10 @@ import VueLodash from 'vue-lodash'
 import lodash from 'lodash'
 import random from 'lodash/random'
 import map from 'lodash/map'
+
+// Plugins
+import plugins from "@/components/plugins.js";
+Vue.use(plugins)
 
 
 Vue.config.productionTip = false

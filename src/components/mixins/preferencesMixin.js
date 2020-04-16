@@ -1,4 +1,20 @@
-// Peferences Mixin
+// Preferences mixin
+// Methods for managing user preferences
+// _________________________
+// 
+// 	toggleDarkMode(mode): sets browser theme
+// 			mode true/false can be passed, but is optional. Default is toggle
+// 			If user is signed in, it'll call savePreferences() to save their change to firebase
+// 
+// 	toggleAnimations(mode): toggles UI animations
+// 			If user is signed in, it'll call savePreferences() to save their change to firebase
+// 
+// 	getPrefs(): Gets preferences from local storage
+// 
+// 	savePrefs(): Saves preferences to local storage
+// 			saves current preferences object to firebase if user is signed in, otherwise nothing
+// 
+
 export default {
 	methods: {
 		/////////////////////////////

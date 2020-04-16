@@ -1,4 +1,10 @@
 // Meta Mixin
+// _________________________
+//
+// 	updateMeta(title, description): Updates page meta and browser tab.
+// 			title: Browser/Tab title.
+// 			description: Page description, which isn't really used.
+// 
 
 export default {
 	methods: {

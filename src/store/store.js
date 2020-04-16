@@ -1,3 +1,18 @@
+// 
+// Store
+// 		Store and get values across components 
+// 
+// 		Definitions:
+//			-scrollLock
+// 				true/false to lock scrolling with CSS (use with full width/height elements so you can't scroll behind them)
+//			-softKeyboard
+// 				true/false - whether the on screen keyboard is visible on mobile devices (See softKeyboardMixin)
+//			-isMobile
+// 				watched by screenResize mixin, set if screen is mobile or smaller
+//			-userPreferences
+// 				object - user's saved preferences from localstorage
+// 
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -12,6 +27,8 @@ export const store = new Vuex.Store({
 		// UI
 		// If soft keyboard visible on mobile
 		softKeyboard: false,
+		// If screen size is mobile - watched by resize
+		isMobile: false,
 		// UserPreferences
 		// Update 3 places in App.vue
 		// at var defaultPrefs
@@ -28,6 +45,9 @@ export const store = new Vuex.Store({
 		softKeyboard(state, softKeyboard) {
 			state.softKeyboard = softKeyboard
 		},
+		isMobile(state, isMobile) {
+			state.isMobile = isMobile
+		},
 		userPreferences(state, userPreferences) {
 			state.userPreferences = userPreferences
 		},
@@ -35,6 +55,7 @@ export const store = new Vuex.Store({
 	getters: {
 		scrollLock: state => state.scrollLock,
 		softKeyboard: state => state.softKeyboard,
+		isMobile: state => state.isMobile,
 		userPreferences: state => state.userPreferences,
 	}
 })
