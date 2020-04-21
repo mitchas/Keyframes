@@ -26,8 +26,14 @@ Vue.use(plugins)
 
 
 Vue.config.productionTip = false
+
+// Moment
 Vue.use(require('vue-moment'));
+// Lodash
 Vue.use(VueLodash, { name: 'animate' , lodash: { map, random } })
+// Color Converter
+window.convert = require('color-convert');
+
 
 let app = '';
 

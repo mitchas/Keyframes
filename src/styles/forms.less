@@ -14,6 +14,7 @@
 // 		buttons
 // 			- colors: default (primary), .red, .green, .yellow, .purple, .grey
 // 		Checkboxes, Radios, Toggle Switches
+// 		Range
 // 		custom-picker
 // 			custom visual radio or checkbox picker - icon with text, horizontal buttons
 // 		.input-validator
@@ -29,16 +30,59 @@
 	&.horizontal{
 		display: flex;
 		width: 100%;
+		justify-content: space-between;
 
 		label{
 			width: 40%;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+			padding: 0;
 		}
 
 		input{
 			flex-grow: 3;
+		}
+	}
+
+	// Label for slider - also includes small input right of label for keyboard input
+	.slider-label-value{
+		display: flex;
+		justify-content: space-between;
+		padding-bottom: 5px;
+		padding: 0 0 4px 0;
+
+		// Actual label text
+		span{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		b{
+			font-weight: bold;
+		}
+
+		input{
+			width: 60px;
+			-webkit-appearance: none;
+			appearance: none;
+			-moz-appearance: textfield;
+			background-color: transparent;
+			color: inherit;
+			text-align: center;
+			margin: 0 0 0 0;
+			padding: 0;
+			border-radius: var(--borderRadiusSmall);
+			height: 30px;
+			background-color: var(--greyFade);
+		}
+
+		button{
+			width: fit-content;
+			i,span{
+				display: inline;
+			}
 		}
 	}
 }
@@ -48,7 +92,7 @@
 //////////////////////
 // Labels
 label{
-	padding: 2px 0 4px 0px;
+	padding: 2px 0 6px 0px;
 	letter-spacing: 0.25px;
 	display: block;
 	color: var(--text);
@@ -237,6 +281,13 @@ textarea{
 		padding-top: 5px;
 		padding-bottom: 5px;
 		line-height: 26px;
+	}
+
+	// Code textarea
+	&.code{
+		font-family: var(--mono);
+		font-size: 14px;
+		line-height: 16px;
 	}
 }
 // Select needs own height definition
@@ -622,6 +673,69 @@ input[type="checkbox"]:focus {
 		}
 	}
 }
+
+
+///////////////////////
+//      Range       //
+/////////////////////
+
+// now for the good stuff 🎉
+input[type="range"] {
+	outline: 0;
+	border: 0;
+	width: 100%;
+	margin: 0 0 0 0;
+	// Chrome
+	@media screen and (-webkit-min-device-pixel-ratio:0) {
+		& {
+			height: 4px;
+			background-color: transparent;
+			-webkit-appearance: none;
+			background-color: rgba(255,255,255,0.65);
+		}
+		&::-webkit-slider-runnable-track {
+			height: 22px;
+			-webkit-appearance: none;
+			margin-top: -1px;
+			transition: box-shadow 0.2s ease-in-out;
+		}
+		&::-webkit-slider-thumb {
+			width: 22px;
+			-webkit-appearance: none;
+			height: 22px;
+			cursor: ew-resize;
+			background: var(--white);
+			border-radius: 50%;
+			transition: box-shadow 0.2s ease-in-out;
+			position: relative;
+			// top: 1px;
+		}
+		&:active::-webkit-slider-thumb {
+			background: var(--yellow);
+		}
+	}
+	// Firefox
+	&::-moz-range-thumb{
+		// border: 1px solid transparent;
+		border-color: white;
+		border-radius: 50%;
+		border-width: 0;
+	}	
+	&::-moz-range-progress {
+		background-color: var(--yellow); 
+	}
+	&::-moz-range-track {  
+		background-color: transparent;
+	}
+	// IE
+	&::-ms-fill-lower {
+		background-color: #43e5f7; 
+	}
+	&::-ms-fill-upper {  
+		background-color: #9a905d;
+	}
+}
+
 
 // Custom radio or checkbox group to select different options
 // Horizontal, icon with text

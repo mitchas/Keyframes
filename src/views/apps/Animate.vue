@@ -29,7 +29,7 @@
 			<!-- Show output -->
 			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="{'red': showOutput}">
 				<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
-				<span>Output CSS</span>
+				<span>Get CSS</span>
 			</button>
 		</div>
 		
@@ -1324,7 +1324,6 @@ export default {
 							width: 100%;
 
 							label{
-								font-size: 14px;
 								flex-grow: 3;
 								width: 100%;
 								display: flex;

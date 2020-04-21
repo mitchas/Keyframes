@@ -161,7 +161,7 @@ export default {
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-		padding: 0 25px 0 25px;
+		padding: 0 15px 0 15px;
 		box-sizing: border-box;
 		height: 64px;
 		position: sticky;
@@ -173,14 +173,14 @@ export default {
 		// backdrop-filter:  grayscale(100%);
 
 		// Adjust padding and height on smaller screens
+		@media (min-width: @screenMD) {
+			padding: 0 25px;
+		}
 		@media (max-width: @screenMD) {
-			padding: 0 20px;
-			background: var(--navBackground);
 			height: 60px;
 		}
 		@media (max-width: @screenSM) {
 			height: 54px;
-			padding: 0 15px;
 		}
 
 		// Logo

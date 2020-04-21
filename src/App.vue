@@ -153,10 +153,6 @@ export default {
 						padding-right: 25px;
 						padding-left: 25px;
 					}
-					@media (min-width: @screenXL) {
-						padding-left: 45px;
-						padding-right: 45px;
-					}
 				}
 			}
 
