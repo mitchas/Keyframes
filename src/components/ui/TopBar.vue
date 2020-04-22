@@ -38,7 +38,7 @@
 							<i v-bind:class="{'far fa-chevron-circle-down': !showAppSwitcher, 'far fa-chevron-circle-up': showAppSwitcher}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
-						<div class="settings-nav-popover" v-bind:class="{'visible': showAppSwitcher}">
+						<div class="settings-nav-popover yellow" v-bind:class="{'visible': showAppSwitcher}">
 							<!-- CSS Animations -->
 							<button class="popover-link" @click="navigate('/animate/')">
 								<span>CSS Animations</span>
@@ -68,7 +68,7 @@
 							<i v-bind:class="{'far fa-chevron-circle-down': !showSettingsPopover, 'far fa-chevron-circle-up': showSettingsPopover}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
-						<div class="settings-nav-popover" v-bind:class="{'visible': showSettingsPopover}">
+						<div class="settings-nav-popover green" v-bind:class="{'visible': showSettingsPopover}">
 							<!-- Toggle dark mode -->
 							<label for="topBarDarkModeToggle" class="popover-link" tabindex="1">
 								<span v-if="!$store.getters.userPreferences.darkMode">Dark Mode</span>
@@ -167,7 +167,7 @@ export default {
 		position: sticky;
 		top: 0px;
 		backdrop-filter: blur(3px);
-		background: var(--navBackground);
+		background: var(--pinkBackground);
 		z-index: 50;
 		// backdrop-filter: blur(3.3px);
 		// backdrop-filter:  grayscale(100%);
@@ -329,7 +329,7 @@ export default {
 					right: 0;
 					max-height: 0;
 					overflow: hidden;
-					background-color: var(--altBackground);
+					background-color: var(--blueBackground);
 					box-sizing: border-box;
 					border-radius: var(--borderRadiusSmall);
 					padding: 0px 10px;
@@ -343,6 +343,13 @@ export default {
 						width: 210px;
 						padding: 0 6px;
 					}
+
+					// Colors
+					&.blue{background-color:var(--blueBackground);}
+					&.green{background-color:var(--greenBackground);}
+					&.yellow{background-color:var(--yellowBackground);}
+					&.purple{background-color:var(--purpleBackground);}
+					&.pink{background-color:var(--pinkBackground);}
 
 					// Visible Class
 					&.visible{
