@@ -145,10 +145,10 @@
 			</button>
 			<div id="animateSidebar" v-bind:class="{'toggled': togglePropSidebar}">
 				<!-- Top of sidebar - 50px height to match buttons on left -->
-				<div id="animateSidebarTop">
+				<h4 id="animateSidebarTop">
 					<span>CSS Properties</span> 
 					<span>{{roundValue(currentStep.left)}}%</span>
-				</div>
+				</h4>
 
 				<div id="animateSidebarProperties">
 					<button class="property-header" @click="propertiesToggles.transform = !propertiesToggles.transform" v-bind:class="{'active':propertiesToggles.transform}">
@@ -333,7 +333,7 @@
 			<div id="animationControls">
 				<!-- Left side, add step -->
 				<div class="steps">
-					<button aria-label="Add new step" class="button mright-sm" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
+					<button aria-label="Add new step" class="button mright-xs" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
 						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
 						<span v-if="!addingStep">Add Step</span>
 						<span v-else>Cancel</span>
@@ -382,7 +382,7 @@
 
 				<!-- Right side, pause -->
 				<div class="preview-button" v-if="animationPlaying">
-					<button class="button green" @click="pauseAnimation()" v-bind:class="{'green': animationPaused}">
+					<button class="button green mleft-xs" @click="pauseAnimation()" v-bind:class="{'green': animationPaused}">
 						<i v-bind:class="{'far fa-pause': !animationPaused, 'far fa-play': animationPaused}"></i>
 						<span v-if="!animationPaused">Pause</span>
 						<span v-else>Resume</span>
@@ -390,7 +390,7 @@
 				</div>
 				<!-- Right side, play/stop -->
 				<div class="preview-button">
-					<button class="button green" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying, 'red': animationPlaying}">
+					<button class="button green mleft-xs" @click="runAnimation()" v-bind:class="{'stop-button': animationPlaying, 'red': animationPlaying}">
 						<i v-bind:class="{'far fa-play': !animationPlaying, 'far fa-stop-circle': animationPlaying}"></i>
 						<span v-if="!animationPlaying">Play</span>
 						<span v-else>Stop</span>
@@ -400,37 +400,35 @@
 			</div>
 
 			<!-- Timeline -->
-			<transition name="modal">
-				<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}" v-if="!$store.getters.softKeyboard">
-					<!-- Animated marker that progresses with animation -->
-					<div class="timeline-marker animated" v-if="animationPlaying" v-bind:class="{'pause': animationPaused}">
-					</div>
-
-					<!-- Marker that shows current/selected step location -->
-					<div class="timeline-marker current" v-bind:style="currentStep" 
-						v-if="currentStep.left != null"
-						@mouseenter="hideAddStep = true" 
-						@mouseleave="hideAddStep = false">
-
-						<b>{{roundValue(currentStep.left)}}</b>
-					</div>
-
-					<!-- V-for all other steps -->
-					<div class="timeline-marker step" v-for="(step, index) in steps" 
-						v-bind:style="step.timelinePosition" :key="step.id" 
-						@mouseenter="hideAddStep = true" 
-						@mouseleave="hideAddStep = false" 
-						@click="changeStep(index)">
-
-						<b>{{roundValue(step.timelinePosition.left)}}</b>
-					</div>
-
-					<!-- Marker that shows location when hovering - must be in after other makers so it responds to ~ sibling css selector -->
-					<div class="timeline-marker new" v-bind:style="timelinePosition">
-						<b>{{roundValue(timelinePosition.left)}}</b>
-					</div>
+			<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}" v-if="!$store.getters.softKeyboard">
+				<!-- Animated marker that progresses with animation -->
+				<div class="timeline-marker animated" v-if="animationPlaying" v-bind:class="{'pause': animationPaused}">
 				</div>
-			</transition>
+
+				<!-- Marker that shows current/selected step location -->
+				<div class="timeline-marker current" v-bind:style="currentStep" 
+					v-if="currentStep.left != null"
+					@mouseenter="hideAddStep = true" 
+					@mouseleave="hideAddStep = false">
+
+					<b>{{roundValue(currentStep.left)}}</b>
+				</div>
+
+				<!-- V-for all other steps -->
+				<div class="timeline-marker step" v-for="(step, index) in steps" 
+					v-bind:style="step.timelinePosition" :key="step.id" 
+					@mouseenter="hideAddStep = true" 
+					@mouseleave="hideAddStep = false" 
+					@click="changeStep(index)">
+
+					<b>{{roundValue(step.timelinePosition.left)}}</b>
+				</div>
+
+				<!-- Marker that shows location when hovering - must be in after other makers so it responds to ~ sibling css selector -->
+				<div class="timeline-marker new" v-bind:style="timelinePosition">
+					<b>{{roundValue(timelinePosition.left)}}</b>
+				</div>
+			</div>
 		</div>
 
 
@@ -506,7 +504,7 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #2400c2;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
+			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #0c4570;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
 			customTargetCode: "<i class='fal fa-hand-peace'></i>",
 			// Animation name to save
 			animationToSaveName: null,
@@ -779,8 +777,8 @@ export default {
 			// position as decimal. Convert that to percent,
 			// Then conver to nearest 0.5.
 			// console.log(_event)
-			var offset = _event.pageX - _event.toElement.offsetLeft;
-			var result = ((offset / _event.toElement.offsetWidth) * 100).toFixed(1);
+			var offset = _event.pageX - _event.target.offsetLeft;
+			var result = ((offset / _event.target.offsetWidth) * 100).toFixed(1);
 			
 			// Set
 			_this.timelinePosition.left = parseFloat(result).toFixed(1) + "%";
@@ -944,8 +942,10 @@ export default {
 		flex-direction: column;
 		justify-content: space-between;
 		height: 100%;
+		max-height: 100%;
+		height: calc(~'100% - 70px');
+		max-height: calc(~'100% - 70px');
 		box-sizing: border-box;
-
 
 		// Top bar - control buttons
 		#animateTop{
@@ -1178,19 +1178,19 @@ export default {
 			/////////////////////////////
 			// Toggle sidebar button
 			#toggleAnimateSidebar{
-				height: 50px;
-				width: 50px;
+				height: 40px;
+				width: 40px;
 				border-radius: 50%;
 				position: absolute;
-				font-size: 22px;
+				font-size: 26px;
 				background-color: var(--backgroundLayer);
 				top: 50%;
-				right: 0;
-				color: var(--textLighter);
-				box-shadow: var(--shadowLight);
+				color: var(--textLight);
 				transition: var(--transitionFast);
 				display: none;
+
 				@media (max-width: @screenMD) {
+					right: 10px;
 					display: block;
 				}
 
@@ -1214,8 +1214,7 @@ export default {
 			}
 			#animateSidebar{
 				width: 340px;
-				background-color: var(--primary);
-				border-radius: var(--borderRadiusSmall);
+				background-color: var(--altBackground);
 				box-shadow: var(--shadow);
 				border: 1px solid var(--border);
 				height: 100%;
@@ -1226,6 +1225,7 @@ export default {
 				padding: 0 0;
 				transition: var(--transitionFast);
 				z-index: 10;
+				border-radius: 10px;
 
 				// Hide on mobile
 				@media (max-width: @screenMD) {
@@ -1242,8 +1242,6 @@ export default {
 				}
 
 				&.toggled{
-					border-top-right-radius: 0;
-					border-bottom-right-radius: 0;
 					right: 0;
 					transition: var(--transitionFast);
 				}
@@ -1253,8 +1251,6 @@ export default {
 					display: flex;
 					width: 100%;
 					justify-content: space-between;
-					font-size: 18px;
-					font-weight: 600;
 					box-sizing: border-box;
 					padding: 15px 15px 15px 15px;
 					letter-spacing: 0.3px;
@@ -1362,6 +1358,22 @@ export default {
 			min-width: 100%;
 			max-width: 100%;
 
+			// Add side padding on mobile
+			@media (max-width: @screenSM) {
+				padding: 0 15px;
+				box-sizing: border-box;
+			
+				// Shrink Buttons
+				.button{
+					font-size: 12px;
+					padding: 0 8px;
+					letter-spacing: 0px;
+					height: 32px;
+				}
+
+			}
+
+
 			// Controls
 			#animationControls{
 				display: flex;
@@ -1378,7 +1390,6 @@ export default {
 				.preview-button{
 					display: flex;
 					justify-content: flex-end;
-					margin-left: 15px;
 				}
 
 				// Timing inputs
@@ -1430,7 +1441,7 @@ export default {
 						input,
 						.set-width,
 						.click-toggle{
-							border-radius: 3px;
+							border-radius: 0;
 							height: 26px;
 							font-size: 14px;
 							font-weight: 700;
@@ -1443,7 +1454,7 @@ export default {
 							// text-decoration: underline;
 							overflow: visible;
 							text-overflow: ellipsis;
-							border-bottom: 2px dashed var(--border);
+							border-bottom: 2px dotted var(--border);
 
 							&:hover,
 							&:focus{
@@ -1566,13 +1577,12 @@ export default {
 						top: 50%;
 						margin-top: -12px;
 						text-align: center;
-						background-color: var(--primary);
 						width: 24px;
 						height: 24px;
 						border-radius: 2px;
 						display: flex;
 						flex-direction: column;
-						color: var(--white);
+						color: var(--text);
 						justify-content: center;
 						font-family: var(--systemFont);
 						pointer-events: none;
@@ -1582,22 +1592,22 @@ export default {
 				// No pointer events
 				.timeline-marker.new{
 					display: none;
-					background-color: var(--green);
+					background-color: var(--blue);
 					pointer-events: none;
 
 					b{
-						// color: var(--text);
-						background-color: var(--green);
+						color: var(--white);
+						background-color: var(--blue);
 					}
 				}
 				// Regular and current step
 				.timeline-marker.step,
 				.timeline-marker.current{
 					z-index: 15;
-					background-color: var(--primary);
+					background-color: var(--greyHover);
 
 					b{
-						background-color: var(--primary);
+						background-color: var(--greyHover);
 					}
 
 					&:hover{
@@ -1614,7 +1624,6 @@ export default {
 					border-radius: 2px;
 					width: 8px;
 					margin-left: -4px;
-					opacity: 0.65;
 					transition: height 0.15s ease, top 0.15s ease;
 					z-index: 11;
 
@@ -1636,10 +1645,11 @@ export default {
 				}
 				.timeline-marker.current{
 					z-index: 12;
-					background-color: var(--primary);
+					background-color: var(--blue);
 
 					b{
-						background-color: var(--primary);
+						background-color: var(--blue);
+						color: var(--white);
 					}
 					&:hover{
 						cursor: default;

@@ -29,7 +29,7 @@
 					</button>
 
 					<!-- Dropdown content -->
-					<div class="option-dropdown-content blue" v-if="controlToggles.options">
+					<div class="option-dropdown-content" v-if="controlToggles.options">
 						<div class="field horizontal">
 							<label for="stageBackground">Background</label>
 							<div class="input-wrapper">
@@ -69,7 +69,7 @@
 			<!-- Fields -->
 			<div class="app-fields">
 
-				<h3 class="mbottom-sm">Box Shadow</h3>
+				<h4 class="mbottom-sm">Box Shadow</h4>
 
 				<!-- Horizontal Offset -->
 				<div class="field">
@@ -138,9 +138,9 @@
 				</div>
 
 				<!-- Output -->
-				<div class="field mtop-sm mbottom-sm">
-					<label for="shadowTransparency" class="slider-label-value">
-						<span>Output</span>
+				<div class="field mbottom-sm" id="shadowOutput">
+					<label class="slider-label-value">
+						<span>Output CSS</span>
 						<button class="button small green" @click="copyShadowOutput()">
 							<i class="far fa-copy"></i>
 							<span>Copy</span>
@@ -202,9 +202,9 @@ export default {
 				horizontal_offset: 0,
 				vertical_offset: 6,
 				blur: 35,
-				spread: -10,
-				color: "rgb(30,30,90,0.22)",
-				opacity: 0.22,
+				spread: -5,
+				color: "rgb(30,30,60,0.25)",
+				opacity: 0.25,
 				layers: 1,
 				stageBackground: "#F2F8FD",
 				customTarget: "<div id='targetElement' class='shadow-target'></div>",
@@ -339,12 +339,12 @@ export default {
 
 	.page-split{
 		display: flex;
-		height: 100%;
 		box-sizing: border-box;
 		padding: 0 0 15px 0;
 
 		@media (max-width: @screenLG) {
 			flex-direction: column;
+			padding: 0 0 0 0;
 		}
 
 		// Left side - controls, stage below
@@ -353,11 +353,20 @@ export default {
 			display: flex;
 			flex-direction: column;
 			margin-right: 25px;
+			min-height: 40vh;
 
 			@media (max-width: @screenLG) {
 				margin-right: 0;
-				margin-bottom: 15px;
+				margin-bottom: 0;
+				height: 50%;
+				height: calc(~'50vh - 60px');
+				max-height: calc(~'50vh - 60px');
 			}
+			@media (max-width: @screenMD) {
+				height: calc(~'50vh - 54px');
+				max-height: calc(~'50vh - 54px');
+			}
+			
 
 			// Top of left side - controls, save, etc
 			.page-split-left-top{
@@ -383,7 +392,6 @@ export default {
 						position: absolute;
 						margin: 7px 0 0 0;
 						top: 100%;
-						background-color: var(--blueBackground);
 						max-width: 500px;
 						min-width: 400px;
 						width: 100%;
@@ -391,13 +399,8 @@ export default {
 						box-shadow: var(--shadow);
 						border-radius: var(--borderRadiusSmall);
 						box-sizing: border-box;
+						background-color: var(--altBackground);
 						padding: 15px;
-
-						&.blue{background-color:var(--blueBackground);}
-						&.green{background-color:var(--greenBackground);}
-						&.yellow{background-color:var(--yellowBackground);}
-						&.purple{background-color:var(--purpleBackground);}
-						&.pink{background-color:var(--pinkBackground);}
 
 						label, h1, h2, h3, h4, h5, h6, p{
 							color: var(--white);
@@ -432,16 +435,30 @@ export default {
 			max-height: 100%;
 			overflow: auto;
 
+			// Fix to bottom on below LG
 			@media (max-width: @screenLG) {
+				width: 94%;
+				margin-left: 3%;
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				height: 50%;
+			}
+			// Full width below md
+			@media (max-width: @screenMD) {
 				width: 100%;
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				height: 50%;
+				margin-left: 0;
 			}
 
 
 			// Sidebar content/app form/fields - primary background
 			.app-fields{
 				display: block;
-				background-color: var(--blueBackground);
-				// background-color: var(--primary);
+				background-color: var(--primary);
 				color: var(--white);
 				box-sizing: border-box;
 				padding: 15px;
@@ -450,6 +467,23 @@ export default {
 				box-shadow: var(--shadow);
 				height: 100%;
 				overflow: auto;
+
+				// Remove bottom border radius, increase top
+				@media (max-width: @screenMD) {
+					padding: 25px;
+					border-top-left-radius: var(--borderRadiusLarge);
+					border-top-right-radius: var(--borderRadiusLarge);
+					border-bottom-left-radius: 0;
+					border-bottom-right-radius: 0;
+				}
+				// Remove bottom border radius, increase top
+				@media (max-width: @screenMD) {
+					padding: 25px;
+					border-top-left-radius: var(--borderRadiusLarge);
+					border-top-right-radius: var(--borderRadiusLarge);
+					border-bottom-left-radius: 0;
+					border-bottom-right-radius: 0;
+				}
 
 				.field{
 					label{
@@ -484,6 +518,15 @@ export default {
 		height: 150px;
 		max-height: 150px;
 		min-height: 150px;
+	}
+	#shadowOutput{
+		display: block;
+		margin-top: 45px;
+
+		code{
+			background: var(--blue);
+			margin-top: 15px;
+		}
 	}
 
 </style>

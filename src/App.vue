@@ -117,13 +117,14 @@ export default {
 		min-height: 100%;
 		box-sizing: border-box;
 		min-height: 100%;
+		max-height: 100%;
 
 		.app-wrapper{
 			width: 100%;
 			margin: 0 auto;
 			min-height: 100%;
 			display: block;
-			max-height: calc(~'100vh - 70px');
+			overflow: hidden;
 
 			//////////////////////////////
 			//    Main Content         //
@@ -142,13 +143,15 @@ export default {
 				// Main body content
 				.body-content{
 					box-sizing: border-box;
-					padding: 0 15px;
+					padding: 0 0;
 					flex-grow: 3;
-					min-height: 90vh;
 					// to account for header
-					min-height: calc(~'100% - 100px');
 					overflow-x: hidden;
 
+					@media (min-width: @screenSM) {
+						padding-right: 15px;
+						padding-left: 15px;
+					}
 					@media (min-width: @screenMD) {
 						padding-right: 25px;
 						padding-left: 25px;
