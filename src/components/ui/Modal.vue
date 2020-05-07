@@ -137,7 +137,7 @@ export default {
 		.modal{
 			display: flex;
 			flex-direction: column;
-			background-color: var(--altBackground);
+			background-color: var(--background);
 			margin: 0 auto;
 			width: 90%;
 			max-width: 500px;

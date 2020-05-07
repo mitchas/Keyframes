@@ -23,7 +23,7 @@
 			<div class="page-split-left-top">
 				<!-- Options -->
 				<div class="option-dropdown">
-					<button class="button small grey mright-sm" @click="controlTab('options')">
+					<button class="button small mright-sm" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'grey': !controlToggles.options}">
 						<i class="far" v-bind:class="{'fa-toggle-on': !controlToggles.options, 'fa-chevron-circle-up': controlToggles.options}"></i>
 						<span>Options</span>
 					</button>
@@ -208,7 +208,7 @@ export default {
 				layers: 1,
 				stageBackground: "#F2F8FD",
 				customTarget: "<div id='targetElement' class='shadow-target'></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    border-radius: 20px;\n    margin: 0 auto;\n}",
+				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    border-radius: 4px;\n    margin: 0 auto;\n}",
 			},
 			// Which controls are visible
 			controlToggles: {
@@ -341,6 +341,7 @@ export default {
 		display: flex;
 		box-sizing: border-box;
 		padding: 0 0 15px 0;
+		height: 100%;
 
 		@media (max-width: @screenLG) {
 			flex-direction: column;
@@ -430,7 +431,7 @@ export default {
 
 		// Right side
 		.page-split-right{
-			width: 400px;
+			width: 340px;
 			height: 100%;
 			max-height: 100%;
 			overflow: auto;
@@ -524,7 +525,7 @@ export default {
 		margin-top: 45px;
 
 		code{
-			background: var(--blue);
+			background: var(--green);
 			margin-top: 15px;
 		}
 	}

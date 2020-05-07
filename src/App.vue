@@ -136,6 +136,7 @@ export default {
 				display: flex;
 				min-height: calc(~'100% - 70px');
 				height: 100%;
+				height: calc(~'100% - 70px');
 
 
 				// Main body content

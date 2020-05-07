@@ -943,9 +943,10 @@ export default {
 		justify-content: space-between;
 		height: 100%;
 		max-height: 100%;
-		height: calc(~'100% - 70px');
-		max-height: calc(~'100% - 70px');
+		// height: calc(~'100% - 70px');
+		// max-height: calc(~'100% - 70px');
 		box-sizing: border-box;
+		height: 100%;
 
 		// Top bar - control buttons
 		#animateTop{
