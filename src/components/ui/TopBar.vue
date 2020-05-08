@@ -15,8 +15,7 @@
 			<!-- Branding - Logo -->
 			<div id="branding">
 				<div id="logo">
-					<img src="@/assets/branding/logo-light.png" @click="navigate('/')" title="Keyframes Logo" v-if="!$store.getters.userPreferences.darkMode"/>
-					<img src="@/assets/branding/logo-dark.png" @click="navigate('/')" title="Keyframes Logo" v-if="$store.getters.userPreferences.darkMode"/>
+					<img src="@/assets/branding/logo.png" @click="navigate('/')" title="Keyframes Logo" v-bind:class="{'invert': $store.getters.userPreferences.darkMode}"/>
 				</div>
 			</div>
 
@@ -193,6 +192,8 @@ export default {
 				transform: scale(1.0);
 				transition: var(--transition);
 
+				
+
 				img{
 					height: 44px;
 					width: auto;
@@ -204,15 +205,9 @@ export default {
 						height: 32px;
 					}
 
-					&.desktop{
-						display: block;
-						@media (max-width: @screenMD) {
-							display: none;
-						}
-					}
-					&.mobile{
-						display: none;
-						
+					// Invert for dark mode
+					&.invert{
+						filter: invert(100%);
 					}
 				}
 
@@ -253,7 +248,7 @@ export default {
 
 				// Username and chevron down
 				.hover-label{
-					color: var(--text);
+					color: var(--dark);
 					font-weight: 800;
 					box-sizing: border-box;
 					display: flex;
@@ -297,7 +292,7 @@ export default {
 						margin-left: 6px;
 						font-size: 20px;
 						font-weight: 500;
-						padding-bottom: 2px;
+						padding-bottom: 0px;
 						transition: var(--transition);
 
 						// Decrease margin on mobile
@@ -351,20 +346,20 @@ export default {
 						padding: 8px 10px 10px 10px;
 						overflow: 1;
 						box-shadow: var(--shadow);
-						border: 1px solid var(--border);
+						border: 1px solid var(--dark);
 					}
 
 					// Change spacing on default hr
 					hr{
 						margin: 5px 0;
-						border-color: var(--border);
+						border-color: var(--dark);
 					}
 
 					// Links
 					.popover-link{
 						display: flex;
 						justify-content: space-between;
-						color: var(--text);
+						color: var(--dark);
 						height: 40px;
 						width: 100%;
 						padding: 0 10px;
@@ -429,7 +424,6 @@ export default {
 						&:active{
 							span{
 								text-decoration: underline;
-								padding-left: 6px;
 								transition: var(--transitionFast);
 							}
 						}
@@ -444,13 +438,6 @@ export default {
 				}
 
 			}
-		}
-	}
-
-	// Mozilla doesn't support backdrop-filter, set to white instead
-	@-moz-document url-prefix() {
-		#topBar {
-			background: var(--background) !important;
 		}
 	}
 </style>

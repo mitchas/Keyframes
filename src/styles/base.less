@@ -30,7 +30,7 @@ body, html{
 	font-family: var(--sans);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: var(--text);
+	color: var(--dark);
 	background-color: var(--background);
 }
 // html
@@ -131,12 +131,12 @@ body{
 }
 
 ::selection {
-	background: #1857EF; /* Gecko Browsers */
-	color: #E0EAF9;
+	background: #1058E7;
+	color: #ffffff;
 }
 ::-moz-selection {
-	background: rgb(187, 189, 194); /* Gecko Browsers */
-	color: #E0EAF9;
+	background: #1058E7;
+	color: #ffffff;
 }
 
 // Never underline fontawesome icons
@@ -159,6 +159,11 @@ body{
 
 	h1{
 		font-weight: 900;
+	}
+
+	&.text-page{
+		max-width: 1000px;
+		margin: 0 auto;
 	}
 }
 

@@ -75,7 +75,6 @@
 			padding: 0;
 			border-radius: var(--borderRadiusSmall);
 			height: 30px;
-			background-color: var(--greyFade);
 		}
 
 		button{
@@ -95,7 +94,7 @@ label{
 	padding: 2px 0 6px 0px;
 	letter-spacing: 0.25px;
 	display: block;
-	color: var(--text);
+	color: var(--dark);
 	font-size: 16px;
 	font-weight: 500;
 	font-family: var(--systemFont);
@@ -114,7 +113,7 @@ label{
 		padding-bottom: 5px;
 		font-weight: 500;
 		letter-spacing: 0.1px;
-		color: var(--text);
+		color: var(--dark);
 	}
 
 	// Invert color
@@ -134,7 +133,7 @@ label{
 	line-height: 16px;
 	padding: 0 0 3px 0;
 	display: block;
-	color: var(--textLighter);
+	color: var(--mediumer);
 	letter-spacing: 0.35px;
 
 	b{
@@ -155,7 +154,7 @@ label{
 	font-size: 12px;
 	font-weight: 500;
 	letter-spacing: 1px;
-	color: var(--textLightest);
+	color: var(--mediumest);
 	position: absolute;
 	box-sizing: border-box;
 	padding-left: 2px;
@@ -209,10 +208,9 @@ textarea{
 	max-width: 100%;
 	width: 100%;
     font-size: 16px;
-	// background-color: var(--inputBackground);
 	box-sizing: border-box;
 	padding: 0 8px;
-	color: var(--text);
+	color: var(--white);
 	font-family: var(--systemFont);
 	font-weight: 500;
 	letter-spacing: 0.35px;
@@ -220,7 +218,8 @@ textarea{
 	border: none;
 	transition: all 0.1s ease, border-color 0.15s ease;
 	font-weight: 500;
-	background-color: var(--inputBackground);
+	border: 1px solid var(--white);
+	background-color: transparent;
 
 	// Increase size on mobile
 	@media (max-width: @screenMD) {
@@ -232,24 +231,21 @@ textarea{
 	// Hover and focus states
 	&:hover,
 	&:focus{
-		border-color: var(--border);
+		background-color: rgba(150,150,150,0.2);
 		transition: all 0.1s ease, border-color 0.15s ease;
 		// Light border mobile
-		@media (max-width: @screenMD) {
-			border-color: var(--border);
-		}
 	}
 	
 	// Placeholder
 	&::placeholder{
-		opacity: 0.35;
-		color: var(--text);
+		color: rgba(150,150,150);
 		letter-spacing: 0.4px;
 		font-weight: 500;
 	}
 
-	&.light{
-		background-color: var(--backgroundLayer);
+	&.invert{
+		border: 1px solid var(--black);
+		color: var(--black);
 	}
 }
 // Single line text inputs
@@ -306,18 +302,15 @@ select{
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		background-color: var(--grey);
 		font-weight: 600;
 		padding: 0 10px;
 		border-radius: var(--borderRadiusSmall);
-		border: 1px solid var(--border);
+		border: 1px solid var(--dark);
 		font-size: 15px;
 		letter-spacing: 0.35px;
 	}
 	// input
 	input{
-		background-color: var(--background);
-		border: 1px solid var(--border);
 		border-left: none;
 	}
 
@@ -354,7 +347,7 @@ button{
 }
 .button{
 	border: none;
-	color: white;
+	color: var(--background);
 	height: 36px;
 	border-radius: 3px;
 	font-size: 14px;
@@ -362,11 +355,9 @@ button{
 	transition: var(--transition);
 	font-weight: 600;
 	padding: 0px 14px 2px 14px;
-	background-color: rgba(255,255,255,0.1);
-	background-color: var(--primary);
+	background-color: var(--dark);
 	box-sizing: border-box;
 	transform: translateY(0px);
-	color: var(--white);
 	box-shadow: var(--shadowLight);
 	font-family: var(--systemFont);
 
@@ -384,7 +375,6 @@ button{
 	&:hover{
 		cursor: pointer;
 		text-decoration: underline;
-		background-color: var(--primaryHover);
 		transition: var(--transition);
 		box-shadow: none;
 	}
@@ -412,57 +402,27 @@ button{
 	// Blue
 	&.blue{
 		background-color: var(--blue);
-		color: var(--text);
-		&:hover{
-			background-color: var(--blueHover);
-		}
+		color: var(--white);
 	}
 	// Green
 	&.green{
 		background-color: var(--green);
-		&:hover{
-			background-color: var(--greenHover);
-		}
+		color: var(--white);
 	}
 	// Red
 	&.red{
 		background-color: var(--red);
-		&:hover{
-			background-color: var(--redHover);
-		}
-	}
-	// Yellow
-	&.yellow{
-		background-color: var(--yellow);
-		color: var(--text);
-		&:hover{
-			background-color: var(--yellowHover);
-		}
-	}
-	// Purple
-	&.purple{
-		background-color: var(--purple);
-		&:hover{
-			background-color: var(--purpleHover);
-		}
+		color: var(--white);
 	}
 	// Grey
-	&.grey,
-	&.gray{
-		background-color: var(--grey);
-		color: var(--text);
-		&:hover{
-			background-color: var(--greyHover);
-		}
+	&.light{
+		color: var(--dark);
+		background-color: var(--light);
 	}
-	// Background
-	// Same color button as background color
-	&.background{
-		background-color: var(--backgroundLayer);
-		color: var(--text);
-		&:hover{
-			background-color: var(--background);
-		}
+	// Grey
+	&.dark{
+		color: var(--white);
+		background-color: var(--medium);
 	}
 	
 
@@ -526,7 +486,7 @@ button{
 	&:disabled{
 		background-color: var(--inputDisabled);
 		color: var(--inputDisabledText);
-		border-color: var(--border);
+		border-color: var(--dark);
 		opacity: 0.8;
 
 		&:hover{
@@ -591,7 +551,7 @@ input[type="checkbox"]:focus {
 		font-family: var(--fontAwesome);
 		font-weight: 900;
 		transition: var(--bezierTransition);
-		color: var(--textLight);
+		color: var(--medium);
 		opacity: 0.3;
 		font-size: 16px;
 		left: 5px;
@@ -629,7 +589,7 @@ input[type="checkbox"]:focus {
 	display: inline-block;
 	position: relative;
 	margin: 0;
-	border: 1px solid var(--border);
+	border: 1px solid var(--dark);
 	transition: all .2s ease;
 	background-color: var(--inputBackground);
 
@@ -642,14 +602,14 @@ input[type="checkbox"]:focus {
 	&:after{
 		content: '';
 		position: absolute;
-		top: 2.5px;
+		top: 4px;
 		left: 4px;
-		width: 25px;
-		height: 25px;
+		width: 22px;
+		height: 22px;
 		border-radius: 50%;
 		background: var(--background);
 		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
-		border: 1px solid var(--border);
+		border: 1px solid var(--dark);
 		box-sizing: border-box;
 		transition: var(--transition);
 	}
@@ -662,13 +622,13 @@ input[type="checkbox"]:focus {
 
 	// Checked, move circle to right, full color
 	&:checked{
-		border: 1px solid var(--border);
+		border: 1px solid var(--dark);
 		background: var(--inputBackground);
 
 		&:after{
-			background: var(--green);
+			background: var(--blue);
 			transform: translateX(17px);
-			border-color: var(--border);
+			border-color: var(--dark);
 			opacity: 1;
 		}
 	}
@@ -704,25 +664,25 @@ input[type="range"] {
 			-webkit-appearance: none;
 			height: 28px;
 			cursor: ew-resize;
-			background: var(--white);
+			background: var(--background);
 			border-radius: 50%;
 			transition: box-shadow 0.2s ease-in-out;
 			position: relative;
 			// top: 1px;
 		}
 		&:active::-webkit-slider-thumb {
-			background: var(--yellow);
+			background: var(--blue);
 		}
 	}
 	// Firefox
 	&::-moz-range-thumb{
 		// border: 1px solid transparent;
-		border-color: white;
+		border-color: var(--white);
 		border-radius: 50%;
 		border-width: 0;
 	}	
 	&::-moz-range-progress {
-		background-color: var(--yellow); 
+		background-color: var(--blue); 
 	}
 	&::-moz-range-track {  
 		background-color: transparent;
@@ -763,18 +723,16 @@ input[type="range"] {
 		box-sizing: border-box;
 		padding: 0 0px;
 		border-radius: var(--borderRadius);
-		background-color: var(--background);
 		max-width: 93px;
-		// border: 1px solid var(--border);
+		border: 1px solid var(--medium);
 		min-width: 93px;
 		flex-grow: 3;
-		color: var(--textLightest);
+		color: var(--medium);
 		margin: 0 10px 6px 0;
 		position: relative;
 		transform: scale(0.9);
 		transition: var(--transitionFast);
 		font-family: var(--systemFont);
-		border: 1px solid var(--borderFade);
 
 		&:last-child{
 			&:before{
@@ -822,7 +780,7 @@ input[type="range"] {
 			font-size: 18px;
 			font-weight: 500;
 			transition: var(--transitionFast);
-			color: var(--textLightest);
+			color: var(--mediumest);
 		}
 
 			
@@ -831,8 +789,8 @@ input[type="range"] {
 			cursor: pointer;
 			transition: var(--transitionFast);
 			text-decoration: none;
-			// border-color: var(--border);
-			color: var(--textLight);
+			// border-color: var(--dark);
+			color: var(--medium);
 
 			span{
 				text-decoration: underline;
@@ -849,12 +807,12 @@ input[type="range"] {
 	
 		// Option Selected
 		&.active{
-			color: var(--text);
-			border-color: var(--border);
+			color: var(--dark);
+			border-color: var(--dark);
 			position: relative;
 			transform: scale(1);
 			box-shadow: var(--shadowLight);
-			border-color: var(--border);
+			border-color: var(--dark);
 
 			i{
 				// Custom icons
@@ -864,7 +822,7 @@ input[type="range"] {
 			}
 			&:after{
 				content: '\f058';
-				color: var(--text);
+				color: var(--dark);
 			}
 		}
 	}
@@ -973,10 +931,7 @@ input[type="range"] {
 			&.active.yellow i{color: var(--yellow);}
 			&.active.red i{color: var(--red);}
 			&.active.blue i{color: var(--blue);}
-			&.active.green i{color: var(--greenHover);}
-			&.active.purple i{color: var(--purple);}
-			&.active.orange i{color: var(--orange);}
-			&.active.pink i{color: var(--pink);}
+			&.active.green i{color: var(--green);}
 		}
 
 	}

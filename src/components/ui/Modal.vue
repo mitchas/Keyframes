@@ -145,7 +145,7 @@ export default {
 			box-shadow: var(--shadowDark);
 			position: relative;
 			max-height: 75vh;
-			border: 1px solid var(--border);
+			border: 1px solid var(--dark);
 
 			// Small, confirmation modal
 			&.small{
@@ -182,7 +182,7 @@ export default {
 				right: 0;
 				padding: 6px 10px;
 				opacity: 0.2;
-				color: var(--textLight);
+				color: var(--medium);
 				transition: var(--transition);
 
 				&:hover{
@@ -202,13 +202,13 @@ export default {
 			.modal-title{
 				display: block;
 				box-sizing: border-box;
-				padding: 20px 20px 10px 20px;
+				padding: 20px 20px 20px 20px;
 				border-top-right-radius: var(--borderRadiusSmall);
 				border-top-left-radius: var(--borderRadiusSmall);
-				color: var(--text);
+				color: var(--dark);
 				font-weight: 600;
-				letter-spacing: 0.15px;
-				font-size: 20px;
+				letter-spacing: 0.25px;
+				font-size: 24px;
 				text-align: left;
 				line-height: 24px;
 

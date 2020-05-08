@@ -17,17 +17,17 @@
 		<div id="animateTop">
 			<!-- left siide, export, settings, etc. -->
 			<!-- Show settings -->
-			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button small" @click="viewSaveLoad()" v-bind:class="[showSaveLoad ? 'red' : 'grey']">
+			<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button small" @click="viewSaveLoad()" v-bind:class="[showSaveLoad ? 'red' : '']">
 				<i class="far fa-adjust" v-bind:class="{'fa-save': !showSaveLoad, 'fa-chevron-circle-up': showSaveLoad}"></i>
 				<span>Save/Load</span>
 			</button>
 			<!-- Edit Target -->
-			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button small" @click="editTarget()" v-bind:class="[showEditTarget ? 'red' : 'grey']">
+			<button id="showEditTargetButton" aria-label="Edit Target Element" class="button small" @click="editTarget()" v-bind:class="[showEditTarget ? 'red' : '']">
 				<i class="far" v-bind:class="{'fa-bullseye': !showEditTarget, 'fa-chevron-circle-up': showEditTarget}"></i>
 				<span>Target Element</span>
 			</button>
 			<!-- Show output -->
-			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="{'red': showOutput}">
+			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="[showOutput ? 'red' : 'blue']">
 				<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
 				<span>Get CSS</span>
 			</button>
@@ -49,7 +49,7 @@
 					<p>You can save your animation configuration and come back to it later.</p>
 					<div id="saveAnimationField">
 						<input id="newAnimationSaveName" aria-label="Save as Name" type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
-						<button aria-label="Save Animation" class="button green" @click="saveAnimation()">
+						<button aria-label="Save Animation" class="button blue" @click="saveAnimation()">
 							<i class="far fa-save"></i>
 							<span>Save</span>
 						</button>
@@ -156,7 +156,7 @@
 						<span>Transform</span>
 					</button>
 					<!-- Transform fields -->
-					<transition name="tab">
+					<transition name="basic">
 						<div class="property-group" v-if="propertiesToggles.transform">
 
 							<!-- Rotate -->
@@ -204,7 +204,7 @@
 						<span>Colors & Text</span>
 					</button>
 					<!-- Colors & Text Fields-->
-					<transition name="tab">
+					<transition name="basic">
 						<div class="property-group" v-if="propertiesToggles.colors">
 							<!-- Background -->
 							<div class="field-set">
@@ -245,7 +245,7 @@
 						<span>Sizing & Spacing</span>
 					</button>
 					<!-- Sizing and spacing -->
-					<transition name="tab">
+					<transition name="basic">
 						<div class="property-group" v-if="propertiesToggles.sizing">
 							<!-- Width -->
 							<div class="field-set">
@@ -286,7 +286,7 @@
 						<span>Borders</span>
 					</button>
 					<!-- Borders -->
-					<transition name="tab">
+					<transition name="basic">
 						<div class="property-group" v-if="propertiesToggles.borders">
 							<!-- Border -->
 							<div class="field-set">
@@ -333,7 +333,7 @@
 			<div id="animationControls">
 				<!-- Left side, add step -->
 				<div class="steps">
-					<button aria-label="Add new step" class="button mright-xs" @click="addingStep = !addingStep;" v-bind:class="{'active' : addingStep}">
+					<button aria-label="Add new step" class="button mright-xs" @click="addingStep = !addingStep;" v-bind:class="{'red' : addingStep}">
 						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
 						<span v-if="!addingStep">Add Step</span>
 						<span v-else>Cancel</span>
@@ -504,7 +504,7 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #0c4570;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
+			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #1058E7;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
 			customTargetCode: "<i class='fal fa-hand-peace'></i>",
 			// Animation name to save
 			animationToSaveName: null,
@@ -997,7 +997,7 @@ export default {
 				max-height: 90%;
 				max-height: calc(~'100% - 50px');
 				height: fit-content;
-				background-color: var(--primary);
+				background-color: var(--backgroundLayer);
 				transform-origin: top center;
 				border-radius: var(--borderRadiusSmall);
 				box-shadow: var(--shadow);
@@ -1005,7 +1005,7 @@ export default {
 				position: absolute;
 				top: 50px;
 				z-index: 50;
-				border: 1px solid var(--border);
+				border: 1px solid var(--dark);
 
 				// Full with on sm
 				@media (max-width: @screenSM) {
@@ -1069,10 +1069,10 @@ export default {
 							height: 100%;
 							border-top-left-radius: 0;
 							border-bottom-left-radius: 0;
-							border-left: 1px solid var(--greenHover);
 							padding-left: 6px;
 							white-space: pre;
-							
+							border: 1px solid var(--white);
+
 							i{
 								margin-right: 8px;
 								margin-left: 5px;
@@ -1092,7 +1092,7 @@ export default {
 							justify-content: space-between;
 							padding: 0 10px 0 10px;
 							box-sizing: border-box;
-							color: var(--white);
+							color: var(--background);
 							font-family: var(--mono);
 
 							span{
@@ -1104,7 +1104,7 @@ export default {
 								padding: 3px 0;
 							}
 							i{
-								color: var(--white);
+								color: var(--background);
 								opacity: 0;
 								transition: var(--transition);
 								font-size: 14px;
@@ -1184,9 +1184,9 @@ export default {
 				border-radius: 50%;
 				position: absolute;
 				font-size: 26px;
-				background-color: var(--backgroundLayer);
+				background-color: var(--background);
 				top: 50%;
-				color: var(--textLight);
+				color: var(--medium);
 				transition: var(--transitionFast);
 				display: none;
 
@@ -1215,9 +1215,8 @@ export default {
 			}
 			#animateSidebar{
 				width: 340px;
-				background-color: var(--altBackground);
+				background-color: var(--backgroundLayer);
 				box-shadow: var(--shadow);
-				border: 1px solid var(--border);
 				height: 100%;
 				box-sizing: border-box;
 				display: flex;
@@ -1227,6 +1226,7 @@ export default {
 				transition: var(--transitionFast);
 				z-index: 10;
 				border-radius: 10px;
+				border: 1px solid var(--white);
 
 				// Hide on mobile
 				@media (max-width: @screenMD) {
@@ -1234,7 +1234,7 @@ export default {
 					right: -375px;
 					width: 350px;
 					z-index: 50;
-					background-color: var(--seeThrough);
+					background-color: var(--transparent);
 				}
 				@media (max-width: @screenSM) {
 					position: absolute;
@@ -1280,7 +1280,7 @@ export default {
 						padding: 10px 15px 10px 15px;
 						font-size: 14px;
 						font-weight: 700;
-						// border-bottom: 1px solid var(--border);
+						// border-bottom: 1px solid var(--dark);
 						color: var(--white);
 						transition: var(--transition);
 
@@ -1296,7 +1296,6 @@ export default {
 						}
 
 						&:hover{
-							color: var(--white);
 							transition: var(--transition);
 
 							i{
@@ -1313,9 +1312,9 @@ export default {
 
 						// Adjust fields
 						.field-set{
-							padding: 2px 15px 2px 40px;
+							padding: 4px 15px 4px 40px;
 							box-sizing: border-box;
-							// background-color: var(--altBackground);
+							// background-color: var(--dark);
 							display: flex;
 							justify-content: space-between;
 							width: 100%;
@@ -1338,7 +1337,6 @@ export default {
 									font-family: var(--mono);
 									font-size: 14px;
 									letter-spacing: 0px;
-									// background-color: var(--background);
 								}
 							}
 							
@@ -1424,7 +1422,7 @@ export default {
 							display: block;
 							box-sizing: border-box;
 							padding: 0 0px 0 0;
-							color: var(--textLighter);
+							color: var(--max);
 							user-select: none;
 							position: absolute;
 							top: 34px;
@@ -1448,18 +1446,18 @@ export default {
 							font-weight: 700;
 							background-color: transparent;
 							border: none;							
-							color: var(--textLight);
+							color: var(--max);
 							padding: 0;
 							width: 100%;
 							text-align: center;
 							// text-decoration: underline;
 							overflow: visible;
 							text-overflow: ellipsis;
-							border-bottom: 2px dotted var(--border);
+							border-bottom: 2px dotted var(--medium);
 
 							&:hover,
 							&:focus{
-								border-color: var(--borderHover);
+								border-color: var(--dark);
 							}
 						}
 
@@ -1534,7 +1532,6 @@ export default {
 			// Timeline
 			#animateTimeline{
 				height: 80px;
-				background-color: var(--backgroundLayer);
 				border-radius: 3px;
 				box-sizing: border-box;
 				padding: 15px;
@@ -1542,7 +1539,7 @@ export default {
 				box-shadow: var(--shadowLight);
 				position: relative;
 				transition: 0s ease;
-				border: 1px solid var(--border);
+				border: 1px solid var(--dark);
 
 				// Remove bottom padding on mobile
 				@media (max-width: @screenMD) {
@@ -1583,7 +1580,7 @@ export default {
 						border-radius: 2px;
 						display: flex;
 						flex-direction: column;
-						color: var(--text);
+						color: var(--white);
 						justify-content: center;
 						font-family: var(--systemFont);
 						pointer-events: none;
@@ -1593,22 +1590,23 @@ export default {
 				// No pointer events
 				.timeline-marker.new{
 					display: none;
-					background-color: var(--blue);
+					background-color: var(--green);
 					pointer-events: none;
 
 					b{
 						color: var(--white);
-						background-color: var(--blue);
+						background-color: var(--green);
 					}
 				}
 				// Regular and current step
 				.timeline-marker.step,
 				.timeline-marker.current{
 					z-index: 15;
-					background-color: var(--greyHover);
+					background-color: var(--backgroundLayer);
 
 					b{
-						background-color: var(--greyHover);
+						background-color: var(--backgroundLayer);
+						color: var(--white);
 					}
 
 					&:hover{
@@ -1672,7 +1670,7 @@ export default {
 				// Hover timeline, show new marker
 				&.add-step:hover {
 					cursor: copy;
-					border-color: var(--borderHover);
+					border-color: var(--white);
 
 					// Show new again
 					.new{
@@ -1728,8 +1726,6 @@ export default {
 			left: 100%;
 		}
 	}
-	
-
 
 
 </style>

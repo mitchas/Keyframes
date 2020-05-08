@@ -8,15 +8,14 @@
 // -->
 
 <template>
-	<div class="page">
+	<div class="page text-page">
 
 		<Callout
 			icon="far fa-shapes"
 			class="mbottom-sm"
-			color="purple"
+			color="blue"
 			size="fit">
-			<span>Hey, glad you still use this site :). I'm updating it for the first time in 2 years. I'm rebuilding it on Vue, and will be adding more tools besides animations. Extension update will come in a little bit. If you want the old version, <a href="https://keyframes.app/old/">click here</a>.</span>
-			<small>Also, I'll make a proper home page. For now, just enjoy the bare minimum...</small>
+			<span>Hello! I'm updating it for the first time in 2 years. It's rebuilt with Vue, has a few new features, and I will be adding more tools besides animations. Extension update will come in a little bit. There may be some bugs, so if you want the old version, <a href="https://mitchs.co/keyframes1/">click here</a>.</span>
 		</Callout>
 
 
@@ -32,9 +31,13 @@
 			And it gives you the CSS when you're done.
 		</p>
 
+		<p>
+			<small>Better home page coming soon</small>
+		</p>
+
 		<button class="button mright-sm" @click="tab('https://chrome.google.com/webstore/detail/dalaiblmpeklkjnpeocmaojcfldmbfck')">
 			<i class="fab fa-chrome"></i>
-			<span>Download Chrome Extension</span>
+			<span>Download (old) Chrome Extension</span>
 		</button>
 		<button class="button green" @click="navigate('/animate/')">
 			<i class="far fa-browser"></i>

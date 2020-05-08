@@ -123,7 +123,7 @@ export default {
 		right: 25px;
 		display: flex;
 		flex-direction: column;
-		background-color: var(--altBackground);
+		background-color: var(--backgroundLayer);
 		backdrop-filter: blur(3px);
 		border-radius: 12px;
 		transition: var(--transition);
@@ -160,7 +160,7 @@ export default {
 			height: 24px;
 			width: 24px;
 			border-radius: 50%;
-			color: var(--text);
+			color: var(--dark);
 			text-align: center;
 			display: flex;
 			flex-direction: column;
@@ -187,7 +187,7 @@ export default {
 			.toast-close{
 				transition: var(--transition);
 				opacity: 0.8;
-				background-color: var(--backgroundLayer);
+				background-color: var(--light);
 			}
 
 		}
@@ -197,7 +197,7 @@ export default {
 			box-sizing: border-box;
 			padding: 14px 12px 16px 10px;
 			display: flex;
-			color: var(--text);
+			color: var(--white);
 
 			// Increase padding on smaller screens
 			@media (max-width: @screenSM) {
@@ -217,7 +217,7 @@ export default {
 				box-sizing: content-box;
 				padding-bottom: 2px;
 				height: auto;
-				color: var(--primary);
+				color: var(--dark);
 				@media (max-width: @screenSM) {
 					font-size: 46px;
 				}
@@ -233,7 +233,7 @@ export default {
 				padding-left: 8px;
 				max-width: 280px;
 				min-width: 160px;
-				color: var(--text);
+				color: var(--dark);
 
 				// Adjust spacing on small screens
 				@media (max-width: @screenSM) {
@@ -259,7 +259,7 @@ export default {
 					line-height: 18px;
 					letter-spacing: 0.5px;
 					font-weight: 500;
-					color: var(--textLighter);
+					color: var(--mediumer);
 					font-family: var(--systemFont);
 
 					// Spacing on mobile
@@ -295,7 +295,7 @@ export default {
 				display:flex;
 				width: 0%;
 				height: 100%;
-				background-color: var(--primary);
+				background-color: var(--blue);
 				border-bottom-left-radius: 4px;
 			}
 

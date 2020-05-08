@@ -33,7 +33,7 @@ h1,h2,h3,h4,h5,h6{
 // h1
 h1{
 	font-size: 40px;	
-	color: var(--text);
+	color: var(--dark);
 	line-height: 44px;
 	font-weight: 500;
 	letter-spacing: 0.38px;
@@ -47,7 +47,7 @@ h1{
 h2{
 	font-size: 33px;
 	line-height: 36px;
-	color: var(--text);
+	color: var(--dark);
 	font-weight: 600;
 	letter-spacing: 0.25px;
 	// Adjust Mobile
@@ -123,7 +123,7 @@ h6.section{
 		content: '';
 		height: 6px;
 		width: 80px;
-		background-color: var(--primary);
+		background-color: var(--dark);
 		position: absolute;
 		bottom: -7px;
 		left: 0;
@@ -147,7 +147,7 @@ p{
 	line-height: 26px;
 	max-width: 700px;
 	padding: 12px 0;
-	color: var(--textLight);
+	color: var(--medium);
 	letter-spacing: 0.4px;
 	font-family: var(--systemFont);
 	// Mobile changes
@@ -204,7 +204,6 @@ a{
 	
 	&:hover{
 		cursor: pointer;
-		color: var(--linksHover);
 		text-decoration: underline;
 		transition: var(--transition);
 		outline-color: transparent;
@@ -234,17 +233,17 @@ ul{
 //   Modifiers   //
 //////////////////
 .text-fade{
-	color: var(--textLightest);
+	color: var(--mediumest);
 }
 .text-bright{
-	color: var(--text);
+	color: var(--dark);
 }
 
 // Horizontal Rule
 hr{
 	border: none;
 	border-top: 1px solid;
-	border-color: var(--border);
+	border-color: var(--dark);
 	height: 1px;
 	overflow: hidden;
 	margin: 8px auto

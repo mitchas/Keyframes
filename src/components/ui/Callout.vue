@@ -56,8 +56,9 @@ export default {
 		padding: 0 15px 0 60px;
 		border-radius: var(--borderRadiusSmall);
 		position: relative;
-		background-color: var(--primaryLight);
+		background-color: var(--backgroundLayer);
 		box-shadow: var(--shadowLight);
+		border: 1px solid var(--white);
 
 		// Icon
 		.callout-icon{
@@ -72,8 +73,7 @@ export default {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			color: var(--primary);
-			text-shadow: 0px 0px 18px var(--primaryFade);
+			color: var(--blue);
 		}
 
 		// Text
@@ -83,7 +83,7 @@ export default {
 			font-weight: 400;
 			letter-spacing: 0.25px;
 			font-family: var(--systemFont);
-			color: var(--text);
+			color: var(--white);
 			padding: 15px 0 15px 0;
 
 			@media (max-width: @screenSM) {
@@ -115,66 +115,19 @@ export default {
 		// Link
 		a{
 			color: var(--links);
-			&:hover{
-				color: var(--linksHover);
-			}
 		}
 
 
 		// Colors
 		&.red{
-			background-color: var(--redLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--redFade);
+			.callout-icon, a{
 				color: var(--red);
-			}
-			a{
-				color: var(--red);
-			}
-			a:hover{
-				color: var(--redHover);
-			}
-		}
-		// Colors
-		&.purple{
-			background-color: var(--purpleLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--purpleFade);
-				color: var(--purple);
-			}
-			a{
-				color: var(--purple);
-			}
-			a:hover{
-				color: var(--purple);
 			}
 		}
 		// Green
 		&.green{
-			background-color: var(--greenLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--greenFade);
+			.callout-icon, a{
 				color: var(--green);
-			}
-			a{
-				color: var(--links);
-			}
-			a:hover{
-				color: var(--linksHover);
-			}
-		}
-		// Yellow
-		&.yellow{
-			background-color: var(--yellowLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--yellowFade);
-				color: var(--yellowHover);
-			}
-			a{
-				color: var(--links);
-			}
-			a:hover{
-				color: var(--linksHover);
 			}
 		}
 

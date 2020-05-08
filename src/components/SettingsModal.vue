@@ -58,7 +58,7 @@
 				<!-- Start Page Selector -->
 				<label class="setting-label-large mtop-xs">
 					Start Page {{test}}
-					<small>Select the page you'd like to load first when you visit keyframes.app.</small>
+					<small>Select the page you'd like to see first when you visit keyframes.app.</small>
 				</label>
 				<div class="custom-picker no-scrollbars mtop-xs mbottom-sm">
 					<label class="option" v-for="option in startPages" :key="option.label" :for="'cat_' + option.label" v-bind:class="{'active': $store.getters.userPreferences.startPage == option.path}">
@@ -153,12 +153,16 @@ export default {
 			startPages: [
 				{
 					path: '/',
-					icon: 'far fa-home',
+					icon: 'fal fa-home',
 					label: 'Home'
 				},{
-					path: '/animate',
-					icon: 'far fa-video',
+					path: '/animate/',
+					icon: 'fal fa-video',
 					label: 'Animate'
+				},{
+					path: '/shadows/',
+					icon: 'fal fa-eclipse',
+					label: 'Shadows'
 				}
 			]
 		};
@@ -267,7 +271,7 @@ export default {
 		#localStorageHelpButton{
 			display: inline-block;
 			width: fit-content;
-			color: var(--text);
+			color: var(--dark);
 			font-size: 13px;
 			font-weight: 500;
 			padding: 10px 0 10px 0;
@@ -281,13 +285,13 @@ export default {
 
 	// Local storage help
 	#localStorageHelp{
-		background-color: var(--background);
+		background-color: var(--backgroundLayer);
 		box-sizing: border-box;
 		padding: 10px;
 		border-radius: var(--borderRadiusSmall);
-		border: 1px solid var(--border);
+		border: 1px solid var(--dark);
 		margin: 10px 0 0 0;
-
+		color: var(--white);
 		font-size: 12px;
 		letter-spacing: 0.5px;
 		font-weight: 400;
@@ -309,7 +313,6 @@ export default {
 	.local-storage-code-display{
 		box-sizing: border-box;
 		padding: 0 15px 15px 15px;
-		// background-color: var(--grey);
 		// border-radius: var(--borderRadiusSmall);
 		margin: 0 auto;
 		max-height: 300px;
@@ -328,66 +331,7 @@ export default {
 		}
 	}
 
-	// Option select
-	// Basically just styled radios/checkboxes
-	.options-display{
-		display: flex;
-		flex-wrap: wrap;
-		box-sizing: border-box;
-		padding: 10px 0 0 0;
 
-		.option{
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			margin: 0 15px 15px 0;
-			width: 76px;
-			height: 50px;
-			border-radius: var(--borderRadiusSmall);
-			border: 1px solid var(--border);
-			text-align: center;
-			color: var(--borderHover);
-			transition: var(--transitionFast);
-
-			// Icon
-			i{
-				font-size: 17px;
-				padding-bottom: 6px;
-				padding-top: 2px;
-				font-weight: 500;
-			}
-			// Label
-			span{
-				font-size: 14px;
-				font-weight: 600;
-				letter-spacing: 0.4px;
-			}
-
-			// Hover state
-			&:hover{
-				cursor: pointer;
-				border-color: var(--text);
-				transition: var(--transitionFast);
-				color: var(--text);
-			}
-		}
-
-		// If checked 
-		input:checked + label{
-			border-color: var(--primaryHover);
-			background-color: var(--primary);
-
-			span,i{
-				color: var(--white);
-			}
-
-			&:hover{
-				border-color: var(--primaryHover);
-				color: var(--primary);
-				transition: var(--transitionFast);
-			}
-		}
-	}
 
 
 

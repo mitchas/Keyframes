@@ -206,9 +206,9 @@ export default {
 				color: "rgb(30,30,60,0.25)",
 				opacity: 0.25,
 				layers: 1,
-				stageBackground: "#F2F8FD",
-				customTarget: "<div id='targetElement' class='shadow-target'></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    border-radius: 4px;\n    margin: 0 auto;\n}",
+				stageBackground: "white",
+				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-user-secret'></i></div>",
+				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    border-radius: 4px;\n    margin: 0 auto;\n    font-size: 52px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
 			},
 			// Which controls are visible
 			controlToggles: {
@@ -396,15 +396,15 @@ export default {
 						max-width: 500px;
 						min-width: 400px;
 						width: 100%;
-						border: 1px solid var(--border);
+						border: 1px solid var(--dark);
 						box-shadow: var(--shadow);
 						border-radius: var(--borderRadiusSmall);
 						box-sizing: border-box;
-						background-color: var(--altBackground);
+						background-color: var(--dark);
 						padding: 15px;
 
 						label, h1, h2, h3, h4, h5, h6, p{
-							color: var(--white);
+							color: var(--background);
 						}
 					}
 				}
@@ -459,12 +459,12 @@ export default {
 			// Sidebar content/app form/fields - primary background
 			.app-fields{
 				display: block;
-				background-color: var(--primary);
-				color: var(--white);
+				background-color: var(--dark);
+				color: var(--background);
 				box-sizing: border-box;
 				padding: 15px;
 				border-radius: var(--borderRadius);
-				border: 1px solid var(--border);
+				border: 1px solid var(--dark);
 				box-shadow: var(--shadow);
 				height: 100%;
 				overflow: auto;
@@ -488,7 +488,7 @@ export default {
 
 				.field{
 					label{
-						color: var(--white);
+						color: var(--background);
 					}
 
 					code{
@@ -501,7 +501,7 @@ export default {
 						border-radius: var(--borderRadiusSmall);
 						margin: 4px 0 0 0;
 						line-height: 20px;
-						background-color: var(--black);
+						background-color: var(--dark);
 					}
 				}
 			}
@@ -525,7 +525,7 @@ export default {
 		margin-top: 45px;
 
 		code{
-			background: var(--green);
+			background: var(--blue);
 			margin-top: 15px;
 		}
 	}
