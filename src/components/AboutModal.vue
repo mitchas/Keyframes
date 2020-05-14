@@ -1,15 +1,12 @@
 <!-- 
-// SettingsModal.vue
+// AboutModal.vue
 // _________________________
 // 
-// 	Shows modal containing settings
-//		- Dark mode toggle
-//		- UI Animations toggle
-//		- Start page selector
-//		- Local Storage information
-//
-//	- Props:
-//		- graphic - curve
+// 	Shows modal containing about info
+//		- Version
+//		- Code info
+//		- Donate?
+//		- view on GitHub
 //
 //	- Functions:
 //		- clearLocalStorage()
@@ -23,97 +20,19 @@
 	<div>
 
 		<Modal
-			v-bind:show="showSettings"
-			title="Settings"
+			v-bind:show="showAbout"
+			title="About"
 			color="grey"
-			confirmText="Close Settings"
+			confirmText="Dismiss"
 			confirmIcon="fas fa-times"
-			@confirmed="$emit('settingsModalClosed');"
-			@dismissed="$emit('settingsModalClosed');">
+			@confirmed="$emit('aboutModalClosed');"
+			@dismissed="$emit('aboutModalClosed');">
 
 
 			<!-- General Preferences -->
 			<div class="settings-group">
-
-				<!-- Dark Mode -->
-				<div class="setting-toggle">
-					<div class="setting-toggle-input">
-						<input id="darkmodeToggle" type="checkbox" class="toggle" v-model="$store.getters.userPreferences.darkMode" @change="toggleDarkMode()"/>
-					</div>
-					<label class="setting-label-large" for="darkmodeToggle">
-						Dark Mode
-					</label>
-				</div>
-
-				<!-- UI Animations -->
-				<div class="setting-toggle">
-					<div class="setting-toggle-input">
-						<input id="animationToggle" type="checkbox" class="toggle" v-model="$store.getters.userPreferences.animations" @change="toggleAnimations()"/>
-					</div>
-					<label class="setting-label-large" for="animationToggle">
-						UI Animations
-						<small>You can turn off the UI animations like the ones that transition between pages.</small>
-					</label>
-				</div>
-
-				<!-- Start Page Selector -->
-				<label class="setting-label-large mtop-xs">
-					Start Page {{test}}
-					<small>Select the page you'd like to see first when you visit keyframes.app.</small>
-				</label>
-				<div class="custom-picker no-scrollbars mtop-xs mbottom-sm">
-					<label class="option" v-for="option in startPages" :key="option.label" :for="'cat_' + option.label" v-bind:class="{'active': $store.getters.userPreferences.startPage == option.path}">
-						<i :class="[option.icon]"></i>
-						<span>{{option.label}}</span>
-						<input type="radio" :id="'cat_' + option.label" v-model="$store.getters.userPreferences.startPage" v-bind:value="option.path" v-bind:aria-label="option.label + ' Page'" hidden/>
-					</label>
-				</div>
-
-
-				<!-- Clear local storage -->
-				<div class="basic-field" id="clearLocalStorage">
-					<div class="field-body">
-						<button class="button red small" type="button" aria-label="Clear Local Storage" @click="clearLocalStorage()">
-							<span>Clear Local Storage</span>
-							<i class="far fa-trash-alt"></i>
-						</button>
-						<!-- Local storage help toggle -->
-						<button id="localStorageHelpButton" @click="showLocalStorageHelp = !showLocalStorageHelp">
-							<span v-if="!showLocalStorageHelp">What's this?</span>
-							<span v-else>Hide</span>
-							<i v-bind:class="{'far fa-chevron-down': !showLocalStorageHelp, 'far fa-chevron-up': showLocalStorageHelp}"></i>
-						</button>
-					</div>
-				</div>
-
-				<!-- Paragraph explaining local storage -->
-				<transition name="basic">
-					<div id="localStorageHelp" v-if="showLocalStorageHelp">
-						Instead of accounts, this site uses your browser's local storage to remember your preferences and data. Here's what that means:
-						<ul>
-							<li>Local Storage is basically a file in your browser that this website can use to temporarily save things.</li>
-							<li>Because it's saved <b>only</b> in the browser, if you visit this site on another device or browser, you won't have your preferences or data.</li>
-							<li>Anyone who visits this site on this device/browser will have access to the data, but...</li>
-							<li>We don't save anything private or personal in there. It's mainly for settings you toggle (like remembering if you prefer dark or light mode).</li>
-						</ul>
-						If you'd like to clear the local storage and reset this site to the default settings, click the button above.
-						<br/>
-						<b>Your local storage currently looks like this:</b>
-						<!-- Code block to show existing local storage -->
-						<div class="local-storage-code-display" v-if="localStorageString">
-							<code>
-								<!-- If empty -->
-								<span v-if="localStorageString == '[]'">
-									[Your Local Storage is empty]
-								</span>
-								<span v-else>
-									{{localStorageString}}
-								</span>
-							</code>
-						</div>
-						
-					</div>
-				</transition>
+				<div class="badge">v1.0</div>
+				<p>This is version 1</p>
 
 			</div>
 
@@ -141,7 +60,7 @@ export default {
 		Modal,
 	},
 	props: [
-		'showSettings'
+		'showAbout'
 	],
 	data() {
 		return {

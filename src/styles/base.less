@@ -30,7 +30,7 @@ body, html{
 	font-family: var(--sans);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: var(--dark);
+	color: var(--text);
 	background-color: var(--background);
 }
 // html
@@ -144,6 +144,23 @@ body{
 	text-decoration: none !important;
 	text-decoration-color: transparent !important;
 }
+
+// No scrollbars
+.no-scrollbars,
+.no-scrollbars *{
+	scrollbar-width: none;
+	// Hidden
+	&::-webkit-scrollbar{
+		width: 0px;
+		display: none;
+	}
+	// Scrollbar handle/thumb
+	&::-webkit-scrollbar-thumb{
+		display: none;
+		width: 0px;
+	}
+}
+
 
 // Default page styles
 // Don't use class .page for pages that need custom headers, etc

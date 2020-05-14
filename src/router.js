@@ -24,6 +24,7 @@ import Animate from './views/apps/Animate.vue';
 import Shadows from './views/apps/Shadows.vue';
 // Everything else
 import Error404 from './views/other/error404.vue';
+import Changelog from './views/other/Changelog.vue';
 
 Vue.use(Router);
 
@@ -43,6 +44,14 @@ const router = new Router({
 			path: '/',
 			name: 'home',
 			component: Home,
+		},
+		////////////////
+		// Changelog //
+		//////////////
+		{
+			path: '/changelog/',
+			name: 'changelog',
+			component: Changelog,
 		},
 
 		///////////

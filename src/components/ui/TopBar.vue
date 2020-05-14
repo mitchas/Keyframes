@@ -34,24 +34,24 @@
 						<button class="hover-label">
 							<span>Apps</span>
 							<!-- Chevron down -->
-							<i v-bind:class="{'far fa-chevron-circle-down': !showAppSwitcher, 'far fa-chevron-circle-up': showAppSwitcher}"></i>
+							<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-times-circle': showAppSwitcher}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
 						<div class="settings-nav-popover" v-bind:class="{'visible': showAppSwitcher}">
 							<!-- CSS Animations -->
 							<button class="popover-link" @click="navigate('/animate/')">
 								<span>CSS Animations</span>
-								<i class="far fa-video"></i>
+								<i class="fas fa-stream"></i>
 							</button>
 							<!-- CSS Shadows -->
 							<button class="popover-link" @click="navigate('/shadows/')">
 								<span>Shadows</span>
-								<i class="far fa-eclipse"></i>
+								<i class="fas fa-eclipse"></i>
 							</button>
 							<!-- More -->
 							<button class="popover-link">
 								<span>More coming soon</span>
-								<i class="far fa-ellipsis-h"></i>
+								<i class="fas fa-ellipsis-h"></i>
 							</button>
 						</div>
 					</div>
@@ -64,7 +64,7 @@
 						<button class="hover-label">
 							<span>Settings</span>
 							<!-- Chevron down -->
-							<i v-bind:class="{'far fa-chevron-circle-down': !showSettingsPopover, 'far fa-chevron-circle-up': showSettingsPopover}"></i>
+							<i v-bind:class="{'far fa-toggle-off': !showSettingsPopover, 'far fa-toggle-on': showSettingsPopover}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
 						<div class="settings-nav-popover" v-bind:class="{'visible': showSettingsPopover}">
@@ -72,13 +72,18 @@
 							<label for="topBarDarkModeToggle" class="popover-link" tabindex="1">
 								<span v-if="!$store.getters.userPreferences.darkMode">Dark Mode</span>
 								<span v-else>Light Mode</span>
-								<i v-bind:class="{ 'far fa-lightbulb-slash': !$store.getters.userPreferences.darkMode, 'far fa-lightbulb-on': $store.getters.userPreferences.darkMode }"></i>
+								<i v-bind:class="{ 'fas fa-lightbulb-slash': !$store.getters.userPreferences.darkMode, 'fas fa-lightbulb-on': $store.getters.userPreferences.darkMode }"></i>
 							</label>
 							<input type="checkbox" id="topBarDarkModeToggle" v-model="$store.getters.userPreferences.darkMode" @change="toggleDarkMode()" hidden/>
 							<!-- Settings -->
 							<button class="popover-link" @click="showSettings()">
-								<span>Settings</span>
-								<i class="far fa-cog"></i>
+								<span>All Settings</span>
+								<i class="fas fa-tools"></i>
+							</button>
+							<!-- About -->
+							<button class="popover-link" @click="showAbout()">
+								<span>About</span>
+								<i class="fas fa-ghost"></i>
 							</button>
 						</div>
 					</div>
@@ -91,11 +96,14 @@
 
 		<!-- Settings modal -->
 		<SettingsModal :showSettings="showSettingsModal" v-on:settingsModalClosed="showSettingsModal = false"></SettingsModal>
+		<!-- About modal -->
+		<AboutModal :showAbout="showAboutModal" v-on:aboutModalClosed="showAboutModal = false"></AboutModal>
 	</span>
 </template>
 
 <script>
 import SettingsModal from "@/components/SettingsModal";
+import AboutModal from "@/components/AboutModal";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 
 
@@ -105,16 +113,22 @@ export default {
 		preferencesMixin,
 	],
 	components: {
+		AboutModal,
 		SettingsModal
 	},
 	data() {
 		return {
 			showSettingsPopover: false,
 			showSettingsModal: false,
+			showAboutModal: false,
 			showAppSwitcher: false
 		};
 	},
 	methods: {
+		// Show about modal
+		showAbout: function(){
+			this.showAboutModal = true;
+		},
 		// Show settings modal
 		showSettings: function(){
 			this.showSettingsModal = true;
@@ -166,7 +180,8 @@ export default {
 		position: sticky;
 		top: 0px;
 		backdrop-filter: blur(3px);
-		background: var(--background);
+		background: var(--layer);
+		border-bottom: 1px solid var(--border);
 		z-index: 50;
 		// backdrop-filter: blur(3.3px);
 		// backdrop-filter:  grayscale(100%);
@@ -192,22 +207,20 @@ export default {
 				transform: scale(1.0);
 				transition: var(--transition);
 
-				
-
 				img{
-					height: 44px;
+					height: 34px;
 					width: auto;
 					@media (max-width: @screenMD) {
 						display: block;
-						height: 38px;
 					}
 					@media (max-width: @screenSM) {
-						height: 32px;
+						height: 30px;
+						padding-bottom: 2px;
 					}
 
 					// Invert for dark mode
 					&.invert{
-						filter: invert(100%);
+						filter: invert(100%) brightness(150%);
 					}
 				}
 
@@ -248,13 +261,13 @@ export default {
 
 				// Username and chevron down
 				.hover-label{
-					color: var(--dark);
+					color: var(--text);
 					font-weight: 800;
 					box-sizing: border-box;
 					display: flex;
 					justify-content: flex-end;
 					user-select: none;
-					margin-left: 8px;
+					margin-left: 12px;
 
 					// Profile photo
 					.hover-label-photo{
@@ -279,25 +292,21 @@ export default {
 					}
 					// Label text - either username or "Hey There!"
 					span{
-						letter-spacing: 0.3px;
-						font-size: 16px;
-						font-weight: 700;
-						letter-spacing: 0.3px;
-						@media (max-width: @screenSM) {
-							font-size: 14.5px;
-						}
+						font-size: 14px;
+						font-weight: 600;
 					}
 					// Caret down arrow
 					i{
 						margin-left: 6px;
 						font-size: 20px;
-						font-weight: 500;
 						padding-bottom: 0px;
 						transition: var(--transition);
-
+						width: 18px;
+						position: relative;
+						top: 1px;
 						// Decrease margin on mobile
 						@media (max-width: @screenMD) {
-							margin-left: 8px;
+							top: 0;
 						}
 					}
 				}
@@ -329,10 +338,13 @@ export default {
 					padding: 0px 10px;
 					overflow: 0;
 					border: 0px solid transparent;
-					background-color: var(--background);
+					background-color: var(--black);
 
 					@media (max-width: @screenMD) {
 						width: 220px;
+						top: 53px;
+						border-top-left-radius: 0;
+						border-top-right-radius: 0;
 					}
 					@media (max-width: @screenSM) {
 						width: 210px;
@@ -346,20 +358,20 @@ export default {
 						padding: 8px 10px 10px 10px;
 						overflow: 1;
 						box-shadow: var(--shadow);
-						border: 1px solid var(--dark);
+						border: 1px solid var(--border);
 					}
 
 					// Change spacing on default hr
 					hr{
 						margin: 5px 0;
-						border-color: var(--dark);
+						border-color: var(--border);
 					}
 
 					// Links
 					.popover-link{
 						display: flex;
 						justify-content: space-between;
-						color: var(--dark);
+						color: var(--white);
 						height: 40px;
 						width: 100%;
 						padding: 0 10px;

@@ -54,11 +54,11 @@ export default {
 		max-width: var(--maxWidth);
 		box-sizing: border-box;
 		padding: 0 15px 0 60px;
-		border-radius: var(--borderRadiusSmall);
+		border-radius: 3px;
 		position: relative;
-		background-color: var(--backgroundLayer);
+		background-color: var(--layer);
 		box-shadow: var(--shadowLight);
-		border: 1px solid var(--white);
+		border: 1px solid var(--border);
 
 		// Icon
 		.callout-icon{
@@ -83,7 +83,7 @@ export default {
 			font-weight: 400;
 			letter-spacing: 0.25px;
 			font-family: var(--systemFont);
-			color: var(--white);
+			color: var(--text);
 			padding: 15px 0 15px 0;
 
 			@media (max-width: @screenSM) {

@@ -43,35 +43,32 @@
 	--maxWidth: 800px;
 	--maxWidthLarge: 1000px;
 
-	--white: #FFFFFF;
-	--black: #000000;
-	--outline: rgba(160,160,160,0.25);
+	--white: #ffffff;
+	--black: #000220;
 	////////////////////
 	//  Light Theme  //
 	////////////////////
-	// Black and white mainly
-	// Colors are named to match light theme
-	// In dark theme, they might not make the same sense
-	--background: #FFFFFF;
-	--backgroundLayer: rgb(0,0,0);
-	--light: #F4F4F4;
-	--medium: rgb(146, 146, 146);
-	--dark: rgb(0,0,0);
+	--text: #16023C;
+	--textLight: rgba(22, 2, 60, 0.65);
+	--background: #E3EFFE;
+	--layer: #ffffff;
+	--border: #16023C;
+	--grey: #F4F4F4;
+	--blue: #0868FE;
+	--purple: #631CCC;
+	--green: #4AF9D6;
+	--yellow: rgb(255, 219, 16);
+	--red: rgb(252, 20, 59);
 
-	// Other Colors
-	--lightbox: rgba(255,255,255,0.5);
-
-	// Primary Colors
-	--blue: #1058E7;
-	--green: #32c91e;
-	--red: #FE401C;
-	--yellow: rgb(255, 198, 88);
+	// Other colors
+	--lightbox: rgba(173, 171, 184, 0.397);
+	--outline: rgba(160,160,160,0.25);
 
 	// Links
-	// Same as secondary
-	--links: #4437f5;
-	--linksHover: #2d20d3;
-	// Misc
+	--links: #0868FE; // Same as blue
+	--linksHover: rgb(0, 79, 206);
+
+	// Floating element that needs to be seen through
 	--transparent: rgba(7, 7, 15, 0.85);
 
 	// Box Shadows
@@ -105,14 +102,25 @@
 //  Dark Theme  //
 ////////////////////
 [data-theme="dark"] {
-	--background: rgb(0, 0, 0);
-	--backgroundLayer: rgba(0,0,0);
-	--light: rgb(39, 39, 39);
-	--medium: rgb(124, 124, 124);
-	--dark: #FFFFFF;
 
-	// Modal lightbox background/opacity
+	--text: #eaefff;
+	// --text: #e5dffc;
+	// --text: rgb(235, 255, 255);
+	--textLight: #AFB5BB;
+	--background: #040013;
+	--layer: #0b081d;
+	--border: #556091;
+
+	// Other colors
 	--lightbox: rgba(0,0,0,0.5);
+
+	// Links
+	--links: #0868FE; // Same as blue
+	--linksHover: rgb(0, 79, 206);
+
+	// Floating element that needs to be seen through
+	--transparent: rgba(7, 7, 15, 0.85);
+
 
 }
 [data-theme="high-contrast-dark"] {

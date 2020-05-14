@@ -68,7 +68,6 @@
 			-webkit-appearance: none;
 			appearance: none;
 			-moz-appearance: textfield;
-			background-color: transparent;
 			color: inherit;
 			text-align: center;
 			margin: 0 0 0 0;
@@ -94,7 +93,7 @@ label{
 	padding: 2px 0 6px 0px;
 	letter-spacing: 0.25px;
 	display: block;
-	color: var(--dark);
+	color: var(--text);
 	font-size: 16px;
 	font-weight: 500;
 	font-family: var(--systemFont);
@@ -113,7 +112,7 @@ label{
 		padding-bottom: 5px;
 		font-weight: 500;
 		letter-spacing: 0.1px;
-		color: var(--dark);
+		color: var(--text);
 	}
 
 	// Invert color
@@ -133,7 +132,7 @@ label{
 	line-height: 16px;
 	padding: 0 0 3px 0;
 	display: block;
-	color: var(--mediumer);
+	color: var(--textLight);
 	letter-spacing: 0.35px;
 
 	b{
@@ -154,7 +153,7 @@ label{
 	font-size: 12px;
 	font-weight: 500;
 	letter-spacing: 1px;
-	color: var(--mediumest);
+	color: var(--textLight);
 	position: absolute;
 	box-sizing: border-box;
 	padding-left: 2px;
@@ -210,15 +209,14 @@ textarea{
     font-size: 16px;
 	box-sizing: border-box;
 	padding: 0 8px;
-	color: var(--white);
+	color: var(--text);
 	font-family: var(--systemFont);
 	font-weight: 500;
 	letter-spacing: 0.35px;
-	border-radius: var(--borderRadiusSmall);
-	border: none;
+	border-radius: 3px;
 	transition: all 0.1s ease, border-color 0.15s ease;
 	font-weight: 500;
-	border: 1px solid var(--white);
+	border: 1px solid var(--border);
 	background-color: transparent;
 
 	// Increase size on mobile
@@ -231,7 +229,8 @@ textarea{
 	// Hover and focus states
 	&:hover,
 	&:focus{
-		background-color: rgba(150,150,150,0.2);
+		// background-color: rgba(150,150,150,0.2);
+		background-color: var(--grey);
 		transition: all 0.1s ease, border-color 0.15s ease;
 		// Light border mobile
 	}
@@ -243,10 +242,6 @@ textarea{
 		font-weight: 500;
 	}
 
-	&.invert{
-		border: 1px solid var(--black);
-		color: var(--black);
-	}
 }
 // Single line text inputs
 input[type='text'],
@@ -270,7 +265,8 @@ textarea{
 	padding-top: 8px;
 	padding-bottom: 8px;
 	line-height: 20px;
-	min-height: 100px;
+	min-height: 120px;
+	box-shadow: none;
 	
 	@media (max-width: @screenMD) {
 		font-size: 14px;
@@ -293,47 +289,6 @@ select{
 }
 
 
-// Input Group
-// Input Group
-.input-group{
-	display: flex;
-
-	.input-group-label{
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		font-weight: 600;
-		padding: 0 10px;
-		border-radius: var(--borderRadiusSmall);
-		border: 1px solid var(--dark);
-		font-size: 15px;
-		letter-spacing: 0.35px;
-	}
-	// input
-	input{
-		border-left: none;
-	}
-
-	// Change border radii based on child position instead of class, so it can go on either side
-	:nth-child(1){
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-
-		&.input-group-label{
-			border-right-color: transparent;
-		}
-	}
-	:nth-child(2){
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-
-		&.input-group-label{
-			border-left-color: transparent;
-		}
-	}
-}
-
-
 ////////////////////////
 //      Buttons      //
 //////////////////////
@@ -347,40 +302,45 @@ button{
 }
 .button{
 	border: none;
-	color: var(--background);
+	color: var(--white);
 	height: 36px;
 	border-radius: 3px;
 	font-size: 14px;
 	letter-spacing: 0.15px;
-	transition: var(--transition);
 	font-weight: 600;
 	padding: 0px 14px 2px 14px;
-	background-color: var(--dark);
+	background-color: var(--text);
 	box-sizing: border-box;
 	transform: translateY(0px);
-	box-shadow: var(--shadowLight);
 	font-family: var(--systemFont);
+	border: 1px solid var(--border);
+	border-bottom-width: 2px;
 
 	// Increase size on mobile
 	@media (max-width: @screenMD) {
 		letter-spacing: 0.4px;
-		padding: 0px 14px;
-	}
-	// Even more on small
-	@media (max-width: @screenSM) {
-		padding: 0px 14px;
+		padding: 2px 14px 2px 14px;
 	}
 
 	// States
 	&:hover{
 		cursor: pointer;
 		text-decoration: underline;
-		transition: var(--transition);
-		box-shadow: none;
 	}
 	&:active{
-		transform: translateY(1px);
-		transition: var(--transitionFast);
+		padding: 0 14px 3px 14px;
+		border-bottom-width: 1px;
+
+		span,i{
+			position: relative;
+			top: 1px;
+		}
+
+		// Mobile
+		@media (max-width: @screenMD) {
+			letter-spacing: 0.4px;
+			padding: 2px 14px 3px 14px;
+		}
 	}
 	&:focus{
 		text-decoration: underline;
@@ -407,22 +367,27 @@ button{
 	// Green
 	&.green{
 		background-color: var(--green);
-		color: var(--white);
+		color: var(--black);
 	}
 	// Red
 	&.red{
 		background-color: var(--red);
 		color: var(--white);
 	}
-	// Grey
-	&.light{
-		color: var(--dark);
-		background-color: var(--light);
+	// Yellow
+	&.yellow{
+		background-color: var(--yellow);
+		color: var(--black);
+	}
+	// Purple
+	&.purple{
+		background-color: var(--purple);
+		color: var(--white);
 	}
 	// Grey
-	&.dark{
-		color: var(--white);
-		background-color: var(--medium);
+	&.grey{
+		color: var(--black);
+		background-color: var(--grey);
 	}
 	
 
@@ -486,7 +451,7 @@ button{
 	&:disabled{
 		background-color: var(--inputDisabled);
 		color: var(--inputDisabledText);
-		border-color: var(--dark);
+		border-color: var(--border);
 		opacity: 0.8;
 
 		&:hover{
@@ -531,7 +496,6 @@ input[type="checkbox"]:focus {
 	background: var(--inputBackground);
 	font-size: 16px;
 	font-weight: 800;
-	box-shadow: var(--shadow);
 	// Remove border mobile
 	@media (max-width: @screenMD) {
 		border-color: transparent;
@@ -551,7 +515,7 @@ input[type="checkbox"]:focus {
 		font-family: var(--fontAwesome);
 		font-weight: 900;
 		transition: var(--bezierTransition);
-		color: var(--medium);
+		color: var(--text);
 		opacity: 0.3;
 		font-size: 16px;
 		left: 5px;
@@ -589,14 +553,9 @@ input[type="checkbox"]:focus {
 	display: inline-block;
 	position: relative;
 	margin: 0;
-	border: 1px solid var(--dark);
+	border: 1px solid var(--border);
 	transition: all .2s ease;
 	background-color: var(--inputBackground);
-
-	// Remove border mobile
-	@media (max-width: @screenMD) {
-		border-color: transparent;
-	}
 
 	// Circle (switch that moves)
 	&:after{
@@ -609,26 +568,26 @@ input[type="checkbox"]:focus {
 		border-radius: 50%;
 		background: var(--background);
 		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
-		border: 1px solid var(--dark);
+		border: 1px solid var(--border);
 		box-sizing: border-box;
 		transition: var(--transition);
 	}
 
 	// Hover
 	&:hover:after{
-		opacity: 0.42;
 		transition: var(--transition);
+		background-color: var(--green);
 	}
 
 	// Checked, move circle to right, full color
 	&:checked{
-		border: 1px solid var(--dark);
+		border: 1px solid var(--border);
 		background: var(--inputBackground);
 
 		&:after{
 			background: var(--blue);
 			transform: translateX(17px);
-			border-color: var(--dark);
+			border-color: var(--border);
 			opacity: 1;
 		}
 	}
@@ -649,35 +608,35 @@ input[type="range"] {
 	@media screen and (-webkit-min-device-pixel-ratio:0) {
 		& {
 			height: 4px;
-			background-color: transparent;
+			background-color: var(--text);
 			-webkit-appearance: none;
-			background-color: rgba(255,255,255,0.65);
 		}
 		&::-webkit-slider-runnable-track {
-			height: 28px;
+			height: 22px;
 			-webkit-appearance: none;
 			margin-top: -1px;
 			transition: box-shadow 0.2s ease-in-out;
 		}
 		&::-webkit-slider-thumb {
-			width: 28px;
+			width: 22px;
 			-webkit-appearance: none;
-			height: 28px;
+			height: 22px;
 			cursor: ew-resize;
-			background: var(--background);
+			background: var(--blue);
 			border-radius: 50%;
 			transition: box-shadow 0.2s ease-in-out;
 			position: relative;
 			// top: 1px;
 		}
 		&:active::-webkit-slider-thumb {
-			background: var(--blue);
+			background: var(--green);
 		}
 	}
 	// Firefox
 	&::-moz-range-thumb{
 		// border: 1px solid transparent;
-		border-color: var(--white);
+		background-color: var(--blue);
+		border-color: var(--blue);
 		border-radius: 50%;
 		border-width: 0;
 	}	
@@ -685,14 +644,14 @@ input[type="range"] {
 		background-color: var(--blue); 
 	}
 	&::-moz-range-track {  
-		background-color: transparent;
+		background-color: var(--background);
 	}
 	// IE
 	&::-ms-fill-lower {
-		background-color: #43e5f7; 
+		background-color: var(--blue); 
 	}
 	&::-ms-fill-upper {  
-		background-color: #9a905d;
+		background-color: var(--green);
 	}
 }
 
@@ -722,12 +681,12 @@ input[type="range"] {
 		height: 65px;
 		box-sizing: border-box;
 		padding: 0 0px;
-		border-radius: var(--borderRadius);
+		border-radius: 3px;
 		max-width: 93px;
-		border: 1px solid var(--medium);
+		border: 1px solid var(--border);
 		min-width: 93px;
 		flex-grow: 3;
-		color: var(--medium);
+		color: var(--textLight);
 		margin: 0 10px 6px 0;
 		position: relative;
 		transform: scale(0.9);
@@ -780,7 +739,7 @@ input[type="range"] {
 			font-size: 18px;
 			font-weight: 500;
 			transition: var(--transitionFast);
-			color: var(--mediumest);
+			color: var(--border);
 		}
 
 			
@@ -789,8 +748,8 @@ input[type="range"] {
 			cursor: pointer;
 			transition: var(--transitionFast);
 			text-decoration: none;
-			// border-color: var(--dark);
-			color: var(--medium);
+			// border-color: var(--border);
+			color: var(--text);
 
 			span{
 				text-decoration: underline;
@@ -807,12 +766,11 @@ input[type="range"] {
 	
 		// Option Selected
 		&.active{
-			color: var(--dark);
-			border-color: var(--dark);
+			color: var(--text);
+			border-color: var(--border);
 			position: relative;
 			transform: scale(1);
-			box-shadow: var(--shadowLight);
-			border-color: var(--dark);
+			border-color: var(--border);
 
 			i{
 				// Custom icons
@@ -822,7 +780,8 @@ input[type="range"] {
 			}
 			&:after{
 				content: '\f058';
-				color: var(--dark);
+				color: var(--blue);
+				font-weight: 600;
 			}
 		}
 	}

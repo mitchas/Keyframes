@@ -137,15 +137,15 @@ export default {
 		.modal{
 			display: flex;
 			flex-direction: column;
-			background-color: var(--background);
+			background-color: var(--layer);
 			margin: 0 auto;
 			width: 90%;
 			max-width: 500px;
-			border-radius: var(--borderRadius);
+			border-radius: 3px;
 			box-shadow: var(--shadowDark);
 			position: relative;
 			max-height: 75vh;
-			border: 1px solid var(--dark);
+			border: 1px solid var(--border);
 
 			// Small, confirmation modal
 			&.small{
@@ -163,11 +163,10 @@ export default {
 				width: 100%;
 				position: absolute;
 				bottom: 0;
-				left: 0;
+				left: -1px;
 				max-width: 100%;
-				border-top-left-radius: 48px;
-				border-top-right-radius: 48px;
-				border: none;			
+				border-top-left-radius: 16px;
+				border-top-right-radius: 16px;
 				box-shadow: var(--shadowTop);
 			}
 
@@ -182,7 +181,7 @@ export default {
 				right: 0;
 				padding: 6px 10px;
 				opacity: 0.2;
-				color: var(--medium);
+				color: var(--text);
 				transition: var(--transition);
 
 				&:hover{
@@ -205,7 +204,7 @@ export default {
 				padding: 20px 20px 20px 20px;
 				border-top-right-radius: var(--borderRadiusSmall);
 				border-top-left-radius: var(--borderRadiusSmall);
-				color: var(--dark);
+				color: var(--text);
 				font-weight: 600;
 				letter-spacing: 0.25px;
 				font-size: 24px;

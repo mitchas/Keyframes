@@ -134,9 +134,9 @@ export default {
 				padding-right: 0;
 				z-index: 60;
 				display: flex;
-				min-height: calc(~'100% - 70px');
+				min-height: calc(~'100% - 54px');
 				height: 100%;
-				height: calc(~'100% - 70px');
+				height: calc(~'100% - 54px');
 
 
 				// Main body content
@@ -148,15 +148,6 @@ export default {
 					flex-grow: 3;
 					// to account for header
 					overflow-x: hidden;
-
-					@media (min-width: @screenSM) {
-						padding-right: 15px;
-						padding-left: 15px;
-					}
-					@media (min-width: @screenMD) {
-						padding-right: 25px;
-						padding-left: 25px;
-					}
 				}
 			}
 

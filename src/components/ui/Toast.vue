@@ -21,7 +21,7 @@
 	<!-- Toast notificaion -->
 	<transition name="toast">
 
-		<!-- <div id="toast" v-bind:class="toastData.color" @click="hideToast()"> -->
+		<!-- <div id="toast" v-bind:class="toastData.color" v-if="!toastData.visible" @click="hideToast()"> -->
 		<div id="toast" v-bind:class="toastData.color" v-if="toastData.visible" @click="hideToast()">
 			<!-- Floaing x - clicking anywhere will close it, though -->
 			<div class="toast-close">
@@ -123,7 +123,7 @@ export default {
 		right: 25px;
 		display: flex;
 		flex-direction: column;
-		background-color: var(--backgroundLayer);
+		background-color: var(--layer);
 		backdrop-filter: blur(3px);
 		border-radius: 12px;
 		transition: var(--transition);
@@ -131,16 +131,16 @@ export default {
 		z-index: 50000;
 		transform: translateY(0px);
 		transform-origin: center right;
+		border: 1px solid var(--border);
 
 		@media (max-width: @screenSM) {
 			right: unset;
 			width: 100%;
 			border-radius: 0;
-			border-top-right-radius: 28px;
-			border-top-left-radius: 28px;
+			border-top-right-radius: 8px;
+			border-top-left-radius: 8px;
 			bottom: 0;
 			box-shadow: var(--shadowTop);
-			border: none;
 		}
 
 		// Transition down when hiding beore unmount
@@ -160,7 +160,7 @@ export default {
 			height: 24px;
 			width: 24px;
 			border-radius: 50%;
-			color: var(--dark);
+			color: var(--text);
 			text-align: center;
 			display: flex;
 			flex-direction: column;
@@ -176,6 +176,10 @@ export default {
 				top: 6px;
 				opacity: 0.2;
 			}
+
+			i{
+				font-weight: 400;
+			}
 		}
 
 		// Hover state increases size a little, brightens close, cursor
@@ -187,7 +191,6 @@ export default {
 			.toast-close{
 				transition: var(--transition);
 				opacity: 0.8;
-				background-color: var(--light);
 			}
 
 		}
@@ -217,7 +220,7 @@ export default {
 				box-sizing: content-box;
 				padding-bottom: 2px;
 				height: auto;
-				color: var(--dark);
+				color: var(--text);
 				@media (max-width: @screenSM) {
 					font-size: 46px;
 				}
@@ -233,7 +236,7 @@ export default {
 				padding-left: 8px;
 				max-width: 280px;
 				min-width: 160px;
-				color: var(--dark);
+				color: var(--text);
 
 				// Adjust spacing on small screens
 				@media (max-width: @screenSM) {
@@ -259,7 +262,7 @@ export default {
 					line-height: 18px;
 					letter-spacing: 0.5px;
 					font-weight: 500;
-					color: var(--mediumer);
+					color: var(--text);
 					font-family: var(--systemFont);
 
 					// Spacing on mobile

@@ -29,7 +29,7 @@
 			<!-- Show output -->
 			<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="[showOutput ? 'red' : 'blue']">
 				<i class="far" v-bind:class="{'fa-file-code': !showOutput, 'fa-chevron-circle-up': showOutput}"></i>
-				<span>Get CSS</span>
+				<span>Output CSS</span>
 			</button>
 		</div>
 		
@@ -997,7 +997,7 @@ export default {
 				max-height: 90%;
 				max-height: calc(~'100% - 50px');
 				height: fit-content;
-				background-color: var(--backgroundLayer);
+				background-color: var(--layer);
 				transform-origin: top center;
 				border-radius: var(--borderRadiusSmall);
 				box-shadow: var(--shadow);
@@ -1005,7 +1005,7 @@ export default {
 				position: absolute;
 				top: 50px;
 				z-index: 50;
-				border: 1px solid var(--dark);
+				border: 1px solid var(--border);
 
 				// Full with on sm
 				@media (max-width: @screenSM) {
@@ -1186,7 +1186,7 @@ export default {
 				font-size: 26px;
 				background-color: var(--background);
 				top: 50%;
-				color: var(--medium);
+				color: var(--textLight);
 				transition: var(--transitionFast);
 				display: none;
 
@@ -1215,7 +1215,7 @@ export default {
 			}
 			#animateSidebar{
 				width: 340px;
-				background-color: var(--backgroundLayer);
+				background-color: var(--layer);
 				box-shadow: var(--shadow);
 				height: 100%;
 				box-sizing: border-box;
@@ -1280,7 +1280,7 @@ export default {
 						padding: 10px 15px 10px 15px;
 						font-size: 14px;
 						font-weight: 700;
-						// border-bottom: 1px solid var(--dark);
+						// border-bottom: 1px solid var(--border);
 						color: var(--white);
 						transition: var(--transition);
 
@@ -1314,7 +1314,7 @@ export default {
 						.field-set{
 							padding: 4px 15px 4px 40px;
 							box-sizing: border-box;
-							// background-color: var(--dark);
+							// background-color: var(--text);
 							display: flex;
 							justify-content: space-between;
 							width: 100%;
@@ -1453,11 +1453,11 @@ export default {
 							// text-decoration: underline;
 							overflow: visible;
 							text-overflow: ellipsis;
-							border-bottom: 2px dotted var(--medium);
+							border-bottom: 2px dotted var(--text);
 
 							&:hover,
 							&:focus{
-								border-color: var(--dark);
+								border-color: var(--border);
 							}
 						}
 
@@ -1539,7 +1539,7 @@ export default {
 				box-shadow: var(--shadowLight);
 				position: relative;
 				transition: 0s ease;
-				border: 1px solid var(--dark);
+				border: 1px solid var(--border);
 
 				// Remove bottom padding on mobile
 				@media (max-width: @screenMD) {
@@ -1602,10 +1602,10 @@ export default {
 				.timeline-marker.step,
 				.timeline-marker.current{
 					z-index: 15;
-					background-color: var(--backgroundLayer);
+					background-color: var(--layer);
 
 					b{
-						background-color: var(--backgroundLayer);
+						background-color: var(--layer);
 						color: var(--white);
 					}
 

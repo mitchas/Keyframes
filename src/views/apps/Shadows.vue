@@ -13,58 +13,98 @@
 // 			Just a quick fix for people who format badly.
 //	- copyShadowOutput()
 // 		Copies generated shadow CSS to clipboard
+//	- addLayer()
+// 		Adds new shadow layer
 // 
 // -->
 
 <template>
 	<div class="page-split">
-		<!-- Stage that contains target -->
+
+		<!--/////////////////////////////
+			Left side of page - top bar, stage
+		/////////////////////////////-->
 		<div class="page-split-left">
 			<div class="page-split-left-top">
-				<!-- Options -->
+
+				<!--/////////////////////////////
+					Dropdown buttons - options, output
+				/////////////////////////////-->
 				<div class="option-dropdown">
-					<button class="button small mright-sm" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'grey': !controlToggles.options}">
-						<i class="far" v-bind:class="{'fa-toggle-on': !controlToggles.options, 'fa-chevron-circle-up': controlToggles.options}"></i>
+					<button class="button small" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'grey': !controlToggles.options}">
+						<i v-bind:class="{'fas fa-edit': !controlToggles.options, 'fas fa-times-circle': controlToggles.options}"></i>
 						<span>Options</span>
 					</button>
+					<button class="button small" @click="controlTab('output')" v-bind:class="{'red': controlToggles.output, 'green': !controlToggles.output}">
+						<i v-bind:class="{'fas fa-brackets-curly': !controlToggles.output, 'fas fa-times-circle': controlToggles.output}"></i>
+						<span>Output CSS</span>
+					</button>
 
-					<!-- Dropdown content -->
-					<div class="option-dropdown-content" v-if="controlToggles.options">
-						<div class="field horizontal">
-							<label for="stageBackground">Background</label>
-							<div class="input-wrapper">
+					<!--/////////////////////////////
+						Dropdown Content
+					/////////////////////////////-->
+					<!-- Options -->
+					<transition name="fromtop">
+						<div class="option-dropdown-content" v-if="controlToggles.options">
+							<div class="field horizontal">
+								<label for="stageBackground">Background</label>
 								<input type="text" id="stageBackground" v-model="options.stageBackground" placeholder="#FFFFFF"/>
 							</div>
-						</div>
-						<!-- Target Element -->
-						<div class="field mtop-sm">
-							<label for="customTarget">
-								Target Element
-								<small class="block">Your element must have the id targetElement</small>
-							</label>
-							<div class="input-wrapper">
+							<!-- Target Element -->
+							<div class="field mtop-sm">
+								<label for="customTarget">
+									Target Element
+									<small class="block">Your element must have the id targetElement</small>
+								</label>
 								<textarea class="code" id="customTarget" v-model="options.customTarget"></textarea>
 							</div>
-						</div>
-						<!-- Target CSS -->
-						<div class="field mtop-sm">
-							<label for="customTargetCSS">
-								Custom CSS
-							</label>
-							<div class="input-wrapper">
+							<!-- Target CSS -->
+							<div class="field mtop-sm">
+								<label for="customTargetCSS">
+									Custom CSS
+								</label>
 								<textarea class="code" id="customTargetCSS" v-model="options.customTargetCSS"></textarea>
 							</div>
 						</div>
+					</transition>
 
-					</div>
+
+					<!-- Output -->
+					<transition name="fromtop">
+						<div class="option-dropdown-content" v-if="controlToggles.output">
+							<code class="wrap">
+								<pre>
+									box-shadow: 
+									<div v-for="(layer, index) in layers" :key="index">{{layer.horizontal_offset}}px {{layer.vertical_offset}}px {{layer.blur}}px {{layer.spread}}px {{layer.color}}{{index + 1 != layers.length ? ', ' : ';'}}</div>
+								</pre>
+							</code>
+
+							<!-- Copy to clipboard -->
+							<button class="button small green" @click="copyShadowOutput()">
+								<i class="far fa-copy"></i>
+								<span>Copy to Clipboard</span>
+							</button>
+						</div>
+					</transition>
 				</div>
+			</div> <!-- End page split left top -->
 
-			</div>
+
+			<!--/////////////////////////////
+				Stage
+			/////////////////////////////-->
 			<div class="app-stage" v-html="options.customTarget">
 			</div>
 			
-		</div>
-		<!-- Right side - output and adjustments -->
+		</div> <!-- End page left -->
+
+
+
+		<!--//////////////////////
+			//////////////////////
+			Right side - value editor
+			//////////////////////
+			//////////////////////-->
 		<div class="page-split-right">
 			<!-- Fields -->
 			<div class="app-fields">
@@ -75,45 +115,37 @@
 				<div class="field">
 					<label for="horOffset" class="slider-label-value">
 						<span>Horizontal Offset</span>
-						<input type="number" v-model="options.horizontal_offset" min="-200" max="200"/>
+						<input type="number" v-model="layers[selectedLayer - 1].horizontal_offset" min="-200" max="200"/>
 						<!-- <b>{{options.horizontal_offset}}px</b>	 -->
 					</label>
-					<div class="input-wrapper">
-						<input type="range" id="horOffset" v-model="options.horizontal_offset" min="-200" max="200"/>
-					</div>
+					<input type="range" id="horOffset" v-model="layers[selectedLayer - 1].horizontal_offset" min="-200" max="200"/>
 				</div>
 
 				<!-- Vertical Offset -->
 				<div class="field mtop-sm">
 					<label for="vertOffset" class="slider-label-value">
 						<span>Vertical Offset</span>
-						<input type="number" v-model="options.vertical_offset" min="-200" max="200"/>
+						<input type="number" v-model="layers[selectedLayer - 1].vertical_offset" min="-200" max="200"/>
 					</label>
-					<div class="input-wrapper">
-						<input type="range" id="vertOffset" v-model="options.vertical_offset" min="-200" max="200"/>
-					</div>
+					<input type="range" id="vertOffset" v-model="layers[selectedLayer - 1].vertical_offset" min="-200" max="200"/>
 				</div>
 
 				<!-- Blur -->
 				<div class="field mtop-sm">
 					<label for="shadowBlur" class="slider-label-value">
 						<span>Blur</span>
-						<input type="number" v-model="options.blur" min="0" max="100"/>
+						<input type="number" v-model="layers[selectedLayer - 1].blur" min="0" max="100"/>
 					</label>
-					<div class="input-wrapper">
-						<input type="range" id="shadowBlur" v-model="options.blur" min="0" max="100"/>
-					</div>
+					<input type="range" id="shadowBlur" v-model="layers[selectedLayer - 1].blur" min="0" max="100"/>
 				</div>
 
 				<!-- Spread -->
 				<div class="field mtop-sm">
 					<label for="shadowSpread" class="slider-label-value">
 						<span>Spread</span>
-						<input type="number" v-model="options.spread" min="-200" max="200"/>
+						<input type="number" v-model="layers[selectedLayer - 1].spread" min="-200" max="200"/>
 					</label>
-					<div class="input-wrapper">
-						<input type="range" id="shadowSpread" v-model="options.spread" min="-200" max="200"/>
-					</div>
+					<input type="range" id="shadowSpread" v-model="layers[selectedLayer - 1].spread" min="-200" max="200"/>
 				</div>
 
 				<!-- Color -->
@@ -121,48 +153,32 @@
 					<label for="shadowSpread">
 						Shadow Color
 					</label>
-					<div class="input-wrapper mtop-xs">
-						<input type="text" id="shadowColor" v-model="options.color" @change="calculateShadow('color')"/>
-					</div>
+					<input type="text" id="shadowColor" v-model="layers[selectedLayer - 1].color" @change="calculateShadow('color')"/>
 				</div>
 
-				<!-- Transparency -->
+				<!-- Color Opacity -->
 				<div class="field mtop-sm mbottom-sm">
 					<label for="shadowTransparency" class="slider-label-value">
 						<span>Color Opacity</span>
-						<input type="number" v-model="options.opacity" min="0" max="1"/>
+						<input type="number" v-model="layers[selectedLayer - 1].opacity" min="0" max="1"/>
 					</label>
-					<div class="input-wrapper">
-						<input type="range" id="shadowTransparency" v-model="options.opacity" min="0" max="1" step="0.01" @input="calculateShadow('color')"/>
-					</div>
-				</div>
-
-				<!-- Output -->
-				<div class="field mbottom-sm" id="shadowOutput">
-					<label class="slider-label-value">
-						<span>Output CSS</span>
-						<button class="button small green" @click="copyShadowOutput()">
-							<i class="far fa-copy"></i>
-							<span>Copy</span>
-						</button>
-					</label>
-					<div class="input-wrapper">
-						<code>
-							box-shadow: {{options.horizontal_offset}}px {{options.vertical_offset}}px {{options.blur}}px {{options.spread}}px {{options.color}};
-						</code>
-					</div>
+					<input type="range" id="shadowTransparency" v-model="layers[selectedLayer - 1].opacity" min="0" max="1" step="0.01" @input="calculateShadow('color')"/>
 				</div>
 
 				<!-- Layers -->
-				<!-- <div class="field mtop-sm">
-					<label for="shadowLayers" class="slider-label-value">
-						Layers
-						<b>{{options.layers}}</b>	
+				<div class="field mtop-md mbottom-sm">
+					<label>
+						<span>Layers</span>
 					</label>
-					<div class="input-wrapper">
-						<input type="range" id="shadowLayers" v-model="options.layers" min="1" max="10"/>
+					<!-- Layer controls -->
+					<div class="layer-selector">
+						<div class="layer-button" v-for="(layer, index) in layers" :key="index" :class="{'active': selectedLayer == index + 1}" @click="selectedLayer = index + 1">{{index + 1}}</div>
+						<!-- Add layer -->
+						<div class="layer-button" @click="addLayer()">
+							<i class="far fa-plus"></i>
+						</div>
 					</div>
-				</div> -->
+				</div>
 
 			</div>
 		</div>
@@ -174,7 +190,10 @@
 				background: {{options.stageBackground}};
 			}
 			#targetElement{
-				box-shadow: {{options.horizontal_offset}}px {{options.vertical_offset}}px {{options.blur}}px {{options.spread}}px {{options.color}};
+				box-shadow:
+				<template v-for="(layer, index) in layers">
+					{{layer.horizontal_offset}}px {{layer.vertical_offset}}px {{layer.blur}}px {{layer.spread}}px {{layer.color}} {{index + 1 != layers.length ? ', ' : ';'}}				
+				</template>
 			}
 		</v-style>
 
@@ -198,6 +217,17 @@ export default {
 
 	data() {
 		return {
+			selectedLayer: 1,
+			layers: [
+				{
+					horizontal_offset: 10,
+					vertical_offset: 6,
+					blur: 35,
+					spread: -5,
+					color: "rgb(30,30,60,0.25)",
+					opacity: 0.25,
+				},
+			],
 			options: {
 				horizontal_offset: 0,
 				vertical_offset: 6,
@@ -205,10 +235,9 @@ export default {
 				spread: -5,
 				color: "rgb(30,30,60,0.25)",
 				opacity: 0.25,
-				layers: 1,
 				stageBackground: "white",
-				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-user-secret'></i></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    border-radius: 4px;\n    margin: 0 auto;\n    font-size: 52px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
+				customTarget: "<div id='targetElement' class='shadow-target'><i class='far fa-hands-wash'></i></div>",
+				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    color: #16023C;\n    border-radius: 3px;\n    margin: 0 auto;\n    font-size: 52px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
 			},
 			// Which controls are visible
 			controlToggles: {
@@ -253,7 +282,7 @@ export default {
 		// Runs shadow calculation - needed for multiple layers
 		calculateShadow: function(type){
 
-			var color = this.options.color;
+			var color = this.layers[this.selectedLayer - 1].color;
 
 
 			// Color only needs to update when color or opacity changes
@@ -265,7 +294,7 @@ export default {
 				// Convert hex to rgb
 				if(color.startsWith("#")){
 					rgbArray = convert.hex.rgb(color.substring(1,7));
-					this.options.opacity = 1;
+					this.layers[this.selectedLayer - 1].opacity = 1;
 				// Get numbers from RGB format
 				}else{
 					var numbers = color.replace(/[^\d,]/g, '').split(',')
@@ -282,11 +311,11 @@ export default {
 					+ this.rgbNumberFormat(rgbArray[0]) + ", "
 					+ this.rgbNumberFormat(rgbArray[1]) + ", "
 					+ this.rgbNumberFormat(rgbArray[2]) + ", "
-					+ this.options.opacity + ")";
+					+ this.layers[this.selectedLayer - 1].opacity + ")";
 
 				// Set to options
-				this.options.color_format = formattedColor;
-				this.options.color = formattedColor;
+				this.layers[this.selectedLayer - 1].color_format = formattedColor;
+				this.layers[this.selectedLayer - 1].color = formattedColor;
 
 				// Update color input
 			}
@@ -326,6 +355,18 @@ export default {
 			
 			this.copyToClipboard("Your Shadow's CSS", output);
 		},
+
+		/////////////////////
+		// Add new Layer  //
+		///////////////////
+		addLayer: function(){
+			// Copy selected layer to new layer
+			var copyLayer = _.cloneDeep(this.layers[this.selectedLayer - 1]);
+			// Push copied layer to layers arrray
+			this.layers.push(copyLayer);
+			// Select new layer
+			this.selectedLayer = this.layers.length;
+		},
 		
 	}
 };
@@ -340,10 +381,10 @@ export default {
 	.page-split{
 		display: flex;
 		box-sizing: border-box;
-		padding: 0 0 15px 0;
+		padding: 0 0 0 0;
 		height: 100%;
 
-		@media (max-width: @screenLG) {
+		@media (max-width: @screenMD) {
 			flex-direction: column;
 			padding: 0 0 0 0;
 		}
@@ -353,31 +394,36 @@ export default {
 			flex-grow: 3;
 			display: flex;
 			flex-direction: column;
-			margin-right: 25px;
 			min-height: 40vh;
 
-			@media (max-width: @screenLG) {
-				margin-right: 0;
-				margin-bottom: 0;
-				height: 50%;
-				height: calc(~'50vh - 60px');
-				max-height: calc(~'50vh - 60px');
-			}
 			@media (max-width: @screenMD) {
-				height: calc(~'50vh - 54px');
-				max-height: calc(~'50vh - 54px');
+				margin: 0;
 			}
 			
 
 			// Top of left side - controls, save, etc
 			.page-split-left-top{
 				display: flex;
-				padding: 0 0 15px 0;
-				height: 24px;
-				max-height: 24px;
+				padding: 0 0 0 0;
+				background-color: var(--layer);
 
 				button{
 					width: fit-content;
+					border-radius: 0;
+					border-top: 0;
+					border-bottom: 0;
+					padding-left: 15px;
+					padding-right: 15px;
+					padding-bottom: 2px;
+					border-left: none;
+
+					i{
+						width: 18px;
+					}
+					@media (max-width: @screenMD) {
+						padding-bottom: 0;
+						height: 34px;
+					}
 				}
 
 				// Option button that displays dropdown content
@@ -386,26 +432,59 @@ export default {
 					height: fit-content;
 					overflow: visible;
 					display: flex;
-					flex-direction: column;
+					flex-direction: row;
 					justify-content: center;
 
 					.option-dropdown-content{
 						position: absolute;
-						margin: 7px 0 0 0;
+						margin: 10px 0 0 0;
+						left: 10px;
 						top: 100%;
 						max-width: 500px;
 						min-width: 400px;
 						width: 100%;
-						border: 1px solid var(--dark);
 						box-shadow: var(--shadow);
-						border-radius: var(--borderRadiusSmall);
+						border-radius: 3px;
 						box-sizing: border-box;
-						background-color: var(--dark);
+						background-color: var(--black);
 						padding: 15px;
+						border: 1px solid var(--background);
 
 						label, h1, h2, h3, h4, h5, h6, p{
-							color: var(--background);
+							color: var(--white);
 						}
+
+						code{
+							padding: 3px 0 0 0;
+							margin-bottom: 15px;
+							display: block;
+							overflow: auto;
+							font-size: 13px;
+							line-height: 15px;
+							font-family: var(--mono);
+
+							pre{
+								color: var(--white);
+								white-space: pre;
+							}
+
+							&.wrap{
+								pre{
+									white-space: pre-line;
+								}
+							}
+
+							div{
+								padding-left: 15px;
+							}
+						}
+
+						input, textarea{
+							background-color: var(--layer);
+							border: none;
+						}
+
+						
 					}
 				}
 			}
@@ -418,7 +497,8 @@ export default {
 				flex-grow: 3;
 				box-sizing: border-box;
 				padding: 0 0 25px 0;
-				border-radius: var(--borderRadius);
+				border-top: 1px solid var(--black);
+				transition: var(--transition);
 				
 				@media (max-width: @screenLG) {
 					padding: 55px 0;
@@ -431,64 +511,43 @@ export default {
 
 		// Right side
 		.page-split-right{
-			width: 340px;
+			width: 420px;
 			height: 100%;
 			max-height: 100%;
 			overflow: auto;
 
 			// Fix to bottom on below LG
-			@media (max-width: @screenLG) {
-				width: 94%;
-				margin-left: 3%;
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				height: 50%;
+			@media (max-width: @screenXL) {
+				width: 340px;
 			}
-			// Full width below md
+			// Fix to bottom on below LG
 			@media (max-width: @screenMD) {
 				width: 100%;
-				position: fixed;
-				bottom: 0;
-				left: 0;
 				height: 50%;
-				margin-left: 0;
+				max-height: 50%;
 			}
 
 
 			// Sidebar content/app form/fields - primary background
 			.app-fields{
 				display: block;
-				background-color: var(--dark);
-				color: var(--background);
+				background-color: var(--layer);
 				box-sizing: border-box;
 				padding: 15px;
-				border-radius: var(--borderRadius);
-				border: 1px solid var(--dark);
-				box-shadow: var(--shadow);
+				border-left: 1px solid var(--border);
 				height: 100%;
 				overflow: auto;
 
 				// Remove bottom border radius, increase top
 				@media (max-width: @screenMD) {
-					padding: 25px;
-					border-top-left-radius: var(--borderRadiusLarge);
-					border-top-right-radius: var(--borderRadiusLarge);
-					border-bottom-left-radius: 0;
-					border-bottom-right-radius: 0;
-				}
-				// Remove bottom border radius, increase top
-				@media (max-width: @screenMD) {
-					padding: 25px;
-					border-top-left-radius: var(--borderRadiusLarge);
-					border-top-right-radius: var(--borderRadiusLarge);
-					border-bottom-left-radius: 0;
-					border-bottom-right-radius: 0;
+					padding: 50px 50px 50px 50px;
+					border-left: none;
+					border-right: none;
+					border-top: 1px solid var(--border);
 				}
 
 				.field{
 					label{
-						color: var(--background);
 					}
 
 					code{
@@ -501,7 +560,38 @@ export default {
 						border-radius: var(--borderRadiusSmall);
 						margin: 4px 0 0 0;
 						line-height: 20px;
-						background-color: var(--dark);
+						background-color: var(--background);
+					}
+
+					// Layer selector
+					.layer-selector{
+						display: flex;
+
+						.layer-button{
+							width: 30px;
+							height: 30px;
+							border: 1px solid var(--border);
+							margin-right: 8px;
+							border-radius: 3px;
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							text-align: center;
+							font-weight: bolder;
+							font-size: 16px;
+							transition: var(--transitionFast);
+
+							&:hover{
+								cursor: pointer;
+								transition: var(--transitionFast);
+								background-color: var(--grey);
+							}
+
+							&.active{
+								background-color: var(--blue);
+								color: var(--white);
+							}
+						}
 					}
 				}
 			}
@@ -511,9 +601,9 @@ export default {
 
 	// Specific element styling
 	#customTarget{
-		height: 50px;
-		max-height: 50px;
-		min-height: 50px;
+		height: 80px;
+		max-height: 80px;
+		min-height: 80px;
 	}
 	#customTargetCSS{
 		height: 150px;
