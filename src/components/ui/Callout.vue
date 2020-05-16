@@ -51,7 +51,7 @@ export default {
 	.callout{
 		display: flex;
 		width: 100%;
-		max-width: var(--maxWidth);
+		// max-width: var(--maxWidth);
 		box-sizing: border-box;
 		padding: 0 15px 0 60px;
 		border-radius: 3px;
@@ -130,6 +130,14 @@ export default {
 				color: var(--green);
 			}
 		}
+		// invert
+		&.invert{
+			background-color: var(--text);
+			color: var(--background);
+			span,p,h1,h2,h3,h4,h5,h6,i{
+				color: var(--background);
+			}
+		}
 
 		// Sizing
 		// Narrow means max width
@@ -152,15 +160,39 @@ export default {
 		}
 		// Giant means giant icon and bigger text
 		&.giant{
-			max-width: 400px;
-			padding: 20px 15px 20px 100px;
+			padding: 10px 15px 10px 130px;
+			border-radius: 5px;
 			.callout-icon{
-				font-size: 42px;
-				width: 100px;
+				font-size: 50px;
+				width: 130px;
 			}
 			.callout-body{
 				font-size: 18px;
 				font-weight: 600;
+			}
+
+			@media (max-width: @screenSM) {
+				flex-wrap: wrap;
+				padding: 15px;
+
+				.callout-icon{
+					width: 100%;
+					position: relative;
+					left: 0;
+					top: 0;
+					margin-bottom: 10px;
+					text-align: left;
+				}
+				.callout-body{
+					min-width: 100%;
+					font-weight: 500;
+
+					p{
+						font-size: 12px;
+						line-height: 20px;
+						font-weight: 500;
+					}
+				}
 			}
 		}
 		// tiny means lil smaller icon and smaller text

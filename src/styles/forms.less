@@ -85,6 +85,12 @@
 	}
 }
 
+// field row - horizontal row
+.field-row{
+	display: flex;
+	justify-content: space-between;
+}
+
 ////////////////////////
 //      Text        //
 //////////////////////
@@ -174,7 +180,8 @@ input,button,textarea,a,select{
 	
 	// Focus, show outline
 	&:focus{
-		outline: 2px dashed var(--outline) !important;
+		outline: none !important;
+		// outline: 2px dashed var(--outline) !important;
 		outline-offset: 4px;
 		transition: outline 0.1s ease, outline-offset 0.2s ease;
 
@@ -302,7 +309,7 @@ button{
 }
 .button{
 	border: none;
-	color: var(--white);
+	color: var(--background);
 	height: 36px;
 	border-radius: 3px;
 	font-size: 14px;
@@ -313,7 +320,7 @@ button{
 	box-sizing: border-box;
 	transform: translateY(0px);
 	font-family: var(--systemFont);
-	border: 1px solid var(--border);
+	border: 1px solid var(--borderDark);
 	border-bottom-width: 2px;
 
 	// Increase size on mobile
@@ -386,8 +393,23 @@ button{
 	}
 	// Grey
 	&.grey{
-		color: var(--black);
+		color: var(--text);
 		background-color: var(--grey);
+	}
+	// Black
+	&.black{
+		color: var(--white);
+		background-color: var(--black);
+	}
+	// Invert
+	&.invert{
+		color: var(--layer);
+		background-color: var(--text);
+	}
+	// transparent
+	&.transparent{
+		color: var(--text);
+		background-color: var(--layer);
 	}
 	
 
@@ -461,6 +483,11 @@ button{
 			opacity: 0.8;
 			text-decoration:none;
 		}
+	}
+
+	// Inline 
+	&.fit{
+		width: fit-content;
 	}
 }
 
@@ -612,19 +639,22 @@ input[type="range"] {
 			-webkit-appearance: none;
 		}
 		&::-webkit-slider-runnable-track {
-			height: 22px;
-			-webkit-appearance: none;
-			margin-top: -1px;
-			transition: box-shadow 0.2s ease-in-out;
+			background: var(--text);
+			height: 4px;
+			outline: none;
+			box-shadow: none;
+			border: none;		
 		}
 		&::-webkit-slider-thumb {
 			width: 22px;
 			-webkit-appearance: none;
 			height: 22px;
 			cursor: ew-resize;
-			background: var(--blue);
+			background: var(--text);
 			border-radius: 50%;
 			transition: box-shadow 0.2s ease-in-out;
+			position: relative;
+			top: -9px;
 			position: relative;
 			// top: 1px;
 		}
@@ -655,6 +685,56 @@ input[type="range"] {
 	}
 }
 
+// Range specific for background where color changes - always visible
+input[type="range"].color-range {
+	@media screen and (-webkit-min-device-pixel-ratio:0) {
+		& {
+			background-color: var(--red);
+		}
+		&::-webkit-slider-thumb {
+			background: var(--white);
+			border: 2px solid var(--black);			
+			top: -9px;
+			position: relative;
+
+		}
+		&::-webkit-slider-runnable-track {
+			background: var(--text);
+			height: 4px;
+			outline: none;
+			box-shadow: none;
+			border: none;		
+		}
+		&:active::-webkit-slider-thumb {
+			background: var(--green);
+		}
+	}
+	// Firefox
+	&::-moz-range-thumb{
+		background-color: var(--white);
+		border-color: var(--white);
+		border-radius: 50%;
+		border: 2px solid var(--black);
+	}	
+	&::-moz-range-progress {
+		background-color: var(--black); 
+	}
+	&::-moz-range-track {  
+		background-color: var(--white);
+		border: none;
+		box-shadow: none;
+	}
+	// IE
+	&::-ms-fill-lower {
+		background-color: var(--blue); 
+	}
+	&::-ms-fill-upper {  
+		background-color: var(--green);
+	}
+}
+input[type=range]::-moz-focus-outer {
+	border: 0;
+}
 
 // Custom radio or checkbox group to select different options
 // Horizontal, icon with text

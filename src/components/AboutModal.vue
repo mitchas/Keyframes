@@ -9,32 +9,91 @@
 //		- view on GitHub
 //
 //	- Functions:
-//		- clearLocalStorage()
-//			- Clears all local storage for this site 
-//		- getAllLocalStorage()
-//			- Called on mount, gets all localstorage content 
 // 
 -->
+
 
 <template>
 	<div>
 
 		<Modal
 			v-bind:show="showAbout"
-			title="About"
-			color="grey"
-			confirmText="Dismiss"
-			confirmIcon="fas fa-times"
-			@confirmed="$emit('aboutModalClosed');"
+			color="black"
+			confirmText="View on GitHub"
+			confirmIcon="fab fa-github"
+			dismissText="Dismiss"
+			reverseFooter="true"
+			@confirmed="tab('https://github.com/mitchas/Keyframes');"
 			@dismissed="$emit('aboutModalClosed');">
 
+			<!-- Modal Heder -->
+			<template v-slot:header>
+				<span>Keyframes.app</span>
+				<img src="@/assets/branding/hotdish.png" @click="tab('https://hotdi.sh')" title="Hotdish Logo" v-bind:class="{'invert': $store.getters.userPreferences.darkMode}"/>
+			</template>
 
-			<!-- General Preferences -->
-			<div class="settings-group">
-				<div class="badge">v1.0</div>
-				<p>This is version 1</p>
+			<!-- Body -->
+			<template v-slot:body>
 
-			</div>
+				<!-- Version Info -->
+				<div id="aboutVersion">
+					<div class="badge green">
+						<i class="far fa-code-branch"></i>
+						<span>v2.0, May 15 2020</span>
+					</div>
+					<a @click="$emit('aboutModalClosed'); navigate('/changelog/')">View Changelog</a>
+				</div>
+
+				<!-- What -->
+				<div class="about-section">
+					<h3>What, Why, Who?</h3>
+					<p class="small">Keyframes is a free bundle of tools to generate & live preview different CSS properties, plus some other web development tools. It's a side project I started to bring some CSS tools I use into one place, with features I wished other tools had.</p>
+					<p class="small">You can find some other things I'm working on at <a href="https://hotdi.sh" target="_blank">Hotdi.sh</a>.</p>
+				</div>
+
+
+				<!-- Stack -->
+				<div class="about-section">
+					<h3>Stack</h3>
+					<!-- Framework -->
+					<div class="stack-row">
+						<label>Framework</label>
+						<span><a href="https://vuejs.org" target="_blank">Vue.js</a></span>
+					</div>
+					<!-- Backend -->
+					<div class="stack-row">
+						<label>Backend</label>
+						<span><b>None</b> - local storage only</span>
+					</div>
+					<!-- Analytics -->
+					<div class="stack-row">
+						<label>Analytics</label>
+						<span>Self-hosted <a href="https://matomo.org/" target="_blank">Matomo</a> with minimal tracking</span>
+					</div>
+					<!-- Analytics -->
+					<div class="stack-row">
+						<label>Everything Else</label>
+						<span>
+							<a href="https://fontawesome.com/" target="_blank">Font Awesome Pro</a> for icons,
+							<a href="https://www.npmjs.com/package/vue-moment" target="_blank">Vue Moment</a> for date/time,
+							<a href="https://www.npmjs.com/package/vue-lodash" target="_blank">Vue Lodash</a> for data,
+							and <a href="https://www.npmjs.com/package/color-convert" target="_blank">Color Convert</a> for color stuff.
+						</span>
+					</div>
+				</div>
+
+				<!-- Contribute -->
+				<div class="about-section">
+					<h3>Contribute</h3>
+					<p class="small">The entire project source is available on GitHub. Feel free to use it for whatever *personal* reasons you need, but please don't redistrubute or try to sell it.</p>
+					<p class="small mtop-xs">If you have suggestions for tools you'd like to see added, or if you find any bugs, send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a> or tell me on <i class="fab fa-twitter"></i> Twitter <a href="https://twitter.com/sleumasm" target="_blank">@sleumasm</a>.</p>
+					<p class="small mtop-xs">Keyframes is free and doesn't have any ads, but if it has saved you time and you'd like to help out...</p>
+					<button class="button yellow small mtop-xs mleft-sm mbottom-sm" @click="tab('https://buymeacoff.ee/mitchs')">
+						<i class="far fa-coffee-togo"></i>
+						<span>Buy me a Coffee</span>
+					</button>
+				</div>
+			</template>
 
 		</Modal>
 
@@ -44,17 +103,10 @@
 <script>
 // Components
 import Modal from "@/components/ui/Modal.vue";
-// Mixins
-import metaMixin from "@/components/mixins/metaMixin.js";
-import preferencesMixin from "@/components/mixins/preferencesMixin.js";
-import scrollLockMixin from "@/components/mixins/ui/scrollLockMixin.js";
 
 export default {
-	name: "SettinigsModal",
+	name: "AboutModal",
 	mixins: [
-		metaMixin,
-		preferencesMixin,
-		scrollLockMixin,
 	],
 	components: {
 		Modal,
@@ -64,66 +116,12 @@ export default {
 	],
 	data() {
 		return {
-			// Toggle help
-			showLocalStorageHelp: false,
-			// Variable to hold entire *string* of local storage for displaying to user
-			localStorageString: null,
-			// Define potential start pages users can choose
-			test: null,
-			startPages: [
-				{
-					path: '/',
-					icon: 'fal fa-home',
-					label: 'Home'
-				},{
-					path: '/animate/',
-					icon: 'fal fa-video',
-					label: 'Animate'
-				},{
-					path: '/shadows/',
-					icon: 'fal fa-eclipse',
-					label: 'Shadows'
-				}
-			]
 		};
 	},
 	mounted() {
-		// Show modal, lock scroll
-		this.getAllLocalStorage();
 	},
 	methods: {
 	
-		// Delete all items from local storage
-		clearLocalStorage: function(){
-			let _this = this;
-
-			// Clear local storage
-			localStorage.clear();
-
-			// Toast
-			_this.toast("Local Storage Cleared", "Your data & preferences have been cleared from your browser's local storage.", "", "far fa-trash-alt");
-
-			// Close modal - this shows user an action,
-			// Also forcing them to open settings again shows accurate localstorage string
-			_this.closeSettings();
-		},
-		// This function returns all local storage data available
-		getAllLocalStorage: function(){
-
-			var values = [];
-			var keys = Object.keys(localStorage);
-			console.log(keys);
-			var i = keys.length;
-
-			while( i-- ){
-				var item = {}
-				item[keys[i]] = localStorage.getItem(keys[i])
-
-				values.push(item);
-			}
-
-			this.localStorageString = JSON.stringify(values).split('\\').join('');
-		}
 	}
 };
 </script>
@@ -132,127 +130,93 @@ export default {
 
 	@import '~@/styles/variables.less';
 
-	// Spacing for Individual groups of settings
-	.settings-group{
-		margin: 0 auto 0 auto;
-		padding-bottom: 0;
-	}
-	
-	// Horizontal row layout for toggles
-	.setting-toggle{
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		padding: 10px 0;
-		width: 100%;
-		position: relative;
+	// Version info and changelog link
+	#aboutVersion{
 
-		.setting-toggle-input{
-			display: block;
-			padding-right: 15px;
-		}		
-	}
-
-	// Large setting label with small text below
-	// Used for toggles on settings
-	.setting-label-large{
-		font-weight: 500;
-		font-size: 14px;
-		letter-spacing: 0.3px;
-		display: block;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		font-size: 16px;
-		letter-spacing: 0.4px;
-		font-weight: 600;
-
-		small{
+		a{
 			font-size: 12px;
-			font-weight: 400;
-			line-height: 16px;
-			padding-top: 2px;
-			font-family: var(--systemFont);
-		}
-	}
+			font-weight: 600;
+			padding: 0 10px;
+			color: var(--textLight);
 
-	
-
-	// Field to clear local storage, everything inside
-	#clearLocalStorage{
-		margin-top: 10px;
-
-		// Center content inside
-		.field-body{
-			text-align: left;
-		}
-
-		// More info button
-		#localStorageHelpButton{
-			display: inline-block;
-			width: fit-content;
-			color: var(--text);
-			font-size: 13px;
-			font-weight: 500;
-			padding: 10px 0 10px 0;
-			margin-left: 15px;
-
-			i{
-				margin-left: 5px;
+			&:hover{
+				cursor: pointer;
+				color: var(--text);
 			}
 		}
 	}
 
-	// Local storage help
-	#localStorageHelp{
-		background-color: var(--background);
-		box-sizing: border-box;
-		padding: 10px;
-		border-radius: var(--borderRadiusSmall);
-		border: 1px solid var(--border);
-		margin: 10px 0 0 0;
-		color: var(--text);
-		font-size: 12px;
-		letter-spacing: 0.5px;
-		font-weight: 400;
-		line-height: 22px;
-		letter-spacing: 0.2px;
-		font-family: var(--systemFont);
 
-		b{
-			font-weight: bold;
+	// Tech Stack
+	.about-section{
+		padding: 20px 0 0 0;
+
+		// Section heading
+		h3{
+			font-size: 20px;
+			padding-bottom: 5px;
 		}
 
-		// List of info
-		ul{
-			margin: 10px 0;
+		// Adjust paragraph padding
+		p{
+			padding: 0 0 0 20px;
+			font-size: 13px !important;
+			line-height: 17px !important;
 		}
-	}
 
-	// Code display to show all local storage data
-	.local-storage-code-display{
-		box-sizing: border-box;
-		padding: 0 15px 15px 15px;
-		// border-radius: var(--borderRadiusSmall);
-		margin: 0 auto;
-		max-height: 300px;
-		overflow: auto;
+		// Links in about sections
+		a{
+			color: var(--text);
+			&:after{
+				content: '\f0c1';
+				color: var(--blue);
+				font-family: var(--fontAwesome);
+				font-weight: 600;
+				font-size: 12px;
+				padding-left: 4px;
+			}
+		}
 
-		code{
-			font-family: var(--mono);
-			display: block;
-			white-space: normal;
+		.stack-row{
 			box-sizing: border-box;
-			padding: 5px 0;
-			font-size: 12px;
-			line-height: 14px;
-			word-break:break-all;
-			white-space: pre-wrap;
+			padding: 2px 0 2px 20px;
+			display: flex;
+			justify-content: flex-end;
+
+			
+
+			label,a,span{
+				font-size: 13px;
+				line-height: 15px;
+			}
+
+			label{
+				width: 135px;
+				min-width: 135px;
+				max-width: 135px;
+
+				// Shrink on mobile
+				@media (max-width: @screenSM) {
+					width: 90px;
+					min-width: 90px;
+					max-width: 90px;
+				}
+			}
+			span{
+				flex-grow: 3;
+
+				b{
+					font-weight: 600;
+				}
+
+				
+			}
 		}
 	}
 
-
-
-
+	// Footer adjustments
+	#aboutModalFooter{
+		padding-bottom: 10px;
+	}
 
 </style>

@@ -19,25 +19,25 @@
 // -->
 
 <template>
-	<div class="page-split">
+	<div class="app-page-split">
 
 		<!--/////////////////////////////
 			Left side of page - top bar, stage
 		/////////////////////////////-->
-		<div class="page-split-left">
-			<div class="page-split-left-top">
+		<div class="app-page-split-left">
+			<div class="app-page-split-left-top">
 
 				<!--/////////////////////////////
 					Dropdown buttons - options, output
 				/////////////////////////////-->
 				<div class="option-dropdown">
-					<button class="button small" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'grey': !controlToggles.options}">
+					<button class="button small" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'black': !controlToggles.options}">
 						<i v-bind:class="{'fas fa-edit': !controlToggles.options, 'fas fa-times-circle': controlToggles.options}"></i>
 						<span>Options</span>
 					</button>
 					<button class="button small" @click="controlTab('output')" v-bind:class="{'red': controlToggles.output, 'green': !controlToggles.output}">
 						<i v-bind:class="{'fas fa-brackets-curly': !controlToggles.output, 'fas fa-times-circle': controlToggles.output}"></i>
-						<span>Output CSS</span>
+						<span>Get CSS</span>
 					</button>
 
 					<!--/////////////////////////////
@@ -52,18 +52,18 @@
 							</div>
 							<!-- Target Element -->
 							<div class="field mtop-sm">
-								<label for="customTarget">
+								<label for="customShadowTarget">
 									Target Element
 									<small class="block">Your element must have the id targetElement</small>
 								</label>
-								<textarea class="code" id="customTarget" v-model="options.customTarget"></textarea>
+								<textarea class="code" id="customShadowTarget" v-model="options.customTarget"></textarea>
 							</div>
 							<!-- Target CSS -->
 							<div class="field mtop-sm">
-								<label for="customTargetCSS">
+								<label for="customShadowTargetCSS">
 									Custom CSS
 								</label>
-								<textarea class="code" id="customTargetCSS" v-model="options.customTargetCSS"></textarea>
+								<textarea class="code" id="customShadowTargetCSS" v-model="options.customTargetCSS"></textarea>
 							</div>
 						</div>
 					</transition>
@@ -105,7 +105,7 @@
 			Right side - value editor
 			//////////////////////
 			//////////////////////-->
-		<div class="page-split-right">
+		<div class="app-page-split-right">
 			<!-- Fields -->
 			<div class="app-fields">
 
@@ -220,24 +220,18 @@ export default {
 			selectedLayer: 1,
 			layers: [
 				{
-					horizontal_offset: 10,
-					vertical_offset: 6,
-					blur: 35,
-					spread: -5,
+					horizontal_offset: 0,
+					vertical_offset: 15,
+					blur: 25,
+					spread: -4,
 					color: "rgb(30,30,60,0.25)",
 					opacity: 0.25,
 				},
 			],
 			options: {
-				horizontal_offset: 0,
-				vertical_offset: 6,
-				blur: 35,
-				spread: -5,
-				color: "rgb(30,30,60,0.25)",
-				opacity: 0.25,
 				stageBackground: "white",
-				customTarget: "<div id='targetElement' class='shadow-target'><i class='far fa-hands-wash'></i></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: white;\n    color: #16023C;\n    border-radius: 3px;\n    margin: 0 auto;\n    font-size: 52px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
+				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-hands-wash'></i></div>",
+				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:1px solid #f2f5f9;\n    color: #16023C;\n    border-radius: 4px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
 			},
 			// Which controls are visible
 			controlToggles: {
@@ -302,7 +296,7 @@ export default {
 					if(numbers[2]){
 						rgbArray = numbers;
 					}else{
-						this.toast("Bad Color", "Please enter your color in either rgb() or #HEX format.", "red", "far fa-tint");
+						this.toast("Bad Color Format", "Please enter your color in either rgb() or #HEX format.", "red", "far fa-tint");
 					}
 				}
 
@@ -347,11 +341,22 @@ export default {
 		// copies CSS output to clipboard
 		copyShadowOutput: function(){
 			var output = "box-shadow: ";
-			output = output + 	this.options.horizontal_offset + "px " +
-								this.options.vertical_offset + "px " +
-								this.options.blur + "px " +
-								this.options.spread + "px " +
-								this.options.color + ";";
+
+			for (var index = 0; index < this.layers.length; index++) { 
+				var l = this.layers[index];
+				output = output + 	l.horizontal_offset + "px " +
+					l.vertical_offset + "px " +
+					l.blur + "px " +
+					l.spread + "px " +
+					l.color;
+
+				// End line if end, otherwise comma
+				if(index == this.layers.length - 1){
+					output = output + ";"
+				}else{
+					output = output + ", ";
+				}
+			} 
 			
 			this.copyToClipboard("Your Shadow's CSS", output);
 		},
@@ -378,234 +383,14 @@ export default {
 
 	@import '~@/styles/variables.less';
 
-	.page-split{
-		display: flex;
-		box-sizing: border-box;
-		padding: 0 0 0 0;
-		height: 100%;
-
-		@media (max-width: @screenMD) {
-			flex-direction: column;
-			padding: 0 0 0 0;
-		}
-
-		// Left side - controls, stage below
-		.page-split-left{
-			flex-grow: 3;
-			display: flex;
-			flex-direction: column;
-			min-height: 40vh;
-
-			@media (max-width: @screenMD) {
-				margin: 0;
-			}
-			
-
-			// Top of left side - controls, save, etc
-			.page-split-left-top{
-				display: flex;
-				padding: 0 0 0 0;
-				background-color: var(--layer);
-
-				button{
-					width: fit-content;
-					border-radius: 0;
-					border-top: 0;
-					border-bottom: 0;
-					padding-left: 15px;
-					padding-right: 15px;
-					padding-bottom: 2px;
-					border-left: none;
-
-					i{
-						width: 18px;
-					}
-					@media (max-width: @screenMD) {
-						padding-bottom: 0;
-						height: 34px;
-					}
-				}
-
-				// Option button that displays dropdown content
-				.option-dropdown{
-					position: relative;
-					height: fit-content;
-					overflow: visible;
-					display: flex;
-					flex-direction: row;
-					justify-content: center;
-
-					.option-dropdown-content{
-						position: absolute;
-						margin: 10px 0 0 0;
-						left: 10px;
-						top: 100%;
-						max-width: 500px;
-						min-width: 400px;
-						width: 100%;
-						box-shadow: var(--shadow);
-						border-radius: 3px;
-						box-sizing: border-box;
-						background-color: var(--black);
-						padding: 15px;
-						border: 1px solid var(--background);
-
-						label, h1, h2, h3, h4, h5, h6, p{
-							color: var(--white);
-						}
-
-						code{
-							padding: 3px 0 0 0;
-							margin-bottom: 15px;
-							display: block;
-							overflow: auto;
-							font-size: 13px;
-							line-height: 15px;
-							font-family: var(--mono);
-
-							pre{
-								color: var(--white);
-								white-space: pre;
-							}
-
-							&.wrap{
-								pre{
-									white-space: pre-line;
-								}
-							}
-
-							div{
-								padding-left: 15px;
-							}
-						}
-
-						input, textarea{
-							background-color: var(--layer);
-							border: none;
-						}
-
-						
-					}
-				}
-			}
-
-			// Stage
-			.app-stage{
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				flex-grow: 3;
-				box-sizing: border-box;
-				padding: 0 0 25px 0;
-				border-top: 1px solid var(--black);
-				transition: var(--transition);
-				
-				@media (max-width: @screenLG) {
-					padding: 55px 0;
-				}
-				
-				#targetElement{
-				}
-			}
-		}
-
-		// Right side
-		.page-split-right{
-			width: 420px;
-			height: 100%;
-			max-height: 100%;
-			overflow: auto;
-
-			// Fix to bottom on below LG
-			@media (max-width: @screenXL) {
-				width: 340px;
-			}
-			// Fix to bottom on below LG
-			@media (max-width: @screenMD) {
-				width: 100%;
-				height: 50%;
-				max-height: 50%;
-			}
-
-
-			// Sidebar content/app form/fields - primary background
-			.app-fields{
-				display: block;
-				background-color: var(--layer);
-				box-sizing: border-box;
-				padding: 15px;
-				border-left: 1px solid var(--border);
-				height: 100%;
-				overflow: auto;
-
-				// Remove bottom border radius, increase top
-				@media (max-width: @screenMD) {
-					padding: 50px 50px 50px 50px;
-					border-left: none;
-					border-right: none;
-					border-top: 1px solid var(--border);
-				}
-
-				.field{
-					label{
-					}
-
-					code{
-						font-family: var(--mono);
-						font-size: 16px;
-						padding: 0;
-						box-sizing: border-box;
-						display: block;
-						padding: 12px;
-						border-radius: var(--borderRadiusSmall);
-						margin: 4px 0 0 0;
-						line-height: 20px;
-						background-color: var(--background);
-					}
-
-					// Layer selector
-					.layer-selector{
-						display: flex;
-
-						.layer-button{
-							width: 30px;
-							height: 30px;
-							border: 1px solid var(--border);
-							margin-right: 8px;
-							border-radius: 3px;
-							display: flex;
-							flex-direction: column;
-							justify-content: center;
-							text-align: center;
-							font-weight: bolder;
-							font-size: 16px;
-							transition: var(--transitionFast);
-
-							&:hover{
-								cursor: pointer;
-								transition: var(--transitionFast);
-								background-color: var(--grey);
-							}
-
-							&.active{
-								background-color: var(--blue);
-								color: var(--white);
-							}
-						}
-					}
-				}
-			}
-			
-		}
-	}
 
 	// Specific element styling
-	#customTarget{
+	#customShadowTarget{
 		height: 80px;
 		max-height: 80px;
 		min-height: 80px;
 	}
-	#customTargetCSS{
+	#customShadowTargetCSS{
 		height: 150px;
 		max-height: 150px;
 		min-height: 150px;

@@ -32,7 +32,7 @@
 					<div class="settings-nav-dropdown" @click="toggleDropdown('apps')">
 						<!-- Hover label to show dropdown -->
 						<button class="hover-label">
-							<span>Apps</span>
+							<span>Tools</span>
 							<!-- Chevron down -->
 							<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-times-circle': showAppSwitcher}"></i>
 						</button>
@@ -48,10 +48,10 @@
 								<span>Shadows</span>
 								<i class="fas fa-eclipse"></i>
 							</button>
-							<!-- More -->
-							<button class="popover-link">
-								<span>More coming soon</span>
-								<i class="fas fa-ellipsis-h"></i>
+							<!-- Colors -->
+							<button class="popover-link" @click="navigate('/colors/')">
+								<span>Colors</span>
+								<i class="fas fa-tint"></i>
 							</button>
 						</div>
 					</div>
@@ -182,7 +182,7 @@ export default {
 		backdrop-filter: blur(3px);
 		background: var(--layer);
 		border-bottom: 1px solid var(--border);
-		z-index: 50;
+		z-index: 60;
 		// backdrop-filter: blur(3.3px);
 		// backdrop-filter:  grayscale(100%);
 
@@ -269,21 +269,6 @@ export default {
 					user-select: none;
 					margin-left: 12px;
 
-					// Profile photo
-					.hover-label-photo{
-						display: block;
-						height: 34px;
-						width: 34px;
-						border-radius: var(--borderRadius);
-						margin-left: 10px;
-						background-size: cover;
-						position: relative;
-						top: -2px;
-
-						// Adjust padding on larger screens
-						@media (min-width: @screenMD) {
-						}
-					}
 					// label and icon
 					span,i{
 						display: inline-flex;
@@ -294,6 +279,11 @@ export default {
 					span{
 						font-size: 14px;
 						font-weight: 600;
+
+						// Move down a tiny bit on mobile
+						@media (max-width: @screenMD) {
+							padding-top: 1px;
+						}
 					}
 					// Caret down arrow
 					i{
@@ -304,7 +294,8 @@ export default {
 						width: 18px;
 						position: relative;
 						top: 1px;
-						// Decrease margin on mobile
+
+						// Move on mobile
 						@media (max-width: @screenMD) {
 							top: 0;
 						}
@@ -334,7 +325,7 @@ export default {
 					max-height: 0;
 					overflow: hidden;
 					box-sizing: border-box;
-					border-radius: var(--borderRadiusSmall);
+					border-radius: 3px;
 					padding: 0px 10px;
 					overflow: 0;
 					border: 0px solid transparent;
@@ -358,6 +349,7 @@ export default {
 						padding: 8px 10px 10px 10px;
 						overflow: 1;
 						box-shadow: var(--shadow);
+						border: 1px solid rgba(205,205,255,0.25);
 						border: 1px solid var(--border);
 					}
 

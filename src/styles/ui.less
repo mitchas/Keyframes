@@ -1,0 +1,368 @@
+////////////////////////// 
+////   UI Elements   ////
+////////////////////////
+// 
+// Styles for various global UI elements
+// 
+// 		.badge
+// 			- Colored text with optional icon,
+// 			- Color classes default (primary), .blue, .red, .green, .yellow, .black
+// 		.breadcrumbs
+// 			- Navigation breadcrumbs
+// 		.tabs
+// 			- Navigation tabs for within a page
+// 		.tooltip
+// 			- Tooltip label for hover hints
+// 			- optional .tooltip-left or .tooltip-right classes for setting float direction
+// 
+
+
+/////////////////////
+////   Badge    ////
+///////////////////
+.badge{
+	display: inline-block;
+	font-weight: 500;
+	font-size: 12px;
+	box-sizing: border-box;
+	background-color: var(--blue);
+	color: var(--white);
+	padding: 5px 6px 6px 7px;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
+	font-family: var(--systemFont);
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	letter-spacing: 0.18px;
+	// Adjust padding on mobile
+	@media (max-width: @screenSM) {
+		padding: 5px 6px 5px 7px;
+		font-size: 11.5px;
+	}
+
+	i{
+		margin-right: 5px;
+		transform: scale(1.1);
+		transform-origin: center center;
+	}
+
+	// Color variations
+	&.blue{background-color:var(--blue);}
+	&.red{background-color:var(--red);}
+	&.green{
+		color: var(--black);
+		background-color:var(--green);
+	}
+	&.yellow{
+		background-color:var(--yellow);
+		color: var(--black);
+	}
+	&.grey{
+		background-color:var(--grey);
+		color: var(--black);
+	}
+	&.transparent{
+		background-color: transparent;
+		color: var(--text);
+	}
+	&.black{background-color:var(--black);}
+
+	// Reverse badge - curve and icon reversed
+	&.reverse{
+		border-top-left-radius: 6px;
+		border-bottom-left-radius: 6px;
+		border-top-right-radius: 20px;
+		border-bottom-right-radius: 20px;
+
+		i{
+			margin-left: 5px;
+			margin-right: 0;
+		}
+	}
+
+}
+
+///////////////////////////
+////   Breadcrumbs    ////
+/////////////////////////
+.breadcrumbs{
+	display: flex;
+	width: 100%;
+	box-sizing: border-box;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+
+	@media (max-width: @screenSM) {
+		// flex-wrap: nowrap;
+		// overflow: auto;
+	}
+
+	// Hide scrollbars
+	// Hidden
+	&::-webkit-scrollbar{
+		width: 0px;
+		display: none;
+	}
+	// Scrollbar handle/thumb
+	&::-webkit-scrollbar-thumb{
+		display: none;
+		width: 0px;
+	}
+
+	.crumb{
+		display: flex;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 0.35px;
+		color: var(--textLightest);
+		transition: var(--transition);
+		text-transform: capitalize;
+		width: fit-content;
+
+		// Shrink on mobile
+		@media (max-width: @screenMD) {
+			font-size: 14px;
+			margin-bottom: 6px;
+		}
+		@media (max-width: @screenSM) {
+			font-size: 13px;
+			text-align: center;
+		}
+
+		span{
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			margin-right: 8px;
+			white-space: pre;
+		}
+
+		// Add arrow before each child
+		&:before{
+			content: '\f30b';
+			font-family: var(--fontAwesome);
+			display: block;
+			padding: 0 8px 0 0;
+			color: var(--textLightest);
+			position: relative;
+			top: -1px;
+			font-weight: 600;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		// Remove arrow before first child
+		&:first-child{
+			&:before{
+				display: none;
+			}
+		}
+
+		// Hover
+		&:hover{
+			text-decoration: none;
+			color: var(--textLight);
+			transition: var(--transition);
+			cursor: pointer;
+
+			span{
+			}
+		}
+
+		// Highlight last (current) crumb
+		&.active{
+			color: var(--text);
+		}
+
+	}
+}
+
+////////////////////////////////
+////    Tabs Navigation    ////
+//////////////////////////////
+.tabs{
+	display: flex;
+	box-sizing: border-box;
+	background-color: var(--backgroundLayer);
+	width: fit-content;
+	border-radius: 20px;
+	box-shadow: var(--shadowLight);
+
+	// Full width mobile
+	@media (max-width: @screenSM) {
+		width: 100%;
+	}
+
+	.tab{
+		height: 40px;
+		padding: 0 20px 2px 20px;
+		font-family: var(--systemFont);
+		font-size: 14px;
+		letter-spacing: 0.3px;
+		flex-grow: 3;
+		font-weight: 500;
+		color: var(--textLight);
+		border: none;
+		text-align: center;
+		background-color: transparent;
+		transition: var(--transition);
+		border-radius: 8px;
+
+		// Icon
+		i{
+			transform:scale(1.3);
+			margin-right: 8px;
+		}
+
+		// Adjust for mobile
+		@media (max-width: @screenSM) {
+			padding: 0 0 1px 0;
+			font-size: 12.5px;
+			letter-spacing: 0.4px;
+			height: 36px;
+		}
+
+		// More spacing on last tab
+		&:last-child{
+			border-bottom-right-radius: 20px;
+			border-top-right-radius: 20px;
+		}
+		// Border radius on first/last child
+		&:first-child{
+			border-bottom-left-radius: 20px;
+			border-top-left-radius: 20px;
+		}
+
+		// Hover
+		&:hover{
+			color: var(--text);
+			transition: var(--transition);
+		}
+
+		// Active tab
+		&.active{
+			font-weight: 500;
+			background-color: var(--primary);
+			text-decoration: underline;
+			color: var(--white);
+			border-radius: 20px;
+		}
+	}
+}
+
+
+////////////////////////
+////    Tooltip    ////
+//////////////////////
+// Add .tooltip class to element that needs tooltip
+.tooltip{
+
+	// Tooltip body - icon and text
+	.tooltip-body{
+		background-color: var(--backgroundLayer);
+		width: fit-content;
+		box-sizing: border-box;
+		padding: 4px 0;
+		border-radius: 5px;
+		box-shadow: var(--shadowLight);
+		position: absolute;
+		top: 50%;
+		margin-top: -13px;
+		left: 0;
+		white-space: pre;
+		max-width: 0px;
+		transition: var(--transition);
+		pointer-events: none;
+		overflow: hidden;
+		transition-delay: 0s;
+		opacity: 0;
+		z-index: 100;
+
+		@media (max-width: @screenSM) {
+			padding: 4px 0;
+			margin-top: -13px;
+		}
+
+		i,.tooltip-text{
+			display: inline-block;
+			vertical-align: baseline;
+			height: 100%;
+		}
+		// Icon
+		i{
+			font-size: 16px;
+			box-sizing: border-box;
+			margin-left: 6px;
+			color: var(--border);
+
+			@media (max-width: @screenSM) {
+				font-size: 12px;
+			}
+		}
+		.tooltip-text{
+			box-sizing: border-box;
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			position: relative;
+			color: var(--text);
+			top: -1px;
+			margin-right: 6px;
+			margin-left: 6px;
+
+			span{
+				text-transform: uppercase;
+			}
+
+			@media (max-width: @screenSM) {
+				font-size: 10px;
+				top: 0;
+			}
+		}
+
+		// Color the icons
+		&.gold{
+			i{color: var(--secondary);}
+		}
+		&.green{
+			i{color: var(--green);}
+		}
+		&.blue{
+			i{color: var(--blue);}
+		}
+		&.red{
+			i{color: var(--red);}
+		}
+		&.grey{
+			i{color: var(--border);}
+		}
+	}
+
+	// Float to the left
+	&.tooltip-left{
+		.tooltip-body{
+			left: auto;
+			right: 100%;
+		}
+	}
+	// Float to the right
+	&.tooltip-right{
+		.tooltip-body{
+			left: 100%;
+			right: auto;
+		}
+	}
+
+	// Hover element with class tooltip to show it
+	&:hover{
+		.tooltip-body{
+			max-width: 300px;
+			transition: var(--transition);
+			transition-delay: 0.5s;
+			opacity: 1;
+		}
+	}
+}
