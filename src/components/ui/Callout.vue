@@ -51,13 +51,14 @@ export default {
 	.callout{
 		display: flex;
 		width: 100%;
-		max-width: var(--maxWidth);
+		// max-width: var(--maxWidth);
 		box-sizing: border-box;
 		padding: 0 15px 0 60px;
-		border-radius: var(--borderRadiusSmall);
+		border-radius: 3px;
 		position: relative;
-		background-color: var(--primaryLight);
+		background-color: var(--layer);
 		box-shadow: var(--shadowLight);
+		border: 1px solid var(--border);
 
 		// Icon
 		.callout-icon{
@@ -72,8 +73,7 @@ export default {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			color: var(--primary);
-			text-shadow: 0px 0px 18px var(--primaryFade);
+			color: var(--blue);
 		}
 
 		// Text
@@ -115,66 +115,27 @@ export default {
 		// Link
 		a{
 			color: var(--links);
-			&:hover{
-				color: var(--linksHover);
-			}
 		}
 
 
 		// Colors
 		&.red{
-			background-color: var(--redLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--redFade);
+			.callout-icon, a{
 				color: var(--red);
-			}
-			a{
-				color: var(--red);
-			}
-			a:hover{
-				color: var(--redHover);
-			}
-		}
-		// Colors
-		&.purple{
-			background-color: var(--purpleLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--purpleFade);
-				color: var(--purple);
-			}
-			a{
-				color: var(--purple);
-			}
-			a:hover{
-				color: var(--purple);
 			}
 		}
 		// Green
 		&.green{
-			background-color: var(--greenLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--greenFade);
+			.callout-icon, a{
 				color: var(--green);
 			}
-			a{
-				color: var(--links);
-			}
-			a:hover{
-				color: var(--linksHover);
-			}
 		}
-		// Yellow
-		&.yellow{
-			background-color: var(--yellowLight);
-			.callout-icon{
-				text-shadow: 0px 0px 18px var(--yellowFade);
-				color: var(--yellowHover);
-			}
-			a{
-				color: var(--links);
-			}
-			a:hover{
-				color: var(--linksHover);
+		// invert
+		&.invert{
+			background-color: var(--text);
+			color: var(--background);
+			span,p,h1,h2,h3,h4,h5,h6,i{
+				color: var(--background);
 			}
 		}
 
@@ -199,15 +160,39 @@ export default {
 		}
 		// Giant means giant icon and bigger text
 		&.giant{
-			max-width: 400px;
-			padding: 20px 15px 20px 100px;
+			padding: 10px 15px 10px 130px;
+			border-radius: 5px;
 			.callout-icon{
-				font-size: 42px;
-				width: 100px;
+				font-size: 50px;
+				width: 130px;
 			}
 			.callout-body{
 				font-size: 18px;
 				font-weight: 600;
+			}
+
+			@media (max-width: @screenSM) {
+				flex-wrap: wrap;
+				padding: 15px;
+
+				.callout-icon{
+					width: 100%;
+					position: relative;
+					left: 0;
+					top: 0;
+					margin-bottom: 10px;
+					text-align: left;
+				}
+				.callout-body{
+					min-width: 100%;
+					font-weight: 500;
+
+					p{
+						font-size: 12px;
+						line-height: 20px;
+						font-weight: 500;
+					}
+				}
 			}
 		}
 		// tiny means lil smaller icon and smaller text

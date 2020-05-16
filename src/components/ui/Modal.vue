@@ -8,6 +8,7 @@
 // 			- size: large (default/empty), small
 // 			- color: primary (default/empty), other button colors
 // 			- title: Text string for modal title
+// 			- reverseFooter: reverse direction of footer
 // 			- dismissText: text for dismiss button
 // 			- confirmText: text for main action/confirm button
 // 			- confirmIcon: icon for confirm button
@@ -43,16 +44,16 @@
 				<div class="modal" v-bind:class="size">
 					<!-- Header -->
 					<div class="modal-title">
-						{{title}}
+						<slot name="header"></slot>
 					</div>
 					<!-- Body Content -->
 					<div class="modal-body">
-						<slot></slot>
+						<slot name="body"></slot>
 					</div>
 					<!-- Footer/Buttons -->
-					<div class="modal-footer" v-bind:class="{'center': !dismissText}">
+					<div class="modal-footer" v-bind:class="{'center': !dismissText, 'reverse': reverseFooter}" v-if="confirmText">
 						<!-- Dismiss -->
-						<button class="button grey" @click="$emit('dismissed')" aria-label="Dismiss" v-if="dismissText">
+						<button class="button blue" @click="$emit('dismissed')" aria-label="Dismiss" v-if="dismissText">
 							<i class="far fa-times"></i>
 							<span>{{dismissText}}</span>
 						</button>
@@ -82,6 +83,7 @@ export default {
 		'size',
 		'color',
 		'title',
+		'reverseFooter',
 		'dismissText',
 		'confirmText',
 		'confirmIcon',
@@ -114,7 +116,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		z-index: 500;
-		backdrop-filter: blur(4px);
+		backdrop-filter: blur(3px);
 	}
 
 	// Modals
@@ -137,11 +139,11 @@ export default {
 		.modal{
 			display: flex;
 			flex-direction: column;
-			background-color: var(--background);
+			background-color: var(--layer);
 			margin: 0 auto;
 			width: 90%;
 			max-width: 500px;
-			border-radius: var(--borderRadius);
+			border-radius: 3px;
 			box-shadow: var(--shadowDark);
 			position: relative;
 			max-height: 75vh;
@@ -163,11 +165,10 @@ export default {
 				width: 100%;
 				position: absolute;
 				bottom: 0;
-				left: 0;
+				left: -1px;
 				max-width: 100%;
-				border-top-left-radius: 48px;
-				border-top-right-radius: 48px;
-				border: none;			
+				border-top-left-radius: 12px;
+				border-top-right-radius: 12px;
 				box-shadow: var(--shadowTop);
 			}
 
@@ -182,7 +183,7 @@ export default {
 				right: 0;
 				padding: 6px 10px;
 				opacity: 0.2;
-				color: var(--textLight);
+				color: var(--text);
 				transition: var(--transition);
 
 				&:hover{
@@ -202,34 +203,57 @@ export default {
 			.modal-title{
 				display: block;
 				box-sizing: border-box;
-				padding: 20px 20px 10px 20px;
+				padding: 0 20px 0 20px;
 				border-top-right-radius: var(--borderRadiusSmall);
 				border-top-left-radius: var(--borderRadiusSmall);
 				color: var(--text);
 				font-weight: 600;
-				letter-spacing: 0.15px;
-				font-size: 20px;
+				letter-spacing: 0.25px;
+				font-size: 24px;
 				text-align: left;
-				line-height: 24px;
+				height: 66px;
+				min-height: 66px;
+				border-bottom: 1px solid var(--border);
+				display: flex;
+				justify-content: space-between;
 
 				// Increase size and padding on mobile
 				@media (max-width: @screenSM) {
-					padding: 25px 25px 0px 25px;
+				}
+
+				span, i{
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					padding-bottom: 4px;
+				}
+
+				// Image - floats right,
+				img{
+					height: 36px;
+					margin-top: 15px;
+					transition: var(--transition);
+					transform: scale(1);
+
+					&:hover{
+						cursor: pointer;
+						transform: scale(.95);
+						transition: var(--transition);
+					}
+
+					// Invert for dark mode
+					&.invert{
+						filter: invert(100%);
+					}
 				}
 			}
 
 			// Main body/content
 			.modal-body{
 				box-sizing: border-box;
-				padding: 5px 20px 10px 20px;
+				padding: 20px;
 				overflow: scroll;
 				flex-grow: 3;
-
-				// Increase size and padding on mobile
-				@media (max-width: @screenSM) {
-					padding: 0px 25px 0px 25px;
-				}
-
 			}
 
 			// Modal footer/buttons
@@ -237,12 +261,10 @@ export default {
 				display: flex;
 				justify-content: space-between;
 				box-sizing: border-box;
-				padding: 20px;
-
-				// Remove bottom and side padding
-				@media (max-width: @screenSM) {
-					padding: 15px 25px 20px 25px;
-				}
+				height: 66px;
+				min-height: 70px;
+				padding: 15px 20px;
+				border-top: 1px solid var(--border);
 
 				// Center buttons
 				&.center{
@@ -256,6 +278,15 @@ export default {
 					button{
 						margin-left: 12px;
 					}
+				}
+				&.between{
+					justify-content: space-between;
+					padding-left: 0;
+					padding-right: 0;
+				}
+
+				&.reverse{
+					flex-direction: row-reverse;
 				}
 			}
 		}

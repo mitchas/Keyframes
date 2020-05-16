@@ -21,6 +21,8 @@
 @import 'forms';
 @import 'typography';
 @import 'animations';
+@import 'ui';
+@import 'layout';
 
 // ///////////////////////////////
 // Universal 
@@ -131,12 +133,12 @@ body{
 }
 
 ::selection {
-	background: #1857EF; /* Gecko Browsers */
-	color: #E0EAF9;
+	background: #1058E7;
+	color: #ffffff;
 }
 ::-moz-selection {
-	background: rgb(187, 189, 194); /* Gecko Browsers */
-	color: #E0EAF9;
+	background: #1058E7;
+	color: #ffffff;
 }
 
 // Never underline fontawesome icons
@@ -144,6 +146,23 @@ body{
 	text-decoration: none !important;
 	text-decoration-color: transparent !important;
 }
+
+// No scrollbars
+.no-scrollbars,
+.no-scrollbars *{
+	scrollbar-width: none;
+	// Hidden
+	&::-webkit-scrollbar{
+		width: 0px;
+		display: none;
+	}
+	// Scrollbar handle/thumb
+	&::-webkit-scrollbar-thumb{
+		display: none;
+		width: 0px;
+	}
+}
+
 
 // Default page styles
 // Don't use class .page for pages that need custom headers, etc
@@ -157,8 +176,10 @@ body{
 		padding: 30px 30px 70px 30px;
 	}
 
-	h1{
-		font-weight: 900;
+
+	&.text-page{
+		max-width: 1000px;
+		margin: 0 auto;
 	}
 }
 

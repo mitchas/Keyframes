@@ -8,15 +8,14 @@
 // -->
 
 <template>
-	<div class="page">
+	<div class="page text-page no-scrollbars">
 
 		<Callout
 			icon="far fa-shapes"
 			class="mbottom-sm"
-			color="purple"
+			color="blue"
 			size="fit">
-			<span>Hey, glad you still use this site :). I'm updating it for the first time in 2 years. I'm rebuilding it on Vue, and will be adding more tools besides animations. Extension update will come in a little bit. If you want the old version, <a href="https://keyframes.app/old/">click here</a>.</span>
-			<small>Also, I'll make a proper home page. For now, just enjoy the bare minimum...</small>
+			<span>Hello! After two years I decided to rewrite Keyframes to fix some bugs, make it faster, and add tools other than animations. Read more about the changes <a @click="navigate('/changelog')">here</a>. If you want to continue to use the old version, <a href="https://mitchs.co/keyframes1/">you can find it here</a>.</span>
 		</Callout>
 
 
@@ -32,14 +31,51 @@
 			And it gives you the CSS when you're done.
 		</p>
 
+		<p>
+			<small>Better home page coming soon</small>
+		</p>
+
 		<button class="button mright-sm" @click="tab('https://chrome.google.com/webstore/detail/dalaiblmpeklkjnpeocmaojcfldmbfck')">
 			<i class="fab fa-chrome"></i>
-			<span>Download Chrome Extension</span>
+			<span>Download (old) Chrome Extension</span>
 		</button>
 		<button class="button green" @click="navigate('/animate/')">
 			<i class="far fa-browser"></i>
 			<span>Use Web App</span>
 		</button>
+
+		<br/><br/><br/><br/>
+		<h1 class="mbottom-md">Buttons!</h1>
+		<button class="button green mbottom-xs mright-xs">
+			<i class="far fa-browser"></i>
+			<span>Green</span>
+		</button>
+		<button class="button red mbottom-xs mright-xs">
+			<i class="far fa-browser"></i>
+			<span>Red</span>
+		</button>
+		<button class="button blue mbottom-xs mright-xs">
+			<i class="far fa-browser"></i>
+			<span>Blue</span>
+		</button>
+		<button class="button yellow mbottom-xs mright-xs">
+			<i class="far fa-browser"></i>
+			<span>Yellow</span>
+		</button>
+		<button class="button purple mbottom-xs mright-xs">
+			<i class="far fa-browser"></i>
+			<span>Purple</span>
+		</button>
+		<button class="button grey mbottom-xs mright-xs">
+			<i class="far fa-browser"></i>
+			<span>Grey</span>
+		</button>
+
+		<p>
+			<!-- <a href="https://hotdi.sh" target="_blank">
+				<img src="@/assets/branding/hotdish.png" @click="tab('https://hotdi.sh')" title="Hotdish Logo" v-bind:class="{'invert': $store.getters.userPreferences.darkMode}"/>
+			</a> -->
+		</p>
 
 	</div>
 </template>

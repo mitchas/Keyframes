@@ -1,0 +1,252 @@
+///////////////////////// 
+////     Layout     ////
+///////////////////////
+// 
+// Layouts for different pages
+// 
+// 		.badge
+// 			- Colored text with optional icon,
+// 			- Color classes default (primary), .blue, .red, .green, .yellow, .black
+// 		.breadcrumbs
+// 			- Navigation breadcrumbs
+// 		.tabs
+// 			- Navigation tabs for within a page
+// 		.tooltip
+// 			- Tooltip label for hover hints
+// 			- optional .tooltip-left or .tooltip-right classes for setting float direction
+// 
+
+
+//////////////////////////////
+////   App Page Split    ////
+////////////////////////////
+.app-page-split{
+	display: flex;
+	box-sizing: border-box;
+	padding: 0 0 0 0;
+	height: 100%;
+
+	@media (max-width: @screenMD) {
+		flex-direction: column;
+		padding: 0 0 0 0;
+	}
+
+	// Left side - controls, stage below
+	.app-page-split-left{
+		flex-grow: 3;
+		display: flex;
+		flex-direction: column;
+		min-height: 40vh;
+
+		@media (max-width: @screenMD) {
+			margin: 0;
+		}
+		
+
+		// Top of left side - controls, save, etc
+		.app-page-split-left-top{
+			display: flex;
+			padding: 0 0 0 0;
+			// background-color: var(--background);
+			border-bottom: 1px solid var(--black);
+
+			button{
+				width: fit-content;
+				border-radius: 0;
+				border-top: 0;
+				border-bottom: 0;
+				padding-left: 15px;
+				padding-right: 15px;
+				padding-bottom: 2px;
+				border-left: none;
+
+				i{
+					width: 18px;
+				}
+				@media (max-width: @screenMD) {
+					padding-bottom: 0;
+					height: 34px;
+				}
+			}
+
+			// Option button that displays dropdown content
+			.option-dropdown{
+				position: relative;
+				height: fit-content;
+				overflow: visible;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+
+				.option-dropdown-content{
+					position: absolute;
+					margin: 10px 0 0 0;
+					left: 10px;
+					top: 100%;
+					min-width: 400px;
+					max-width: 400px;
+					width: 400px;
+					box-shadow: var(--shadow);
+					border-radius: 3px;
+					box-sizing: border-box;
+					background-color: var(--black);
+					padding: 15px;
+					border: 1px solid rgba(205,205,255,0.25);
+
+					// Full width mobile
+					@media (max-width: @screenSM) {
+						width: 90vw;
+						min-width: 90vw;
+						max-width: 90vw;
+						width: calc(~'100vw - 20px');
+						min-width: calc(~'100vw - 20px');
+						max-width: calc(~'100vw - 20px');
+					}
+
+					label, h1, h2, h3, h4, h5, h6, p{
+						color: var(--white);
+					}
+
+					code{
+						padding: 3px 0 0 0;
+						margin-bottom: 15px;
+						display: block;
+						overflow: auto;
+						font-size: 13px;
+						line-height: 15px;
+						font-family: var(--mono);
+
+						pre{
+							color: var(--white);
+							white-space: pre;
+						}
+
+						&.wrap{
+							pre{
+								white-space: pre-line;
+							}
+						}
+
+						div{
+							padding-left: 15px;
+						}
+					}
+
+					input, textarea{
+						background-color: var(--background);
+						border: 1px solid rgba(205,205,255,0.25);
+					}
+
+					
+				}
+			}
+		}
+
+		// Stage
+		.app-stage{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			flex-grow: 3;
+			box-sizing: border-box;
+			padding: 0 0 25px 0;
+			transition: var(--transition);
+			
+			@media (max-width: @screenLG) {
+				padding: 55px 0;
+			}
+			
+			#targetElement{
+			}
+		}
+	}
+
+	// Right side
+	.app-page-split-right{
+		width: 420px;
+		height: 100%;
+		max-height: 100%;
+		overflow: auto;
+
+		// Shrink a bit below XL
+		@media (max-width: @screenXL) {
+			width: 340px;
+		}
+		// Fix to bottom on below LG
+		@media (max-width: @screenMD) {
+			width: 100%;
+			height: 50%;
+			max-height: 50%;
+		}
+
+
+		// Sidebar content/app form/fields - primary background
+		.app-fields{
+			display: block;
+			background-color: var(--layer);
+			box-sizing: border-box;
+			padding: 15px;
+			border-left: 1px solid var(--border);
+			height: 100%;
+			overflow: auto;
+
+			// Remove bottom border radius, increase top
+			@media (max-width: @screenMD) {
+				padding: 50px 50px 50px 50px;
+				border-left: none;
+				border-right: none;
+				border-top: 1px solid var(--border);
+			}
+
+			.field{
+				label{
+				}
+
+				code{
+					font-family: var(--mono);
+					font-size: 16px;
+					padding: 0;
+					box-sizing: border-box;
+					display: block;
+					padding: 12px;
+					border-radius: var(--borderRadiusSmall);
+					margin: 4px 0 0 0;
+					line-height: 20px;
+					background-color: var(--background);
+				}
+
+				// Layer selector
+				.layer-selector{
+					display: flex;
+
+					.layer-button{
+						width: 30px;
+						height: 30px;
+						border: 1px solid var(--border);
+						margin-right: 8px;
+						border-radius: 3px;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						text-align: center;
+						font-weight: bolder;
+						font-size: 16px;
+						transition: var(--transitionFast);
+
+						&:hover{
+							cursor: pointer;
+							transition: var(--transitionFast);
+							background-color: var(--grey);
+						}
+
+						&.active{
+							background-color: var(--blue);
+							color: var(--white);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+}

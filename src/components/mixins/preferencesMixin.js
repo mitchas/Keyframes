@@ -97,6 +97,17 @@ export default {
 
 			// Make changes based on gotten prefs
 			_this.setPrefs();
+
+			// Save visit to local storage - use count for prompt for donation? Maybe?
+			var totalVisits = localStorage.getItem("totalVisits");
+			if(totalVisits){
+				totalVisits = parseInt(totalVisits) + 1;
+			}else{
+				totalVisits = 1;
+			}
+			// Save to localstorage
+			localStorage.setItem("totalVisits", totalVisits);
+
 		},
 		//////////////////////
 		// Set Preferences //

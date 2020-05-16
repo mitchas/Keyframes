@@ -22,8 +22,10 @@ import Home from './views/Home.vue';
 // Apps
 import Animate from './views/apps/Animate.vue';
 import Shadows from './views/apps/Shadows.vue';
+import Colors from './views/apps/Colors.vue';
 // Everything else
 import Error404 from './views/other/error404.vue';
+import Changelog from './views/other/Changelog.vue';
 
 Vue.use(Router);
 
@@ -44,6 +46,14 @@ const router = new Router({
 			name: 'home',
 			component: Home,
 		},
+		////////////////
+		// Changelog //
+		//////////////
+		{
+			path: '/changelog/',
+			name: 'changelog',
+			component: Changelog,
+		},
 
 		///////////
 		// Apps //
@@ -59,6 +69,12 @@ const router = new Router({
 			path: '/shadows/',
 			name: 'Shadows',
 			component: Shadows
+		},
+		// Colors
+		{
+			path: '/colors/',
+			name: 'Colors',
+			component: Colors
 		},
 		//////////////////////
 		// Everything Else //
