@@ -1495,7 +1495,7 @@ export default {
 					pointer-events: none;
 
 					b{
-						color: var(--white);
+						color: var(--black);
 						background-color: var(--green);
 					}
 				}

@@ -19,59 +19,30 @@
 		</Callout>
 
 
-		<p>
-			Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.
-		</p>
+		<h1>Keyframes is a simple CSS toolbox.</h1>
+		<h3 class="mtop-xs">(a better home page is coming soon)</h3>
+
 
 		<p>
-			And it gives you the CSS when you're done.
+			I'm in the process of re-writing Keyframes, and I'm waiting to finish the home page until the tools are done. But feel free to click around and use the tools.
 		</p>
 
-		<p>
-			<small>Better home page coming soon</small>
-		</p>
 
-		<button class="button mright-sm" @click="tab('https://chrome.google.com/webstore/detail/dalaiblmpeklkjnpeocmaojcfldmbfck')">
-			<i class="fab fa-chrome"></i>
-			<span>Download (old) Chrome Extension</span>
-		</button>
-		<button class="button green" @click="navigate('/animate/')">
-			<i class="far fa-browser"></i>
-			<span>Use Web App</span>
+		<button class="button mright-sm" @click="navigate('/animate/')">
+			<i class="far fa-stream"></i>
+			<span>Animation Creator</span>
 		</button>
 
-		<br/><br/><br/><br/>
-		<h1 class="mbottom-md">Buttons!</h1>
-		<button class="button green mbottom-xs mright-xs">
-			<i class="far fa-browser"></i>
-			<span>Green</span>
-		</button>
-		<button class="button red mbottom-xs mright-xs">
-			<i class="far fa-browser"></i>
-			<span>Red</span>
-		</button>
-		<button class="button blue mbottom-xs mright-xs">
-			<i class="far fa-browser"></i>
-			<span>Blue</span>
-		</button>
-		<button class="button yellow mbottom-xs mright-xs">
-			<i class="far fa-browser"></i>
-			<span>Yellow</span>
-		</button>
-		<button class="button purple mbottom-xs mright-xs">
-			<i class="far fa-browser"></i>
-			<span>Purple</span>
-		</button>
-		<button class="button grey mbottom-xs mright-xs">
-			<i class="far fa-browser"></i>
-			<span>Grey</span>
+		<button class="button mright-sm blue" @click="navigate('/colors/')">
+			<i class="far fa-tint"></i>
+			<span>Color Palettes</span>
 		</button>
 
-		<p>
-			<!-- <a href="https://hotdi.sh" target="_blank">
-				<img src="@/assets/branding/hotdish.png" @click="tab('https://hotdi.sh')" title="Hotdish Logo" v-bind:class="{'invert': $store.getters.userPreferences.darkMode}"/>
-			</a> -->
-		</p>
+		<button class="button mright-sm yellow" @click="navigate('/shadows/')">
+			<i class="far fa-eclipse"></i>
+			<span>Box Shadow Generator</span>
+		</button>
+
 
 	</div>
 </template>
