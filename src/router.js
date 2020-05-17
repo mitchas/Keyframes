@@ -71,6 +71,7 @@ const router = new Router({
 			component: Shadows
 		},
 		// Colors
+		// Optional color parameter to share
 		{
 			path: '/colors/',
 			name: 'Colors',

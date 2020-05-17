@@ -53,7 +53,7 @@
 				<!--  Basic settings -->
 				<!--  show/hide with  showSaveLoad -->
 				<transition name="fromtop">
-					<div class="settings-display save-load" v-if="showSaveLoad">
+					<div class="settings-display" v-if="showSaveLoad">
 						<!-- Save current animation -->
 						<div class="field">
 							<label for="newAnimationSaveName">
@@ -69,12 +69,12 @@
 						</div>
 						<!-- Saved animations -->
 						<div class="field mtop-sm">
-							<label for="newAnimationSaveName">
+							<label>
 								Load a Saved Animation
 								<small v-if="!savedAnimations.length" class="block">You don't have any saved animations yet</small>
 							</label>
-							<div id="savedAnimationsList">
-								<div class="animation" v-for="(name, index) in savedAnimations" :key="index">
+							<div class="saved-list">
+								<div class="saved-item" v-for="(name, index) in savedAnimations" :key="index">
 									<i class="far fa-times" @click.self.prevent="deleteAnimationFromStorage(name)"></i>
 									<span @click="loadAnimation(name)">{{name.substr(10)}}</span>
 								</div>
@@ -943,7 +943,7 @@ export default {
 		copyOutput: function(){
 			// Create input element, append text, copy text, remove element
 			var copyContent = document.getElementById('outputCSS').innerText;
-			this.copyToClipboard("The CSS", copyContent)
+			this.copyToClipboard("Output CSS", copyContent)
 		},
 
 	}
@@ -1690,50 +1690,6 @@ export default {
 			label small{
 				margin: 4px 0 4px 0;
 			}
-		}
-
-		// Save/load display
-		&.save-load{
-
-			// Previously saved animation list - with delete button
-			#savedAnimationsList{
-				display: block;
-				width: 100%;
-
-				.animation{
-					width: 100%;
-					padding: 5px 25px 5px 25px;
-					box-sizing: border-box;
-					color: var(--white);
-					font-family: var(--mono);
-					font-size: 16px;
-					font-weight: 500;
-
-					i{
-						color: var(--white);
-						opacity: 0;
-						transition: var(--transition);
-						margin-right: 10px;
-						position: relative;
-						top: 1px;
-					}
-
-					// Hover
-					&:hover{
-						cursor: pointer;
-						i{
-							opacity: 1; 
-							transition: var(--transition);
-							&:hover{
-								color: var(--red);
-								opacity: 1;
-								transition: var(--transition);
-							}
-						}
-					}
-				}
-			}
-			
 		}
 	}
 

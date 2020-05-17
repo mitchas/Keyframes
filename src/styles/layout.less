@@ -4,16 +4,14 @@
 // 
 // Layouts for different pages
 // 
-// 		.badge
+// 		.app-page-split
 // 			- Colored text with optional icon,
 // 			- Color classes default (primary), .blue, .red, .green, .yellow, .black
-// 		.breadcrumbs
-// 			- Navigation breadcrumbs
-// 		.tabs
-// 			- Navigation tabs for within a page
-// 		.tooltip
-// 			- Tooltip label for hover hints
-// 			- optional .tooltip-left or .tooltip-right classes for setting float direction
+//
+//
+//	Other misc universal page elements
+// 		.saved-list
+// 			- Text list of items saved in local storage - used in options popups
 // 
 
 
@@ -92,6 +90,7 @@
 					background-color: var(--black);
 					padding: 15px;
 					border: 1px solid rgba(205,205,255,0.25);
+					z-index: 10;
 
 					// Full width mobile
 					@media (max-width: @screenSM) {
@@ -135,6 +134,7 @@
 					input, textarea{
 						background-color: var(--background);
 						border: 1px solid rgba(205,205,255,0.25);
+						user-select: all;
 					}
 
 					
@@ -179,6 +179,19 @@
 			max-height: 50%;
 		}
 
+		// Alternative Layouts
+		// Small (25%) height on mobile
+		&.mobile-small{
+			@media (max-width: @screenMD) {
+				height: 35%;
+				max-height: 35%;
+			}
+			@media (max-width: @screenSM) {
+				height: 25%;
+				max-height: 25%;
+			}
+		}
+
 
 		// Sidebar content/app form/fields - primary background
 		.app-fields{
@@ -196,6 +209,15 @@
 				border-left: none;
 				border-right: none;
 				border-top: 1px solid var(--border);
+			}
+
+			// Hides overflow - must make child elements scroll hor
+			&.mobile-noscroll{
+				@media (max-width: @screenMD) {
+					padding: 10px 0 10px 0;
+					max-height: 100%;
+					overflow: hidden;
+				}
 			}
 
 			.field{
@@ -248,5 +270,55 @@
 			}
 		}
 		
+	}
+
+}
+
+
+
+
+///////////////////////////////
+////   Other Layout UI    ////
+/////////////////////////////
+
+// Saved list
+.saved-list{
+	display: block;
+	width: 100%;
+
+	.saved-item{
+		width: 100%;
+		padding: 5px 15px 5px 15px;
+		box-sizing: border-box;
+		color: var(--white);
+		font-family: var(--mono);
+		font-size: 16px;
+		font-weight: 500;
+
+		i{
+			color: var(--white);
+			opacity: 0;
+			transition: var(--transition);
+			margin-right: 10px;
+			position: relative;
+			top: 1px;
+		}
+
+		// Hover
+		&:hover{
+			cursor: pointer;
+			span{
+				text-decoration: underline;
+			}
+			i{
+				opacity: 1; 
+				transition: var(--transition);
+				&:hover{
+					color: var(--red);
+					opacity: 1;
+					transition: var(--transition);
+				}
+			}
+		}
 	}
 }

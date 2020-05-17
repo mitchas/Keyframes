@@ -64,14 +64,18 @@ export default {
 			document.execCommand('copy',false);
 			inp.remove();
 			// Toast
-			this.toast("Copied!", name + " has been copied to your clipboard. ", "", "far fa-copy");
+			// this.toast("Copied!", name + " has been copied to your clipboard. ", "", "far fa-copy");
+			this.alert(name + " Copied to clipboard!", "far fa-copy");
 		}
 
-		////////////////
-		//// Toast ////
-		//////////////
+		////////////////////////
+		//// Toast & Alert ////
+		//////////////////////
 		Vue.prototype.toast = function(title, body, color, icon) {
 			this.$root.$children[0].$refs.toastComponent.showToast(title, body, color, icon);
+		}
+		Vue.prototype.alert = function(message, icon) {
+			this.$root.$children[0].$refs.alertComponent.showAlert(message, icon);
 		}
 	}
  }

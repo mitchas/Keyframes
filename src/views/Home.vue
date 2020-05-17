@@ -19,10 +19,6 @@
 		</Callout>
 
 
-		<h1>
-			An insanely simple way to create CSS animations
-		</h1>
-
 		<p>
 			Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.
 		</p>

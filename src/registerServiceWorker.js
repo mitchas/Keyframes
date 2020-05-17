@@ -4,16 +4,16 @@ import { register } from 'register-service-worker'
 
 if (process.env.NODE_ENV === 'production') {
 
-	navigator.serviceWorker.getRegistrations().then(
+	// navigator.serviceWorker.getRegistrations().then(
 
-		function(registrations) {
+	// 	function(registrations) {
 	
-			for(let registration of registrations) {  
-				registration.unregister();
+	// 		for(let registration of registrations) {  
+	// 			registration.unregister();
 	
-			}
+	// 		}
 	
-	});
+	// });
 
 	
 //   register(`/service-worker.js`, {

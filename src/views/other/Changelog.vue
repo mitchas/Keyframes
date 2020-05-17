@@ -95,7 +95,7 @@
 					<span>(May 22, 2018)</span>
 				</div>
 				<p class="small">
-					Version 1 was a pretty crappy attept I put together really fast with only jQuery since I didn't plan on anyone using it except me. It worked, but the code was messy and hard to maintain or change, so I re-did it all for v2. There's no changelog between v1 and v2 because I got busy and never made any fixes or improvements on version 1. Whoops.
+					Version 1 was a pretty crappy attempt I put together really fast with only jQuery since I didn't plan on anyone using it except me. It worked, but the code was messy and hard to maintain or change, so I re-did it all for v2. There's no changelog between v1 and v2 because I got busy and never made any fixes or improvements on version 1. Whoops.
 				</p>
 				<p class="small">
 					You can find version 1 and the extension on <a href="https://github.com/mitchas/keyframes.app" target="_blank">GitHub here</a>.

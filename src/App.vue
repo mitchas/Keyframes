@@ -10,10 +10,6 @@
 //			- Body
 //			- Toast
 // 
-//		- Functions
-//			relayToast()
-//				Shows toast with message, called from global plugin method
-// 
 // 		- Styles
 // 			- #app
 // 			- main#content
@@ -45,6 +41,8 @@
 
 				<!-- Toast Component -->
 				<Toast ref="toastComponent"></Toast>
+				<!-- Alert Component -->
+				<Alert ref="alertComponent"></Alert>
 
 			</div>
 		</transition>
@@ -53,6 +51,7 @@
 
 <script>
 // Components
+import Alert from "@/components/ui/Alert";
 import Toast from "@/components/ui/Toast";
 import TopBar from "@/components/ui/TopBar";
 // Mixins
@@ -66,6 +65,7 @@ export default {
 		preferencesMixin,
 	],
 	components: {
+		Alert,
 		Toast,
 		TopBar,
 	},

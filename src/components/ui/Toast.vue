@@ -64,6 +64,10 @@ export default {
 			}
 		};
 	},
+	mounted(){
+		console.log("Route Params")
+		console.log(this.$route.params.c)
+	},
 	methods: {
 		/////////////////////
 		//   Show Toast   //
@@ -82,7 +86,7 @@ export default {
 				"body": body
 			}
 
-			// Hide after 5 seconds
+			// Hide after 4 seconds
 			setTimeout(function(){
 				_this.hideToast();
 			}, 4000)
