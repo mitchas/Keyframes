@@ -40,18 +40,18 @@
 						<div class="settings-nav-popover" v-bind:class="{'visible': showAppSwitcher}">
 							<!-- CSS Animations -->
 							<button class="popover-link" @click="navigate('/animate/')">
-								<span>CSS Animations</span>
+								<span>Animations</span>
 								<i class="fas fa-stream"></i>
-							</button>
-							<!-- CSS Shadows -->
-							<button class="popover-link" @click="navigate('/shadows/')">
-								<span>Shadows</span>
-								<i class="fas fa-eclipse"></i>
 							</button>
 							<!-- Colors -->
 							<button class="popover-link" @click="navigate('/colors/')">
 								<span>Colors</span>
 								<i class="fas fa-tint"></i>
+							</button>
+							<!-- CSS Shadows -->
+							<button class="popover-link" @click="navigate('/shadows/')">
+								<span>Shadows</span>
+								<i class="fas fa-eclipse"></i>
 							</button>
 						</div>
 					</div>

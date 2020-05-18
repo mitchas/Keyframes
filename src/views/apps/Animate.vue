@@ -118,9 +118,7 @@
 							@keyframes yourAnimation &#123;
 							<span v-for="(step, index) in computedCSSOutput" v-bind:key="index">
 								<span class="ltab-1">{{step.timelinePosition.left}}&#123;</span>
-									<span v-for="(prop, index) in step.properties" v-bind:key="index" class="ltab-2">
-										{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};
-									</span>
+									<div v-for="(prop, index) in step.properties" v-bind:key="index" class="ltab-2">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};</div>
 								<span class="ltab-1">&#125;</span>
 							</span>
 							&#125;
@@ -150,7 +148,7 @@
 					-->
 					<div id="targetStage">
 						<div id="targetCenterAlign">
-							<span id="targetElement" v-bind:style="allProperties" v-bind:class="{'pause': animationPaused}" v-html="customTargetCode"></span>
+							<span id="targetElement" v-bind:style="selectedKeyframeCSS.properties" v-bind:class="{'pause': animationPaused}" v-html="customTargetCode"></span>
 						</div>
 					</div>
 				</div>
@@ -169,7 +167,6 @@
 						<span>CSS Properties</span> 
 						<span>{{roundValue(currentStep.left)}}%</span>
 					</h4>
-
 					<div id="animateSidebarProperties">
 						<button class="property-header" @click="propertiesToggles.transform = !propertiesToggles.transform" v-bind:class="{'active':propertiesToggles.transform}">
 							<i v-bind:class="propertiesToggles.transform == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
@@ -183,35 +180,35 @@
 								<div class="field-set">
 									<label>Rotate</label>
 									<div class="input-wrapper">
-										<input type="text" id="transformRotate" placeholder="45deg" v-model="allProperties.transformProps.rotate" @input="saveStep()" maxlength="10">
+										<input type="text" id="transformRotate" placeholder="45deg" v-model="keyframes[currentStep.left].transformProps.rotate" @input="getTransformString();" maxlength="10">
 									</div>
 								</div>
 								<!-- Scale -->
 								<div class="field-set">
 									<label>Scale</label>
 									<div class="input-wrapper">
-										<input type="text" id="transformScale" placeholder="1.5" v-model="allProperties.transformProps.scale" @input="saveStep()" maxlength="6">
+										<input type="text" id="transformScale" placeholder="1.5" v-model="keyframes[currentStep.left].transformProps.scale" @input="getTransformString();" maxlength="6">
 									</div>
 								</div>
 								<!-- Translate -->
 								<div class="field-set">
 									<label>Translate</label>
 									<div class="input-wrapper">
-										<input type="text" id="transformTranslate" placeholder="50px, 100px" v-model="allProperties.transformProps.translate" @input="saveStep()" maxlength="12">
+										<input type="text" id="transformTranslate" placeholder="50px, 100px" v-model="keyframes[currentStep.left].transformProps.translate" @input="getTransformString();" maxlength="12">
 									</div>
 								</div>
 								<!-- Skew -->
 								<div class="field-set">
 									<label>Skew</label>
 									<div class="input-wrapper">
-										<input type="text" id="transformSkew" placeholder="-45deg" v-model="allProperties.transformProps.skew" @input="saveStep()">
+										<input type="text" id="transformSkew" placeholder="-45deg" v-model="keyframes[currentStep.left].transformProps.skew" @input="getTransformString();">
 									</div>
 								</div>
 								<!-- Transform Origin -->
 								<div class="field-set">
 									<label>Transform Origin</label>
 									<div class="input-wrapper">
-										<input type="text" id="transformOrigin" placeholder="bottom left" v-model="allProperties.transformOrigin" @input="saveStep()" maxlength="22">
+										<input type="text" id="transformOrigin" placeholder="bottom left" v-model="keyframes[currentStep.left].properties.transformOrigin" @input="saveStep()" maxlength="22">
 									</div>
 								</div>
 							</div>
@@ -230,28 +227,28 @@
 								<div class="field-set">
 									<label>Background</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="red" v-model="allProperties.background" @input="saveStep()">
+										<input type="text" placeholder="red" v-model="keyframes[currentStep.left].properties.background" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Opacity -->
 								<div class="field-set">
 									<label>Opacity</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="0.5" v-model="allProperties.opacity" @input="saveStep()">
+										<input type="text" placeholder="0.5" v-model="keyframes[currentStep.left].properties.opacity" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Color (Text) -->
 								<div class="field-set">
 									<label>Color (Text)</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="#0000FF" v-model="allProperties.color" @input="saveStep()">
+										<input type="text" placeholder="#0000FF" v-model="keyframes[currentStep.left].properties.color" @input="saveStep()">
 									</div>
 								</div>
 								<!-- FontSize -->
 								<div class="field-set">
 									<label>Font Size</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="14px" v-model="allProperties.fontSize" @input="saveStep()">
+										<input type="text" placeholder="14px" v-model="keyframes[currentStep.left].properties.fontSize" @input="saveStep()">
 									</div>
 								</div>
 							</div>
@@ -271,28 +268,69 @@
 								<div class="field-set">
 									<label>Width</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="100px" v-model="allProperties.width" @input="saveStep()">
+										<input type="text" placeholder="100px" v-model="keyframes[currentStep.left].properties.width" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Height -->
 								<div class="field-set">
 									<label>Height</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="100px" v-model="allProperties.height" @input="saveStep()">
+										<input type="text" placeholder="100px" v-model="keyframes[currentStep.left].properties.height" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Margin -->
 								<div class="field-set">
 									<label>Margin</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="15px 15px" v-model="allProperties.margin" @input="saveStep()">
+										<input type="text" placeholder="15px 15px" v-model="keyframes[currentStep.left].properties.margin" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Padding -->
 								<div class="field-set">
 									<label>Padding</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="10px 0 0 0" v-model="allProperties.padding" @input="saveStep()">
+										<input type="text" placeholder="10px 0 0 0" v-model="keyframes[currentStep.left].properties.padding" @input="saveStep()">
+									</div>
+								</div>
+							</div>
+						</transition> <!-- End Sizing & Spacing -->
+
+						<!-- 
+							Positioning
+						-->
+						<button class="property-header" @click="propertiesToggles.position = !propertiesToggles.position" v-bind:class="{'active':propertiesToggles.position}">
+							<i v-bind:class="propertiesToggles.position ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+							<span>Position</span>
+						</button>
+						<!-- position -->
+						<transition name="basic">
+							<div class="property-group" v-if="propertiesToggles.position">
+								<!-- Top -->
+								<div class="field-set">
+									<label>Top</label>
+									<div class="input-wrapper">
+										<input type="text" placeholder="15px" v-model="keyframes[currentStep.left].properties.top" @input="saveStep()">
+									</div>
+								</div>
+								<!-- Right -->
+								<div class="field-set">
+									<label>Right</label>
+									<div class="input-wrapper">
+										<input type="text" placeholder="50%" v-model="keyframes[currentStep.left].properties.right" @input="saveStep()">
+									</div>
+								</div>
+								<!-- Bottom -->
+								<div class="field-set">
+									<label>Bottom</label>
+									<div class="input-wrapper">
+										<input type="text" placeholder="10vh" v-model="keyframes[currentStep.left].properties.bottom" @input="saveStep()">
+									</div>
+								</div>
+								<!-- Left -->
+								<div class="field-set">
+									<label>Left</label>
+									<div class="input-wrapper">
+										<input type="text" placeholder="25px" v-model="keyframes[currentStep.left].properties.left" @input="saveStep()">
 									</div>
 								</div>
 							</div>
@@ -312,28 +350,28 @@
 								<div class="field-set">
 									<label>Border</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="1px solid red" v-model="allProperties.border" @input="saveStep()">
+										<input type="text" placeholder="1px solid red" v-model="keyframes[currentStep.left].properties.border" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Border Radius -->
 								<div class="field-set">
 									<label>Border Radius</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="50%" v-model="allProperties.borderRadius" @input="saveStep()">
+										<input type="text" placeholder="50%" v-model="keyframes[currentStep.left].properties.borderRadius" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Box Shadow -->
 								<div class="field-set">
 									<label>Box Shadow</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="5px 5px 10px 5px rgba(0,0,0,0.2)" v-model="allProperties.boxShadow" @input="saveStep()">
+										<input type="text" placeholder="5px 5px 10px 5px rgba(0,0,0,0.2)" v-model="keyframes[currentStep.left].properties.boxShadow" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Outline -->
 								<div class="field-set">
 									<label>Outline</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="2px solid rgba(0,0,0,0.2)" v-model="allProperties.outline" @input="saveStep()">
+										<input type="text" placeholder="2px solid rgba(0,0,0,0.2)" v-model="keyframes[currentStep.left].properties.outline" @input="saveStep()">
 									</div>
 								</div>
 							</div>
@@ -359,7 +397,7 @@
 						<span v-if="!addingStep">Add Step</span>
 						<span v-else>Cancel</span>
 					</button>
-					<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.steps)[1] && currentStep.left != '0.0'">
+					<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.keyframes)[1] && currentStep.left != '0.0'">
 						<i class="far fa-trash-alt"></i>
 						<span>Delete {{roundValue(currentStep.left)}}%</span>
 					</button>
@@ -439,11 +477,11 @@
 				</div>
 
 				<!-- V-for all other steps -->
-				<div class="timeline-marker step" v-for="(step, index) in steps" 
+				<div class="timeline-marker step" v-for="(step, index) in keyframes" 
 					v-bind:style="step.timelinePosition" :key="step.id" 
 					@mouseenter="hideAddStep = true" 
 					@mouseleave="hideAddStep = false" 
-					@click="changeStep(index)">
+					@click="currentStep.left = index; stopAnimation()">
 
 					<b>{{roundValue(step.timelinePosition.left)}}</b>
 				</div>
@@ -456,24 +494,19 @@
 		</div>
 
 
-<!-- steps:
-<span>
-{{steps}}
-</span> -->
-
 <!-- Append Styles to page -->
 <v-style>
-	{{rawOutputCSS}}
 	.timeline-marker.animated{
 		animation: animationTicker {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
 		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
 	}
-
 	{{customTargetStyles}}
 </v-style>
 <!-- Only add animation if it's playing -->
 <!-- Otherwise  -->
 <v-style v-if="animationPlaying">
+	{{rawOutputCSS}}
+
 	#targetElement{
 		animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
 		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
@@ -508,14 +541,15 @@ export default {
 				transform: true,
 				colors: false,
 				sizing: false,
-				borders: false
+				position: false,
+				borders: false,
 			},
 			// Prop sidebar hides on mobile
 			togglePropSidebar: false,
 			// Show Output modal or not
 			showOutput: false,
 			// Hold css output generated
-			rawOutputCSS: null,
+			// rawOutputCSS: null,
 			// Enable hover timeline to add step
 			addingStep: false,
 			// When hovering an existing step
@@ -528,7 +562,7 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #1058E7;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    transition: 0.5s ease;\n}",
+			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #1058E7;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    position: relative;\n    transition: 0.5s ease;\n}",
 			customTargetCode: "<i class='fal fa-hand-peace'></i>",
 			// Animation name to save
 			animationToSaveName: null,
@@ -536,39 +570,31 @@ export default {
 			savedAnimations: null,
 			// Selected step position
 			currentStep: {
-				left: "0.0",
+				left: "0.0%",
 			},
 			// Hover position on timeline
 			timelinePosition: {
-				left: "0.0"
+				left: "0.0%"
 			},
 
-			// Properties
-			// Holds all properties editable
-			// Saved for each step
-			allProperties: {
-				transformProps:{
-					rotate: null,
-					scale: null,
-					translate: null,
-					skew: null,
-				},
-				transformOrigin: null,
-				// Individual strings
-				background: null,
-				opacity: null,
-				color: null,
-				fontSize: null,
-				width: null,
-				height: null,
-				margin: null,
-				padding: null,
-				border: null,
-				borderRadius: null,
-				boxShadow: null,
-				outline: null,
-				transform: null,
+			// Keyframes
+			// Array of all steps and props
+			keyframes: {
+				'0.0%': {
+					"timelinePosition": {
+						"left": "0.0%"
+					},
+					"transformProps": {
+						"rotate": "",
+						"scale": "",
+						"translate": "",
+						"skew": "",
+					},
+					"properties": {
+					}
+				}
 			},
+
 			// Animation timing
 			animationProperties: {
 				duration: "3s",
@@ -589,17 +615,7 @@ export default {
 					"normal", "none", "forwards", "backwards", "both"
 				],
 			},
-			// Animation steps,
 			// Holds all css at each step
-			steps: {
-				'0.0': {
-					"timelinePosition": {
-						"left": "0.0%"
-					},
-					"properties": {}
-				}
-			},
-
 			// Backdoor to reference to update computed property - not really actually used
 			backdoor: 0,
 		};
@@ -615,22 +631,19 @@ export default {
 
 	computed: {
 
-		// Clean steps to generate output
+		// Clean keyframes to generate output
 		computedCSSOutput: function () {
 			// Reference backdoor var so it recomputes when that changes.
 			this.backdoor;
 
 			let _this = this;
-			// let css = _this.steps;
 			let css = [];
 
-			var copySteps = _this.steps;
-			// var copySteps = _.cloneDeep(_this.steps);
+			var copySteps = _.cloneDeep(_this.keyframes);
 
 			for (var step in copySteps) {
-				console.log(copySteps[step])
 				// transformProps
-				delete copySteps[step].properties.transformProps; 
+				delete copySteps[step]['transformProps']; 
 
 				// Remove erased props
 				for (var prop in copySteps[step].properties) {
@@ -646,6 +659,40 @@ export default {
 			// Return
 			return css;
 		},
+		// Get CSS as string from output
+		rawOutputCSS: function () {
+			if(document.getElementById("outputCSS")){
+				var fullCSSString = document.getElementById("outputCSS").textContent;
+			}else{
+				var fullCSSString = "";
+			}
+
+			// Return
+			return fullCSSString;
+		},
+		// CSS for selected keyframe
+		selectedKeyframeCSS: function () {
+			// Reference backdoor var so it recomputes when that changes.
+			this.backdoor;
+
+			let _this = this;
+
+			var currentFrame = _.cloneDeep(_this.keyframes[this.currentStep.left]);
+
+			// transformProps
+			delete currentFrame['transformProps']; 
+
+			// Remove erased props
+			for (var prop in currentFrame.properties) {
+				// If prop doesn't have value, delete it
+				if(!currentFrame.properties[prop]){
+					delete currentFrame.properties[prop]; 
+				}
+			}
+
+			// Return
+			return currentFrame;
+		},
 
 	},
 
@@ -656,77 +703,65 @@ export default {
 	methods: {
 
 		////////////////////////
+		// Transform String
+		///////////////////////
+		// Make Transform String from transform props - called on change to a transform prop
+		getTransformString: function(){
+
+			// Shorthand transform props
+			var props = this.keyframes[this.currentStep.left].transformProps;
+			// Make string
+			var transformArray = [];
+			if(props.rotate){
+				transformArray.push("rotate(" + props.rotate + ")");
+			}
+			if(props.scale){
+				transformArray.push("scale(" + props.scale + ")");
+			}
+			if(props.translate){
+				transformArray.push("translate(" + props.translate + ")");
+			}
+			if(props.skew){
+				transformArray.push("skew(" + props.skew + ")");
+			}
+
+			// Make string
+			var string = transformArray.join(' ');
+
+			this.keyframes[this.currentStep.left].properties.transform = string;
+
+			// Save step
+			this.saveStep();
+		},
+
+		////////////////////////
 		// Step Functions
 		///////////////////////
 		// Save current step
 		saveStep: function(){
-			var copyProps = _.cloneDeep(this.allProperties);
-
-			// Format to make it easier to read later,
-			// Add timeline position
-			var propsToSave = {
-				timelinePosition: {
-					left: parseFloat(this.currentStep.left).toFixed(1) + "%"
-				},
-				properties: copyProps
-			}
-
-			// String to generate transform: prop
-			var transformString = "";
-			if(copyProps['transformProps']){
-				for(var prop in copyProps['transformProps']) {
-					if(copyProps['transformProps'][prop]){
-						transformString = transformString + " " + prop + "(" + copyProps['transformProps'][prop] + ")"
-					}
-				}
-				// Set prop in cleanprops
-				this.allProperties.transform = transformString;
-				copyProps.transform = transformString;
-			}
-
-				
-			// Save changes to steps at current step 
-			this.steps[this.currentStep.left] = propsToSave;
-
-			// Get text content of output to apply to targetElement
-			var _this = this;
-
-			var fullCSSString = document.getElementById("outputCSS").textContent;
-			_this.rawOutputCSS = fullCSSString;
-			_this.backdoor++;
-
-
+			this.backdoor++;
 		},
 
 		// Save new step, duplicating last selected props
 		newStep: function(){
 
+			// Prev position and new/clicked pos
 			var pos = this.timelinePosition.left;
 			var oldPos = this.currentStep.left;
 
-			var propsToSave = _.cloneDeep(this.steps[oldPos]);
+			var propsToSave = _.cloneDeep(this.keyframes[oldPos]);
 			propsToSave['timelinePosition']['left'] = pos;
 
-			// Save changes to steps at new step 
-			this.steps[pos] = propsToSave;
+			console.log(propsToSave)
+
+			// Save changes to keyframes at new step 
+			this.keyframes[pos] = propsToSave;
 			this.currentStep.left = pos; 
+
+			console.log(this.keyframes)
 
 			// // No longer adding
 			this.addingStep = false;
-		},
-
-		// Change step
-		changeStep: function(index){
-			// If index is 'delete', set it to 0 and DON'T saveStep()
-			if(index == 'delete'){
-				index = "0.0";
-			}
-
-			// then change to clicked step
-			this.currentStep.left = index; 
-			// And set allProps to the saved data
-			var merged = {...this.allProperties, ...this.steps[index].properties};
-			this.allProperties = merged;
 		},
 
 		// Delete selected Step
@@ -734,27 +769,23 @@ export default {
 
 			var stepToDelete = this.currentStep.left;
 
-			if(Object.keys(this.steps)[0]){
+			if(Object.keys(this.keyframes)[0]){
 				if(stepToDelete == "0.0"){
 					// Can't delete step at 0
 					console.log("Cannot delete 0% step.")
 				}else{
-					delete this.steps[stepToDelete]
+					delete this.keyframes[stepToDelete]
 				}
 				// Change to 0% step
-				this.currentStep.left = Object.keys(this.steps)[0];
-				this.changeStep('delete');
+				this.currentStep.left = Object.keys(this.keyframes)[0];
 			}else{
 				return;
 			}
-
-			
 		},
 
 		////////////////////////
 		// Animation Functions
 		///////////////////////
-
 		// Play/Pause animation
 		runAnimation: function(){
 			this.addingStep = false;
@@ -887,12 +918,11 @@ export default {
 		////////////////////
 		////////////////////
 		saveAnimation: function(){
-			var newAnimation = this.allProperties;
 			var animationData = {
 				date: new Date(),
 				customTargetCode: this.customTargetCode,
 				customTargetStyles: this.customTargetStyles,
-				keyframeData: this.allProperties
+				keyframes: this.keyframes
 			}
 			var stringified = JSON.stringify(animationData)
 			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), stringified);
@@ -924,7 +954,7 @@ export default {
 			var animation = localStorage.getItem(name);
 
 			var parsed = JSON.parse(animation)
-			this.allProperties = parsed.keyframeData;
+			this.keyframes = parsed.keyframes;
 			this.customTargetStyles = parsed.customTargetStyles;
 			this.customTargetCode = parsed.customTargetCode;
 			// // this.allProperties = animation;
