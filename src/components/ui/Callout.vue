@@ -54,11 +54,11 @@ export default {
 		// max-width: var(--maxWidth);
 		box-sizing: border-box;
 		padding: 0 15px 0 60px;
-		border-radius: 3px;
+		border-radius: var(--borderRadius);
 		position: relative;
 		background-color: var(--layer);
 		box-shadow: var(--shadowLight);
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--border);
 
 		// Icon
 		.callout-icon{
@@ -175,7 +175,7 @@ export default {
 		// Giant means giant icon and bigger text
 		&.giant{
 			padding: 10px 15px 10px 130px;
-			border-radius: 5px;
+			border-radius: var(--borderRadius);
 			.callout-icon{
 				font-size: 50px;
 				width: 130px;

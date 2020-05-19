@@ -78,7 +78,7 @@
 				color: var(--text);
 				font-size: 105px;
 				margin: 0 auto;
-				animation: ghost 2s ease-in-out 0s infinite alternate none;
+				animation: error-ghost 2s ease-in-out 0s infinite alternate none;
 			}
 		}
 
@@ -112,7 +112,7 @@
 		}
 	}
 
-	@keyframes ghost {
+	@keyframes error-ghost {
 		0.0%{
 			transform: translate(0, 0);
 		}

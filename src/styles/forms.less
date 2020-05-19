@@ -72,7 +72,7 @@
 			text-align: center;
 			margin: 0 0 0 0;
 			padding: 0;
-			border-radius: var(--borderRadiusSmall);
+			border-radius: var(--borderRadius);
 			height: 30px;
 		}
 
@@ -220,10 +220,10 @@ textarea{
 	font-family: var(--systemFont);
 	font-weight: 500;
 	letter-spacing: 0.35px;
-	border-radius: 3px;
+	border-radius: var(--borderRadius);
 	transition: all 0.1s ease, border-color 0.15s ease;
 	font-weight: 500;
-	border: 1px solid var(--border);
+	border: var(--borderWidth) solid var(--inputBorder);
 	background-color: transparent;
 
 	// Increase size on mobile
@@ -311,7 +311,7 @@ button{
 	border: none;
 	color: var(--background);
 	height: 36px;
-	border-radius: 3px;
+	border-radius: var(--borderRadius);
 	font-size: 14px;
 	letter-spacing: 0.15px;
 	font-weight: 600;
@@ -320,7 +320,7 @@ button{
 	box-sizing: border-box;
 	transform: translateY(0px);
 	font-family: var(--systemFont);
-	border: 1px solid var(--borderDark);
+	border: var(--borderWidth) solid var(--inputBorder);
 	border-bottom-width: 2px;
 
 	// Increase size on mobile
@@ -399,7 +399,7 @@ button{
 	// Black
 	&.black{
 		color: var(--white);
-		background-color: var(--black);
+		background-color: var(--popup);
 	}
 	// Invert
 	&.invert{
@@ -516,9 +516,9 @@ input[type="checkbox"]:focus {
 	display: inline-block;
 	position: relative;
 	margin: 0;
-	border-radius: var(--borderRadiusSmall);
+	border-radius: var(--borderRadius);
 	box-sizing: border-box;
-	border: 1px solid transparent;
+	border: var(--borderWidth) solid transparent;
 	transition: all 0.2s ease;
 	background: var(--inputBackground);
 	font-size: 16px;
@@ -580,7 +580,7 @@ input[type="checkbox"]:focus {
 	display: inline-block;
 	position: relative;
 	margin: 0;
-	border: 1px solid var(--border);
+	border: var(--borderWidth) solid var(--inputBorder);
 	transition: all .2s ease;
 	background-color: var(--inputBackground);
 
@@ -595,7 +595,7 @@ input[type="checkbox"]:focus {
 		border-radius: 50%;
 		background: var(--background);
 		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--inputBorder);
 		box-sizing: border-box;
 		transition: var(--transition);
 	}
@@ -608,13 +608,13 @@ input[type="checkbox"]:focus {
 
 	// Checked, move circle to right, full color
 	&:checked{
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--inputBorder);
 		background: var(--inputBackground);
 
 		&:after{
 			background: var(--blue);
 			transform: translateX(17px);
-			border-color: var(--border);
+			border-color: var(--inputBorder);
 			opacity: 1;
 		}
 	}
@@ -664,7 +664,7 @@ input[type="range"] {
 	}
 	// Firefox
 	&::-moz-range-thumb{
-		// border: 1px solid transparent;
+		// border: var(--borderWidth) solid transparent;
 		background-color: var(--blue);
 		border-color: var(--blue);
 		border-radius: 50%;
@@ -714,10 +714,10 @@ input[type="range"].color-range {
 		background-color: var(--white);
 		border-color: var(--white);
 		border-radius: 50%;
-		border: 2px solid var(--black);
+		border: 2px solid var(--popup);
 	}	
 	&::-moz-range-progress {
-		background-color: var(--black); 
+		background-color: var(--popup); 
 	}
 	&::-moz-range-track {  
 		background-color: var(--white);
@@ -761,9 +761,9 @@ input[type=range]::-moz-focus-outer {
 		height: 65px;
 		box-sizing: border-box;
 		padding: 0 0px;
-		border-radius: 3px;
+		border-radius: var(--borderRadius);
 		max-width: 93px;
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--inputBorder);
 		min-width: 93px;
 		flex-grow: 3;
 		color: var(--textLight);
@@ -819,7 +819,7 @@ input[type=range]::-moz-focus-outer {
 			font-size: 18px;
 			font-weight: 500;
 			transition: var(--transitionFast);
-			color: var(--border);
+			color: var(--inputBorder);
 		}
 
 			
@@ -828,7 +828,7 @@ input[type=range]::-moz-focus-outer {
 			cursor: pointer;
 			transition: var(--transitionFast);
 			text-decoration: none;
-			// border-color: var(--border);
+			// border-color: var(--inputBorder);
 			color: var(--text);
 
 			span{
@@ -847,10 +847,10 @@ input[type=range]::-moz-focus-outer {
 		// Option Selected
 		&.active{
 			color: var(--text);
-			border-color: var(--border);
+			border-color: var(--inputBorder);
 			position: relative;
 			transform: scale(1);
-			border-color: var(--border);
+			border-color: var(--inputBorder);
 
 			i{
 				// Custom icons
@@ -872,7 +872,7 @@ input[type=range]::-moz-focus-outer {
 
 		.option{
 			height: 85px;
-			border-radius: var(--borderRadiusSmall);
+			border-radius: var(--borderRadius);
 			max-width: 124px;
 			flex-grow: 3;
 			margin-right: 12px !important;

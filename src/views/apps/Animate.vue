@@ -472,7 +472,7 @@
 								<div class="field-set">
 									<label>Border</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="1px solid red" v-model="keyframes[currentStep.left].properties.border" @input="saveStep()">
+										<input type="text" placeholder="var(--borderWidth) solid red" v-model="keyframes[currentStep.left].properties.border" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Border Radius -->
@@ -1148,7 +1148,7 @@ export default {
 				#animateTop{
 					display: flex;
 					justify-content: flex-start;
-					border-bottom: 1px solid var(--border);
+					border-bottom: var(--borderWidth) solid var(--border);
 					width: 100%;
 					background-color: var(--layer);
 
@@ -1177,7 +1177,7 @@ export default {
 					// Editor button - only visible on mobile to toggle sidebar
 					#mobilePropertyToggle{
 						align-self: flex-end;
-						border-left: 1px solid var(--border);
+						border-left: var(--borderWidth) solid var(--border);
 						width: 130px;
 						display: none;
 
@@ -1212,7 +1212,7 @@ export default {
 					}
 
 					#targetStage{
-						border-radius: var(--borderRadiusSmall);
+						border-radius: var(--borderRadius);
 						width: 100%;
 						height: 100%;
 						display: flex;
@@ -1254,7 +1254,7 @@ export default {
 					padding: 0 0;
 					transition: var(--transitionFast);
 					z-index: 10;
-					border-left: 1px solid var(--border);
+					border-left: var(--borderWidth) solid var(--border);
 
 					// Shrink a bit below XL
 					@media (max-width: @screenXL) {
@@ -1314,7 +1314,7 @@ export default {
 							padding: 10px 15px 10px 15px;
 							font-size: 14px;
 							font-weight: 700;
-							// border-bottom: 1px solid var(--border);
+							// border-bottom: var(--borderWidth) solid var(--border);
 							transition: var(--transition);
 							color: var(--text);
 
@@ -1404,7 +1404,7 @@ export default {
 			min-width: 100%;
 			max-width: 100%;
 			background-color: var(--layer);
-			border-top: 1px solid var(--border);
+			border-top: var(--borderWidth) solid var(--border);
 			height: fit-content;
 			min-height: fit-content;
 
@@ -1418,7 +1418,7 @@ export default {
 				display: flex;
 				justify-content: space-between;
 				flex-wrap: wrap;
-				border-bottom: 1px solid var(--border);
+				border-bottom: var(--borderWidth) solid var(--border);
 				background-color: var(--layer);
 
 				// Add and delete step buttons
@@ -1458,7 +1458,7 @@ export default {
 						width: 100%;
 						padding: 5px 0 12px 0;
 						margin-right: 0;
-						border-bottom: 1px solid var(--border);
+						border-bottom: var(--borderWidth) solid var(--border);
 					}
 
 					// Animation props
@@ -1594,11 +1594,11 @@ export default {
 			// Timeline
 			#animateTimeline{
 				height: 80px;
-				border-radius: 3px;
+				border-radius: var(--borderRadius);
 				box-sizing: border-box;
 				position: relative;
 				transition: 0s ease;
-				border: 1px solid var(--border);
+				border: var(--borderWidth) solid var(--border);
 				width: 95%;
 				margin: 15px 0 25px 2.5%;
 				background-color: var(--background);
@@ -1808,18 +1808,17 @@ export default {
 		max-height: 90%;
 		max-height: calc(~'100% - 50px');
 		height: fit-content;
-		background-color: var(--black);
+		background-color: var(--popup);
 		padding: 15px;
 		transform-origin: top center;
-		border-radius: 3px;
-		box-shadow: var(--shadow);
+		border-radius: var(--borderRadius);
 		box-sizing: border-box;
 		position: absolute;
 		top: 40px;
 		left: 10px;
 		overflow: auto;
 		z-index: 55;
-		border: 1px solid rgba(205,205,255,0.25) !important;
+		border: var(--borderWidth) solid rgba(205,205,255,0.25) !important;
 
 		// Full width mobile
 		@media (max-width: @screenSM) {
@@ -1842,7 +1841,7 @@ export default {
 			font-family: var(--mono);
 			background-color: var(--background) !important;
 			line-height: 15px;
-			border: 1px solid rgba(205,205,255,0.25) !important;
+			border: var(--borderWidth) solid rgba(205,205,255,0.25) !important;
 		}
 		textarea.small{
 			min-height: 60px;

@@ -41,8 +41,6 @@ export default {
 		// This lets you use custom elements that are accessible/focusable, rather than router-link
 		// then use @click to navigate()
 		Vue.prototype.navigate = function(route) {
-			console.log("ROUTEROUTE")
-			console.log(route)
 			// Confirm leave on these pages
 			var confirmPages = ['/animate/', '/colors/', '/shadows'];
 

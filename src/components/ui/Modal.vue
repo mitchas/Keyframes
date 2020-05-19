@@ -143,11 +143,11 @@ export default {
 			margin: 0 auto;
 			width: 90%;
 			max-width: 500px;
-			border-radius: 3px;
+			border-radius: var(--borderRadiusMd);
 			box-shadow: var(--shadowDark);
 			position: relative;
 			max-height: 75vh;
-			border: 1px solid var(--border);
+			border: var(--borderWidth) solid var(--border);
 
 			// Small, confirmation modal
 			&.small{
@@ -204,8 +204,8 @@ export default {
 				display: block;
 				box-sizing: border-box;
 				padding: 0 20px 0 20px;
-				border-top-right-radius: var(--borderRadiusSmall);
-				border-top-left-radius: var(--borderRadiusSmall);
+				border-top-right-radius: var(--borderRadiusMd);
+				border-top-left-radius: var(--borderRadiusMd);
 				color: var(--text);
 				font-weight: 600;
 				letter-spacing: 0.25px;
@@ -213,9 +213,10 @@ export default {
 				text-align: left;
 				height: 66px;
 				min-height: 66px;
-				border-bottom: 1px solid var(--border);
+				border-bottom: var(--borderWidth) solid var(--border);
 				display: flex;
 				justify-content: space-between;
+				background-color: var(--layer);
 
 				// Increase size and padding on mobile
 				@media (max-width: @screenSM) {
@@ -253,6 +254,7 @@ export default {
 				box-sizing: border-box;
 				padding: 20px;
 				overflow: scroll;
+				background-color: var(--background);
 				flex-grow: 3;
 			}
 
@@ -262,9 +264,10 @@ export default {
 				justify-content: space-between;
 				box-sizing: border-box;
 				height: 66px;
+				background-color: var(--layer);
 				min-height: 70px;
 				padding: 15px 20px;
-				border-top: 1px solid var(--border);
+				border-top: var(--borderWidth) solid var(--border);
 
 				// Center buttons
 				&.center{

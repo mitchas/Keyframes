@@ -275,11 +275,11 @@ export default {
 		.app-feature{
 			width: 100%;
 			display: block;
-			// border: 1px solid var(--border);
+			// border: var(--borderWidth) solid var(--border);
 			// background-color: var(--layer);
 			box-sizing: border-box;
 			padding: 65px 0;
-			border-radius: 3px;
+			border-radius: var(--borderRadius);
 			display: flex;
 			justify-content: space-between;
 
@@ -358,15 +358,15 @@ export default {
 			i{
 				color: var(--blue);
 				font-size: 52px;
-				animation: ghost 10s ease-in-out  0s infinite  normal  forwards;
+				animation: home-ghost 10s ease-in-out  0s infinite  normal  forwards;
 				transform-origin: center center;
 			}
 		}
 		#featuredTimeline{
 			display: block;
-			border: 1px solid var(--border);
+			border: var(--borderWidth) solid var(--border);
 			height: 50px;
-			border-radius: 3px;
+			border-radius: var(--borderRadius);
 			position: relative;
 			background-color: var(--layer);
 			opacity: 0.9;
@@ -386,7 +386,7 @@ export default {
 
 				@media (max-width: @screenSM) {
 					width: 8px;
-					border-radius: 3px;
+					border-radius: var(--borderRadius);
 				}
 
 				&.active{
@@ -423,7 +423,7 @@ export default {
 				width: 60px;
 				border-radius: 50%;
 				margin: 0 4px;
-				border: 1px solid var(--border);
+				border: var(--borderWidth) solid var(--border);
 				box-sizing: border-box;
 				letter-spacing: 0.4px;
 				font-weight: 600;
@@ -481,8 +481,8 @@ export default {
 				background-color: var(--layer);
 				font-size: 22px;
 				color: var(--text);
-				border-radius: 5px;
-				border: 1px solid var(--border);
+				border-radius: var(--borderRadius);
+				border: var(--borderWidth) solid var(--border);
 				box-shadow: 0px 15px 25px -2px rgba(30,30,60,0.15);
 
 				// Shrink a bit under xl
@@ -534,7 +534,7 @@ export default {
 	}
 
 	/* Copy this @keyframes block to your CSS*/
-	@keyframes ghost {
+	@keyframes home-ghost {
 		0.0%{
 			transform: scale(0) translate(0, 0);
 		}

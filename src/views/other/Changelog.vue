@@ -272,7 +272,7 @@ export default {
 		height: 30px;
 		min-height: 30px;
 		max-height: 30px;
-		border-radius: 3px;
+		border-radius: var(--borderRadius);
 		width: 30px;
 		min-width: 30px;
 		max-width: 30px;

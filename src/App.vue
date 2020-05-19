@@ -80,6 +80,10 @@ export default {
 		};
 	},
 	created: function () {
+		// Send initial track
+		_paq.push(['setCustomUrl', "/" ]);
+		_paq.push(['setDocumentTitle', "Home"]);
+		_paq.push(['trackPageView']);
 	},
 	computed: {
 		// Computed prefs to watch
@@ -95,6 +99,14 @@ export default {
 			},
 			deep: true,
 		},
+
+		// Send track on each route change
+		$route (to, from){
+			_paq.push(['setCustomUrl', to.path ]);
+			_paq.push(['setDocumentTitle', to.name]);
+			_paq.push(['trackPageView']);
+		}
+
 	},
 	mounted() {
 		this.pageMounted = true;

@@ -65,8 +65,6 @@ export default {
 		};
 	},
 	mounted(){
-		console.log("Route Params")
-		console.log(this.$route.params.c)
 	},
 	methods: {
 		/////////////////////
@@ -135,7 +133,7 @@ export default {
 		z-index: 50000;
 		transform: translateY(0px);
 		transform-origin: center right;
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--border);
 
 		@media (max-width: @screenSM) {
 			right: unset;
@@ -190,7 +188,7 @@ export default {
 		&:hover{
 			cursor: pointer;
 			transform: translateY(3px);
-			transition: var(--bezierTransitionSlow);
+			transition: var(--bezierTransition);
 
 			.toast-close{
 				transition: var(--transition);
@@ -303,7 +301,7 @@ export default {
 				width: 0%;
 				height: 100%;
 				background-color: var(--blue);
-				border-bottom-left-radius: 4px;
+				border-bottom-left-radius: var(--borderRadius);
 			}
 
 			// Show progress moving when class is added with v-if

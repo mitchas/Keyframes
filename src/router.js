@@ -46,12 +46,12 @@ const router = new Router({
 		/////////
 		{
 			path: '/',
-			name: 'home',
+			name: 'Home',
 			component: Home,
 		},
 		{
 			path: '/v2/',
-			name: 'home',
+			name: 'Home',
 			component: Home,
 		},
 		////////////////
@@ -59,7 +59,7 @@ const router = new Router({
 		//////////////
 		{
 			path: '/changelog/',
-			name: 'changelog',
+			name: 'Changelog',
 			component: Changelog,
 		},
 
@@ -91,7 +91,7 @@ const router = new Router({
 		// 404
 		{
 			path: '/404',
-			name: 'error404',
+			name: 'Error404',
 			component: Error404
 		},
 		// If no match, redirect to 404

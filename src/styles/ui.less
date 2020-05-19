@@ -31,8 +31,8 @@
 	border-top-left-radius: 20px;
 	border-bottom-left-radius: 20px;
 	font-family: var(--systemFont);
-	border-top-right-radius: 6px;
-	border-bottom-right-radius: 6px;
+	border-top-right-radius: var(--borderRadius);
+	border-bottom-right-radius: var(--borderRadius);
 	letter-spacing: 0.18px;
 	// Adjust padding on mobile
 	@media (max-width: @screenSM) {
@@ -65,7 +65,7 @@
 		background-color: transparent;
 		color: var(--text);
 	}
-	&.black{background-color:var(--black);}
+	&.black{background-color:var(--popup);}
 
 	// Reverse badge - curve and icon reversed
 	&.reverse{
@@ -265,7 +265,7 @@
 		width: fit-content;
 		box-sizing: border-box;
 		padding: 4px 0;
-		border-radius: 5px;
+		border-radius: var(--borderRadius);
 		box-shadow: var(--shadowLight);
 		position: absolute;
 		top: 50%;

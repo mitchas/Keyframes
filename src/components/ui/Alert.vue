@@ -95,12 +95,12 @@ export default {
 			color: var(--black);
 			box-sizing: border-box;
 			padding: 5px 6px 6px 6px;
-			border-radius: 5px;
+			border-radius: var(--borderRadius);
 			font-size: 14px;
 			box-shadow: var(--shadow);
 			font-weight: 700;
 			margin: 0 auto;
-			border: 1px solid var(--border);
+			border: var(--borderWidth) solid var(--border);
 			max-width: 300px;
 			display: flex;
 			justify-content: space-between;
