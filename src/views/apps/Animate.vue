@@ -152,7 +152,7 @@
 								CSS output
 								///////////////////////////
 							-->
-							<div><b>/* Copy this @keyframes block to your CSS*/</b></div>
+							<b>/* Copy this @keyframes block to your CSS*/</b>
 							<!-- Keyframe definition block -->
 							<span>@keyframes yourAnimation &#123;</span>
 								<!-- For each keyframe step -->
@@ -184,6 +184,23 @@
 								<div>perspective: {{perspective}}</div>
 							</span>
 						</pre>
+
+							<!-- <b>/* Copy this @keyframes block to your CSS*/</b>
+
+							@keyframes yourAnimation &#123;
+							<span v-for="(step, index) in computedCSSOutput" v-bind:key="index">
+								<span class="ltab-1">{{step.timelinePosition.left}}&#123;</span>
+									<div v-for="(prop, index) in step.properties" v-bind:key="index" class="ltab-2">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};</div>
+								<span class="ltab-1">&#125;</span>
+							</span>
+							&#125;
+
+							<b>/* Add the animation: property to whichever element you want to animate */</b>
+							#elementToAnimate&#123;
+								<span class="ltab-1">animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};</span>
+							&#125; -->
+
+
 
 						<!-- Copy to clipboard button -->
 						<button class="button small green fit" @click="copyOutput()">
@@ -602,30 +619,31 @@
 		</div>
 
 
-<!-- Append Styles to page -->
-<v-style>
-	.timeline-marker.animated{
-		animation: animationTicker {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
-		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
-	}
-	{{customTargetStyles}}
-</v-style>
-<!-- Perspective -->
-<v-style v-if="perspective">
-	.perspective{
-		perspective: {{perspective}};
-	}
-</v-style>
-<!-- Only add animation if it's playing -->
-<!-- Otherwise  -->
-<v-style v-if="animationPlaying">
-	{{rawOutputCSS}}
+		<!-- Append Styles to page -->
+		<v-style>
+			.timeline-marker.animated{
+				animation: animationTicker {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+				animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
+			}
+			{{customTargetStyles}}
+		</v-style>
+		<!-- Only add animation if it's playing -->
+		<!-- Otherwise  -->
+		<v-style v-if="animationPlaying">
+			{{rawOutputCSS}}
 
-	#targetElement{
-		animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
-		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
-	}
-</v-style>
+			#targetElement{
+				animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+				animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
+			}
+		</v-style>
+		
+		<!-- Perspective -->
+		<v-style v-if="perspective">
+			.perspective{
+				perspective: {{perspective}};
+			}
+		</v-style>
 
 	</div>
 </template>
@@ -665,8 +683,6 @@ export default {
 			perspective: '',
 			// Show Output modal or not
 			showOutput: false,
-			// Hold css output generated
-			// rawOutputCSS: null,
 			// Enable hover timeline to add step
 			addingStep: false,
 			// When hovering an existing step
@@ -680,7 +696,8 @@ export default {
 			showEditTarget: false,
 			// Custom CSS for target
 			customTargetStyles: "#targetElement{\n   display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #0868FE;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    position: absolute;\n    transition: 0.5s ease;\n}",
-			customTargetCode: "<i class='fal fa-hands-wash'></i>",
+			customTargetCode: "<i class='fal fa-ufo'></i>",
+			// customTargetCode: "<i class='fal fa-alien-monster'></i>",
 			// Animation name to save
 			animationToSaveName: null,
 			// Previously saved animations
@@ -774,8 +791,10 @@ export default {
 		},
 		// Get CSS as string from output
 		rawOutputCSS: function () {
+			// Reference backdoor var so it recomputes when that changes.
+			this.backdoor;
 			if(document.getElementById("outputCSS")){
-				var fullCSSString = document.getElementById("outputCSS").textContent;
+				var fullCSSString = document.getElementById("outputCSS").innerHTML.toString().replace(/&nbsp;/g,'').replace(/(<([^>]+)>)/ig,"");
 			}else{
 				var fullCSSString = "";
 			}
@@ -900,6 +919,7 @@ export default {
 		///////////////////////
 		// Play/stop animation
 		runAnimation: function(){
+			this.backdoor++;
 			this.addingStep = false;
 			this.animationPaused = false;
 

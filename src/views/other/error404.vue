@@ -11,13 +11,14 @@
 		<div class="text-page-content">
 
 			<div class="not-found">
-				<!-- Error Text -->
-				<div class="error-title">
-					Oops
+				<!-- Animated Ghost -->
+				<div class="ghost-animation">
+					<i class="fas fa-ghost"></i>
 				</div>
 				<!-- Error text -->
 				<div class="error-text">
-					We can't find the page you're looking for...
+					It's a ghost town here.
+					<small><b>Error 404</b> that page isn't here</small>
 				</div>
 				<!-- Action -->
 				<div class="error-nav">
@@ -62,49 +63,65 @@
 			left: 0px;
 		}
 
-		.error-title{
-			font-size: 40px;
-			font-weight: 700;
-			position: relative;
-			z-index: 35;
-			letter-spacing: 0.2px;
+		.ghost-animation{
 			display: block;
 			width: 100%;
+			max-width: 300px;
+			position: relative;
+			text-align: center;
+			margin: 0 auto;
+			box-sizing: border-box;
+			padding: 45px 0;
+
+			i{
+				margin: 0 auto;
+				color: var(--text);
+				font-size: 105px;
+				margin: 0 auto;
+				animation: ghost 2s ease-in-out 0s infinite alternate none;
+			}
 		}
 
 		// Actual text for error
 		.error-text{
-			font-size: 26px;
+			font-size: 22px;
 			font-weight: 540;
-			line-height: 32px;
-			padding: 10px 0 20px 0;
+			line-height: 28px;
 			display: block;
 			max-width: 360px;
-			font-weight: bolder;
-
-			// Center, full width on mobile
-			@media (max-width: @screenMD) {
-				max-width: none;
-				text-align: center;
-				width: 100%;
-			}
+			margin: 0 auto;
+			text-align: center;
 
 			small{
-				font-size: 18px;
+				font-size: 14px;
+				display: block;
+				font-style: italic;
 				font-weight: 500;
+				margin-top: 8px;
 			}
 		}
 
 		// Buttons to link elsewhere
 		.error-nav{
 			padding: 15px 0 35px 0;
+			text-align: center;
 
-			// Center, full width on mobile
-			@media (max-width: @screenMD) {
-				max-width: none;
-				text-align: center;
-				width: 100%;
+			button{
+				margin: 15px 0 0 0;
 			}
 		}
 	}
+
+	@keyframes ghost {
+		0.0%{
+			transform: translate(0, 0);
+		}
+		50.0%{
+			transform: translate(0px, -15px);
+		}
+		99.8%{
+			transform: translate(0, 0);
+		}
+	}
+
 </style>
