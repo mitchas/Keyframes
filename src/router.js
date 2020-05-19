@@ -5,11 +5,14 @@
 //
 //
 //		- Routes
-// 			main pages _____________________________________ 
+// 			Text pages _____________________________________ 
 //					/																			- Home page
+//					/2/																			- Also Home page, but with v2 announcement & PH message
+//					/changelog/																	- Changelog
 // 			apps _____________________________________ 
 //					/animate/																	- Create CSS keyframe animations
 //					/shadows/																	- Generate CSS shadows
+//					/colors/																	- HEX/RGB converter and color palettes
 //			errors _____________________________________ 
 //					/404/
 // 
@@ -43,6 +46,11 @@ const router = new Router({
 		/////////
 		{
 			path: '/',
+			name: 'home',
+			component: Home,
+		},
+		{
+			path: '/v2/',
 			name: 'home',
 			component: Home,
 		},

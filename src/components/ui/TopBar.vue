@@ -32,7 +32,7 @@
 					<div class="settings-nav-dropdown" @click="toggleDropdown('apps')">
 						<!-- Hover label to show dropdown -->
 						<button class="hover-label">
-							<span>Tools</span>
+							<span>Apps</span>
 							<!-- Chevron down -->
 							<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-times-circle': showAppSwitcher}"></i>
 						</button>

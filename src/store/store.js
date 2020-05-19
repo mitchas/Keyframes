@@ -33,6 +33,7 @@ export const store = new Vuex.Store({
 		// Update 3 places in App.vue
 		// at var defaultPrefs
 		userPreferences: {
+			confirmLeave: true,
 			darkMode: false,
 			animations: true,
 			startPage: '/'

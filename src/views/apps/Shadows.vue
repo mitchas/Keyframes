@@ -224,7 +224,7 @@ export default {
 					vertical_offset: 15,
 					blur: 25,
 					spread: -4,
-					color: "rgb(30,30,60,0.25)",
+					color: "rgba(30,30,60,0.25)",
 					opacity: 0.25,
 				},
 			],

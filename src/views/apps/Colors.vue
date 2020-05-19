@@ -393,6 +393,9 @@ export default {
 			var hex = this.palette[this.selectedPalette].hex;
 			if(hex[0] == "#"){
 				hex = hex.substring(1);
+			}else{
+				// Add hex to prop
+				this.palette[this.selectedPalette].hex = "#" + this.palette[this.selectedPalette].hex
 			}
 
 			// get rgb numbers
@@ -469,20 +472,6 @@ export default {
 			}, 500);
 			
 
-		},
-
-		/////////////////////
-		//  Invert Text   //
-		////////////////////
-		// Decides contrast color (for text) based on hex color input.
-		// Taken from https://stackoverflow.com/questions/11867545/change-text-color-based-on-brightness-of-the-covered-background-area
-		invertTextColor: function(color){
-			var hexcolor = color.replace("#", "");
-			var r = parseInt(hexcolor.substr(0,2),16);
-			var g = parseInt(hexcolor.substr(2,2),16);
-			var b = parseInt(hexcolor.substr(4,2),16);
-			var yiq = ((r*299)+(g*587)+(b*114))/1000;
-			return (yiq >= 128) ? 'black' : 'white';
 		},
 
 		/////////////////////////

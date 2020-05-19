@@ -7,26 +7,28 @@
 -->
 
 <template>
-	<div class="page">
+	<div class="page text-page">
+		<div class="text-page-content">
 
-		<div class="not-found">
-			<!-- Error Text -->
-			<div class="error-title">
-				Oops
+			<div class="not-found">
+				<!-- Error Text -->
+				<div class="error-title">
+					Oops
+				</div>
+				<!-- Error text -->
+				<div class="error-text">
+					We can't find the page you're looking for...
+				</div>
+				<!-- Action -->
+				<div class="error-nav">
+					<button class="button" aria-label="Go Home" @click="navigate('/')">
+						<i class="far fa-home"></i>
+						<span>Try the Home Page</span>
+					</button>
+				</div>
 			</div>
-			<!-- Error text -->
-			<div class="error-text">
-				We can't find the page you're looking for...
-			</div>
-			<!-- Action -->
-			<div class="error-nav">
-				<button class="button" aria-label="Go Home" @click="navigate('/')">
-					<i class="far fa-home"></i>
-					<span>Try the Home Page</span>
-				</button>
-			</div>
+
 		</div>
-
 	</div>
 </template>
 

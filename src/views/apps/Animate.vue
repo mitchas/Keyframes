@@ -8,6 +8,40 @@
 //		The Animate page uses it's own not-really-reusable CSS layout
 //			Most other pages use the app-page-split setup - looks similar, but this had to be specific with the timeline
 //
+//  	Functions: 
+//  		getTransformString()
+//  			Called any time a transform prop is changed. It makes a string of all transform properties into one.
+//  		saveStep()
+//  			Backdoor trigger to force change - not exactly sure why.
+//  		newStep()
+//  			Enables mouse-click on timeline to add a new step - processes the click
+//  		deleteStep()
+//    			Delete current selected step
+// 			runAnimation
+// 			 	Stops other functions and begins animation
+// 			pauseAnimation
+// 				Pauses animation - can be resumed, unlike stopping
+// 			getTimelinePosition
+// 				Called when adding a step, while hovering timeline to get mouse position to find step %
+// 			roundValue(val)
+// 				round val to 0.1, and if it's greater than 99%, round to 100% to make the final step
+// 			toggleTiming(type)
+// 				Some animation timing inputs are toggles and not text inputs, this cycles through the options
+// 			viewOutput
+// 			viewSaveLoad
+// 			editTarget
+// 				All three are for top tab controls - hides the others, shows selected.
+// 			saveAnimation
+// 				Saves animation to local storage
+// 			loadAllSaved
+// 				loads local storage and gets items w/prefix animation_
+// 			loadAnimation
+// 				Loads selected animation from local storage into editor
+// 			deleteAnimationFromStorage
+// 				deleted selected animation from local storage
+// 			copyOutput
+// 				copies output to user's clipboard
+//
 // -->
 
 <template>
@@ -94,7 +128,7 @@
 								<small class="block">Change the element you're animating</small>
 							</label>
 							<!-- target html -->
-							<textarea v-model="customTargetCode" id="customTarget" class="mbottom-sm code"></textarea>
+							<textarea v-model="customTargetCode" id="customTarget" class="mbottom-sm code small"></textarea>
 						</div>
 						<!-- Custom Target CSS -->
 						<div class="field">
@@ -103,7 +137,7 @@
 								<small class="block">Modify the target Element's CSS</small>
 							</label>
 							<!-- target css -->
-							<textarea class="code" v-model="customTargetStyles"></textarea>
+							<textarea class="code big" v-model="customTargetStyles"></textarea>
 						</div>
 					</div>
 				</transition>
@@ -113,20 +147,42 @@
 					<div class="settings-display" v-show="showOutput">
 						<!-- Output CSS -->
 						<pre id="outputCSS">
-							<b>/* Copy this @keyframes block to your CSS*/</b>
+							<!-- 
+								///////////////////////////
+								CSS output
+								///////////////////////////
+							-->
+							<div><b>/* Copy this @keyframes block to your CSS*/</b></div>
+							<!-- Keyframe definition block -->
+							<span>@keyframes yourAnimation &#123;</span>
+								<!-- For each keyframe step -->
+								<div v-for="(step, index) in computedCSSOutput" v-bind:key="index">
+									<!-- Step percent and open bracket -->
+									<div>&nbsp;&nbsp;&nbsp;&nbsp;{{step.timelinePosition.left}}&#123;</div>
+									<!-- Property loop -->
+									<div v-for="(prop, index) in step.properties" v-bind:key="index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};</div>
+									<!-- Step end bracket -->
+									<div>&nbsp;&nbsp;&nbsp;&nbsp;&#125;</div>
+								</div>
+							&#125; <!-- End keyframe block -->
+							
+							<br/>
+							<br/>
 
-							@keyframes yourAnimation &#123;
-							<span v-for="(step, index) in computedCSSOutput" v-bind:key="index">
-								<span class="ltab-1">{{step.timelinePosition.left}}&#123;</span>
-									<div v-for="(prop, index) in step.properties" v-bind:key="index" class="ltab-2">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};</div>
-								<span class="ltab-1">&#125;</span>
+							<div><b>/* Add the animation: property to whichever element you want to animate */</b></div>
+							<!-- Animation timing -->
+							<div>#elementToAnimate&#123;</div>
+								<div>&nbsp;&nbsp;&nbsp;&nbsp;animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};</div>
+							&#125;
+
+							<!-- Perspective -->
+							<span v-if="perspective">
+								<br/>
+								<br/>
+								<div><b>/* If you used any 3d transformations: */</b></div>
+								<div><b>/* add your perspective to the ~Parent element~ */</b></div>
+								<div>perspective: {{perspective}}</div>
 							</span>
-							&#125;
-
-							<b>/* Add the animation: property to whichever element you want to animate */</b>
-							#elementToAnimate&#123;
-								<span class="ltab-1">animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};</span>
-							&#125;
 						</pre>
 
 						<!-- Copy to clipboard button -->
@@ -147,7 +203,7 @@
 						////////////////////////
 					-->
 					<div id="targetStage">
-						<div id="targetCenterAlign">
+						<div id="targetCenterAlign" :class="{'perspective': perspective}">
 							<span id="targetElement" v-bind:style="selectedKeyframeCSS.properties" v-bind:class="{'pause': animationPaused}" v-html="customTargetCode"></span>
 						</div>
 					</div>
@@ -168,14 +224,25 @@
 						<span>{{roundValue(currentStep.left)}}%</span>
 					</h4>
 					<div id="animateSidebarProperties">
+
+						<!-- 
+							2d Transform
+						-->
 						<button class="property-header" @click="propertiesToggles.transform = !propertiesToggles.transform" v-bind:class="{'active':propertiesToggles.transform}">
 							<i v-bind:class="propertiesToggles.transform == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
 							<span>Transform</span>
+							<i class="mleft-xs far fa-expand-arrows"></i>
 						</button>
 						<!-- Transform fields -->
 						<transition name="basic">
 							<div class="property-group" v-if="propertiesToggles.transform">
-
+								<!-- Transform Origin -->
+								<div class="field-set">
+									<label>Transform Origin</label>
+									<div class="input-wrapper">
+										<input type="text" id="transformOrigin" placeholder="bottom left" v-model="keyframes[currentStep.left].properties.transformOrigin" @input="saveStep()" maxlength="22">
+									</div>
+								</div>
 								<!-- Rotate -->
 								<div class="field-set">
 									<label>Rotate</label>
@@ -204,11 +271,45 @@
 										<input type="text" id="transformSkew" placeholder="-45deg" v-model="keyframes[currentStep.left].transformProps.skew" @input="getTransformString();">
 									</div>
 								</div>
-								<!-- Transform Origin -->
+							</div>
+						</transition> <!-- End transform: -->
+						<!-- 
+							3d Transform
+						-->
+						<button class="property-header" @click="propertiesToggles.transform3d = !propertiesToggles.transform3d" v-bind:class="{'active':propertiesToggles.transform3d}">
+							<i v-bind:class="propertiesToggles.transform3d == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+							<span>3d Transform</span>
+							<i class="mleft-xs far fa-cube"></i>
+						</button>
+						<!-- 3dTransform fields -->
+						<transition name="basic">
+							<div class="property-group" v-if="propertiesToggles.transform3d">
+								<!-- Perspective -->
 								<div class="field-set">
-									<label>Transform Origin</label>
+									<label>Perspective</label>
 									<div class="input-wrapper">
-										<input type="text" id="transformOrigin" placeholder="bottom left" v-model="keyframes[currentStep.left].properties.transformOrigin" @input="saveStep()" maxlength="22">
+										<input type="text" id="perspective" placeholder="500px" v-model="perspective" @input="saveStep()" maxlength="22">
+									</div>
+								</div>
+								<!-- Translate3d -->
+								<div class="field-set">
+									<label>Translate3d</label>
+									<div class="input-wrapper">
+										<input type="text" id="translate3d" placeholder="42px, -62px, -155px" v-model="keyframes[currentStep.left].transformProps.translate3d" @input="getTransformString();">
+									</div>
+								</div>
+								<!-- scale3d -->
+								<div class="field-set">
+									<label>Scale3d</label>
+									<div class="input-wrapper">
+										<input type="text" id="scale3d" placeholder="1, 2, 5" v-model="keyframes[currentStep.left].transformProps.scale3d" @input="getTransformString();">
+									</div>
+								</div>
+								<!-- rotate3d -->
+								<div class="field-set">
+									<label>Rotate3d</label>
+									<div class="input-wrapper">
+										<input type="text" id="rotate3d" placeholder="0, 1, 1, 45deg" v-model="keyframes[currentStep.left].transformProps.rotate3d" @input="getTransformString();">
 									</div>
 								</div>
 							</div>
@@ -219,6 +320,7 @@
 						<button class="property-header" @click="propertiesToggles.colors = !propertiesToggles.colors" v-bind:class="{'active':propertiesToggles.colors}">
 							<i v-bind:class="propertiesToggles.colors ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
 							<span>Colors & Text</span>
+							<i class="mleft-xs far fa-tint"></i>
 						</button>
 						<!-- Colors & Text Fields-->
 						<transition name="basic">
@@ -260,6 +362,7 @@
 						<button class="property-header" @click="propertiesToggles.sizing = !propertiesToggles.sizing" v-bind:class="{'active':propertiesToggles.sizing}">
 							<i v-bind:class="propertiesToggles.sizing ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
 							<span>Sizing & Spacing</span>
+							<i class="mleft-xs far fa-sort-size-up"></i>
 						</button>
 						<!-- Sizing and spacing -->
 						<transition name="basic">
@@ -301,6 +404,7 @@
 						<button class="property-header" @click="propertiesToggles.position = !propertiesToggles.position" v-bind:class="{'active':propertiesToggles.position}">
 							<i v-bind:class="propertiesToggles.position ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
 							<span>Position</span>
+							<i class="mleft-xs far fa-arrow-to-right"></i>
 						</button>
 						<!-- position -->
 						<transition name="basic">
@@ -342,6 +446,7 @@
 						<button class="property-header" @click="propertiesToggles.borders = !propertiesToggles.borders" v-bind:class="{'active':propertiesToggles.borders}">
 							<i v-bind:class="propertiesToggles.borders ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
 							<span>Borders</span>
+							<i class="mleft-xs fas fa-border-style-alt"></i>
 						</button>
 						<!-- Borders -->
 						<transition name="basic">
@@ -376,6 +481,9 @@
 								</div>
 							</div>
 						</transition>
+
+						<!-- Spacer -->
+						<div class="mtop-md"></div>
 					</div>
 				</div>
 			</div><!-- / animate right -->
@@ -481,7 +589,7 @@
 					v-bind:style="step.timelinePosition" :key="step.id" 
 					@mouseenter="hideAddStep = true" 
 					@mouseleave="hideAddStep = false" 
-					@click="currentStep.left = index; stopAnimation()">
+					@click="currentStep.left = index;">
 
 					<b>{{roundValue(step.timelinePosition.left)}}</b>
 				</div>
@@ -501,6 +609,12 @@
 		animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
 	}
 	{{customTargetStyles}}
+</v-style>
+<!-- Perspective -->
+<v-style v-if="perspective">
+	.perspective{
+		perspective: {{perspective}};
+	}
 </v-style>
 <!-- Only add animation if it's playing -->
 <!-- Otherwise  -->
@@ -539,6 +653,7 @@ export default {
 			// Which tab are they editing
 			propertiesToggles: {
 				transform: true,
+				transform3d: false,
 				colors: false,
 				sizing: false,
 				position: false,
@@ -546,6 +661,8 @@ export default {
 			},
 			// Prop sidebar hides on mobile
 			togglePropSidebar: false,
+			// Perspective for 3d transformations
+			perspective: '',
 			// Show Output modal or not
 			showOutput: false,
 			// Hold css output generated
@@ -562,8 +679,8 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n    display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #1058E7;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    position: relative;\n    transition: 0.5s ease;\n}",
-			customTargetCode: "<i class='fal fa-hand-peace'></i>",
+			customTargetStyles: "#targetElement{\n   display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #0868FE;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    position: absolute;\n    transition: 0.5s ease;\n}",
+			customTargetCode: "<i class='fal fa-hands-wash'></i>",
 			// Animation name to save
 			animationToSaveName: null,
 			// Previously saved animations
@@ -585,10 +702,6 @@ export default {
 						"left": "0.0%"
 					},
 					"transformProps": {
-						"rotate": "",
-						"scale": "",
-						"translate": "",
-						"skew": "",
 					},
 					"properties": {
 					}
@@ -703,31 +816,30 @@ export default {
 	methods: {
 
 		////////////////////////
-		// Transform String
-		///////////////////////
+		// Transform String  //
+		//////////////////////
 		// Make Transform String from transform props - called on change to a transform prop
 		getTransformString: function(){
 
 			// Shorthand transform props
 			var props = this.keyframes[this.currentStep.left].transformProps;
-			// Make string
-			var transformArray = [];
-			if(props.rotate){
-				transformArray.push("rotate(" + props.rotate + ")");
-			}
-			if(props.scale){
-				transformArray.push("scale(" + props.scale + ")");
-			}
-			if(props.translate){
-				transformArray.push("translate(" + props.translate + ")");
-			}
-			if(props.skew){
-				transformArray.push("skew(" + props.skew + ")");
-			}
+			var keys = Object.keys(props);
 
-			// Make string
+
+			// Store props in array
+			var transformArray = [];
+
+			// loop through keys, get properties, format and add to array
+			keys.forEach(function(prop) {
+				if(props[prop]){
+					transformArray.push(prop + "(" + props[prop] + ")");
+				}
+			});
+
+			// Make string from array
 			var string = transformArray.join(' ');
 
+			// Save to keyframes
 			this.keyframes[this.currentStep.left].properties.transform = string;
 
 			// Save step
@@ -786,7 +898,7 @@ export default {
 		////////////////////////
 		// Animation Functions
 		///////////////////////
-		// Play/Pause animation
+		// Play/stop animation
 		runAnimation: function(){
 			this.addingStep = false;
 			this.animationPaused = false;
@@ -800,13 +912,6 @@ export default {
 				this.animationPlaying = true;
 
 			} // End if animation playing
-		},
-		// Stop animation
-		stopAnimation: function(){
-			this.animationPaused = false;
-			if(this.animationPlaying){
-				this.runAnimation();
-			}
 		},
 
 		// Pause animation temporarily
@@ -1077,8 +1182,9 @@ export default {
 					justify-content: center;
 					margin: 0 auto;
 					box-sizing: border-box;
-					padding: 50px 50px 0 0;
 					transition: var(--transition);
+					width: 100%;
+					padding: 0 0 40px 0;
 
 					// Remove right padding on mobile
 					@media (max-width: @screenMD) {
@@ -1092,7 +1198,6 @@ export default {
 						display: flex;
 						flex-direction: column;
 						justify-content: center;
-						margin-right: 50px;
 
 						// To flex align the target elementt center without effecting margin
 						#targetCenterAlign{
@@ -1204,10 +1309,23 @@ export default {
 								margin-right: 8px;
 							}
 
+							&:after{
+								content: '.';
+								font-size: 0px;
+								display: block;
+								flex-grow: 3;
+								height: 1px;
+								position: relative;
+								top: 9px;
+								margin-left: 2.5%;
+								background: var(--border);
+							}
+
 							&:hover{
 								transition: var(--transition);
 
-								i{
+								i.fa-chevron-circle-up,
+								i.fa-chevron-circle-down{
 									font-weight: 900;
 								}
 							}
@@ -1216,12 +1334,12 @@ export default {
 						// Collapsible group that holds related properties
 						.property-group{
 							box-sizing: border-box;
-							padding: 0px 0 18px 0;
+							padding: 0px 0 0 0;
 							overflow: hidden;
 
 							// Adjust fields
 							.field-set{
-								padding: 4px 15px 4px 40px;
+								padding: 6px 15px 6px 40px;
 								box-sizing: border-box;
 								// background-color: var(--text);
 								display: flex;
@@ -1620,8 +1738,9 @@ export default {
 		box-sizing: border-box;
 		padding: 0 20px 20px 0;
 		font-size: 13px;
+		line-height: 16px;
 		overflow: auto;
-		white-space: pre-line;
+		white-space: nowrap;
 		font-family: var(--mono) !important;
 		color: var(--white);
 		font-weight: 600;
@@ -1630,24 +1749,16 @@ export default {
 			line-height: 13px;
 			letter-spacing: 0.3px;
 		}
+
+		span,div,p{
+			// white-space: pre;
+		}
 		
 		// B tags are comments
 		b{
 			font-weight: 600;
 			color: var(--white);
 			opacity: 0.5;
-		}
-
-		// Tab spaces
-		.ltab-1,
-		.ltab-2{
-			white-space: pre;
-		}
-		.ltab-1:before{
-			content: '\00a0\00a0\00a0\00a0';
-		}
-		.ltab-2:before{
-			content: '\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0';
 		}
 
 	}
@@ -1686,6 +1797,7 @@ export default {
 		position: absolute;
 		top: 40px;
 		left: 10px;
+		overflow: auto;
 		z-index: 55;
 		border: 1px solid rgba(205,205,255,0.25) !important;
 
@@ -1712,8 +1824,11 @@ export default {
 			line-height: 15px;
 			border: 1px solid rgba(205,205,255,0.25) !important;
 		}
-		textarea{
-			min-height: 180px;
+		textarea.small{
+			min-height: 60px;
+		}
+		textarea.big{
+			min-height: 160px;
 		}
 
 		.field{

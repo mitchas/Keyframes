@@ -43,6 +43,8 @@
 				<Toast ref="toastComponent"></Toast>
 				<!-- Alert Component -->
 				<Alert ref="alertComponent"></Alert>
+				<!-- Alert Component -->
+				<ConfirmLeave ref="confirmLeaveComponent"></ConfirmLeave>
 
 			</div>
 		</transition>
@@ -53,6 +55,7 @@
 // Components
 import Alert from "@/components/ui/Alert";
 import Toast from "@/components/ui/Toast";
+import ConfirmLeave from "@/components/ui/ConfirmLeave";
 import TopBar from "@/components/ui/TopBar";
 // Mixins
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
@@ -67,6 +70,7 @@ export default {
 	components: {
 		Alert,
 		Toast,
+		ConfirmLeave,
 		TopBar,
 	},
 	data() {
