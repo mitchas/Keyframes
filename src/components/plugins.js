@@ -5,10 +5,14 @@
 //
 // 	navigate(route): pushes route to update vue router
 // 			only fires if route is different than current route
+// 			Specific pages (tools) ask for confirmation before leaving
+// 				unless users have it disabled in settings
 // 
 // 	tab(url): opens url in new tab
 // 
 // 	copyToClipboard(name, value): Copies value to clipboard, shows toast confirmation
+// 	
+// 	invertText(hex): takes hex value and returns hex with proper contrast black or white
 //  
 // 	toast(): provides easy this.toast() call to use in any component.
 //
@@ -37,11 +41,23 @@ export default {
 		// This lets you use custom elements that are accessible/focusable, rather than router-link
 		// then use @click to navigate()
 		Vue.prototype.navigate = function(route) {
+			console.log("ROUTEROUTE")
+			console.log(route)
+			// Confirm leave on these pages
+			var confirmPages = ['/animate/', '/colors/', '/shadows'];
+
 			if(route == this.$route.path){
 				return;
 			}else{
-				this.$router.push(route);
-				document.documentElement.scrollTop = 0;
+
+				if(confirmPages.includes(this.$route.path) && this.$store.getters.userPreferences.confirmLeave){
+					// Show confirmation
+					this.$root.$children[0].$refs.confirmLeaveComponent.confirmLeave(route);
+				}else{
+					// Else no confirmation needed
+					this.$router.push(route);
+					document.documentElement.scrollTop = 0;
+				}
 			}
 		}
 
@@ -66,7 +82,21 @@ export default {
 			// Toast
 			// this.toast("Copied!", name + " has been copied to your clipboard. ", "", "far fa-copy");
 			this.alert(name + " Copied to clipboard!", "far fa-copy");
-		}
+		},
+
+		/////////////////////
+		//  Invert Text   //
+		////////////////////
+		// Decides contrast color (for text) based on hex color input.
+		// Taken from https://stackoverflow.com/questions/11867545/change-text-color-based-on-brightness-of-the-covered-background-area
+		Vue.prototype.invertTextColor = function(color) {
+			var hexcolor = color.replace("#", "");
+			var r = parseInt(hexcolor.substr(0,2),16);
+			var g = parseInt(hexcolor.substr(2,2),16);
+			var b = parseInt(hexcolor.substr(4,2),16);
+			var yiq = ((r*299)+(g*587)+(b*114))/1000;
+			return (yiq >= 128) ? 'black' : 'white';
+		},
 
 		////////////////////////
 		//// Toast & Alert ////

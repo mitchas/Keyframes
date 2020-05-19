@@ -69,7 +69,7 @@ export default {
 			width: 60px;
 			text-align: center;
 			box-sizing: border-box;
-			font-size: 26px;
+			font-size: 30px;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
@@ -78,10 +78,10 @@ export default {
 
 		// Text
 		.callout-body{
-			font-size: 14.5px;
-			line-height: 20px;
-			font-weight: 400;
-			letter-spacing: 0.25px;
+			font-size: 14px;
+			line-height: 24px;
+			font-weight: 500;
+			letter-spacing: 0.55px;
 			font-family: var(--systemFont);
 			color: var(--text);
 			padding: 15px 0 15px 0;
@@ -124,6 +124,11 @@ export default {
 				color: var(--red);
 			}
 		}
+		&.orange{
+			.callout-icon, a{
+				color: var(--orange);
+			}
+		}
 		// Green
 		&.green{
 			.callout-icon, a{
@@ -136,6 +141,15 @@ export default {
 			color: var(--background);
 			span,p,h1,h2,h3,h4,h5,h6,i{
 				color: var(--background);
+			}
+			a{
+				color: var(--links);
+				text-decoration: underline;
+				font-weight: 500;
+
+				&:hover{
+					color: var(--linksHover);
+				}
 			}
 		}
 
@@ -168,7 +182,8 @@ export default {
 			}
 			.callout-body{
 				font-size: 18px;
-				font-weight: 600;
+				font-weight: 500;
+				line-height: 26px;
 			}
 
 			@media (max-width: @screenSM) {

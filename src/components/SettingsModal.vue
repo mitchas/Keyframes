@@ -65,6 +65,17 @@
 						</label>
 					</div>
 
+					<!-- Confirm Leave -->
+					<div class="setting-toggle">
+						<div class="setting-toggle-input">
+							<input id="confirmLeaveToggle" type="checkbox" class="toggle" v-model="$store.getters.userPreferences.confirmLeave" @change="toggleAnimations()"/>
+						</div>
+						<label class="setting-label-large" for="confirmLeaveToggle">
+							Confirm Leave
+							<small>Disable or enable the confirmation popup when leaving an app page.</small>
+						</label>
+					</div>
+
 					<!-- Start Page Selector -->
 					<label class="setting-label-large mtop-xs">
 						Start Page {{test}}

@@ -393,6 +393,9 @@ export default {
 			var hex = this.palette[this.selectedPalette].hex;
 			if(hex[0] == "#"){
 				hex = hex.substring(1);
+			}else{
+				// Add hex to prop
+				this.palette[this.selectedPalette].hex = "#" + this.palette[this.selectedPalette].hex
 			}
 
 			// get rgb numbers
@@ -471,20 +474,6 @@ export default {
 
 		},
 
-		/////////////////////
-		//  Invert Text   //
-		////////////////////
-		// Decides contrast color (for text) based on hex color input.
-		// Taken from https://stackoverflow.com/questions/11867545/change-text-color-based-on-brightness-of-the-covered-background-area
-		invertTextColor: function(color){
-			var hexcolor = color.replace("#", "");
-			var r = parseInt(hexcolor.substr(0,2),16);
-			var g = parseInt(hexcolor.substr(2,2),16);
-			var b = parseInt(hexcolor.substr(4,2),16);
-			var yiq = ((r*299)+(g*587)+(b*114))/1000;
-			return (yiq >= 128) ? 'black' : 'white';
-		},
-
 		/////////////////////////
 		//  Palette Controls  //
 		///////////////////////
@@ -509,8 +498,11 @@ export default {
 					_this.palette.splice(index, 1);
 				}, 300)
 			}else{
-				this.toast("Ope.", "Your palette has to have at least one color...", "red", "far fa-tint");
+				this.toast("Hey don't do that.", "You can't delete every color. You have to have at lest one.", "red", "far fa-tint");
 			}
+
+			// Make new hex string
+			this.makeHexString();
 		},
 		// Add new color to palette
 		// Takes current color, adjusts hue a little bit
@@ -557,7 +549,7 @@ export default {
 			var stringified = JSON.stringify(newPalette)
 			localStorage.setItem('palette_' + this.paletteToSaveName.replace(/\s/g, ''), stringified);
 
-			this.toast("Palette Saved", "Your palette has been saved into your browser's local storage.", "", "fas fa-swatchbook");
+			this.toast("Palette Saved", "Your palette has been saved to your browser's local storage.", "", "fas fa-swatchbook");
 			// Hide tab
 			this.controlToggles.save = false;
 		},
@@ -577,6 +569,11 @@ export default {
 			this.setPalette();
 			// Hide tab
 			this.controlToggles.save = false;
+
+			// Set saved name as save input field name
+			this.paletteToSaveName = name.substr(8);
+			// Generate new hex string
+			this.makeHexString();
 		},
 		
 		
