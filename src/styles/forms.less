@@ -50,7 +50,7 @@
 		display: flex;
 		justify-content: space-between;
 		padding-bottom: 5px;
-		padding: 0 0 4px 0;
+		padding: 0 0 8px 0;
 
 		// Actual label text
 		span{
@@ -72,7 +72,7 @@
 			text-align: center;
 			margin: 0 0 0 0;
 			padding: 0;
-			border-radius: var(--borderRadiusSmall);
+			border-radius: var(--borderRadius);
 			height: 30px;
 		}
 
@@ -216,15 +216,15 @@ textarea{
     font-size: 16px;
 	box-sizing: border-box;
 	padding: 0 8px;
-	color: var(--text);
+	color: var(--black);
 	font-family: var(--systemFont);
 	font-weight: 500;
 	letter-spacing: 0.35px;
-	border-radius: 3px;
+	background-color: var(--inputBackground);
+	border-radius: var(--borderRadius);
 	transition: all 0.1s ease, border-color 0.15s ease;
 	font-weight: 500;
-	border: 1px solid var(--border);
-	background-color: transparent;
+	border: var(--borderWidth) solid var(--inputBorder);
 
 	// Increase size on mobile
 	@media (max-width: @screenMD) {
@@ -236,10 +236,7 @@ textarea{
 	// Hover and focus states
 	&:hover,
 	&:focus{
-		// background-color: rgba(150,150,150,0.2);
-		background-color: var(--grey);
 		transition: all 0.1s ease, border-color 0.15s ease;
-		// Light border mobile
 	}
 	
 	// Placeholder
@@ -311,7 +308,7 @@ button{
 	border: none;
 	color: var(--background);
 	height: 36px;
-	border-radius: 3px;
+	border-radius: var(--borderRadius);
 	font-size: 14px;
 	letter-spacing: 0.15px;
 	font-weight: 600;
@@ -320,7 +317,7 @@ button{
 	box-sizing: border-box;
 	transform: translateY(0px);
 	font-family: var(--systemFont);
-	border: 1px solid var(--borderDark);
+	border: var(--borderWidth) solid var(--black);
 	border-bottom-width: 2px;
 
 	// Increase size on mobile
@@ -386,6 +383,11 @@ button{
 		background-color: var(--yellow);
 		color: var(--black);
 	}
+	// Orange
+	&.orange{
+		background-color: var(--orange);
+		color: var(--white);
+	}
 	// Purple
 	&.purple{
 		background-color: var(--purple);
@@ -399,7 +401,7 @@ button{
 	// Black
 	&.black{
 		color: var(--white);
-		background-color: var(--black);
+		background-color: var(--popup);
 	}
 	// Invert
 	&.invert{
@@ -420,7 +422,7 @@ button{
 		font-size: 13px;
 		letter-spacing: 0.26px;
 		font-weight: 600;
-		padding: 0 8px 0 8px;
+		padding: 0 8px 1px 8px;
 
 		// Increase size on mobile
 		@media (max-width: @screenMD) {
@@ -516,9 +518,9 @@ input[type="checkbox"]:focus {
 	display: inline-block;
 	position: relative;
 	margin: 0;
-	border-radius: var(--borderRadiusSmall);
+	border-radius: var(--borderRadius);
 	box-sizing: border-box;
-	border: 1px solid transparent;
+	border: var(--borderWidth) solid transparent;
 	transition: all 0.2s ease;
 	background: var(--inputBackground);
 	font-size: 16px;
@@ -580,7 +582,7 @@ input[type="checkbox"]:focus {
 	display: inline-block;
 	position: relative;
 	margin: 0;
-	border: 1px solid var(--border);
+	border: var(--borderWidth) solid var(--inputBorder);
 	transition: all .2s ease;
 	background-color: var(--inputBackground);
 
@@ -595,7 +597,7 @@ input[type="checkbox"]:focus {
 		border-radius: 50%;
 		background: var(--background);
 		transition: all .2s cubic-bezier(.5,.1,.75,1.35);
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--inputBorder);
 		box-sizing: border-box;
 		transition: var(--transition);
 	}
@@ -608,13 +610,13 @@ input[type="checkbox"]:focus {
 
 	// Checked, move circle to right, full color
 	&:checked{
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--inputBorder);
 		background: var(--inputBackground);
 
 		&:after{
 			background: var(--blue);
 			transform: translateX(17px);
-			border-color: var(--border);
+			border-color: var(--inputBorder);
 			opacity: 1;
 		}
 	}
@@ -634,7 +636,7 @@ input[type="range"] {
 	// Chrome
 	@media screen and (-webkit-min-device-pixel-ratio:0) {
 		& {
-			height: 4px;
+			height: 6px;
 			background-color: var(--text);
 			-webkit-appearance: none;
 		}
@@ -646,17 +648,17 @@ input[type="range"] {
 			border: none;		
 		}
 		&::-webkit-slider-thumb {
-			width: 22px;
+			height: 28px;
+			width: 28px;
 			-webkit-appearance: none;
-			height: 22px;
 			cursor: ew-resize;
-			background: var(--text);
+			background: var(--layer);
+			border: 3px solid var(--inputBorder);
 			border-radius: 50%;
 			transition: box-shadow 0.2s ease-in-out;
 			position: relative;
-			top: -9px;
-			position: relative;
-			// top: 1px;
+			top: -12px;
+			// margin-top: -4px;
 		}
 		&:active::-webkit-slider-thumb {
 			background: var(--green);
@@ -664,74 +666,31 @@ input[type="range"] {
 	}
 	// Firefox
 	&::-moz-range-thumb{
-		// border: 1px solid transparent;
-		background-color: var(--blue);
-		border-color: var(--blue);
+		// border: var(--borderWidth) solid transparent;
+		background-color: var(--layer);
+		border: 3px solid var(--inputBorder);
 		border-radius: 50%;
-		border-width: 0;
+		height: 28px;
+		width: 28px;
 	}	
 	&::-moz-range-progress {
-		background-color: var(--blue); 
+		background-color: var(--inputBorder); 
 	}
 	&::-moz-range-track {  
-		background-color: var(--background);
+		background-color: var(--layer);
+	}
+	&:active::-moz-range-thumb {
+		background: var(--green);
 	}
 	// IE
 	&::-ms-fill-lower {
-		background-color: var(--blue); 
+		background-color: var(--inputBorder); 
 	}
 	&::-ms-fill-upper {  
-		background-color: var(--green);
+		background-color: var(--layer);
 	}
 }
 
-// Range specific for background where color changes - always visible
-input[type="range"].color-range {
-	@media screen and (-webkit-min-device-pixel-ratio:0) {
-		& {
-			background-color: var(--red);
-		}
-		&::-webkit-slider-thumb {
-			background: var(--white);
-			border: 2px solid var(--black);			
-			top: -9px;
-			position: relative;
-
-		}
-		&::-webkit-slider-runnable-track {
-			background: var(--text);
-			height: 4px;
-			outline: none;
-			box-shadow: none;
-			border: none;		
-		}
-		&:active::-webkit-slider-thumb {
-			background: var(--green);
-		}
-	}
-	// Firefox
-	&::-moz-range-thumb{
-		background-color: var(--white);
-		border-color: var(--white);
-		border-radius: 50%;
-		border: 2px solid var(--black);
-	}	
-	&::-moz-range-progress {
-		background-color: var(--black); 
-	}
-	&::-moz-range-track {  
-		background-color: var(--white);
-		border: none;
-		box-shadow: none;
-	}
-	// IE
-	&::-ms-fill-lower {
-		background-color: var(--blue); 
-	}
-	&::-ms-fill-upper {  
-		background-color: var(--green);
-	}
-}
 input[type=range]::-moz-focus-outer {
 	border: 0;
 }
@@ -761,9 +720,9 @@ input[type=range]::-moz-focus-outer {
 		height: 65px;
 		box-sizing: border-box;
 		padding: 0 0px;
-		border-radius: 3px;
+		border-radius: var(--borderRadius);
 		max-width: 93px;
-		border: 1px solid var(--border);
+		border: var(--borderWidth) solid var(--inputBorder);
 		min-width: 93px;
 		flex-grow: 3;
 		color: var(--textLight);
@@ -819,7 +778,7 @@ input[type=range]::-moz-focus-outer {
 			font-size: 18px;
 			font-weight: 500;
 			transition: var(--transitionFast);
-			color: var(--border);
+			color: var(--inputBorder);
 		}
 
 			
@@ -828,7 +787,7 @@ input[type=range]::-moz-focus-outer {
 			cursor: pointer;
 			transition: var(--transitionFast);
 			text-decoration: none;
-			// border-color: var(--border);
+			// border-color: var(--inputBorder);
 			color: var(--text);
 
 			span{
@@ -847,10 +806,10 @@ input[type=range]::-moz-focus-outer {
 		// Option Selected
 		&.active{
 			color: var(--text);
-			border-color: var(--border);
+			border-color: var(--inputBorder);
 			position: relative;
 			transform: scale(1);
-			border-color: var(--border);
+			border-color: var(--inputBorder);
 
 			i{
 				// Custom icons
@@ -872,7 +831,7 @@ input[type=range]::-moz-focus-outer {
 
 		.option{
 			height: 85px;
-			border-radius: var(--borderRadiusSmall);
+			border-radius: var(--borderRadius);
 			max-width: 124px;
 			flex-grow: 3;
 			margin-right: 12px !important;

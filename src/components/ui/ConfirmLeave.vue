@@ -25,7 +25,7 @@
 					</div>
 					<!-- Body Content -->
 					<div class="modal-body">
-						<p class="padding-none margin-none">Are you sure you want to leave this page? If you have any unsaved changes, they will be lost.</p>
+						Are you sure you want to leave this page? If you have any unsaved changes, they will be lost.
 					</div>
 					<!-- Footer/Buttons -->
 					<div class="modal-footer">
@@ -100,12 +100,12 @@ export default {
 			color: var(--black);
 			box-sizing: border-box;
 			padding: 5px 6px 6px 6px;
-			border-radius: 5px;
+			border-radius: var(--borderRadius);
 			font-size: 14px;
 			box-shadow: var(--shadow);
 			font-weight: 700;
 			margin: 0 auto;
-			border: 1px solid var(--border);
+			border: var(--borderWidth) solid var(--border);
 			max-width: 300px;
 			display: flex;
 			justify-content: space-between;

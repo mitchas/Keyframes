@@ -18,7 +18,7 @@
 
 		<Modal
 			v-bind:show="showAbout"
-			color="black"
+			color="white"
 			confirmText="View on GitHub"
 			confirmIcon="fab fa-github"
 			dismissText="Dismiss"
@@ -119,6 +119,8 @@ export default {
 		};
 	},
 	mounted() {
+		// Track settings open
+		_paq.push(['trackEvent', 'Action', 'View', 'About']);	
 	},
 	methods: {
 	

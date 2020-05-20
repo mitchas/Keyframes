@@ -46,11 +46,11 @@
 			<div class="app-page-split-left-top" id="colorOptionsBar">
 
 				<div class="option-dropdown">
-					<button class="button small" @click="controlTab('save')" v-bind:class="{'red': controlToggles.save, 'invert': !controlToggles.save}">
+					<button class="button small action-btn" @click="controlTab('save')" v-bind:class="{'red': controlToggles.save, 'invert': !controlToggles.save}">
 						<i v-bind:class="{'fas fa-save': !controlToggles.save, 'fas fa-times-circle': controlToggles.save}"></i>
 						<span>Save/Load</span>
 					</button>
-					<button class="button small" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'transparent': !controlToggles.options}">
+					<button class="button small action-btn" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'transparent': !controlToggles.options}">
 						<i v-bind:class="{'fas fa-edit': !controlToggles.options, 'fas fa-times-circle': controlToggles.options}"></i>
 						<span>Options</span>
 					</button>
@@ -68,10 +68,16 @@
 								</label>
 								<!-- animation name -->
 								<input id="newPaletteSaveName" aria-label="Save as Name" type="text" v-model="paletteToSaveName" maxlength="12" placeholder="MyPalette"/>
-								<button aria-label="Save Palette" class="button blue small mtop-xs" @click="savePalette()">
+								<button aria-label="Save Palette" class="button blue mtop-xs" @click="savePalette()">
 									<i class="far fa-save"></i>
 									<span>Save</span>
 								</button>
+								<transition name="basic">
+									<div class="badge red mleft-xs" v-if="savedPalettes.includes('palette_' + paletteToSaveName)">
+										<i class="far fa-code-branch"></i>
+										<span>Overwriting {{paletteToSaveName}}</span>
+									</div>
+								</transition>
 							</div>
 							<!-- Saved animations -->
 							<div class="field mtop-sm">
@@ -133,33 +139,33 @@
 					<div class="field">
 						<label for="rgbaRed" class="slider-label-value">
 							<span>Red</span>
-							<input type="number" v-model="palette[selectedPalette].r" min="0" max="255"/>
+							<input type="number" v-model="palette[selectedPalette].r" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaRed" v-model="palette[selectedPalette].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
+						<input type="range" id="rgbaRed" v-model="palette[selectedPalette].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
 					</div>
 					<!-- Green -->
 					<div class="field">
 						<label for="rgbaGreen" class="slider-label-value">
 							<span>Green</span>
-							<input type="number" v-model="palette[selectedPalette].g" min="0" max="255"/>
+							<input type="number" v-model="palette[selectedPalette].g" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaGreen" v-model="palette[selectedPalette].g" min="0" max="255" step="1" @input="rgbaChange()"/>
+						<input type="range" id="rgbaGreen" v-model="palette[selectedPalette].g" min="0" max="255" step="1" @input="rgbaChange()"/>
 					</div>
 					<!-- Blue -->
 					<div class="field">
 						<label for="rgbaBlue" class="slider-label-value">
 							<span>Blue</span>
-							<input type="number" v-model="palette[selectedPalette].b" min="0" max="255"/>
+							<input type="number" v-model="palette[selectedPalette].b" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaBlue" v-model="palette[selectedPalette].b" min="0" max="255" step="1" @input="rgbaChange()"/>
+						<input type="range" id="rgbaBlue" v-model="palette[selectedPalette].b" min="0" max="255" step="1" @input="rgbaChange()"/>
 					</div>
 					<!-- Opacity -->
 					<div class="field">
 						<label for="rgbaOpacity" class="slider-label-value">
 							<span>Opacity</span>
-							<input type="number" v-model="palette[selectedPalette].a" min="0" max="255"/>
+							<input type="number" v-model="palette[selectedPalette].a" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaOpacity" v-model="palette[selectedPalette].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
+						<input type="range" id="rgbaOpacity" v-model="palette[selectedPalette].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
 					</div>
 
 				</div>
@@ -290,7 +296,7 @@ export default {
 			options: {
 				stageBackground: "",
 				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-hands-wash'></i></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:1px solid #f2f5f9;\n    color: #16023C;\n    border-radius: 4px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
+				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:var(--borderWidth) solid #f2f5f9;\n    color: #16023C;\n    border-radius: 3px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
 			},
 			// Which controls are visible
 			controlToggles: {
@@ -589,14 +595,14 @@ export default {
 
 	// Hide top options bar - not yet needed for colors page
 	#colorOptionsBar{
-		border-bottom: 1px solid var(--border);
+		border-bottom: var(--borderWidth) solid var(--border);
 		background-color: var(--background);
 	}
 
 	// Main color picker stage
 	#colorEditorStage{
 		background-color: var(--blue);
-		border-radius: 3px;
+		border-radius: var(--borderRadius);
 		margin: 10px 10px 20px 10px;
 		transition: 0s;
 		overflow: auto;
@@ -621,12 +627,12 @@ export default {
 					font-weight: 700;
 				}
 				label input{
-					border-radius: 3px;
+					border-radius: var(--borderRadius);
 				}
 				input{
 					background-color: var(--layer);
 					border-top-left-radius: 0;
-					border: 1px solid var(--border);
+					border: var(--borderWidth) solid var(--border);
 					color: var(--text);
 				}
 			}
@@ -653,13 +659,15 @@ export default {
 	#colorPalette{
 
 		@media (max-width: @screenMD) {
-			height: 100%;
-			max-height: 100%;
 			overflow: hidden;
+			flex-grow: 3;
 
 			.color-wrapper{
 				display: flex;
+				height: 100%;
 				overflow-y: auto;
+				box-sizing: border-box;
+				padding: 5px 0 0 0;
 			}
 		}
 
@@ -667,9 +675,9 @@ export default {
 			display: flex;
 			justify-content: space-between;
 			width: 100%;
-			height: 100px;
-			border-radius: 3px;
-			border: 1px solid var(--border);
+			height: 140px;
+			border-radius: var(--borderRadius);
+			border: var(--borderWidth) solid var(--border);
 			margin: 0 0 15px 0;
 			box-sizing: border-box;
 			letter-spacing: 0.4px;
@@ -678,8 +686,9 @@ export default {
 
 			// Fixed width on mobile because it scrolls horizontally
 			@media (max-width: @screenMD) {
-				width: 200px;
-				min-width: 200px;
+				width: 210px;
+				height: 100%;
+				min-width: 210px;
 				margin: 0 10px 0 0;
 
 				&:first-child{
@@ -696,9 +705,13 @@ export default {
 				display: none;
 				color: var(--textLight);
 				transition: var(--transitionFast);
+				box-sizing: border-box;
+				padding: 8px 0;
 
 				@media (max-width: @screenMD) {
+					min-height: 100%;
 					display: flex;
+					flex-grow: 3;
 				}
 
 				i.fa-plus,
@@ -749,12 +762,12 @@ export default {
 				justify-content: space-between;
 				height: 100%;
 				box-sizing: border-box;
-				padding: 10px;
+				padding: 10px 0 10px 10px;
 
 				.name{
 					text-transform: capitalize;
 					flex-grow: 3;
-					font-size: 17px;
+					font-size: 18px;
 					font-weight: 700;
 					display: block;
 
@@ -764,20 +777,20 @@ export default {
 					}
 				}
 				.color-value{
-					font-family: var(--mono);
 					display: block;
 					margin-top: 5px;
 					font-size: 15px;
 					transition: 0.08s;
-					opacity: 0;
+					// opacity: 0;
+					font-weight: 600;
 
 					// Shrink mobile
 					@media (max-width: @screenMD) {
-						font-size: 12px;
+						font-size: 14px;
 					}
 
 					i{
-						padding-left: 2px;
+						padding-left: 5px;
 					}
 
 					// Hover - click to copy

@@ -100,6 +100,12 @@
 								<i class="far fa-save"></i>
 								<span>Save</span>
 							</button>
+							<transition name="basic">
+								<div class="badge red mleft-xs" v-if="savedAnimations.includes('animation_' + animationToSaveName)">
+									<i class="far fa-code-branch"></i>
+									<span>Overwriting {{animationToSaveName}}</span>
+								</div>
+							</transition>
 						</div>
 						<!-- Saved animations -->
 						<div class="field mtop-sm">
@@ -125,16 +131,18 @@
 						<div class="field">
 							<label for="customTarget">
 								Target Element
-								<small class="block">Change the element you're animating</small>
+								<small class="block">Change the content of element you're animating</small>
 							</label>
 							<!-- target html -->
-							<textarea v-model="customTargetCode" id="customTarget" class="mbottom-sm code small"></textarea>
+							<div class="target-el-open">&lt;div id="targetElement"&gt;</div>
+							<textarea v-model="customTargetCode" id="customTarget" class="code"></textarea>
+							<div class="target-el-close">&lt;/div&gt;</div>
 						</div>
 						<!-- Custom Target CSS -->
 						<div class="field">
 							<label for="customTargetCSS">
 								Target CSS
-								<small class="block">Modify the target Element's CSS</small>
+								<small class="block">Modify the target element's default CSS</small>
 							</label>
 							<!-- target css -->
 							<textarea class="code big" v-model="customTargetStyles"></textarea>
@@ -154,7 +162,7 @@
 							-->
 							<b>/* Copy this @keyframes block to your CSS*/</b>
 							<!-- Keyframe definition block -->
-							<span>@keyframes yourAnimation &#123;</span>
+							<div>@keyframes yourAnimation &#123;</div>
 								<!-- For each keyframe step -->
 								<div v-for="(step, index) in computedCSSOutput" v-bind:key="index">
 									<!-- Step percent and open bracket -->
@@ -472,7 +480,7 @@
 								<div class="field-set">
 									<label>Border</label>
 									<div class="input-wrapper">
-										<input type="text" placeholder="1px solid red" v-model="keyframes[currentStep.left].properties.border" @input="saveStep()">
+										<input type="text" placeholder="var(--borderWidth) solid red" v-model="keyframes[currentStep.left].properties.border" @input="saveStep()">
 									</div>
 								</div>
 								<!-- Border Radius -->
@@ -695,8 +703,8 @@ export default {
 			// Show modal to edit target
 			showEditTarget: false,
 			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n   display: inline-flex;\n    flex-direction: column;\n    justify-content: center;\n    width: 80px;\n    height: 80px;\n    background-color: #0868FE;\n    color: #FFFFFF;\n    text-align: center;\n    border-radius: 50%;\n    font-size: 42px;\n    position: absolute;\n    transition: 0.5s ease;\n}",
-			customTargetCode: "<i class='fal fa-ufo'></i>",
+			customTargetStyles: "#targetElement{\n   \n}",
+			customTargetCode: "<i class='fas fa-alien-monster kft'></i>",
 			// customTargetCode: "<i class='fal fa-alien-monster'></i>",
 			// Animation name to save
 			animationToSaveName: null,
@@ -755,8 +763,8 @@ export default {
 		this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
 
 		// Create date and format (remove spaces, remove year)
-		var dateName = new Date().toDateString().replace(/\s/g, '');
-		this.animationToSaveName =  "" + dateName.substring(0,dateName.length - 4).substring(3,dateName.length - 4) + "-x" + (Math.floor(Math.random() * 666)+100).toString();
+		// var dateName = new Date().toDateString().replace(/\s/g, '');
+		// this.animationToSaveName =  "" + dateName.substring(0,dateName.length - 4).substring(3,dateName.length - 4) + "-x" + (Math.floor(Math.random() * 666)+100).toString();
 	},
 
 	computed: {
@@ -1082,6 +1090,8 @@ export default {
 			this.keyframes = parsed.keyframes;
 			this.customTargetStyles = parsed.customTargetStyles;
 			this.customTargetCode = parsed.customTargetCode;
+			// Set name to overwrite
+			this.animationToSaveName = name.substr(10);
 			// // this.allProperties = animation;
 
 			this.toast(name.substr(10) + " Loaded", "Your animation has been loaded.", "", "far fa-cloud-download");
@@ -1098,7 +1108,7 @@ export default {
 		copyOutput: function(){
 			// Create input element, append text, copy text, remove element
 			var copyContent = document.getElementById('outputCSS').innerText;
-			this.copyToClipboard("Output CSS", copyContent)
+			this.copyToClipboard("Your Animation CSS", copyContent)
 		},
 
 	}
@@ -1148,7 +1158,7 @@ export default {
 				#animateTop{
 					display: flex;
 					justify-content: flex-start;
-					border-bottom: 1px solid var(--border);
+					border-bottom: var(--borderWidth) solid var(--border);
 					width: 100%;
 					background-color: var(--layer);
 
@@ -1177,7 +1187,7 @@ export default {
 					// Editor button - only visible on mobile to toggle sidebar
 					#mobilePropertyToggle{
 						align-self: flex-end;
-						border-left: 1px solid var(--border);
+						border-left: var(--borderWidth) solid var(--border);
 						width: 130px;
 						display: none;
 
@@ -1212,7 +1222,7 @@ export default {
 					}
 
 					#targetStage{
-						border-radius: var(--borderRadiusSmall);
+						border-radius: var(--borderRadius);
 						width: 100%;
 						height: 100%;
 						display: flex;
@@ -1226,8 +1236,25 @@ export default {
 							
 							// Element that's being animated
 							#targetElement{
-								// box-shadow: var(--shadow);
 								z-index: 3;
+								transition: 0.2s cubic-bezier(0.5, 0.1, 0.8, 1);
+								
+								// Specific target element that it starts with
+								.kft{
+									display: inline-flex;
+									color: var(--text);
+									background: var(--background);
+									border-radius: 50%;
+									height: 100px;
+									width: 100px;
+									font-size: 64px;
+									display: flex;
+									flex-direction: column;
+									justify-content: center;
+									text-align: center;
+									
+									transform-origin: 50% 50%;
+								}
 							}
 						}
 					}
@@ -1254,7 +1281,7 @@ export default {
 					padding: 0 0;
 					transition: var(--transitionFast);
 					z-index: 10;
-					border-left: 1px solid var(--border);
+					border-left: var(--borderWidth) solid var(--border);
 
 					// Shrink a bit below XL
 					@media (max-width: @screenXL) {
@@ -1314,7 +1341,7 @@ export default {
 							padding: 10px 15px 10px 15px;
 							font-size: 14px;
 							font-weight: 700;
-							// border-bottom: 1px solid var(--border);
+							// border-bottom: var(--borderWidth) solid var(--border);
 							transition: var(--transition);
 							color: var(--text);
 
@@ -1404,7 +1431,7 @@ export default {
 			min-width: 100%;
 			max-width: 100%;
 			background-color: var(--layer);
-			border-top: 1px solid var(--border);
+			border-top: var(--borderWidth) solid var(--border);
 			height: fit-content;
 			min-height: fit-content;
 
@@ -1418,7 +1445,7 @@ export default {
 				display: flex;
 				justify-content: space-between;
 				flex-wrap: wrap;
-				border-bottom: 1px solid var(--border);
+				border-bottom: var(--borderWidth) solid var(--border);
 				background-color: var(--layer);
 
 				// Add and delete step buttons
@@ -1458,7 +1485,7 @@ export default {
 						width: 100%;
 						padding: 5px 0 12px 0;
 						margin-right: 0;
-						border-bottom: 1px solid var(--border);
+						border-bottom: var(--borderWidth) solid var(--border);
 					}
 
 					// Animation props
@@ -1594,11 +1621,11 @@ export default {
 			// Timeline
 			#animateTimeline{
 				height: 80px;
-				border-radius: 3px;
+				border-radius: var(--borderRadius);
 				box-sizing: border-box;
 				position: relative;
 				transition: 0s ease;
-				border: 1px solid var(--border);
+				border: var(--borderWidth) solid var(--border);
 				width: 95%;
 				margin: 15px 0 25px 2.5%;
 				background-color: var(--background);
@@ -1758,12 +1785,12 @@ export default {
 		box-sizing: border-box;
 		padding: 0 20px 20px 0;
 		font-size: 13px;
-		line-height: 16px;
+		line-height: 17px;
 		overflow: auto;
 		white-space: nowrap;
 		font-family: var(--mono) !important;
 		color: var(--white);
-		font-weight: 600;
+		font-weight: 500;
 
 		span{
 			line-height: 13px;
@@ -1808,18 +1835,17 @@ export default {
 		max-height: 90%;
 		max-height: calc(~'100% - 50px');
 		height: fit-content;
-		background-color: var(--black);
+		background-color: var(--popup);
 		padding: 15px;
 		transform-origin: top center;
-		border-radius: 3px;
-		box-shadow: var(--shadow);
+		border-radius: var(--borderRadius);
 		box-sizing: border-box;
 		position: absolute;
 		top: 40px;
 		left: 10px;
 		overflow: auto;
 		z-index: 55;
-		border: 1px solid rgba(205,205,255,0.25) !important;
+		border: var(--borderWidth) solid rgba(205,205,255,0.25) !important;
 
 		// Full width mobile
 		@media (max-width: @screenSM) {
@@ -1840,9 +1866,7 @@ export default {
 		textarea,input{
 			font-size: 14px;
 			font-family: var(--mono);
-			background-color: var(--background) !important;
 			line-height: 15px;
-			border: 1px solid rgba(205,205,255,0.25) !important;
 		}
 		textarea.small{
 			min-height: 60px;
@@ -1855,6 +1879,37 @@ export default {
 			label small{
 				margin: 4px 0 4px 0;
 			}
+		}
+
+
+		// Change target element textarea to show non-editable targetElement wrapper
+		.target-el-open,
+		.target-el-close{
+			position: relative;
+			top: 30px;
+			font-size: 14px;
+			font-family: var(--mono);
+			line-height: 15px;
+			color: var(--black);
+			opacity: 0.5;
+			box-sizing: border-box;
+			padding: 5px;
+			user-select: none;
+		}
+		.target-el-open{
+			margin-top: -24px;
+		}
+		.target-el-close{
+			top: -15px;
+			margin-top: -15px;
+			background-color: transparent;
+			border-top: none;
+		}
+		#customTarget{
+			box-sizing: border-box;
+			padding: 30px 10px 30px 30px;
+			white-space: pre;
+			min-height: 80px;
 		}
 	}
 

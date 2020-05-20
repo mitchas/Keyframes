@@ -181,7 +181,7 @@ export default {
 		top: 0px;
 		backdrop-filter: blur(3px);
 		background: var(--layer);
-		border-bottom: 1px solid var(--border);
+		border-bottom: var(--borderWidth) solid var(--border);
 		z-index: 60;
 		// backdrop-filter: blur(3.3px);
 		// backdrop-filter:  grayscale(100%);
@@ -277,18 +277,20 @@ export default {
 					}
 					// Label text - either username or "Hey There!"
 					span{
-						font-size: 14px;
-						font-weight: 600;
+						font-size: 16px;
+						font-weight: 700;
+						letter-spacing: 0.3px;
 
 						// Move down a tiny bit on mobile
 						@media (max-width: @screenMD) {
+							font-size: 15px;
 							padding-top: 1px;
 						}
 					}
 					// Caret down arrow
 					i{
-						margin-left: 6px;
-						font-size: 20px;
+						margin-left: 8px;
+						font-size: 24px;
 						padding-bottom: 0px;
 						transition: var(--transition);
 						width: 18px;
@@ -297,7 +299,9 @@ export default {
 
 						// Move on mobile
 						@media (max-width: @screenMD) {
+							font-size: 22px;
 							top: 0;
+							margin-left: 5px;
 						}
 					}
 				}
@@ -325,11 +329,11 @@ export default {
 					max-height: 0;
 					overflow: hidden;
 					box-sizing: border-box;
-					border-radius: 3px;
+					border-radius: var(--borderRadius);
 					padding: 0px 10px;
 					overflow: 0;
 					border: 0px solid transparent;
-					background-color: var(--black);
+					background-color: var(--popup);
 
 					@media (max-width: @screenMD) {
 						width: 220px;
@@ -349,8 +353,8 @@ export default {
 						padding: 8px 10px 10px 10px;
 						overflow: 1;
 						box-shadow: var(--shadow);
-						border: 1px solid rgba(205,205,255,0.25);
-						border: 1px solid var(--border);
+						border: var(--borderWidth) solid rgba(205,205,255,0.25);
+						border: var(--borderWidth) solid var(--border);
 					}
 
 					// Change spacing on default hr

@@ -46,9 +46,9 @@
 			display: flex;
 			padding: 0 0 0 0;
 			// background-color: var(--background);
-			border-bottom: 1px solid var(--black);
+			border-bottom: var(--borderWidth) solid var(--popup);
 
-			button{
+			.action-btn{
 				width: fit-content;
 				border-radius: 0;
 				border-top: 0;
@@ -60,6 +60,7 @@
 
 				i{
 					width: 18px;
+					transform: scale(1.44);
 				}
 				@media (max-width: @screenMD) {
 					padding-bottom: 0;
@@ -84,12 +85,11 @@
 					min-width: 400px;
 					max-width: 400px;
 					width: 400px;
-					box-shadow: var(--shadow);
-					border-radius: 3px;
+					border-radius: var(--borderRadius);
 					box-sizing: border-box;
-					background-color: var(--black);
+					background-color: var(--popup);
 					padding: 15px;
-					border: 1px solid rgba(205,205,255,0.25);
+					border: var(--borderWidth) solid var(--border);
 					z-index: 10;
 
 					// Full width mobile
@@ -104,6 +104,11 @@
 
 					label, h1, h2, h3, h4, h5, h6, p{
 						color: var(--white);
+					}
+
+					// Spacing below label
+					.field label{
+						padding-bottom: 10px;
 					}
 
 					code{
@@ -132,8 +137,6 @@
 					}
 
 					input, textarea{
-						background-color: var(--background);
-						border: 1px solid rgba(205,205,255,0.25);
 						user-select: all;
 					}
 
@@ -199,7 +202,7 @@
 			background-color: var(--layer);
 			box-sizing: border-box;
 			padding: 15px;
-			border-left: 1px solid var(--border);
+			border-left: var(--borderWidth) solid var(--border);
 			height: 100%;
 			overflow: auto;
 
@@ -208,15 +211,17 @@
 				padding: 50px 50px 50px 50px;
 				border-left: none;
 				border-right: none;
-				border-top: 1px solid var(--border);
+				border-top: var(--borderWidth) solid var(--border);
 			}
 
 			// Hides overflow - must make child elements scroll hor
 			&.mobile-noscroll{
 				@media (max-width: @screenMD) {
-					padding: 10px 0 10px 0;
+					padding: 10px 0 15px 0;
 					max-height: 100%;
 					overflow: hidden;
+					display:flex;
+					flex-direction: column;
 				}
 			}
 
@@ -231,7 +236,7 @@
 					box-sizing: border-box;
 					display: block;
 					padding: 12px;
-					border-radius: var(--borderRadiusSmall);
+					border-radius: var(--borderRadius);
 					margin: 4px 0 0 0;
 					line-height: 20px;
 					background-color: var(--background);
@@ -244,9 +249,9 @@
 					.layer-button{
 						width: 30px;
 						height: 30px;
-						border: 1px solid var(--border);
+						border: var(--borderWidth) solid var(--border);
 						margin-right: 8px;
-						border-radius: 3px;
+						border-radius: var(--borderRadius);
 						display: flex;
 						flex-direction: column;
 						justify-content: center;

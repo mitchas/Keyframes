@@ -21,7 +21,7 @@
 	<!-- Toast notificaion -->
 	<transition name="toast">
 
-		<!-- <div id="toast" v-bind:class="toastData.color" v-if="!toastData.visible" @click="hideToast()"> -->
+		<!-- <div id="toast" class="yellow" v-if="!toastData.visible" @click="hideToast()"> -->
 		<div id="toast" v-bind:class="toastData.color" v-if="toastData.visible" @click="hideToast()">
 			<!-- Floaing x - clicking anywhere will close it, though -->
 			<div class="toast-close">
@@ -65,8 +65,6 @@ export default {
 		};
 	},
 	mounted(){
-		console.log("Route Params")
-		console.log(this.$route.params.c)
 	},
 	methods: {
 		/////////////////////
@@ -121,7 +119,7 @@ export default {
 	/////////////////
 	#toast{
 		position: fixed;
-		bottom: 22px;
+		bottom: 25px;
 		float: right;
 		opacity: 1;
 		right: 25px;
@@ -129,22 +127,39 @@ export default {
 		flex-direction: column;
 		background-color: var(--layer);
 		backdrop-filter: blur(3px);
-		border-radius: 12px;
+		border-radius: var(--borderRadiusMd);
 		transition: var(--transition);
 		box-shadow: var(--shadow);
 		z-index: 50000;
 		transform: translateY(0px);
 		transform-origin: center right;
-		border: 1px solid var(--border);
+		border: 1px solid var(--inputBorder);
+		background-color: var(--blue);
+		color: var(--white);
 
 		@media (max-width: @screenSM) {
 			right: unset;
 			width: 100%;
 			border-radius: 0;
-			border-top-right-radius: 8px;
-			border-top-left-radius: 8px;
 			bottom: 0;
-			box-shadow: var(--shadowTop);
+			padding: 8px 0;
+		}
+
+		// Color Variations
+		// Color Variations
+		// Red
+		&.red{
+			background-color: var(--red);
+		}
+		// Green
+		&.green{
+			background-color: var(--green);
+			color: var(--inputBorder);
+		}
+		// Yellow
+		&.yellow{
+			background-color: var(--yellow);
+			color: var(--inputBorder);
 		}
 
 		// Transition down when hiding beore unmount
@@ -164,21 +179,21 @@ export default {
 			height: 24px;
 			width: 24px;
 			border-radius: 50%;
-			color: var(--text);
+			color: var(--inputBorder);
 			text-align: center;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			background-color: transparent;
 			transition: var(--transition);
-			opacity: 0.3;
+			opacity: 0.5;
 
 			@media (max-width: @screenSM) {
 				width: 30px;
 				height: 30px;
 				right: 6px;
 				top: 6px;
-				opacity: 0.2;
+				opacity: 0.7;
 			}
 
 			i{
@@ -190,7 +205,7 @@ export default {
 		&:hover{
 			cursor: pointer;
 			transform: translateY(3px);
-			transition: var(--bezierTransitionSlow);
+			transition: var(--bezierTransition);
 
 			.toast-close{
 				transition: var(--transition);
@@ -204,7 +219,6 @@ export default {
 			box-sizing: border-box;
 			padding: 14px 12px 16px 10px;
 			display: flex;
-			color: var(--white);
 
 			// Increase padding on smaller screens
 			@media (max-width: @screenSM) {
@@ -217,14 +231,13 @@ export default {
 				flex-direction: column;
 				justify-content: center;
 				text-align: center;
-				width: 56px;
-				min-width: 56px;
-				max-width: 56px;
+				width: 44px;
+				min-width: 44px;
+				max-width: 44px;
 				font-size: 36px;
 				box-sizing: content-box;
 				padding-bottom: 2px;
 				height: auto;
-				color: var(--text);
 				@media (max-width: @screenSM) {
 					font-size: 46px;
 				}
@@ -240,7 +253,6 @@ export default {
 				padding-left: 8px;
 				max-width: 280px;
 				min-width: 160px;
-				color: var(--text);
 
 				// Adjust spacing on small screens
 				@media (max-width: @screenSM) {
@@ -250,23 +262,21 @@ export default {
 				}
 
 				.toast-title{
-					font-size: 17px;
+					font-size: 16px;
 					font-weight: 700;
 					letter-spacing: 0.25px;
-					padding-bottom: 2px;
+					padding-bottom: 3px;
 
 					// Spacing on mobile
 					@media (max-width: @screenSM) {
 						padding-bottom: 4px;
-						font-size: 16px;
 					}
 				}
 				.toast-body{
-					font-size: 14px;
+					font-size: 13px;
 					line-height: 18px;
-					letter-spacing: 0.5px;
+					letter-spacing: 0.35px;
 					font-weight: 500;
-					color: var(--text);
 					font-family: var(--systemFont);
 
 					// Spacing on mobile
@@ -285,9 +295,9 @@ export default {
 			bottom: 0px;
 			display: block;
 			width: 100%;
-			height: 4px;
-			min-height: 4px;
-			max-height: 4px;
+			height: 6px;
+			min-height: 6px;
+			max-height: 6px;
 
 			// Make a bit bigger on mobile
 			@media (max-width: @screenSM) {
@@ -302,8 +312,8 @@ export default {
 				display:flex;
 				width: 0%;
 				height: 100%;
-				background-color: var(--blue);
-				border-bottom-left-radius: 4px;
+				background-color: var(--inputBorder);
+				border-bottom-left-radius:  var(--borderRadiusMd);
 			}
 
 			// Show progress moving when class is added with v-if
@@ -311,39 +321,6 @@ export default {
 				animation: toastBar 4s 1 0s linear;
 			}
 		}
-
-		// Color Variations
-		// Color Variations
-		// Color Variations
-		// Red
-		&.red{
-			.toast-icon{
-				color: var(--red);
-			}
-			.toast-bar:after{
-				background-color: var(--red);
-			}
-		}
-		
-		// Green
-		&.green{
-			.toast-icon{
-				color: var(--green);
-			}
-			.toast-bar:after{
-				background-color: var(--green);
-			}
-		}
-		// Yellow
-		&.yellow{
-			.toast-icon{
-				color: var(--yellow);
-			}
-			.toast-bar:after{
-				background-color: var(--yellow);
-			}
-		}
-		
 
 	}
 

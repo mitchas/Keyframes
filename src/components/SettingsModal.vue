@@ -12,6 +12,8 @@
 //		- graphic - curve
 //
 //	- Functions:
+//		- viewLocalStorage()
+//			- Shows local storage help and tracks action
 //		- clearLocalStorage()
 //			- Clears all local storage for this site 
 //		- getAllLocalStorage()
@@ -98,7 +100,7 @@
 								<i class="far fa-trash-alt"></i>
 							</button>
 							<!-- Local storage help toggle -->
-							<button id="localStorageHelpButton" @click="showLocalStorageHelp = !showLocalStorageHelp">
+							<button id="localStorageHelpButton" @click="viewLocalStorage();">
 								<span v-if="!showLocalStorageHelp">What's this?</span>
 								<span v-else>Hide</span>
 								<i v-bind:class="{'far fa-chevron-down': !showLocalStorageHelp, 'far fa-chevron-up': showLocalStorageHelp}"></i>
@@ -199,12 +201,22 @@ export default {
 	mounted() {
 		// Show modal, lock scroll
 		this.getAllLocalStorage();
+		// Track settings open
+		_paq.push(['trackEvent', 'Action', 'View', 'Settings']);	
 	},
 	methods: {
+		// Open local storage help and track action
+		viewLocalStorage: function(){
+			this.showLocalStorageHelp = !this.showLocalStorageHelp;
+			_paq.push(['trackEvent', 'Action', 'View', 'Local Storage']);
+		},
 	
 		// Delete all items from local storage
 		clearLocalStorage: function(){
 			let _this = this;
+
+			// Track action
+			_paq.push(['trackEvent', 'Action', 'Function', 'Clear Local Storage']);
 
 			// Clear local storage
 			localStorage.clear();
@@ -214,7 +226,7 @@ export default {
 
 			// Close modal - this shows user an action,
 			// Also forcing them to open settings again shows accurate localstorage string
-			_this.closeSettings();
+			this.$emit('settingsModalClosed');
 		},
 		// This function returns all local storage data available
 		getAllLocalStorage: function(){
@@ -317,8 +329,8 @@ export default {
 		background-color: var(--background);
 		box-sizing: border-box;
 		padding: 10px;
-		border-radius: var(--borderRadiusSmall);
-		border: 1px solid var(--border);
+		border-radius: var(--borderRadius);
+		border: var(--borderWidth) solid var(--border);
 		margin: 10px 0 0 0;
 		color: var(--text);
 		font-size: 12px;
@@ -342,7 +354,6 @@ export default {
 	.local-storage-code-display{
 		box-sizing: border-box;
 		padding: 0 5px 5px 5px;
-		// border-radius: var(--borderRadiusSmall);
 		margin: 0 auto;
 		max-height: 300px;
 		overflow: auto;

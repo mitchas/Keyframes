@@ -17,7 +17,7 @@
 
 // Set font, disable text selection
 h1,h2,h3,h4,h5,h6,a{
-	font-family: var(--systemFont);
+	font-family: var(--sans);
 }
 label,a,p{
 	font-family: var(--systemFont);
@@ -110,32 +110,6 @@ h6{
 		letter-spacing: 0.4px;
 	}
 }
-
-h1.section,
-h2.section,
-h3.section,
-h4.section,
-h5.section,
-h6.section{
-	position: relative;
-
-	&:after{
-		content: '';
-		height: 6px;
-		width: 80px;
-		background-color: var(--text);
-		position: absolute;
-		bottom: -7px;
-		left: 0;
-		border-radius: 4px;
-	}
-}
-h1.section:after{height: 8px;}
-h2.section:after{height: 7px;}
-h3.section:after{height: 6px;}
-h4.section:after{height: 5px;}
-h5.section:after{height: 4px;}
-h6.section:after{height: 3px;}
 
 
 ////////////////////////
@@ -247,7 +221,7 @@ ul{
 // Horizontal Rule
 hr{
 	border: none;
-	border-top: 1px solid;
+	border-top: var(--borderWidth) solid;
 	border-color: var(--border);
 	height: 1px;
 	overflow: hidden;

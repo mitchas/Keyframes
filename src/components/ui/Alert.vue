@@ -27,10 +27,10 @@ export default {
 	name: "Toast",
 	data() {
 		return {
-			hidingAlert: false,
 			alertMessage: 'This is an alert',
 			alertIcon: 'fas fa-house',
 			alertVisible: false,
+			hideTimer: null,
 		};
 	},
 	mounted(){
@@ -43,33 +43,30 @@ export default {
 
 			let _this = this;
 
-			// Set new alert data
-			_this.alertMessage = message;
-			_this.alertIcon = icon;
-			_this.alertVisible = true;
-
-			// Hide after 2.5 seconds
-			setTimeout(function(){
-				_this.hideAlert();
-			}, 2500)
-		},
-		
-
-		/////////////////////
-		//   Hide Alert   //
-		///////////////////
-		hideAlert: function(){
-			let _this = this;
-
-			// Hiding alert
-			_this.hidingAlert = true;
-
-			// 300ms delay for animation out
-			setTimeout(function(){
-				_this.hidingAlert = false;
+			// If it's already visible, hide it first, then re-call function
+			if(_this.alertVisible){
+				// Hide alert, clear previous timer so it doesn't hide new alert early
 				_this.alertVisible = false;
-			}, 0)
-		}
+				clearTimeout(this.hideTimer);
+				// re-call alert after 150ms - bounce out and in effect
+				setTimeout(function(){
+					_this.showAlert(message, icon)
+				}, 150)
+			}else{
+				// Else show alert
+
+				// Set new alert data
+				_this.alertMessage = message;
+				_this.alertIcon = icon;
+				_this.alertVisible = true;
+
+				// Hide after 2.5 seconds
+				this.hideTimer = setTimeout(function(){
+					_this.alertVisible = false;
+				}, 3500)
+
+			}
+		},
 	}
 };
 </script>
@@ -94,26 +91,32 @@ export default {
 			background-color: var(--yellow);
 			color: var(--black);
 			box-sizing: border-box;
-			padding: 5px 6px 6px 6px;
-			border-radius: 5px;
+			padding: 7px 6px 7px 6px;
+			border-radius: var(--borderRadius);
 			font-size: 14px;
 			box-shadow: var(--shadow);
 			font-weight: 700;
 			margin: 0 auto;
-			border: 1px solid var(--border);
+			border: var(--borderWidth) solid var(--border);
 			max-width: 300px;
 			display: flex;
 			justify-content: space-between;
 			line-height: 18px;
 
 			span, i{
+				padding-bottom: 1px;
+				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
 				justify-content: center;
 			}
 
+			span{
+			}
+
 			i{
-				padding-right: 5px;
+				transform: scale(1.3);
+				margin: 0 4px 0 5px;
 			}
 		}
 	}
@@ -135,7 +138,7 @@ export default {
 			transform: scale(0);
 		}
 		80% {
-			transform: scale(1.1);
+			transform: scale(1.2);
 			opacity: 1;
 		}
 		100% {
@@ -150,7 +153,7 @@ export default {
 			opacity: 1;
 		}
 		20% {
-			transform: scale(1.1);
+			transform: scale(1.2);
 			opacity: 1;
 		}
 		100% {

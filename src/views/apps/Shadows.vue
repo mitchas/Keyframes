@@ -31,11 +31,11 @@
 					Dropdown buttons - options, output
 				/////////////////////////////-->
 				<div class="option-dropdown">
-					<button class="button small" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'black': !controlToggles.options}">
+					<button class="button small action-btn" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'black': !controlToggles.options}">
 						<i v-bind:class="{'fas fa-edit': !controlToggles.options, 'fas fa-times-circle': controlToggles.options}"></i>
 						<span>Options</span>
 					</button>
-					<button class="button small" @click="controlTab('output')" v-bind:class="{'red': controlToggles.output, 'green': !controlToggles.output}">
+					<button class="button small action-btn" @click="controlTab('output')" v-bind:class="{'red': controlToggles.output, 'green': !controlToggles.output}">
 						<i v-bind:class="{'fas fa-brackets-curly': !controlToggles.output, 'fas fa-times-circle': controlToggles.output}"></i>
 						<span>Get CSS</span>
 					</button>
@@ -80,7 +80,7 @@
 							</code>
 
 							<!-- Copy to clipboard -->
-							<button class="button small green" @click="copyShadowOutput()">
+							<button class="button green" @click="copyShadowOutput()">
 								<i class="far fa-copy"></i>
 								<span>Copy to Clipboard</span>
 							</button>
@@ -231,7 +231,7 @@ export default {
 			options: {
 				stageBackground: "white",
 				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-hands-wash'></i></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:1px solid #f2f5f9;\n    color: #16023C;\n    border-radius: 4px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
+				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:var(--borderWidth) solid #f2f5f9;\n    color: #16023C;\n    border-radius: 3px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
 			},
 			// Which controls are visible
 			controlToggles: {
@@ -358,7 +358,7 @@ export default {
 				}
 			} 
 			
-			this.copyToClipboard("Your Shadow's CSS", output);
+			this.copyToClipboard("The shadow CSS", output);
 		},
 
 		/////////////////////

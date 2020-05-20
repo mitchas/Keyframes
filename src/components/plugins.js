@@ -13,6 +13,8 @@
 // 	copyToClipboard(name, value): Copies value to clipboard, shows toast confirmation
 // 	
 // 	invertText(hex): takes hex value and returns hex with proper contrast black or white
+// 	
+// 	hello(message, icon): Shows tiny yellow toast for a brief moment
 //  
 // 	toast(): provides easy this.toast() call to use in any component.
 //
@@ -41,8 +43,6 @@ export default {
 		// This lets you use custom elements that are accessible/focusable, rather than router-link
 		// then use @click to navigate()
 		Vue.prototype.navigate = function(route) {
-			console.log("ROUTEROUTE")
-			console.log(route)
 			// Confirm leave on these pages
 			var confirmPages = ['/animate/', '/colors/', '/shadows'];
 
@@ -81,7 +81,7 @@ export default {
 			inp.remove();
 			// Toast
 			// this.toast("Copied!", name + " has been copied to your clipboard. ", "", "far fa-copy");
-			this.alert(name + " Copied to clipboard!", "far fa-copy");
+			this.hello(name + " has been copied to your clipboard!", "far fa-copy");
 		},
 
 		/////////////////////
@@ -104,7 +104,7 @@ export default {
 		Vue.prototype.toast = function(title, body, color, icon) {
 			this.$root.$children[0].$refs.toastComponent.showToast(title, body, color, icon);
 		}
-		Vue.prototype.alert = function(message, icon) {
+		Vue.prototype.hello = function(message, icon) {
 			this.$root.$children[0].$refs.alertComponent.showAlert(message, icon);
 		}
 	}

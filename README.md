@@ -1,9 +1,14 @@
+![Keyframes](/public/img/icons/android-chrome-192x192.png)
 # Keyframes
 
-### Demo this at [mitchs.co/vuelocal](https://mitchs.co/vuelocal)
 
+This is a collection of web apps to live preview and generate various CSS styles. It originally started as a tool just for creating CSS animations (hence the name Keyframes), but now has additional tools.
 
-This is a collection of web apps to live preview and generate various CSS styles. It originally started as a tool just for creating CSS animations (hence the name Keyframes), but I'm working to add more tools.
+## Tools:
+
+ * *Animations*: A video-editor like timeline to create CSS @Keyframe animations.
+ * *Colors*: Full screen RGB color picker. Convert between HEX/RGB. Save palettes to local storge.
+ * *Shadows*: A visual CSS box-shadow generator. Single or multi-layer shadows.
  
 
 # Project Installation & Development
@@ -42,14 +47,6 @@ Fill in your VUE_APP_BASE_URL and VUE_APP_BASE_PATH in `.env` and `.env.producti
 ### Production Public Path
 If the app is going to be deployed in a sub directory (ie website.com/app/), edit the path in vue.config.js.
 
-### Replace project name
-CMD/CTRL+F to find and replace every **ABCDEFG** - which is used as a placeholder for wherever the project name is supposed to be.
-
-### Terms of Service & Privacy Policy
-Read the TOS and Privacy Policy. There's stuff you'll need to replace (like email addresses and URLs), but also make sure it's accurate for your site. These documents were taken from [Automattic's Legalmattic](https://github.com/Automattic/legalmattic) documents (and modified a bit).
-
-The docs were written for a site with authentication that collects user data. This template does not collect any user data - unless you make it.
-
 
 # Everything else you should know
 
@@ -58,12 +55,12 @@ I tried to use as few as possible. Apart from Vue and everything required by it,
  * [VueMoment](https://www.npmjs.com/package/vue-moment) (MomentJS) for time formatting
  * [FontAwesome](http://fontawesome.com/) (Pro) for icons. You'll have to switch out icons if you don't have pro.
  * [Vue Lodash](https://www.npmjs.com/package/vue-lodash) For working with the data.
+ * [Color Convert](https://www.npmjs.com/package/color-convert) for working with color values.
 
 
 ## Other Features
- * Detect soft keyboard to hide bottom elements
+ * Fully responsive/PWA support
+ * Soft keyboard detection to hide elements on mobile for more space when keyboard is visible.
  * Lock scrolling when modal is visible
- * LESS Styles with global light/dark variables
- * Page transitions
- * Uses system fonts (for paragraphs, not headers/display text) to feel more native
- * Users can toggle UI animations in their preferences.
+ * LESS Styles with global light/dark themes
+ * Preferences stored in local storage.
