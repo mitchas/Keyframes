@@ -8,7 +8,7 @@
 // -->
 
 <template>
-	<div class="page text-page no-scrollbars">
+	<div class="page no-scrollbars">
 		<div class="text-page-content">
 
 			<Callout

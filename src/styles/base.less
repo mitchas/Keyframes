@@ -170,19 +170,16 @@ body{
 	padding: 20px 25px 0 25px;
 	overflow: auto;
 	height: 100%;
+	background-color: var(--pageBackground);
 
 	@media (max-width: @screenMD) {
 		padding: 15px 15px 0 15px;
 	}
 
 
-	&.text-page{
-		background-color: var(--layer);
-
-		.text-page-content{
-			max-width: 1100px;
-			margin: 0 auto;
-		}
+	.text-page-content{
+		max-width: 1100px;
+		margin: 0 auto;
 	}
 }
 

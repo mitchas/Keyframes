@@ -263,7 +263,16 @@
 							<div class="property-group" v-if="propertiesToggles.transform">
 								<!-- Transform Origin -->
 								<div class="field-set">
-									<label>Transform Origin</label>
+									<label>
+										<div class="tooltip left hover-right">
+											<i class="fas fa-question tooltip-icon"></i>
+											<span class="tooltip-text">
+												<span class="code">x-offset | y-offset</span>
+												<a class="tooltip-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/transform-origin" target="_blank">View on MDN</a>
+											</span>
+										</div>
+										Transform Origin
+									</label>
 									<div class="input-wrapper">
 										<input type="text" id="transformOrigin" placeholder="bottom left" v-model="keyframes[currentStep.left].properties.transformOrigin" @input="saveStep()" maxlength="22">
 									</div>

@@ -257,110 +257,83 @@
 //////////////////////
 // Add .tooltip class to element that needs tooltip
 .tooltip{
+	position: absolute;
+	color: var(--green);
+	transition: 0.1s;
 
-	// Tooltip body - icon and text
-	.tooltip-body{
-		background-color: var(--backgroundLayer);
+	&.left{
+		margin-left: -30px;
+	}
+	&.right{
+		margin-right: 30px;
+	}
+
+	// Tooltip icon
+	.tooltip-icon{
+		padding: 0 12px 0 12px;
+		font-size: inherit;
+	}
+	// Tooltip text 
+	.tooltip-text{
+		// display: none;
+		background-color: var(--text);
+		color: var(--background);
 		width: fit-content;
-		box-sizing: border-box;
-		padding: 4px 0;
-		border-radius: var(--borderRadius);
 		position: absolute;
-		top: 50%;
-		margin-top: -13px;
-		left: 0;
-		white-space: pre;
-		max-width: 0px;
-		transition: var(--transition);
-		pointer-events: none;
-		overflow: hidden;
-		transition-delay: 0s;
-		opacity: 0;
-		z-index: 100;
+		right: 100%;
+		box-sizing: border-box;
+		padding: 8px 8px 4px 8px;
+		border-radius: var(--borderRadius);
+		transform: scale(0);
+		transform-origin: top left;
+		transition: 0.08s ease;
+		font-size: 12px;
+		line-height: 14px;
+		display: flex;
+		flex-direction: column;
+		letter-spacing: 0.2px;
+		top: 0;
+		margin-right: -10px;
 
-		@media (max-width: @screenSM) {
-			padding: 4px 0;
-			margin-top: -13px;
+		// Actual text
+		span{
+			display: block;
+			min-width: fit-content;
+			white-space: pre;
 		}
 
-		i,.tooltip-text{
-			display: inline-block;
-			vertical-align: baseline;
-			height: 100%;
+		// Code text
+		.code{
+			font-family: var(--mono);
 		}
-		// Icon
-		i{
-			font-size: 16px;
-			box-sizing: border-box;
-			margin-left: 6px;
-			color: var(--border);
 
-			@media (max-width: @screenSM) {
-				font-size: 12px;
-			}
-		}
-		.tooltip-text{
-			box-sizing: border-box;
+		.tooltip-link{
+			display: block;
+			color: var(--green);
 			font-size: 12px;
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 0.8px;
-			position: relative;
-			color: var(--text);
-			top: -1px;
-			margin-right: 6px;
-			margin-left: 6px;
-
-			span{
-				text-transform: uppercase;
-			}
-
-			@media (max-width: @screenSM) {
-				font-size: 10px;
-				top: 0;
-			}
-		}
-
-		// Color the icons
-		&.gold{
-			i{color: var(--secondary);}
-		}
-		&.green{
-			i{color: var(--green);}
-		}
-		&.blue{
-			i{color: var(--blue);}
-		}
-		&.red{
-			i{color: var(--red);}
-		}
-		&.grey{
-			i{color: var(--border);}
+			padding: 4px 0;
 		}
 	}
 
-	// Float to the left
-	&.tooltip-left{
-		.tooltip-body{
-			left: auto;
-			right: 100%;
-		}
-	}
-	// Float to the right
-	&.tooltip-right{
-		.tooltip-body{
+	// Hover appears left or right
+	&.hover-right{
+		.tooltip-text{
+			transform-origin: top left;
+			right: unset;
+			margin-left: -10px;
+			margin-right: 0px;
+			transition: 0.08s ease;
 			left: 100%;
-			right: auto;
 		}
 	}
 
-	// Hover element with class tooltip to show it
+	// Hover, show text
 	&:hover{
-		.tooltip-body{
-			max-width: 300px;
-			transition: var(--transition);
-			transition-delay: 0.5s;
-			opacity: 1;
+		color: var(--blue);
+
+		.tooltip-text{
+			transform: scale(1);
+			transition: 0.08s ease;
 		}
 	}
 }

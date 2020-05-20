@@ -99,12 +99,25 @@ export default {
 			_this.setPrefs();
 
 			// Save visit to local storage - use count for prompt for donation? Maybe?
-			var totalVisits = localStorage.getItem("totalVisits");
+			var totalVisits = parseInt(localStorage.getItem("totalVisits"));
 			if(totalVisits){
 				totalVisits = parseInt(totalVisits) + 1;
+
+				// Do something if visits equals X
+				if(totalVisits == 15){
+					_paq.push(['trackEvent', 'Action', 'Returns', "15"]);	
+				}else if(totalVisits == 25){
+					_paq.push(['trackEvent', 'Action', 'Returns', "25"]);	
+				}else if(totalVisits == 50){
+					_paq.push(['trackEvent', 'Action', 'Returns', "50"]);	
+				}else if(totalVisits == 100){
+					_paq.push(['trackEvent', 'Action', 'Returns', "100"]);	
+				}
 			}else{
+				// Else this is their first visit
 				totalVisits = 1;
 			}
+			
 			// Save to localstorage
 			localStorage.setItem("totalVisits", totalVisits);
 

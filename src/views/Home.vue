@@ -16,7 +16,7 @@
 // -->
 
 <template>
-	<div class="page text-page no-scrollbars">
+	<div class="page no-scrollbars">
 		<div class="text-page-content">
 
 			<!-- Product Hunt Banner -->
@@ -303,6 +303,7 @@ export default {
 			max-width: 450px;
 			padding-top: 25px;
 			color: var(--textLight);
+			
 		}
 	}
 
@@ -362,7 +363,6 @@ export default {
 					@media (max-width: @screenSM) {
 						font-size: 30px;
 					}
-
 				}
 				p{
 					margin: 0;

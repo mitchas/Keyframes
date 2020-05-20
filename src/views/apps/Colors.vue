@@ -195,17 +195,17 @@
 				<div id="colorPalette">
 					<!-- Saved color loop -->
 					<transition-group name="basic" class="color-wrapper">
-						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedPalette = index" :class="{'removing' : color.name == 'delete'}"
+						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedPalette = index" :class="{'removing' : color.name == 'delete', 'active': selectedPalette == index}"
 							:style="'background: ' + color.hex + '; color: ' + invertTextColor(palette[index].hex) + ';'">
 							<div class="color-codes">
 								<!-- Color name -->
 								<div class="name">{{color.name}}</div>
 								<!-- Hex code -->
-								<span class="color-value" @click.stop="copyToClipboard(color.hex, color.hex)">
+								<span class="color-value" @click="selectedPalette == index && copyToClipboard(color.hex, color.hex)">
 									{{color.hex}}<i class="far fa-copy"></i>
 								</span>
 								<!-- Rgba value -->
-								<span class="color-value" @click.stop="copyToClipboard(color.rgba, 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')')">
+								<span class="color-value" @click="selectedPalette == index && copyToClipboard(color.rgba, 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')')">
 									rgb({{color.r}}, {{color.g}}, {{color.b}})<i class="far fa-copy"></i>
 								</span>
 							</div>
@@ -675,7 +675,7 @@ export default {
 			display: flex;
 			justify-content: space-between;
 			width: 100%;
-			height: 140px;
+			height: auto;
 			border-radius: var(--borderRadius);
 			border: var(--borderWidth) solid var(--border);
 			margin: 0 0 15px 0;
@@ -683,13 +683,16 @@ export default {
 			letter-spacing: 0.4px;
 			font-weight: 600;
 			color: var(--white);
+			transition: var(--transitionFast);
 
 			// Fixed width on mobile because it scrolls horizontally
 			@media (max-width: @screenMD) {
-				width: 210px;
+				width: 200px;
+				max-height: 100%;
 				height: 100%;
-				min-width: 210px;
+				min-width: 200px;
 				margin: 0 10px 0 0;
+				transform: scale(0.85);
 
 				&:first-child{
 					margin-left: 20px;
@@ -770,6 +773,7 @@ export default {
 					font-size: 18px;
 					font-weight: 700;
 					display: block;
+					margin-bottom: 12px;
 
 					// Shrink mobile
 					@media (max-width: @screenSM) {
@@ -791,6 +795,7 @@ export default {
 
 					i{
 						padding-left: 5px;
+						opacity: 0;
 					}
 
 					// Hover - click to copy
@@ -846,12 +851,36 @@ export default {
 					transition: 0.08s;
 				}
 				.color-value{
-					opacity: 0.75;
 					transition: 0.08s;
 				}
 				.name{
 					text-decoration: underline;
 				}
+			}
+
+			// Active is larger,
+			// has padding on bottom codes
+			&.active{
+				transition: var(--transitionFast);
+				height: 140px;
+
+				// Change active for mobile
+				@media (max-width: @screenMD) {
+					transform: scale(1);
+				}
+
+				.color-codes{
+
+					.name{
+						opacity: 1;
+					}
+					.color-value{
+						i{
+							opacity: 1;
+						}
+					}
+				}
+
 			}
 		}
 	}

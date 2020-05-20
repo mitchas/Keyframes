@@ -7,7 +7,7 @@
 -->
 
 <template>
-	<div class="page text-page">
+	<div class="page">
 		<div class="text-page-content">
 
 			<div class="not-found">
