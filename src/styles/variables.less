@@ -35,44 +35,48 @@
 	--transitionFast: 0.1s;
 	--bezierTransition: all 0.18s cubic-bezier(0.5, 0.1, 0.75, 1.35);
 
-
-	// Borders
+	// Border Measurements
 	--borderRadius: 3px;
 	--borderRadiusMd: 8px;
 	--borderWidth: 1px;
-	// Measurements
-	--formWidthDesktop: 520px;
-	--maxWidth: 800px;
-	--maxWidthLarge: 1000px;
 
+	// Global Colors
 	--white: #ffffff;
-	--black: #000220;
+	--black: #060619;
+	--outline: rgba(160,160,160,0.25);
+
+
+
 	////////////////////
 	//  Light Theme  //
 	////////////////////
+	// Layout colors
+	--background: #F8FBFE;
+	--layer: #ffffff;
+	--popup: #1a1b31;
+
+	// Text and other elements
 	--text: #16023C;
 	--textLight: rgba(22, 2, 60, 0.65);
-	--background: #F8FBFE;
-	--popup: #1a1b31;
-	// --background: #E3EFFE;
-	--layer: #ffffff;
 	--border: #16023C;
 	--inputBorder: #16023C;
-	--grey: #F4F4F4;
+	--inputBackground: #ffffff;
+
+	// Colors
 	--blue: #0868FE;
 	--purple: #631CCC;
 	--green: #4AF9D6;
 	--yellow: #ffdb10;
-	--orange: rgb(250, 124, 6);
+	--orange: #fa7c06;
 	--red: #fc143b;
-
-	// Other colors
-	--lightbox: rgba(103, 101, 134, 0.5);
-	--outline: rgba(160,160,160,0.25);
+	--grey: #F4F4F4;
 
 	// Links
 	--links: #0868FE; // Same as blue
 	--linksHover: rgb(0, 79, 206);
+
+	// Other
+	--lightbox: rgba(85, 85, 135, 0.5);
 
 	// Floating element that needs to be seen through
 	--transparent: rgba(255, 255, 255, 0.75);
@@ -81,29 +85,6 @@
 	--shadow:
 		0px 2px 15px -8px rgba(10,10,10,0.2),
 		0px 4px 20px -10px rgba(10,10,10,0.125);
-	--shadowLight:
-		0 0.2px 1.3px rgba(0, 0, 10, 0.015),
-		0 0.6px 1.8px rgba(0, 0, 10, 0.022),
-		0 1.5px 2.8px rgba(0, 0, 10, 0.022),
-		0 4px 10px rgba(0, 0, 10, 0.032);
-	// Shadow below, dark
-	--shadowDark:
-		0 0.4px 0.5px rgba(0, 0, 0, -0.011),
-		0 1px 1.5px rgba(0, 0, 00, -0.017),
-		0 2.4px 3.6px rgba(0, 0, 00, 0.007),
-		0 8px 12px rgba(0, 0, 90, 0.06);
-	--shadowDarker:
-		0 0.4px 0.5px rgba(0, 0, 0, -0.011),
-		0 1px 1.5px rgba(0, 0, 00, -0.017),
-		0 2.4px 3.6px rgba(0, 0, 00, 0.037),
-		0 8px 12px rgba(0, 0, 90, 0.12);
-	  // Shadow top, dark
-	--shadowTop:
-		0px -2px 24px -13px rgba(0,0,30,0.15);
-
-
-
-
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,26 +93,39 @@
 ////////////////////
 [data-theme="dark"] {
 
-	--text: #EEF3FF;
-	--black: #141527;
-	--textLight: #A9B0C7;
+	////////////////////
+	//  Dark  Theme  //
+	////////////////////
 
-	--background: #060619;
-	--layer: #1C1B34;
-	--popup: #060619;
-	--grey: #171520;
-
-
-	--border: #5A5978;
-	--inputBorder: #8F91AE;
 	--borderWidth: 1px;
 
-	// Other colors
-	--lightbox: rgba(73, 71, 104, 0.5);
+	// Layout colors
+	--background: #060619;
+	--layer: #18182A;
+	--popup: #060619;
+
+	// Text and other elements
+	--text: #E1E1F5;
+	--textLight: #A9B0C7;
+	--border: #5A5978;
+	--inputBorder: #8F91AE;
+	--inputBackground: #ffffff;
+
+	// Colors
+	--blue: #004FBC;
+	--purple: #5C0890;
+	--green: #0CC490;
+	--yellow: #E8A700;
+	--orange: #EE5500;
+	--red: #D8003B;
+	--grey: #171520;
 
 	// Links
-	--links: #0868FE; // Same as blue
-	--linksHover: rgb(0, 79, 206);
+	--links: #3F97FF; // Same as blue
+	--linksHover: #3F72FF;
+
+	// Other
+	--lightbox: rgba(10,10,30, 0.75);
 
 	// Floating element that needs to be seen through
 	--transparent: rgba(7, 7, 15, 0.85);

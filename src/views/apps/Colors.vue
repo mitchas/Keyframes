@@ -72,6 +72,12 @@
 									<i class="far fa-save"></i>
 									<span>Save</span>
 								</button>
+								<transition name="basic">
+									<div class="badge red mleft-xs" v-if="savedPalettes.includes('palette_' + paletteToSaveName)">
+										<i class="far fa-code-branch"></i>
+										<span>Overwriting {{paletteToSaveName}}</span>
+									</div>
+								</transition>
 							</div>
 							<!-- Saved animations -->
 							<div class="field mtop-sm">
@@ -135,7 +141,7 @@
 							<span>Red</span>
 							<input type="number" v-model="palette[selectedPalette].r" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaRed" v-model="palette[selectedPalette].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
+						<input type="range" id="rgbaRed" v-model="palette[selectedPalette].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
 					</div>
 					<!-- Green -->
 					<div class="field">
@@ -143,7 +149,7 @@
 							<span>Green</span>
 							<input type="number" v-model="palette[selectedPalette].g" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaGreen" v-model="palette[selectedPalette].g" min="0" max="255" step="1" @input="rgbaChange()"/>
+						<input type="range" id="rgbaGreen" v-model="palette[selectedPalette].g" min="0" max="255" step="1" @input="rgbaChange()"/>
 					</div>
 					<!-- Blue -->
 					<div class="field">
@@ -151,7 +157,7 @@
 							<span>Blue</span>
 							<input type="number" v-model="palette[selectedPalette].b" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaBlue" v-model="palette[selectedPalette].b" min="0" max="255" step="1" @input="rgbaChange()"/>
+						<input type="range" id="rgbaBlue" v-model="palette[selectedPalette].b" min="0" max="255" step="1" @input="rgbaChange()"/>
 					</div>
 					<!-- Opacity -->
 					<div class="field">
@@ -159,7 +165,7 @@
 							<span>Opacity</span>
 							<input type="number" v-model="palette[selectedPalette].a" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" class="color-range" id="rgbaOpacity" v-model="palette[selectedPalette].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
+						<input type="range" id="rgbaOpacity" v-model="palette[selectedPalette].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
 					</div>
 
 				</div>
@@ -653,13 +659,15 @@ export default {
 	#colorPalette{
 
 		@media (max-width: @screenMD) {
-			height: 100%;
-			max-height: 100%;
 			overflow: hidden;
+			flex-grow: 3;
 
 			.color-wrapper{
 				display: flex;
+				height: 100%;
 				overflow-y: auto;
+				box-sizing: border-box;
+				padding: 5px 0 0 0;
 			}
 		}
 
@@ -667,7 +675,7 @@ export default {
 			display: flex;
 			justify-content: space-between;
 			width: 100%;
-			height: 100px;
+			height: 140px;
 			border-radius: var(--borderRadius);
 			border: var(--borderWidth) solid var(--border);
 			margin: 0 0 15px 0;
@@ -678,8 +686,9 @@ export default {
 
 			// Fixed width on mobile because it scrolls horizontally
 			@media (max-width: @screenMD) {
-				width: 200px;
-				min-width: 200px;
+				width: 210px;
+				height: 100%;
+				min-width: 210px;
 				margin: 0 10px 0 0;
 
 				&:first-child{
@@ -696,9 +705,13 @@ export default {
 				display: none;
 				color: var(--textLight);
 				transition: var(--transitionFast);
+				box-sizing: border-box;
+				padding: 8px 0;
 
 				@media (max-width: @screenMD) {
+					min-height: 100%;
 					display: flex;
+					flex-grow: 3;
 				}
 
 				i.fa-plus,
@@ -749,12 +762,12 @@ export default {
 				justify-content: space-between;
 				height: 100%;
 				box-sizing: border-box;
-				padding: 10px;
+				padding: 10px 0 10px 10px;
 
 				.name{
 					text-transform: capitalize;
 					flex-grow: 3;
-					font-size: 17px;
+					font-size: 18px;
 					font-weight: 700;
 					display: block;
 
@@ -764,20 +777,20 @@ export default {
 					}
 				}
 				.color-value{
-					font-family: var(--mono);
 					display: block;
 					margin-top: 5px;
 					font-size: 15px;
 					transition: 0.08s;
-					opacity: 0;
+					// opacity: 0;
+					font-weight: 600;
 
 					// Shrink mobile
 					@media (max-width: @screenMD) {
-						font-size: 12px;
+						font-size: 14px;
 					}
 
 					i{
-						padding-left: 2px;
+						padding-left: 5px;
 					}
 
 					// Hover - click to copy

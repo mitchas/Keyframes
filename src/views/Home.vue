@@ -4,6 +4,14 @@
 // _________________________
 //
 //	Home page view
+//	Landing page with links to and examples of each app
+//
+//		Functions
+//			getLocalStorage()
+//				Called on mount, gets local storage, sets arrays for display
+//			cycleColors(val)
+//				Cycles demo colors - updates value every x seconds. 
+// 				Called on mount, never stops. After timeout, calls itself with random val
 //
 // -->
 
@@ -66,7 +74,7 @@
 				</div>
 				<div class="app-feature-demo">
 					<div id="featuredAnimatedTarget">
-						<i class="far fa-ghost"></i>
+						<i class="fal fa-ghost" @click="hello('Boo!', 'fas fa-exclamation')"></i>
 					</div>
 					<!-- Timeline copy -->
 					<div id="featuredTimeline">
@@ -111,7 +119,7 @@
 
 					<!-- Animated Slider -->
 					<div class="slider-wrapper">
-						<input type="range" class="color-range" v-model="featuredColorsRange" min="0" max="360" step="1"/>
+						<input type="range" @mousedown="colorRangeRunning = false" @input="colorRangeRunning = false" v-model="featuredColorsRange" min="0" max="360" step="1"/>
 					</div>
 				</div>
 			</div>
@@ -139,7 +147,7 @@
 						<div class="shadow"><i class="far fa-sunglasses"></i></div>
 						<div class="shadow"><i class="far fa-cloud-sun"></i></div>
 						<div class="shadow"><i class="far fa-planet-moon"></i></div>
-						<div class="shadow"><i class="far fa-umbrella-beach"></i></div>
+						<div class="shadow"><i class="far fa-eye" @click="hello('Ow.', 'fas fa-exclamation')"></i></div>
 					</div>
 				</div>
 			</div>
@@ -192,13 +200,22 @@ export default {
 			},
 			// Hue rotate range for color preview
 			featuredColorsRange: 0,
+			colorRangeRunning: true,
 		};
 	},
 
 	mounted() {
-		this.updateMeta("Keyframes.app", "Do cool stuff with CSS.")
-		this.getLocalStorage();
+		let _this = this;
 
+		// Update title
+		_this.updateMeta("Keyframes | CSS Toolbox", "Do cool stuff with CSS.")
+		// Get local storage
+		_this.getLocalStorage();
+
+		// Start color cycle after 3s
+		setTimeout(function(){
+			_this.cycleColors(0);
+		}, 3000)
 	},
 
 	computed: {
@@ -231,7 +248,30 @@ export default {
 			// Save to data
 			this.savedWork.animations = animations;
 			this.savedWork.palettes = palettes;
+		},
+
+		///////////////////
+		// Cycle Colors //
+		/////////////////
+		// Cycles through color demo hue-rotate - updates range slider
+		cycleColors: function(value){
+			let _this = this;
+
+			// Set color
+			_this.featuredColorsRange = value;
+
+			// If user hasn't changed value, run it again after 2s
+			if(_this.colorRangeRunning){
+				setTimeout(function(){
+					// Get random number between 1 and 36 - add 0 to it
+					var random = Math.random() * (36 - 0) + 0;
+					random = random * 10;
+					// Run again
+					_this.cycleColors(random)
+				}, 2000)
+			}
 		}
+
 		
 	}
 };
@@ -356,7 +396,7 @@ export default {
 			}
 			
 			i{
-				color: var(--blue);
+				color: var(--text);
 				font-size: 52px;
 				animation: home-ghost 10s ease-in-out  0s infinite  normal  forwards;
 				transform-origin: center center;
@@ -364,9 +404,9 @@ export default {
 		}
 		#featuredTimeline{
 			display: block;
-			border: var(--borderWidth) solid var(--border);
-			height: 50px;
-			border-radius: var(--borderRadius);
+			border: 3px solid var(--border);
+			height: 60px;
+			border-radius: var(--borderRadiusMd);
 			position: relative;
 			background-color: var(--layer);
 			opacity: 0.9;
@@ -375,36 +415,37 @@ export default {
 				display: flex;
 				flex-direction: column;
 				justify-content: center;
-				height: 100%;
-				width: 8px;
+				height: 80%;
+				width: 6px;
 				position: absolute;
-				margin-left: -4px;
-				top: 0px;
-				z-index: 10;
+				top: 10%;
 				box-shadow: var(--shadow);
 				border-radius: 2px;
-
-				@media (max-width: @screenSM) {
-					width: 8px;
-					border-radius: var(--borderRadius);
-				}
+				z-index: 5;
 
 				&.active{
 					background-color: var(--red);
 					animation: animationTicker 10s linear  0s infinite  normal  forwards;
+					height: 130%;
+					top: -15%;
+					margin-left: -10px;
+					border-radius: 2px;
+					width: 8px;
+					z-index: 10;
+					opacity: 0.8;
 				}
 				&.dummy{
 					background-color: var(--text);
 
-					&:nth-child(2){left: 0%;}
+					&:nth-child(2){left: 6px;}
 					&:nth-child(3){left: 5%;}
 					&:nth-child(4){left: 30%;}
 					&:nth-child(5){left: 40%;}
 					&:nth-child(6){left: 50%;}
 					&:nth-child(7){left: 60%;}
 					&:nth-child(8){left: 70%;}
-					&:nth-child(9){left: 95%;}
-					&:nth-child(10){left: 100%;}
+					&:nth-child(9){left: 93.5%;}
+					&:nth-child(10){left: 100%;margin-left: -12px;}
 				}
 			}
 		}
@@ -423,7 +464,7 @@ export default {
 				width: 60px;
 				border-radius: 50%;
 				margin: 0 4px;
-				border: var(--borderWidth) solid var(--border);
+				border: 3px solid var(--border);
 				box-sizing: border-box;
 				letter-spacing: 0.4px;
 				font-weight: 600;

@@ -60,6 +60,7 @@
 
 				i{
 					width: 18px;
+					transform: scale(1.44);
 				}
 				@media (max-width: @screenMD) {
 					padding-bottom: 0;
@@ -105,6 +106,11 @@
 						color: var(--white);
 					}
 
+					// Spacing below label
+					.field label{
+						padding-bottom: 10px;
+					}
+
 					code{
 						padding: 3px 0 0 0;
 						margin-bottom: 15px;
@@ -131,8 +137,6 @@
 					}
 
 					input, textarea{
-						background-color: var(--background);
-						// border: var(--borderWidth) solid rgba(205,205,255,0.25);
 						user-select: all;
 					}
 
@@ -213,9 +217,11 @@
 			// Hides overflow - must make child elements scroll hor
 			&.mobile-noscroll{
 				@media (max-width: @screenMD) {
-					padding: 10px 0 10px 0;
+					padding: 10px 0 15px 0;
 					max-height: 100%;
 					overflow: hidden;
+					display:flex;
+					flex-direction: column;
 				}
 			}
 

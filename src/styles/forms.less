@@ -50,7 +50,7 @@
 		display: flex;
 		justify-content: space-between;
 		padding-bottom: 5px;
-		padding: 0 0 4px 0;
+		padding: 0 0 8px 0;
 
 		// Actual label text
 		span{
@@ -216,15 +216,15 @@ textarea{
     font-size: 16px;
 	box-sizing: border-box;
 	padding: 0 8px;
-	color: var(--text);
+	color: var(--black);
 	font-family: var(--systemFont);
 	font-weight: 500;
 	letter-spacing: 0.35px;
+	background-color: var(--inputBackground);
 	border-radius: var(--borderRadius);
 	transition: all 0.1s ease, border-color 0.15s ease;
 	font-weight: 500;
 	border: var(--borderWidth) solid var(--inputBorder);
-	background-color: transparent;
 
 	// Increase size on mobile
 	@media (max-width: @screenMD) {
@@ -236,10 +236,7 @@ textarea{
 	// Hover and focus states
 	&:hover,
 	&:focus{
-		// background-color: rgba(150,150,150,0.2);
-		background-color: var(--grey);
 		transition: all 0.1s ease, border-color 0.15s ease;
-		// Light border mobile
 	}
 	
 	// Placeholder
@@ -320,7 +317,7 @@ button{
 	box-sizing: border-box;
 	transform: translateY(0px);
 	font-family: var(--systemFont);
-	border: var(--borderWidth) solid var(--inputBorder);
+	border: var(--borderWidth) solid var(--black);
 	border-bottom-width: 2px;
 
 	// Increase size on mobile
@@ -386,6 +383,11 @@ button{
 		background-color: var(--yellow);
 		color: var(--black);
 	}
+	// Orange
+	&.orange{
+		background-color: var(--orange);
+		color: var(--white);
+	}
 	// Purple
 	&.purple{
 		background-color: var(--purple);
@@ -420,7 +422,7 @@ button{
 		font-size: 13px;
 		letter-spacing: 0.26px;
 		font-weight: 600;
-		padding: 0 8px 0 8px;
+		padding: 0 8px 1px 8px;
 
 		// Increase size on mobile
 		@media (max-width: @screenMD) {
@@ -634,7 +636,7 @@ input[type="range"] {
 	// Chrome
 	@media screen and (-webkit-min-device-pixel-ratio:0) {
 		& {
-			height: 4px;
+			height: 6px;
 			background-color: var(--text);
 			-webkit-appearance: none;
 		}
@@ -646,17 +648,17 @@ input[type="range"] {
 			border: none;		
 		}
 		&::-webkit-slider-thumb {
-			width: 22px;
+			height: 28px;
+			width: 28px;
 			-webkit-appearance: none;
-			height: 22px;
 			cursor: ew-resize;
-			background: var(--text);
+			background: var(--layer);
+			border: 3px solid var(--inputBorder);
 			border-radius: 50%;
 			transition: box-shadow 0.2s ease-in-out;
 			position: relative;
-			top: -9px;
-			position: relative;
-			// top: 1px;
+			top: -12px;
+			// margin-top: -4px;
 		}
 		&:active::-webkit-slider-thumb {
 			background: var(--green);
@@ -665,73 +667,30 @@ input[type="range"] {
 	// Firefox
 	&::-moz-range-thumb{
 		// border: var(--borderWidth) solid transparent;
-		background-color: var(--blue);
-		border-color: var(--blue);
+		background-color: var(--layer);
+		border: 3px solid var(--inputBorder);
 		border-radius: 50%;
-		border-width: 0;
+		height: 28px;
+		width: 28px;
 	}	
 	&::-moz-range-progress {
-		background-color: var(--blue); 
+		background-color: var(--inputBorder); 
 	}
 	&::-moz-range-track {  
-		background-color: var(--background);
+		background-color: var(--layer);
+	}
+	&:active::-moz-range-thumb {
+		background: var(--green);
 	}
 	// IE
 	&::-ms-fill-lower {
-		background-color: var(--blue); 
+		background-color: var(--inputBorder); 
 	}
 	&::-ms-fill-upper {  
-		background-color: var(--green);
+		background-color: var(--layer);
 	}
 }
 
-// Range specific for background where color changes - always visible
-input[type="range"].color-range {
-	@media screen and (-webkit-min-device-pixel-ratio:0) {
-		& {
-			background-color: var(--red);
-		}
-		&::-webkit-slider-thumb {
-			background: var(--white);
-			border: 2px solid var(--black);			
-			top: -9px;
-			position: relative;
-
-		}
-		&::-webkit-slider-runnable-track {
-			background: var(--text);
-			height: 4px;
-			outline: none;
-			box-shadow: none;
-			border: none;		
-		}
-		&:active::-webkit-slider-thumb {
-			background: var(--green);
-		}
-	}
-	// Firefox
-	&::-moz-range-thumb{
-		background-color: var(--white);
-		border-color: var(--white);
-		border-radius: 50%;
-		border: 2px solid var(--popup);
-	}	
-	&::-moz-range-progress {
-		background-color: var(--popup); 
-	}
-	&::-moz-range-track {  
-		background-color: var(--white);
-		border: none;
-		box-shadow: none;
-	}
-	// IE
-	&::-ms-fill-lower {
-		background-color: var(--blue); 
-	}
-	&::-ms-fill-upper {  
-		background-color: var(--green);
-	}
-}
 input[type=range]::-moz-focus-outer {
 	border: 0;
 }

@@ -358,7 +358,7 @@ export default {
 				}
 			} 
 			
-			this.copyToClipboard("Your Shadow's CSS", output);
+			this.copyToClipboard("The shadow CSS", output);
 		},
 
 		/////////////////////

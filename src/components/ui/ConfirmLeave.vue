@@ -25,7 +25,7 @@
 					</div>
 					<!-- Body Content -->
 					<div class="modal-body">
-						<p class="padding-none margin-none">Are you sure you want to leave this page? If you have any unsaved changes, they will be lost.</p>
+						Are you sure you want to leave this page? If you have any unsaved changes, they will be lost.
 					</div>
 					<!-- Footer/Buttons -->
 					<div class="modal-footer">

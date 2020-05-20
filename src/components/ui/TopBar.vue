@@ -277,18 +277,20 @@ export default {
 					}
 					// Label text - either username or "Hey There!"
 					span{
-						font-size: 14px;
-						font-weight: 600;
+						font-size: 16px;
+						font-weight: 700;
+						letter-spacing: 0.3px;
 
 						// Move down a tiny bit on mobile
 						@media (max-width: @screenMD) {
+							font-size: 15px;
 							padding-top: 1px;
 						}
 					}
 					// Caret down arrow
 					i{
-						margin-left: 6px;
-						font-size: 20px;
+						margin-left: 8px;
+						font-size: 24px;
 						padding-bottom: 0px;
 						transition: var(--transition);
 						width: 18px;
@@ -297,7 +299,9 @@ export default {
 
 						// Move on mobile
 						@media (max-width: @screenMD) {
+							font-size: 22px;
 							top: 0;
+							margin-left: 5px;
 						}
 					}
 				}

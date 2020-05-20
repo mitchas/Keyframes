@@ -144,21 +144,10 @@ export default {
 			width: 90%;
 			max-width: 500px;
 			border-radius: var(--borderRadiusMd);
-			box-shadow: var(--shadowDark);
 			position: relative;
 			max-height: 75vh;
 			border: var(--borderWidth) solid var(--border);
 
-			// Small, confirmation modal
-			&.small{
-				max-width: 300px;
-
-				// Absolute bottom, larger on mobile
-				@media (max-width: @screenSM) {
-					width: 100%;
-					max-width: 100%;
-				}
-			}
 
 			// Absolute bottom, larger on mobile
 			@media (max-width: @screenSM) {
@@ -167,9 +156,9 @@ export default {
 				bottom: 0;
 				left: -1px;
 				max-width: 100%;
-				border-top-left-radius: 12px;
-				border-top-right-radius: 12px;
-				box-shadow: var(--shadowTop);
+				border-top-left-radius: 30px;
+				border-top-right-radius: 30px;
+				border:none;
 			}
 
 			// Close modal button, floats top right
@@ -203,13 +192,13 @@ export default {
 			.modal-title{
 				display: block;
 				box-sizing: border-box;
-				padding: 0 20px 0 20px;
+				padding: 2px 20px 0 20px;
 				border-top-right-radius: var(--borderRadiusMd);
 				border-top-left-radius: var(--borderRadiusMd);
 				color: var(--text);
 				font-weight: 600;
 				letter-spacing: 0.25px;
-				font-size: 24px;
+				font-size: 20px;
 				text-align: left;
 				height: 66px;
 				min-height: 66px;
@@ -220,6 +209,9 @@ export default {
 
 				// Increase size and padding on mobile
 				@media (max-width: @screenSM) {
+					border-top-right-radius: 30px;
+					border-top-left-radius: 30px;
+					padding: 0 30px;
 				}
 
 				span, i{
@@ -227,6 +219,12 @@ export default {
 					flex-direction: column;
 					justify-content: center;
 					padding-bottom: 4px;
+				}
+
+				span{
+					@media (max-width: @screenSM) {
+						padding-top: 4px;
+					}
 				}
 
 				// Image - floats right,
@@ -256,6 +254,10 @@ export default {
 				overflow: scroll;
 				background-color: var(--background);
 				flex-grow: 3;
+
+				@media (max-width: @screenSM) {
+					padding: 20px 30px;
+				}
 			}
 
 			// Modal footer/buttons
@@ -268,6 +270,13 @@ export default {
 				min-height: 70px;
 				padding: 15px 20px;
 				border-top: var(--borderWidth) solid var(--border);
+				border-bottom-right-radius: var(--borderRadiusMd);
+				border-bottom-left-radius: var(--borderRadiusMd);
+
+				@media (max-width: @screenSM) {
+					padding: 15px 30px;
+					border-radius: 0;
+				}
 
 				// Center buttons
 				&.center{
@@ -290,6 +299,34 @@ export default {
 
 				&.reverse{
 					flex-direction: row-reverse;
+				}
+			}
+
+			// Sizes
+			// Small, confirmation modal
+			&.small{
+				max-width: 380px;
+
+				// Absolute bottom, larger on mobile
+				@media (max-width: @screenSM) {
+					width: 100%;
+					max-width: 100%;
+				}
+
+				// Main body/content
+				.modal-body{
+					font-size: 15px;
+					letter-spacing: 0.6px;
+					line-height: 24px;
+					font-weight: 500;
+					color: var(--textLight);
+					padding: 30px 20px;
+
+					@media (max-width: @screenSM) {
+						padding: 44px 30px;
+						font-size: 17px;
+						line-height: 34px;
+					}
 				}
 			}
 		}
