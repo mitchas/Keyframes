@@ -1,4 +1,4 @@
-![Keyframes](/public/img/icons/android-chrome-192x192.png)
+![Keyframes](/public/img/icons/apple-touch-icon-76x76.png)
 # Keyframes
 
 
