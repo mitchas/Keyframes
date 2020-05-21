@@ -59,6 +59,14 @@
 					<span>New home page design</span>
 				</div>
 				<div class="changelog-change">
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>Changed Hosting to Vercel</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Added some help & tips to the animation page.</span>
+				</div>
+				<div class="changelog-change">
 					<i class="fas fa-sparkles cat-new"></i>
 					<span>Tooltips & settings to hide tooltips</span>
 				</div>

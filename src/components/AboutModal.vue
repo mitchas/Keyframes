@@ -18,7 +18,7 @@
 
 		<Modal
 			v-bind:show="showAbout"
-			color="blue"
+			color="transparent"
 			confirmText="View on GitHub"
 			confirmIcon="fab fa-github"
 			dismissText="Dismiss"
@@ -46,7 +46,7 @@
 
 				<!-- What -->
 				<div class="about-section">
-					<h3>What, Why, Who?</h3>
+					<h3>What?</h3>
 					<p class="small">Keyframes is a free bundle of tools to generate & live preview different CSS properties, plus some other web development tools. It's a side project I started to bring some CSS tools I use into one place, with features I wished other tools had.</p>
 					<p class="small">You can find some other things I'm working on at <a href="https://hotdi.sh" target="_blank">Hotdi.sh</a>.</p>
 				</div>
@@ -54,7 +54,7 @@
 
 				<!-- Stack -->
 				<div class="about-section">
-					<h3>Stack</h3>
+					<h3>Stack.</h3>
 					<!-- Framework -->
 					<div class="stack-row">
 						<label>Framework</label>
@@ -65,10 +65,15 @@
 						<label>Backend</label>
 						<span><b>None</b> - local storage only</span>
 					</div>
+					<!-- Hosting -->
+					<div class="stack-row">
+						<label>Hosting</label>
+						<span><a href="https://vercel.com" target="_blank">Vercel</a></span>
+					</div>
 					<!-- Analytics -->
 					<div class="stack-row">
 						<label>Analytics</label>
-						<span>Self-hosted <a href="https://matomo.org/" target="_blank">Matomo</a> with minimal tracking</span>
+						<span>Self-hosted <a href="https://matomo.org/" target="_blank">Matomo</a> with minimal tracking & no cookies <i class="far fa-cookie"></i></span>
 					</div>
 					<!-- Analytics -->
 					<div class="stack-row">
@@ -84,7 +89,7 @@
 
 				<!-- Contribute -->
 				<div class="about-section">
-					<h3>Contribute</h3>
+					<h3>Contribute.</h3>
 					<p class="small">The entire project source is available on GitHub. Feel free to use it for whatever *personal* reasons you need, but please don't redistrubute or try to sell it.</p>
 					<p class="small mtop-xs">If you have suggestions for tools you'd like to see added, or if you find any bugs, send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a> or tell me on <i class="fab fa-twitter"></i> Twitter <a href="https://twitter.com/sleumasm" target="_blank">@sleumasm</a>.</p>
 					<p class="small mtop-xs">Keyframes is free and doesn't have any ads, but if it has saved you time and you'd like to help out...</p>

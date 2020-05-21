@@ -192,7 +192,7 @@ export default {
 			.modal-title{
 				display: block;
 				box-sizing: border-box;
-				padding: 2px 20px 0 20px;
+				padding: 0 20px 0 20px;
 				border-top-right-radius: var(--borderRadiusMd);
 				border-top-left-radius: var(--borderRadiusMd);
 				color: var(--text);
@@ -210,28 +210,29 @@ export default {
 				@media (max-width: @screenSM) {
 					border-top-right-radius: 30px;
 					border-top-left-radius: 30px;
-					padding: 0 30px;
+					padding: 0 30px 0 30px;
 				}
 
 				span, i{
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
-					padding-bottom: 4px;
 				}
 
-				span{
-					@media (max-width: @screenSM) {
-						padding-top: 4px;
-					}
+				i{
+					transform: scale(1.2);
 				}
 
 				// Image - floats right,
 				img{
-					height: 36px;
-					margin-top: 15px;
+					height: 30px;
+					margin-top: 16px;
 					transition: var(--transition);
 					transform: scale(1);
+
+					@media (max-width: @screenSM) {
+						margin-top: 18px;
+					}
 
 					&:hover{
 						cursor: pointer;
@@ -271,14 +272,23 @@ export default {
 				border-bottom-left-radius: var(--borderRadiusMd);
 
 				@media (max-width: @screenSM) {
-					padding: 15px 30px;
 					border-radius: 0;
 					padding: 0;
-					height: 45px;
-					min-height: 45px;
+					height: 50px;
+					min-height: 50px;
 
 					button{
+						border-radius: 0;
+						border-top: none;
+						border-bottom: none;
+						border-right: none;
 						height: 100%;
+						width: 100%;
+						font-weight: 500;
+
+						&:first-child{
+							border-left: none;
+						}
 					}
 				}
 

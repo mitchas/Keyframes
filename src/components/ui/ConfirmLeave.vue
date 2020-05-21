@@ -30,12 +30,12 @@
 					<!-- Footer/Buttons -->
 					<div class="modal-footer">
 						<!-- Dismiss -->
-						<button class="button blue" @click="show = false" aria-label="Dismiss">
+						<button class="button transparent" @click="show = false" aria-label="Dismiss">
 							<i class="far fa-times"></i>
 							<span>Stay</span>
 						</button>
 						<!-- Leave -->
-						<button class="button red" @click="leave()" aria-label="Yes, Leave">
+						<button class="button invert" @click="leave()" aria-label="Yes, Leave">
 							<span>Leave</span>
 							<i class="fas fa-long-arrow-right"></i>
 						</button>
