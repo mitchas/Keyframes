@@ -160,6 +160,9 @@ export default {
 			if(this.$store.getters.userPreferences.confirmLeave == null){
 				this.$store.getters.userPreferences.confirmLeave = true;
 			}
+			if(!this.$store.getters.userPreferences.viewed){
+				this.$store.getters.userPreferences.viewed = {};
+			}
 		},
 
 	}

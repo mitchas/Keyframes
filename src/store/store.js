@@ -37,7 +37,10 @@ export const store = new Vuex.Store({
 			darkMode: false,
 			animations: true,
 			tooltips: true,
-			startPage: '/'
+			startPage: '/',
+			viewed: {
+				animateIntro: false,
+			},
 		},
 		// Global Variables
 		// used anywhere. Easy to change

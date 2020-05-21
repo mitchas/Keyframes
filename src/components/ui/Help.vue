@@ -6,23 +6,12 @@
 // 		Accepts props:  
 // 			- show: condition to show modal
 // 			- title: Text string for modal title
+// 			- color: Color of button and other accents
+// 			- dismissText: Text for close button
+// 			- dismissIcon: Font awesome icon string for close button
 // 			- newUser: if true, the first slide will be shown only to new users
 // 			- slides: Number of slides/slots in help
 // 
-// 		Styles
-// 		_____________________
-// 		.lightbox
-// 			- show with modal, darken and blur behind, click to dismiss modal
-// 		.modal-wrapper
-// 			- Outer element to center modal with flex
-// 			.modal
-// 				- Actual modal element
-// 				- Add class .small to decrease size to confirmation-like
-// 				
-// 				.modal-title
-// 				.modal-body
-// 				.modal-footer
-// 					Add class .center to align content in the middle, .right to right-justify
 -->
 
 <template>
@@ -34,50 +23,55 @@
 		<!-- Modal -->
 		<transition name="modal">
 
-			<div class="help-wrapper" v-on:click.self="$emit('dismissed')" v-if="show">
+			<div class="help-wrapper" v-on:click.self="closeHelp()" v-if="show">
 
 				<div class="help-body">
-					<h1 class="help-title">{{title}}</h1>
+
+					<transition name="basic">
+						<h1 class="help-title" v-if="title && !newUser">{{title}}</h1>
+					</transition>
 
 
 					<!-- Middle, slide content -->
+					<div class="help-middle" :class="(newUser || slides == 1) && 'fit'">
 
+						<!-- New user slide - only shown if user's first time seeing it -->
 						<transition name="slide">
-							<div class="help-middle" v-if="newUser && currentSlide == 0">
+							<div class="help-middle-content" v-if="newUser">
 								<slot name="newUser"></slot>
 							</div>
 						</transition>
 
+						<!-- Rest of slides, 3 max -->
 						<transition name="slide">
-							<div class="help-middle" v-if="slides > 0 && currentSlide == 1">
+							<div class="help-middle-content" v-if="slides > 0 && currentSlide == 1 && !newUser">
 								<slot name="one"></slot>
 							</div>
 						</transition>
 						<transition name="slide">
-							<div class="help-middle" v-if="slides > 1 && currentSlide == 2">
+							<div class="help-middle-content" v-if="slides > 1 && currentSlide == 2">
 								<slot name="two"></slot>
 							</div>
 						</transition>
 						<transition name="slide">
-							<div class="help-middle" v-if="slides > 2 && currentSlide == 3">
+							<div class="help-middle-content" v-if="slides > 2 && currentSlide == 3">
 								<slot name="three"></slot>
 							</div>
 						</transition>
-
+					</div>
 
 					<!-- Bottom -->
 					<div class="help-footer">
 
 						<!-- Dot Controls -->
-						<div class="help-slide-dots" v-if="(newUser && slides == 1) || slides > 1">
-							<i class="dot fas fa-circle" :class="{'active': currentSlide == 0}" @click="changeSlide(0)" v-if="newUser"></i>
+						<div class="help-slide-dots" v-if="slides > 1 && !newUser">
 							<i v-for="index in parseInt(slides)" :key="index" class="dot fas fa-circle" :class="{'active': currentSlide == index}" @click="changeSlide(index)"></i>
 						</div>
 
 						<!-- Dismiss -->
-						<button class="button invert" @click="$emit('dismissed')" aria-label="Dismiss">
-							<i class="far fa-times"></i>
-							<span>Close</span>
+						<button class="button" :class="color" @click="closeHelp()" aria-label="Dismiss">
+							<i :class="[dismissIcon ? dismissIcon : 'far fa-times']"></i>
+							<span>{{dismissText}}</span>
 						</button>
 					</div>
 				</div> <!-- End modal body/form -->
@@ -98,7 +92,10 @@ export default {
 	props: [
 		'show',
 		'title',
+		'color',
 		'newUser',
+		'dismissText',
+		'dismissIcon',
 		'slides',
 	],
 	data() {
@@ -109,6 +106,12 @@ export default {
 	},
 	created() {
 
+	},
+	watch: {
+		// Watch new user, if that changes, change slide to regular user view
+		newUser: function(newVal, oldVal) {
+			this.changeSlide(1);
+		},
 	},
 	mounted(){
 		if(this.newUser){
@@ -128,7 +131,18 @@ export default {
 
 			setTimeout(function(){
 				_this.currentSlide = slide;
-			}, 250)
+			}, 180)
+		},
+		///////////////////
+		//  Close Help  //
+		/////////////////
+		closeHelp: function(){
+			this.$emit('dismissed');
+
+			// If new user, emit viewed so it doesn't show again
+			if(this.newUser){
+				this.$emit('newUserViewed');
+			}
 		}
 	}	
 }	
@@ -146,6 +160,7 @@ export default {
 		background-color: var(--lightbox);
 		position: fixed;
 		bottom: 0;
+		backdrop-filter: blur(2px);
 		left: 0;
 		z-index: 500;
 	}
@@ -173,28 +188,25 @@ export default {
 			justify-content: space-between;
 			background-color: var(--pageBackground);
 			margin: 0 auto;
-			width: 90%;
+			width: 94%;
 			max-width: 500px;
 			border-radius: var(--borderRadiusMd);
 			position: relative;
-			max-height: 75vh;
 			border: var(--borderWidth) solid var(--border);
 			box-sizing: border-box;
-			padding: 25px 25px;
+			padding: 30px 45px;
 			max-height: 70vh;
 			min-height: 70vh;
 			height: 70vh;
 
 			// Absolute bottom, larger on mobile
 			@media (max-width: @screenSM) {
-				width: 100%;
-				position: absolute;
-				bottom: 0;
-				left: -1px;
-				max-width: 100%;
-				border-top-left-radius: 30px;
-				border-top-right-radius: 30px;
-				border:none;
+				width: 90%;
+				max-height: 80vh;
+				min-height: 50vh;
+				padding: 30px 30px;
+				height: fit-content;
+				border-radius: 10px;
 			}
 
 
@@ -216,6 +228,30 @@ export default {
 				justify-content: center;
 				transform-origin: center center;
 				flex-grow: 3;
+				height: 45vh;
+				max-height: 45vh;
+				min-height: 45vh;
+
+				@media (max-width: @screenSM) {
+					height: 40vh;
+					max-height: 40vh;
+					min-height: 40vh;
+				}
+
+				// Fit height to stretch - set if more than one slide, and not new user
+				&.fit{
+					height: fit-content;
+					max-height: fit-content;
+					min-height: fit-content;
+				}
+
+				// Added inside wrapper to keep height
+				.help-middle-content{
+					display: flex;
+					flex-grow: 3;
+					flex-direction: column;
+					justify-content: center;
+				}
 
 				// Tips layout
 				.help-tips{
@@ -223,30 +259,35 @@ export default {
 					flex-direction: column;
 					flex-grow: 3;
 					justify-content: center;
+					box-sizing: border-box;
+					padding: 15px 0;
 
 					.tip{
 						display: flex;
 						justify-content: space-between;
 						box-sizing: border-box;
-						padding: 10px 0;
+						padding: 14px 0;
 
 						.tip-icon{
-							min-width: 90px;
+							min-width: 50px;
 							text-align: center;
 							display: flex;
+							margin-right: 15px;
 							flex-direction: column;
 							justify-content: center;
 							font-size: 42px;
 						}
 
 						// Text
-						span{
+						.tip-text{
 							box-sizing: border-box;
 							flex-grow: 3;
-							padding-right: 15px;
 							font-size: 14px;
-							line-height: 22px;
+							line-height: 20px;
 							font-weight: 500;
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
 
 							code{
 								font-family: var(--mono);
@@ -270,12 +311,13 @@ export default {
 			.help-footer{
 				display: flex;
 				flex-direction: column;
+				justify-self: flex-end;
 
 				.help-slide-dots{
 					display: flex;
 					justify-content: center;
 					box-sizing: border-box;
-					padding: 0px 0 10px 0;
+					padding: 0px 0 30px 0;
 
 					.dot{
 						margin: 0 4px;
@@ -299,7 +341,7 @@ export default {
 				}
 
 				button{
-					margin: 25px auto 0 auto;
+					margin: 0 auto 0 auto;
 					width: 200px;
 				}
 			}
@@ -311,21 +353,22 @@ export default {
 	//////////////////////
 	// Use for blocks of several items/lists
 	.slide-enter-active {
-		animation: slide-animation-in .15s ease both 0.15s;
+		animation: slide-animation-in .17s ease both 0.17s;
 	}
 	.slide-leave-active {
-		animation: slide-animation-out .15s ease reverse both;
+		animation: slide-animation-out .17s ease reverse both;
 	}
 	@keyframes slide-animation-out {
 		0% {
 			opacity: 0;
-			transform: scaleX(0);
+			// transform: scaleX(0);
+			transform: scale(0);
 			transform-origin: center right;
 			// transform: translateX(30%);
 		}
 		100% {
+			transform: scale(1);
 			// transform: scaleX(1);
-			transform: scaleX(1);
 			// transform: translateX(0px);
 			opacity: 1;
 		}
@@ -333,13 +376,14 @@ export default {
 	@keyframes slide-animation-in {
 		0% {
 			transform-origin: center left;
-			transform: scaleX(0);
+			transform: scale(0);
+			// transform: scaleX(0);
 			opacity: 0;
 			// transform: translateX(-30%);
 		}
 		100% {
-			// transform: scaleX(0);
-			transform: translateX(1);
+			// transform: scaleX(1);
+			transform: scale(1);
 			opacity: 1;
 		}
 	}

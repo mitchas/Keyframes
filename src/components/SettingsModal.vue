@@ -26,9 +26,8 @@
 
 		<Modal
 			v-bind:show="showSettings"
-			color="grey"
-			confirmText="Close Settings"
-			confirmIcon="fas fa-times"
+			color="invert"
+			dismissText="Close Settings"
 			@confirmed="$emit('settingsModalClosed');"
 			@dismissed="$emit('settingsModalClosed');">
 

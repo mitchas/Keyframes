@@ -39,6 +39,8 @@
 // 				deleted selected animation from local storage
 // 			openPreset(index)
 // 				Loads preset at index value in array
+// 			newUserPreset()
+// 				If new user chooses to load preset in new user modal
 // 			copyOutput
 // 				copies output to user's clipboard
 //
@@ -433,53 +435,83 @@
 			@dismissed="$store.getters.global.showHelp = false"> -->
 		<Help
 			v-bind:show="$store.getters.global.showHelp"
-			title="Animation Tips"
+			title="Tips & Tricks"
 			:slides="1"
-			:newUser="true"
-			@dismissed="$store.getters.global.showHelp = false">
+			:color="newUserHelp ? 'green' : 'invert'"
+			:newUser="newUserHelp"
+			:dismissText="newUserHelp ? 'Just Let Me Start' : 'Close Help'"
+			:dismissIcon="newUserHelp ? 'far fa-thumbs-up' : 'far fa-times'"
+			@dismissed="$store.getters.global.showHelp = false"
+			@newUserViewed="$store.getters.userPreferences.viewed.animateIntro = true; newUserHelp = false;">
 			
+			<!-- 
+				Welcome for new users
+			 -->
 			<template v-slot:newUser>
-				<i class="fal fa-ghost" id="animateHelpGhost"></i>
-				<!-- Help tips -->
-				<div class="help-tips">
-					<!-- Load Preset -->
-					<div class="tip">
-						<i class="far fa-car tip-icon"></i>
-						<span>
-							It looks like you're new here. Would you like to load an example animation?
-						</span>
+				<!-- New user message -->
+				<div id="animateHelpNewUser">
+					<!-- Floating Ghost -->
+					<i class="fal fa-ghost" id="animateHelpGhost"></i>
+
+					<div id="animateHelpBody">
+						<h3>Create an Animation</h3>
+						<p class="small padding-none ptop-sm">
+							It looks like this is your first time here. You should be at least a little familiar with CSS @keyframe animations or it might be tricky for you.
+						</p>
+						<p class="small light padding-none ptop-xs pbottom-md">
+							You can read some tips or load an example animation before you start.
+						</p>
+						<!-- Help & Tour -->
+						<div class="flex flex-horizontal flex-around">
+							<button class="button small transparent" @click="newUserHelp = false;">
+								<i class="far fa-book-spells"></i>
+								<span>See Some Tips</span>
+							</button>
+							<button class="button small transparent" @click="newUserPreset()">
+								<i class="far fa-camera-movie"></i>
+								<span>Load Example</span>
+							</button>
+						</div>
 					</div>
 				</div>
 			</template>
 
+			<!-- Help slide 1 -->
 			<template v-slot:one>
 				<!-- Help tips -->
 				<div class="help-tips">
 					<!-- Syntax tip -->
 					<div class="tip">
 						<i class="far fa-brackets-curly tip-icon"></i>
-						<span>
-							If a property isn't working, make sure you have the correct syntax, and there's no target CSS overwriting it.
-						</span>
+						<div class="tip-text">
+							<span>If a property isn't working, make sure you have the correct syntax, and there's no target CSS overwriting it.</span>
+						</div>
 					</div>
 					<!-- Property tip -->
 					<div class="tip">
 						<i class="far fa-badge-percent tip-icon"></i>
-						<span>
-							If you use a property, make sure it has a value at every step - even if it's the same value.
-						</span>
+						<div class="tip-text">
+							<span>If you use a property, make sure it has a value at every step - even if it's the same value.</span>
+						</div>
 					</div>
 					<!-- Shorthand -->
 					<div class="tip">
 						<i class="far fa-spell-check tip-icon"></i>
-						<span>
-							Mny properties can accept multiple values. So <code>5px</code> would be valid for the <code>margin</code> property, and so would <code>5px 15px 25px 35px</code>.
-						</span>
+						<div class="tip-text">
+							<span>Many properties can accept multiple values. So <code>5px</code> would be valid for the <code>margin</code> property, and so would <code>5px 15px 25px 35px</code>.</span>
+						</div>
+					</div>
+					<!-- More soon -->
+					<div class="tip">
+						<i class="far fa-sparkles tip-icon"></i>
+						<div class="tip-text">
+							<span>I'll be adding a better help section & tutorials soon.</span>
+						</div>
 					</div>
 				</div>
 			</template>
 
-		</Help>
+		</Help> <!-- End Help -->
 
 
 	</div>
@@ -520,7 +552,18 @@ export default {
 	},
 
 	mounted() {
-		this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
+		let _this = this;
+
+		_this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
+
+
+// If user has never visited this page, show them help w/new user message
+		if(!_this.$store.getters.userPreferences.viewed.animateIntro){
+			setTimeout(function(){
+				_this.newUserHelp = true;
+				_this.$store.getters.global.showHelp = true;
+			}, 1000)
+		}
 	},
 
 	computed: {
@@ -873,6 +916,14 @@ export default {
 			// Close tab, alert
 			this.options.saveLoad = false;
 			this.hello(preset.name + " is ready to play!", preset.targetClass)
+		},
+
+		// New user start with preset
+		newUserPreset: function(){
+			this.openPreset(0); 
+			this.$store.getters.userPreferences.viewed.animateIntro = true; 
+			this.newUserHelp = false;
+			this.$store.getters.global.showHelp = false;
 		},
 
 		// Copy output to clipboard
@@ -1601,11 +1652,36 @@ export default {
 	/////////////////////
 	//  Help Modal    //
 	///////////////////
-	#animateHelpGhost{
-		animation: error-ghost 2s ease-in-out 0s infinite alternate none;
-		font-size: 75px;
-		text-align: center;
-		margin: 55px 0 0 0;
+	
+	#animateHelpNewUser{
+		display: flex;
+		justify-content: space-around;
+		flex-direction: column;
+		height: 100%;
+
+		#animateHelpGhost{
+			animation: error-ghost 2s ease-in-out 0s infinite alternate none;
+			font-size: 80px;
+			text-align: center;
+			margin: 2vh 0 25px 0;
+
+			// Shrink a bit on mobile
+			@media (max-width: @screenSM) {
+				font-size: 65px;
+				margin: 15px 0 35px 0;
+			}
+		}
+		#animateHelpBody{
+			margin-bottom: 2vh;
+
+			h1,h2,h3,h4{
+				text-align: center;
+			}
+			// Shrink margin on mobile
+			@media (max-width: @screenSM) {
+				margin: 0 0 15px 0;
+			}
+		}
 	}
 
 	/////////////////////

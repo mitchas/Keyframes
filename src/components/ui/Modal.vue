@@ -51,14 +51,14 @@
 						<slot name="body"></slot>
 					</div>
 					<!-- Footer/Buttons -->
-					<div class="modal-footer" v-bind:class="{'center': !dismissText, 'reverse': reverseFooter}" v-if="confirmText">
+					<div class="modal-footer" v-bind:class="{'center': !dismissText || !confirmText, 'reverse': reverseFooter}" v-if="confirmText || dismissText">
 						<!-- Dismiss -->
-						<button class="button blue" @click="$emit('dismissed')" aria-label="Dismiss" v-if="dismissText">
+						<button class="button invert" @click="$emit('dismissed')" aria-label="Dismiss" v-if="dismissText">
 							<i class="far fa-times"></i>
 							<span>{{dismissText}}</span>
 						</button>
 						<!-- Leave -->
-						<button class="button" v-bind:class="color" @click="$emit('confirmed')" v-bind:aria-label="confirmText">
+						<button class="button" v-bind:class="color" @click="$emit('confirmed')" v-bind:aria-label="confirmText" v-if="confirmText">
 							<span>{{confirmText}}</span>
 							<i v-bind:class="confirmIcon ? confirmIcon : 'fas fa-long-arrow-right'"></i>
 						</button>
@@ -116,7 +116,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		z-index: 500;
-		backdrop-filter: blur(3px);
+		backdrop-filter: blur(2px);
 	}
 
 	// Modals
@@ -158,7 +158,7 @@ export default {
 				max-width: 100%;
 				border-top-left-radius: 30px;
 				border-top-right-radius: 30px;
-				border:none;
+				// border:none;
 			}
 
 			// Close modal button, floats top right
@@ -273,6 +273,13 @@ export default {
 				@media (max-width: @screenSM) {
 					padding: 15px 30px;
 					border-radius: 0;
+					padding: 0;
+					height: 45px;
+					min-height: 45px;
+
+					button{
+						height: 100%;
+					}
 				}
 
 				// Center buttons

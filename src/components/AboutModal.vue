@@ -18,7 +18,7 @@
 
 		<Modal
 			v-bind:show="showAbout"
-			color="white"
+			color="blue"
 			confirmText="View on GitHub"
 			confirmIcon="fab fa-github"
 			dismissText="Dismiss"
