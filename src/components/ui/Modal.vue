@@ -51,14 +51,14 @@
 						<slot name="body"></slot>
 					</div>
 					<!-- Footer/Buttons -->
-					<div class="modal-footer" v-bind:class="{'center': !dismissText, 'reverse': reverseFooter}" v-if="confirmText">
+					<div class="modal-footer" v-bind:class="{'center': !dismissText || !confirmText, 'reverse': reverseFooter}" v-if="confirmText || dismissText">
 						<!-- Dismiss -->
-						<button class="button blue" @click="$emit('dismissed')" aria-label="Dismiss" v-if="dismissText">
+						<button class="button invert" @click="$emit('dismissed')" aria-label="Dismiss" v-if="dismissText">
 							<i class="far fa-times"></i>
 							<span>{{dismissText}}</span>
 						</button>
 						<!-- Leave -->
-						<button class="button" v-bind:class="color" @click="$emit('confirmed')" v-bind:aria-label="confirmText">
+						<button class="button" v-bind:class="color" @click="$emit('confirmed')" v-bind:aria-label="confirmText" v-if="confirmText">
 							<span>{{confirmText}}</span>
 							<i v-bind:class="confirmIcon ? confirmIcon : 'fas fa-long-arrow-right'"></i>
 						</button>
@@ -73,7 +73,7 @@
 
 <script>
 export default {
-	name: "Callout",
+	name: "Modal",
 	mixins: [
 	],
 	components: {
@@ -116,7 +116,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		z-index: 500;
-		backdrop-filter: blur(3px);
+		backdrop-filter: blur(2px);
 	}
 
 	// Modals
@@ -139,7 +139,7 @@ export default {
 		.modal{
 			display: flex;
 			flex-direction: column;
-			background-color: var(--layer);
+			background-color: var(--pageBackground);
 			margin: 0 auto;
 			width: 90%;
 			max-width: 500px;
@@ -158,7 +158,7 @@ export default {
 				max-width: 100%;
 				border-top-left-radius: 30px;
 				border-top-right-radius: 30px;
-				border:none;
+				// border:none;
 			}
 
 			// Close modal button, floats top right
@@ -205,7 +205,6 @@ export default {
 				border-bottom: var(--borderWidth) solid var(--border);
 				display: flex;
 				justify-content: space-between;
-				background-color: var(--layer);
 
 				// Increase size and padding on mobile
 				@media (max-width: @screenSM) {
@@ -252,7 +251,6 @@ export default {
 				box-sizing: border-box;
 				padding: 20px;
 				overflow: scroll;
-				background-color: var(--background);
 				flex-grow: 3;
 
 				@media (max-width: @screenSM) {
@@ -266,7 +264,6 @@ export default {
 				justify-content: space-between;
 				box-sizing: border-box;
 				height: 66px;
-				background-color: var(--layer);
 				min-height: 70px;
 				padding: 15px 20px;
 				border-top: var(--borderWidth) solid var(--border);
@@ -276,6 +273,13 @@ export default {
 				@media (max-width: @screenSM) {
 					padding: 15px 30px;
 					border-radius: 0;
+					padding: 0;
+					height: 45px;
+					min-height: 45px;
+
+					button{
+						height: 100%;
+					}
 				}
 
 				// Center buttons

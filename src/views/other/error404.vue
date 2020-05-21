@@ -7,13 +7,13 @@
 -->
 
 <template>
-	<div class="page text-page">
+	<div class="page">
 		<div class="text-page-content">
 
 			<div class="not-found">
 				<!-- Animated Ghost -->
 				<div class="ghost-animation">
-					<i class="fas fa-ghost"></i>
+					<i class="fal fa-ghost"></i>
 				</div>
 				<!-- Error text -->
 				<div class="error-text">

@@ -8,6 +8,7 @@
 // 			capitalize text inside
 // 		.block
 // 			display block
+// 			flex classes
 // 		Spacing helpers
 // 			.[m/p][side]-[size]
 // 			mtop-xs, mbottom-lg, pleft-xl, etc
@@ -42,6 +43,35 @@
 .flex{
 	display: flex;
 }
+.flex-horizontal{
+	width: 100%;
+	flex-direction: row;
+
+	&.reverse{
+		flex-direction: row-reverse;
+	}
+}
+.flex-vertical{
+	height: 100%;
+	flex-direction: column;
+
+	&.reverse{
+		flex-direction: column-reverse;
+	}
+}
+.flex-around{
+	justify-content: space-around;
+}
+.flex-between{
+	justify-content: space-between;
+}
+.flex-end{
+	justify-content: flex-end;
+}
+.flex-center{
+	justify-content: center;
+}
+
 
 // Other misc helpers
 .flex-grow{

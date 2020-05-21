@@ -16,7 +16,7 @@
 // -->
 
 <template>
-	<div class="page text-page no-scrollbars">
+	<div class="page no-scrollbars">
 		<div class="text-page-content">
 
 			<!-- Product Hunt Banner -->
@@ -37,15 +37,15 @@
 				class="mbottom-md"
 				color="blue"
 				size="">
-				<span><b>Welcome to Keyfrmes 2.</b> A complete rewrite on Vue, version 2 has a ton of <a @click="navigate('/changelog')">new features</a> for the animator, new apps for colors & shadows, has dark more and other preferences, and works on phones & tablets. If needed, version 1 can be <a href="https://mitchs.co/keyframes1/">found here</a>.</span>
+				<span><b>Welcome to Keyframes 2.</b> A complete rewrite on Vue, version 2 has a ton of <a @click="navigate('/changelog')">new features</a> for the animator, new apps for colors & shadows, has dark more and other preferences, and works on phones & tablets. If needed, version 1 can be found <a href="https://mitchs.co/keyframes1/">here</a>.</span>
 			</Callout>
 
 			<!-- 
 				Hero
 			 -->
 			<div class="home-hero">
-				<h1>Keyframes is an easy-to-use CSS toolbox.</h1>
-				<h4>Live preview and generate CSS animations, shadows, colors, & more.</h4>
+				<h1>Keyframes helps you write better CSS.</h1>
+				<h4>A straightforward way to create animations, shadows, colors, & more.</h4>
 			</div>
 
 			<!-- <p>
@@ -143,11 +143,12 @@
 				<div class="app-feature-demo">
 					<!-- Shadow Example -->
 					<div id="featuredShadow">
-						<div class="shadow"><i class="far fa-eclipse"></i></div>
-						<div class="shadow"><i class="far fa-sunglasses"></i></div>
-						<div class="shadow"><i class="far fa-cloud-sun"></i></div>
-						<div class="shadow"><i class="far fa-planet-moon"></i></div>
-						<div class="shadow"><i class="far fa-eye" @click="hello('Ow.', 'fas fa-exclamation')"></i></div>
+						<div class="sun">
+							<i class="fad fa-sun fa-swap-opacity"></i>
+						</div>
+						<div class="shadow">
+							<i class="fas fa-globe-americas"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -159,10 +160,12 @@
 				icon="fal fa-sparkles"
 				class=" mtop-lg"
 				color="invert"
-				size="fit">
-				<h4 class="mbottom-xs">More coming soon</h4>
+				size="fit margin-auto">
+				<p class="big padding-none">
+					More coming soon.
+				</p>
 				<p class="padding-none">
-					Have a suggestion for a tool or feature you would like to see?
+					Have a suggestion for a feature or another app you would like to see?
 				</p>
 				<p class="small padding-none">
 					Send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a>
@@ -303,6 +306,7 @@ export default {
 			max-width: 450px;
 			padding-top: 25px;
 			color: var(--textLight);
+			
 		}
 	}
 
@@ -362,7 +366,6 @@ export default {
 					@media (max-width: @screenSM) {
 						font-size: 30px;
 					}
-
 				}
 				p{
 					margin: 0;
@@ -508,35 +511,39 @@ export default {
 		// Shadow example
 		#featuredShadow{
 			display: flex;
+			flex-direction: column;
 			box-sizing: border-box;
 			justify-content: center;
+			background-color: var(--white);
+			box-sizing: border-box;
+			padding: 35px 0;
+			border-radius: var(--borderRadius);
+			border: 3px solid var(--border);
+			width: fit-content;
+			min-width: 280px;
+			margin: 0 auto;
 
+			.sun{
+				text-align: center;
+				width: 50px;
+				font-size: 42px;
+				margin: 0 auto 0 auto;
+				color: var(--yellow);
+				animation: home-shadow-sun 10s linear 0s infinite alternate none;
+			}
 			.shadow{
 				display: flex;
 				flex-direction: column;
 				justify-content: center;
 				text-align: center;
-				height: 60px;
-				width: 60px;
-				margin: 0 4px;
-				background-color: var(--layer);
-				font-size: 22px;
-				color: var(--text);
-				border-radius: var(--borderRadius);
-				border: var(--borderWidth) solid var(--border);
-				box-shadow: 0px 15px 25px -2px rgba(30,30,60,0.15);
-
-				// Shrink a bit under xl
-				@media (max-width: @screenLG) {
-					height: 50px;
-					width: 50px;
-				}
-				
-				&:nth-child(1){animation: shadows 3s ease-in-out 0s infinite  alternate  forwards;}
-				&:nth-child(2){animation: shadows 3s ease-in-out 0.5s infinite  alternate  forwards;}
-				&:nth-child(3){animation: shadows 3s ease-in-out 1s infinite  alternate  forwards;}
-				&:nth-child(4){animation: shadows 3s ease-in-out 1.5s infinite  alternate  forwards;}
-				&:nth-child(5){animation: shadows 3s ease-in-out 2s infinite  alternate  forwards;}
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+				background: transparent;
+				color: var(--blue);
+				font-size: 52px;
+				margin: 0 auto;
+				animation: home-shadow 10s linear 0s infinite alternate none;
 			}
 		}
 	}
@@ -545,24 +552,6 @@ export default {
 
 	// Animations for home page
 
-	// Shadow example animation
-	@keyframes shadows{
-		0%{
-			box-shadow: 0px 15px 20px 2px rgba(30,30,80,0.2), 0px 6px 20px 2px rgba(255,255,255,0.1);
-		}
-		25%{
-			box-shadow: 10px 0px 20px 2px rgba(30,30,80,0.2), 5px 0px 20px 2px rgba(255,255,255,0.1);
-		}
-		50%{
-			box-shadow: 0px -15px 20px 2px rgba(30,30,80,0.2), 0px -6px 20px 2px rgba(255,255,255,0.1);
-		}
-		75%{
-			box-shadow: -10px 0 20px 2px rgba(30,30,80,0.2), -5px 0 20px 2px rgba(255,255,255,0.1);
-		}
-		100%{
-			box-shadow: 0px 15px 20px 2px rgba(30,30,80,0.2), 0px 6px 20px 2px rgba(255,255,255,0.1);
-		}
-	}
 	
 	// Keyframes for red animated ticker
 	@keyframes animationTicker{
@@ -617,5 +606,34 @@ export default {
 		}
 	}	
 
+	// Shadow
+	@keyframes home-shadow {
+		0.0%{
+			box-shadow: 24px 14px 10px -2px rgba(30,30,60,0.45);
+		}
+		50%{
+			box-shadow: 0px 6px 2px -2px rgba(30,30,60,0.25);
+		}
+		100%{
+			box-shadow: -24px 14px 10px -2px rgba(30,30,60,0.45);
+		}
+	}
+	@keyframes home-shadow-sun {
+		0.0%{
+			transform: translate(-70px, 0);
+		}
+		25%{
+			transform: translate(-30px, -10px);
+		}
+		50%{
+			transform: translate(0px, -15px);
+		}
+		75%{
+			transform: translate(30px, -10px);
+		}
+		100%{
+			transform: translate(70px, 0);
+		}
+	}
 
 </style>

@@ -11,9 +11,6 @@
 // 			- Navigation breadcrumbs
 // 		.tabs
 // 			- Navigation tabs for within a page
-// 		.tooltip
-// 			- Tooltip label for hover hints
-// 			- optional .tooltip-left or .tooltip-right classes for setting float direction
 // 
 
 
@@ -247,120 +244,6 @@
 			text-decoration: underline;
 			color: var(--white);
 			border-radius: 20px;
-		}
-	}
-}
-
-
-////////////////////////
-////    Tooltip    ////
-//////////////////////
-// Add .tooltip class to element that needs tooltip
-.tooltip{
-
-	// Tooltip body - icon and text
-	.tooltip-body{
-		background-color: var(--backgroundLayer);
-		width: fit-content;
-		box-sizing: border-box;
-		padding: 4px 0;
-		border-radius: var(--borderRadius);
-		position: absolute;
-		top: 50%;
-		margin-top: -13px;
-		left: 0;
-		white-space: pre;
-		max-width: 0px;
-		transition: var(--transition);
-		pointer-events: none;
-		overflow: hidden;
-		transition-delay: 0s;
-		opacity: 0;
-		z-index: 100;
-
-		@media (max-width: @screenSM) {
-			padding: 4px 0;
-			margin-top: -13px;
-		}
-
-		i,.tooltip-text{
-			display: inline-block;
-			vertical-align: baseline;
-			height: 100%;
-		}
-		// Icon
-		i{
-			font-size: 16px;
-			box-sizing: border-box;
-			margin-left: 6px;
-			color: var(--border);
-
-			@media (max-width: @screenSM) {
-				font-size: 12px;
-			}
-		}
-		.tooltip-text{
-			box-sizing: border-box;
-			font-size: 12px;
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 0.8px;
-			position: relative;
-			color: var(--text);
-			top: -1px;
-			margin-right: 6px;
-			margin-left: 6px;
-
-			span{
-				text-transform: uppercase;
-			}
-
-			@media (max-width: @screenSM) {
-				font-size: 10px;
-				top: 0;
-			}
-		}
-
-		// Color the icons
-		&.gold{
-			i{color: var(--secondary);}
-		}
-		&.green{
-			i{color: var(--green);}
-		}
-		&.blue{
-			i{color: var(--blue);}
-		}
-		&.red{
-			i{color: var(--red);}
-		}
-		&.grey{
-			i{color: var(--border);}
-		}
-	}
-
-	// Float to the left
-	&.tooltip-left{
-		.tooltip-body{
-			left: auto;
-			right: 100%;
-		}
-	}
-	// Float to the right
-	&.tooltip-right{
-		.tooltip-body{
-			left: 100%;
-			right: auto;
-		}
-	}
-
-	// Hover element with class tooltip to show it
-	&:hover{
-		.tooltip-body{
-			max-width: 300px;
-			transition: var(--transition);
-			transition-delay: 0.5s;
-			opacity: 1;
 		}
 	}
 }

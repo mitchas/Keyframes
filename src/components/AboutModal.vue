@@ -18,7 +18,7 @@
 
 		<Modal
 			v-bind:show="showAbout"
-			color="white"
+			color="blue"
 			confirmText="View on GitHub"
 			confirmIcon="fab fa-github"
 			dismissText="Dismiss"
@@ -39,7 +39,7 @@
 				<div id="aboutVersion">
 					<div class="badge green">
 						<i class="far fa-code-branch"></i>
-						<span>v2.0, May 17 2020</span>
+						<span>v2.0.5, May 21 2020</span>
 					</div>
 					<a @click="$emit('aboutModalClosed'); navigate('/changelog/')">View Changelog</a>
 				</div>
@@ -185,8 +185,6 @@ export default {
 			display: flex;
 			justify-content: flex-end;
 
-			
-
 			label,a,span{
 				font-size: 13px;
 				line-height: 15px;
@@ -196,6 +194,8 @@ export default {
 				width: 135px;
 				min-width: 135px;
 				max-width: 135px;
+				box-sizing: border-box;
+				padding-right: 5px;
 
 				// Shrink on mobile
 				@media (max-width: @screenSM) {

@@ -51,7 +51,7 @@ const router = new Router({
 		},
 		{
 			path: '/v2/',
-			name: 'Home',
+			name: 'PromoHome',
 			component: Home,
 		},
 		////////////////
@@ -70,7 +70,10 @@ const router = new Router({
 		{
 			path: '/animate/',
 			name: 'Animate',
-			component: Animate
+			component: Animate,
+			meta: {
+				help: true,
+			}
 		},
 		// Shadows
 		{

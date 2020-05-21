@@ -8,7 +8,7 @@
 // -->
 
 <template>
-	<div class="page text-page no-scrollbars">
+	<div class="page no-scrollbars">
 		<div class="text-page-content">
 
 			<Callout
@@ -46,6 +46,38 @@
 
 			<!-- Actual Chngelog -->
 			<div id="changelog">
+
+				<!-- Version 2.0.5 -->
+				<div class="changelog-title">
+					<div class="cl-version">
+						<b>Version 2.0.5</b>
+						<span>(May 21, 2020)</span>
+					</div>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>New home page design</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Tooltips & settings to hide tooltips</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>Confirm exit when leaving an app page - can be disabled in settings</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>Theme color changes</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Added presets to animations app</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-virus-slash cat-bug"></i>
+					<span>Fixed issue with animation CSS output keyframes being out of order.</span>
+				</div>
 
 				<!-- Version 2.0 -->
 				<div class="changelog-title">

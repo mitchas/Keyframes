@@ -99,14 +99,27 @@ export default {
 			_this.setPrefs();
 
 			// Save visit to local storage - use count for prompt for donation? Maybe?
-			var totalVisits = localStorage.getItem("totalVisits");
+			var totalVisits = _this.$store.getters.userPreferences.totalVisits;
 			if(totalVisits){
 				totalVisits = parseInt(totalVisits) + 1;
+
+				// Do something if visits equals X
+				if(totalVisits == 15){
+					_paq.push(['trackEvent', 'Action', 'Returns', "15"]);	
+				}else if(totalVisits == 25){
+					_paq.push(['trackEvent', 'Action', 'Returns', "25"]);	
+				}else if(totalVisits == 50){
+					_paq.push(['trackEvent', 'Action', 'Returns', "50"]);	
+				}else if(totalVisits == 100){
+					_paq.push(['trackEvent', 'Action', 'Returns', "100"]);	
+				}
 			}else{
+				// Else this is their first visit
 				totalVisits = 1;
 			}
+			
 			// Save to localstorage
-			localStorage.setItem("totalVisits", totalVisits);
+			_this.$store.getters.userPreferences.totalVisits = totalVisits;
 
 		},
 		//////////////////////
@@ -138,6 +151,17 @@ export default {
 				document.getElementsByTagName("body")[0].classList.add("no-animations");
 			}else{
 				document.getElementsByTagName("body")[0].classList.remove("no-animations");
+			}
+	
+			// Set defaults
+			if(this.$store.getters.userPreferences.tooltips == null){
+				this.$store.getters.userPreferences.tooltips = true;
+			}
+			if(this.$store.getters.userPreferences.confirmLeave == null){
+				this.$store.getters.userPreferences.confirmLeave = true;
+			}
+			if(!this.$store.getters.userPreferences.viewed){
+				this.$store.getters.userPreferences.viewed = {};
 			}
 		},
 

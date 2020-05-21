@@ -27,6 +27,17 @@
 			<nav id="settingsNav" aria-label="Settings Menu" @mouseleave="closeDropdowns()">
 
 
+				<!-- Help - only shows on pages with help modal -->
+				<div class="settings-nav" v-if="$route.meta.help">
+					<div class="settings-nav-dropdown" @click="$store.getters.global.showHelp = true">
+						<button class="hover-label">
+							<span>Help</span>
+							<!-- Chevron down -->
+							<i class="far fa-book-spells"></i>
+						</button>
+					</div>
+				</div>
+
 				<!-- App Switcher -->
 				<div class="settings-nav">
 					<div class="settings-nav-dropdown" @click="toggleDropdown('apps')">
@@ -275,22 +286,21 @@ export default {
 						flex-direction: column;
 						justify-content: center;
 					}
-					// Label text - either username or "Hey There!"
+					// Label text - 
 					span{
-						font-size: 16px;
+						font-size: 15px;
 						font-weight: 700;
 						letter-spacing: 0.3px;
 
 						// Move down a tiny bit on mobile
 						@media (max-width: @screenMD) {
-							font-size: 15px;
 							padding-top: 1px;
 						}
 					}
 					// Caret down arrow
 					i{
-						margin-left: 8px;
-						font-size: 24px;
+						margin-left: 6px;
+						font-size: 22px;
 						padding-bottom: 0px;
 						transition: var(--transition);
 						width: 18px;
