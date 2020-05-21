@@ -211,7 +211,7 @@ export default {
 		let _this = this;
 
 		// Update title
-		_this.updateMeta("Keyframes | CSS Toolbox", "Do cool stuff with CSS.")
+		_this.updateMeta("Keyframes", "Do cool stuff with CSS.")
 		// Get local storage
 		_this.getLocalStorage();
 

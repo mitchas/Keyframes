@@ -11,7 +11,7 @@
 	<transition name="alert">
 
 		<!-- <div id="alert" v-if="!alertVisible" @click="hideAlert()"> -->
-		<div id="alert" v-if="alertVisible" @click="hideAlert()">
+		<div id="alert" v-if="alertVisible" @click="alertVisible = false;">
 			<b>
 				<i :class="alertIcon"></i>
 				<span>{{alertMessage}}</span>
@@ -37,7 +37,7 @@ export default {
 	},
 	methods: {
 		/////////////////////
-		//   Show Toast   //
+		//   Show Alert   //
 		///////////////////
 		showAlert: function(message, icon){
 
@@ -67,6 +67,7 @@ export default {
 
 			}
 		},
+	
 	}
 };
 </script>
@@ -117,6 +118,10 @@ export default {
 			i{
 				transform: scale(1.3);
 				margin: 0 4px 0 5px;
+			}
+
+			&:hover{
+				cursor: pointer;
 			}
 		}
 	}

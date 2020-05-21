@@ -29,6 +29,8 @@
 // 				Some animation timing inputs are toggles and not text inputs, this cycles through the options
 // 			toggleOption(option)
 // 				Toggle top tab/option popups
+// 			resetAnimation
+// 				Resets everything to default
 // 			saveAnimation
 // 				Saves animation to local storage
 // 			loadAllSaved
@@ -133,6 +135,14 @@
 									<i class="preset-icon" :class="[preset.targetClass]"></i>
 								</div>
 							</div>
+							<!-- Reset Everything -->
+							<div class="flex flex-end">
+								<button aria-label="Save Animation" class="button red small mtop-xs" @click="resetEverything()">
+									<i class="fas fa-skull-crossbones"></i>
+									<span>Reset Everything</span>
+								</button>
+							</div>
+							
 						</div>
 						
 					</div>
@@ -552,14 +562,17 @@ export default {
 	},
 
 	mounted() {
+		let _this = this;
 
-		this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
-
+		_this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
 		// If user has never visited this page, show them help w/new user message
-		if(!this.$store.getters.userPreferences.viewed.animateIntro){
-			this.newUserHelp = true;
-			this.$store.getters.global.showHelp = true;
-		}
+		// After delay to wait for localstorage
+		setTimeout(function(){
+			if(!_this.$store.getters.userPreferences.viewed.animateIntro){
+				_this.newUserHelp = true;
+				_this.$store.getters.global.showHelp = true;
+			}
+		}, 400)
 	},
 
 	computed: {
@@ -685,8 +698,6 @@ export default {
 			var oldPos = this.currentStep.left;
 
 			// Round to 100
-			console.log("POS")
-			console.log(parseFloat(pos))
 			if(parseFloat(pos) > 99.5){
 				pos = "100%";
 			}
@@ -771,7 +782,6 @@ export default {
 			// Current position - offset, divided by width, gives
 			// position as decimal. Convert that to percent,
 			// Then conver to nearest 0.5.
-			// console.log(_event)
 			var offset = _event.pageX - _event.target.offsetLeft;
 			var result = ((offset / _event.target.offsetWidth) * 100).toFixed(1);
 			
@@ -843,6 +853,26 @@ export default {
 		// Save / Load
 		////////////////////
 		////////////////////
+		// Reset everything - target styles, keyframes, select step 1
+		resetEverything: function(){
+			this.keyframes = {
+				'0.0%': {
+					"timelinePosition": {
+						"left": "0.0%"
+					},
+					"transformProps": {
+					},
+					"properties": {
+					}
+				}
+			};
+			this.customTargetStyles = "#targetElement{\n    color:var(--text);\n    border-radius: 50%;\n    height: 100px;\n    width: 100px;\n    font-size: 65px;\n    transform-origin: center center;    \n}",
+			this.customTargetCode = "<i class='far fa-ghost kft'></i>",
+			this.currentStep.left = "0.0%"
+			this.hello("Everything has been reset.", "far fa-skull-crossbones")
+			this.options.saveLoad = false;
+		},
+		// Save to local storage
 		saveAnimation: function(){
 			var animationData = {
 				date: new Date(),
@@ -871,7 +901,6 @@ export default {
 				}
 
 			}
-			console.log(values);
 
 			this.savedAnimations = values;
 		},
@@ -1498,7 +1527,7 @@ export default {
 						border-radius: 2px;
 						display: flex;
 						flex-direction: column;
-						color: var(--white);
+						color: var(--background);
 						justify-content: center;
 						font-family: var(--systemFont);
 						pointer-events: none;
@@ -1524,7 +1553,7 @@ export default {
 
 					b{
 						background-color: var(--text);
-						color: var(--white);
+						color: var(--background);
 					}
 
 					&:hover{

@@ -4,8 +4,18 @@
 // 
 // 	 Bar at top of screen with logo and account/settings dropdown, and app switcher
 // 		Visible on all screen sizes
-// 			70px height 
-// 			Sticky, floating on top of most things (not modals)
+// 			 
+// 			Functions
+// 				toggleDropdown(name)
+// 					Toggles navigation dropdown by (name)
+// 				closeDropdowns()
+// 					Hides all dropdowns
+// 				showAbout()
+// 					Shows about modal
+// 				showSettings()
+// 					Shows settings modal
+// 				openHelp()
+// 					Button only shows based on route meta - when clicked, opens modal and tracks click
 // 
 -->
 
@@ -29,7 +39,7 @@
 
 				<!-- Help - only shows on pages with help modal -->
 				<div class="settings-nav" v-if="$route.meta.help">
-					<div class="settings-nav-dropdown" @click="$store.getters.global.showHelp = true">
+					<div class="settings-nav-dropdown" @click="openHelp()">
 						<button class="hover-label">
 							<span>Help</span>
 							<!-- Chevron down -->
@@ -136,20 +146,10 @@ export default {
 		};
 	},
 	methods: {
-		// Show about modal
-		showAbout: function(){
-			this.showAboutModal = true;
-		},
-		// Show settings modal
-		showSettings: function(){
-			this.showSettingsModal = true;
-		},
-		// Close all navs
-		closeDropdowns: function(){
-			this.showSettingsPopover = false; 
-			this.showAppSwitcher = false
-		},
-		// Toggle a dropdown to show
+		
+		//////////////////
+		//  Dropdowns  //
+		////////////////
 		toggleDropdown: function(name){
 			// Apps dropdown
 			if(name == 'apps'){
@@ -170,7 +170,33 @@ export default {
 					this.showSettingsPopover = true;
 				}
 			}
-		}
+		},
+		// Close all navs
+		closeDropdowns: function(){
+			this.showSettingsPopover = false; 
+			this.showAppSwitcher = false
+		},
+		///////////////////
+		//    Modals    //
+		/////////////////
+		// Show about modal
+		showAbout: function(){
+			this.showAboutModal = true;
+		},
+		// Show settings modal
+		showSettings: function(){
+			this.showSettingsModal = true;
+		},
+		//////////////////
+		//  Open Help  //
+		////////////////
+		// Toogle help modal - button only shows if available per page
+		openHelp: function(){
+			// Toggle it
+			this.$store.getters.global.showHelp = true; 
+			// Track it
+			_paq.push(['trackEvent', 'Action', 'View', 'Help - ' + this.$route.name]);	
+		},
 	}
 };
 </script>
