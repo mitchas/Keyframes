@@ -552,17 +552,13 @@ export default {
 	},
 
 	mounted() {
-		let _this = this;
 
-		_this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
+		this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
 
-_this.$store.getters.userPreferences.viewed.animateIntro = false;
-// If user has never visited this page, show them help w/new user message
-		if(!_this.$store.getters.userPreferences.viewed.animateIntro){
-			setTimeout(function(){
-				_this.newUserHelp = true;
-				_this.$store.getters.global.showHelp = true;
-			}, 300)
+		// If user has never visited this page, show them help w/new user message
+		if(!this.$store.getters.userPreferences.viewed.animateIntro){
+			this.newUserHelp = true;
+			this.$store.getters.global.showHelp = true;
 		}
 	},
 
