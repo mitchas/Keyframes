@@ -46,6 +46,21 @@
 				<!-- General Preferences -->
 				<div class="settings-group">
 
+
+					<!-- Start Page Selector -->
+					<label class="setting-label-large">
+						Start Page
+						<small>Select the page you'd like to see first when you visit keyframes.app.</small>
+					</label>
+					<div class="custom-picker no-scrollbars mtop-xs mbottom-sm">
+						<label class="option" v-for="option in startPages" :key="option.label" :for="'cat_' + option.label" v-bind:class="{'active': $store.getters.userPreferences.startPage == option.path}">
+							<i :class="[option.icon]"></i>
+							<span>{{option.label}}</span>
+							<input type="radio" :id="'cat_' + option.label" v-model="$store.getters.userPreferences.startPage" v-bind:value="option.path" v-bind:aria-label="option.label + ' Page'" hidden/>
+						</label>
+					</div>
+
+
 					<!-- Dark Mode -->
 					<div class="setting-toggle">
 						<div class="setting-toggle-input">
@@ -70,7 +85,7 @@
 					<!-- Confirm Leave -->
 					<div class="setting-toggle">
 						<div class="setting-toggle-input">
-							<input id="confirmLeaveToggle" type="checkbox" class="toggle" v-model="$store.getters.userPreferences.confirmLeave" @change="toggleAnimations()"/>
+							<input id="confirmLeaveToggle" type="checkbox" class="toggle" v-model="$store.getters.userPreferences.confirmLeave"/>
 						</div>
 						<label class="setting-label-large" for="confirmLeaveToggle">
 							Confirm Leave
@@ -78,18 +93,17 @@
 						</label>
 					</div>
 
-					<!-- Start Page Selector -->
-					<label class="setting-label-large mtop-xs">
-						Start Page {{test}}
-						<small>Select the page you'd like to see first when you visit keyframes.app.</small>
-					</label>
-					<div class="custom-picker no-scrollbars mtop-xs mbottom-sm">
-						<label class="option" v-for="option in startPages" :key="option.label" :for="'cat_' + option.label" v-bind:class="{'active': $store.getters.userPreferences.startPage == option.path}">
-							<i :class="[option.icon]"></i>
-							<span>{{option.label}}</span>
-							<input type="radio" :id="'cat_' + option.label" v-model="$store.getters.userPreferences.startPage" v-bind:value="option.path" v-bind:aria-label="option.label + ' Page'" hidden/>
+					<!-- Show Tooltips -->
+					<div class="setting-toggle">
+						<div class="setting-toggle-input">
+							<input id="showTooltipToggle" type="checkbox" class="toggle" v-model="$store.getters.userPreferences.tooltips"/>
+						</div>
+						<label class="setting-label-large" for="showTooltipToggle">
+							Help Tooltips
+							<small>Show or hide the little <i :class="[$store.getters.global.tooltipIcon]"></i> tooltip help icons.</small>
 						</label>
 					</div>
+
 
 
 					<!-- Clear local storage -->

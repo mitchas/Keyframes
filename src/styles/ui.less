@@ -11,9 +11,6 @@
 // 			- Navigation breadcrumbs
 // 		.tabs
 // 			- Navigation tabs for within a page
-// 		.tooltip
-// 			- Tooltip label for hover hints
-// 			- optional .tooltip-left or .tooltip-right classes for setting float direction
 // 
 
 
@@ -247,93 +244,6 @@
 			text-decoration: underline;
 			color: var(--white);
 			border-radius: 20px;
-		}
-	}
-}
-
-
-////////////////////////
-////    Tooltip    ////
-//////////////////////
-// Add .tooltip class to element that needs tooltip
-.tooltip{
-	position: absolute;
-	color: var(--green);
-	transition: 0.1s;
-
-	&.left{
-		margin-left: -30px;
-	}
-	&.right{
-		margin-right: 30px;
-	}
-
-	// Tooltip icon
-	.tooltip-icon{
-		padding: 0 12px 0 12px;
-		font-size: inherit;
-	}
-	// Tooltip text 
-	.tooltip-text{
-		// display: none;
-		background-color: var(--text);
-		color: var(--background);
-		width: fit-content;
-		position: absolute;
-		right: 100%;
-		box-sizing: border-box;
-		padding: 8px 8px 4px 8px;
-		border-radius: var(--borderRadius);
-		transform: scale(0);
-		transform-origin: top left;
-		transition: 0.08s ease;
-		font-size: 12px;
-		line-height: 14px;
-		display: flex;
-		flex-direction: column;
-		letter-spacing: 0.2px;
-		top: 0;
-		margin-right: -10px;
-
-		// Actual text
-		span{
-			display: block;
-			min-width: fit-content;
-			white-space: pre;
-		}
-
-		// Code text
-		.code{
-			font-family: var(--mono);
-		}
-
-		.tooltip-link{
-			display: block;
-			color: var(--green);
-			font-size: 12px;
-			padding: 4px 0;
-		}
-	}
-
-	// Hover appears left or right
-	&.hover-right{
-		.tooltip-text{
-			transform-origin: top left;
-			right: unset;
-			margin-left: -10px;
-			margin-right: 0px;
-			transition: 0.08s ease;
-			left: 100%;
-		}
-	}
-
-	// Hover, show text
-	&:hover{
-		color: var(--blue);
-
-		.tooltip-text{
-			transform: scale(1);
-			transition: 0.08s ease;
 		}
 	}
 }

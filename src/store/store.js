@@ -36,7 +36,14 @@ export const store = new Vuex.Store({
 			confirmLeave: true,
 			darkMode: false,
 			animations: true,
+			tooltips: true,
 			startPage: '/'
+		},
+		// Global Variables
+		// used anywhere. Easy to change
+		global: {
+			tooltipIcon: "far fa-feather",
+			showHelp: false,
 		}
 	},
 	mutations: {
@@ -52,11 +59,15 @@ export const store = new Vuex.Store({
 		userPreferences(state, userPreferences) {
 			state.userPreferences = userPreferences
 		},
+		global(state, global) {
+			state.userPreferences = global
+		},
 	},
 	getters: {
 		scrollLock: state => state.scrollLock,
 		softKeyboard: state => state.softKeyboard,
 		isMobile: state => state.isMobile,
 		userPreferences: state => state.userPreferences,
+		global: state => state.global,
 	}
 })

@@ -58,14 +58,20 @@
 				padding-bottom: 2px;
 				border-left: none;
 
+				// Add border to last
+				&:last-child{
+					border-right: 1px solid var(--border);
+				}
+
 				i{
 					width: 18px;
 					transform: scale(1.44);
 				}
 				@media (max-width: @screenMD) {
 					padding-bottom: 0;
-					height: 34px;
+					height: 38px;
 				}
+
 			}
 
 			// Option button that displays dropdown content
@@ -293,18 +299,28 @@
 
 	.saved-item{
 		width: 100%;
-		padding: 5px 15px 5px 15px;
+		padding: 5px 20px 5px 20px;
 		box-sizing: border-box;
 		color: var(--white);
 		font-family: var(--mono);
 		font-size: 16px;
 		font-weight: 500;
 
-		i{
+		// Delete icon - local storage items
+		.delete-saved-item{
 			color: var(--white);
-			opacity: 0;
+			opacity: 0.2;
+			float: right;
 			transition: var(--transition);
 			margin-right: 10px;
+			position: relative;
+			top: 1px;
+		}
+
+		// Icon to animate for presets
+		.preset-icon{
+			margin-left: 10px;
+			font-weight: 500;
 			position: relative;
 			top: 1px;
 		}

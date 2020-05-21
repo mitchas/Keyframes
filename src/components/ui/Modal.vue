@@ -73,7 +73,7 @@
 
 <script>
 export default {
-	name: "Callout",
+	name: "Modal",
 	mixins: [
 	],
 	components: {
@@ -139,7 +139,7 @@ export default {
 		.modal{
 			display: flex;
 			flex-direction: column;
-			background-color: var(--layer);
+			background-color: var(--pageBackground);
 			margin: 0 auto;
 			width: 90%;
 			max-width: 500px;
@@ -205,7 +205,6 @@ export default {
 				border-bottom: var(--borderWidth) solid var(--border);
 				display: flex;
 				justify-content: space-between;
-				background-color: var(--pageBackground);
 
 				// Increase size and padding on mobile
 				@media (max-width: @screenSM) {
@@ -252,7 +251,6 @@ export default {
 				box-sizing: border-box;
 				padding: 20px;
 				overflow: scroll;
-				background-color: var(--background);
 				flex-grow: 3;
 
 				@media (max-width: @screenSM) {
@@ -266,7 +264,6 @@ export default {
 				justify-content: space-between;
 				box-sizing: border-box;
 				height: 66px;
-				background-color: var(--pageBackground);
 				min-height: 70px;
 				padding: 15px 20px;
 				border-top: var(--borderWidth) solid var(--border);

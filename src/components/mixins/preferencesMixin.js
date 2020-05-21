@@ -99,7 +99,7 @@ export default {
 			_this.setPrefs();
 
 			// Save visit to local storage - use count for prompt for donation? Maybe?
-			var totalVisits = parseInt(localStorage.getItem("totalVisits"));
+			var totalVisits = _this.$store.getters.userPreferences.totalVisits;
 			if(totalVisits){
 				totalVisits = parseInt(totalVisits) + 1;
 
@@ -119,7 +119,7 @@ export default {
 			}
 			
 			// Save to localstorage
-			localStorage.setItem("totalVisits", totalVisits);
+			_this.$store.getters.userPreferences.totalVisits = totalVisits;
 
 		},
 		//////////////////////
@@ -151,6 +151,14 @@ export default {
 				document.getElementsByTagName("body")[0].classList.add("no-animations");
 			}else{
 				document.getElementsByTagName("body")[0].classList.remove("no-animations");
+			}
+	
+			// Set defaults
+			if(this.$store.getters.userPreferences.tooltips == null){
+				this.$store.getters.userPreferences.tooltips = true;
+			}
+			if(this.$store.getters.userPreferences.confirmLeave == null){
+				this.$store.getters.userPreferences.confirmLeave = true;
 			}
 		},
 

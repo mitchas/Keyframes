@@ -27,10 +27,8 @@
 // 				round val to 0.1, and if it's greater than 99%, round to 100% to make the final step
 // 			toggleTiming(type)
 // 				Some animation timing inputs are toggles and not text inputs, this cycles through the options
-// 			viewOutput
-// 			viewSaveLoad
-// 			editTarget
-// 				All three are for top tab controls - hides the others, shows selected.
+// 			toggleOption(option)
+// 				Toggle top tab/option popups
 // 			saveAnimation
 // 				Saves animation to local storage
 // 			loadAllSaved
@@ -39,6 +37,8 @@
 // 				Loads selected animation from local storage into editor
 // 			deleteAnimationFromStorage
 // 				deleted selected animation from local storage
+// 			openPreset(index)
+// 				Loads preset at index value in array
 // 			copyOutput
 // 				copies output to user's clipboard
 //
@@ -55,18 +55,18 @@
 				<div id="animateTop">
 					<!-- left siide, export, settings, etc. -->
 					<!-- Show settings -->
-					<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button small" @click="viewSaveLoad()" v-bind:class="[showSaveLoad ? 'red' : 'invert']">
-						<i v-bind:class="{'fas fa-save': !showSaveLoad, 'fas fa-times-circle': showSaveLoad}"></i>
+					<button id="showSaveLoadButton" aria-label="Save or Load Animation" class="button small" @click="toggleOption('saveLoad')" v-bind:class="[options.saveLoad ? 'red' : 'invert']">
+						<i v-bind:class="{'fas fa-save': !options.saveLoad, 'fas fa-times-circle': options.saveLoad}"></i>
 						<span>Save/Load</span>
 					</button>
 					<!-- Edit Target -->
-					<button id="showEditTargetButton" aria-label="Edit Target Element" class="button small" @click="editTarget()" v-bind:class="[showEditTarget ? 'red' : 'yellow']">
-						<i v-bind:class="{'fas fa-bullseye': !showEditTarget, 'fas fa-times-circle': showEditTarget}"></i>
+					<button id="showEditTargetButton" aria-label="Edit Target Element" class="button small" @click="toggleOption('editTarget')" v-bind:class="[options.editTarget ? 'red' : 'yellow']">
+						<i v-bind:class="{'fas fa-bullseye': !options.editTarget, 'fas fa-times-circle': options.editTarget}"></i>
 						<span>Target</span>
 					</button>
 					<!-- Show output -->
-					<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="viewOutput()" v-bind:class="[showOutput ? 'red' : 'green']">
-						<i v-bind:class="{'fas fa-brackets-curly': !showOutput, 'fas fa-times-circle': showOutput}"></i>
+					<button id="showOutputButton" aria-label="Show Output CSS" class="button small" @click="toggleOption('output')" v-bind:class="[options.output ? 'red' : 'green']">
+						<i v-bind:class="{'fas fa-brackets-curly': !options.output, 'fas fa-times-circle': options.output}"></i>
 						<span>Get CSS</span>
 					</button>
 					<!-- Spacer -->
@@ -85,14 +85,14 @@
 					========================
 				-->
 				<!--  Basic settings -->
-				<!--  show/hide with  showSaveLoad -->
+				<!--  show/hide with  options.saveLoad -->
 				<transition name="fromtop">
-					<div class="settings-display" v-if="showSaveLoad">
+					<div class="settings-display" v-if="options.saveLoad">
 						<!-- Save current animation -->
 						<div class="field">
 							<label for="newAnimationSaveName">
 								Save your Animation
-								<small class="block">You can save your animation configuration and come back to it later</small>
+								<!-- <small class="block">You can save your animation configuration and come back to it later</small> -->
 							</label>
 							<!-- animation name -->
 							<input id="newAnimationSaveName" aria-label="Save as Name" type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
@@ -101,22 +101,34 @@
 								<span>Save</span>
 							</button>
 							<transition name="basic">
-								<div class="badge red mleft-xs" v-if="savedAnimations.includes('animation_' + animationToSaveName)">
+								<div class="badge red mleft-xs" v-if="savedAnimations && savedAnimations.includes('animation_' + animationToSaveName)">
 									<i class="far fa-code-branch"></i>
-									<span>Overwriting {{animationToSaveName}}</span>
+									<span>Overwriting "{{animationToSaveName}}"</span>
 								</div>
 							</transition>
 						</div>
 						<!-- Saved animations -->
-						<div class="field mtop-sm">
+						<div class="field mtop-xs">
 							<label>
 								Load a Saved Animation
-								<small v-if="!savedAnimations.length" class="block">You don't have any saved animations yet</small>
+								<small v-if="!savedAnimations[0]" class="block">You don't have any saved animations yet</small>
 							</label>
 							<div class="saved-list">
 								<div class="saved-item" v-for="(name, index) in savedAnimations" :key="index">
-									<i class="far fa-times" @click.self.prevent="deleteAnimationFromStorage(name)"></i>
 									<span @click="loadAnimation(name)">{{name.substr(10)}}</span>
+									<i class="far fa-times delete-saved-item" @click.self.prevent="deleteAnimationFromStorage(name)"></i>
+								</div>
+							</div>
+						</div>
+						<!-- Preset animations -->
+						<div class="field mtop-xs">
+							<label>
+								 Preset Animations
+							</label>
+							<div class="saved-list">
+								<div class="saved-item" v-for="(preset, index) in presetAnimations" :key="index" :class="preset.animationClass">
+									<span @click="openPreset(index)">{{preset.name}}</span>
+									<i class="preset-icon" :class="[preset.targetClass]"></i>
 								</div>
 							</div>
 						</div>
@@ -124,9 +136,9 @@
 					</div>
 				</transition>
 				<!--  Edit Target -->
-				<!--  show/hide with showEditTarget -->
+				<!--  show/hide with options.editTarget -->
 				<transition name="fromtop">
-					<div class="settings-display" v-if="showEditTarget">
+					<div class="settings-display" v-if="options.editTarget">
 						<!-- Custom Target -->
 						<div class="field">
 							<label for="customTarget">
@@ -150,9 +162,9 @@
 					</div>
 				</transition>
 				<!--  CSS output -->
-				<!--  show/hide with  showOutput -->
+				<!--  show/hide with  options.output -->
 				<transition name="fromtop">
-					<div class="settings-display" v-show="showOutput">
+					<div class="settings-display" v-show="options.output">
 						<!-- Output CSS -->
 						<pre id="outputCSS">
 							<!-- 
@@ -192,23 +204,6 @@
 								<div>perspective: {{perspective}}</div>
 							</span>
 						</pre>
-
-							<!-- <b>/* Copy this @keyframes block to your CSS*/</b>
-
-							@keyframes yourAnimation &#123;
-							<span v-for="(step, index) in computedCSSOutput" v-bind:key="index">
-								<span class="ltab-1">{{step.timelinePosition.left}}&#123;</span>
-									<div v-for="(prop, index) in step.properties" v-bind:key="index" class="ltab-2">{{index.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase()}}: {{prop}};</div>
-								<span class="ltab-1">&#125;</span>
-							</span>
-							&#125;
-
-							<b>/* Add the animation: property to whichever element you want to animate */</b>
-							#elementToAnimate&#123;
-								<span class="ltab-1">animation: yourAnimation {{animationProperties.duration}} {{animationProperties.timing}}  {{animationProperties.delay}} {{animationProperties.iterations}}  {{animationProperties.direction}}  {{animationProperties.fillMode}};</span>
-							&#125; -->
-
-
 
 						<!-- Copy to clipboard button -->
 						<button class="button small green fit" @click="copyOutput()">
@@ -250,271 +245,37 @@
 					</h4>
 					<div id="animateSidebarProperties">
 
-						<!-- 
-							2d Transform
-						-->
-						<button class="property-header" @click="propertiesToggles.transform = !propertiesToggles.transform" v-bind:class="{'active':propertiesToggles.transform}">
-							<i v-bind:class="propertiesToggles.transform == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
-							<span>Transform</span>
-							<i class="mleft-xs far fa-expand-arrows"></i>
-						</button>
-						<!-- Transform fields -->
-						<transition name="basic">
-							<div class="property-group" v-if="propertiesToggles.transform">
-								<!-- Transform Origin -->
-								<div class="field-set">
-									<label>
-										<div class="tooltip left hover-right">
-											<i class="fas fa-question tooltip-icon"></i>
-											<span class="tooltip-text">
-												<span class="code">x-offset | y-offset</span>
-												<a class="tooltip-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/transform-origin" target="_blank">View on MDN</a>
-											</span>
+						<!-- Property loops -->
+						<!-- First for transform props, then the rest -->
+						<div v-for="(group, name) in fields" :key="name">
+							<button class="property-header" @click="propertiesToggles[group.toggle] = !propertiesToggles[group.toggle]" v-bind:class="{'active': propertiesToggles[group.toggle]}">
+								<i v-bind:class="propertiesToggles[group.toggle] == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
+								<span>{{name}}</span>
+								<i :class="['mleft-xs ' + group.icon]"></i>
+							</button>
+							<transition name="basic">
+								<div class="property-group" v-if="propertiesToggles[group.toggle]">
+									<div class="field-set" v-for="(field, index) in group.props" :key="index">
+										<!-- Tooltip -->
+										<Tooltip :link="field.tooltipLink" v-if="field.tooltipText">
+											<b>{{field.tooltipText}}</b>
+											<span class="code" v-if="field.tooltipCode">{{field.tooltipCode}}</span>
+											<span class="code example" v-if="field.tooltipExample">{{field.tooltipExample}}</span>
+										</Tooltip>
+										<label :for="'field' + field.model">{{index}}</label>
+										<div class="input-wrapper">
+											<!-- Transform Props -->
+											<input v-if="field.transform" type="text" :id="'field' + field.model" :placeholder="field.placeholder" v-model="keyframes[currentStep.left].transformProps[field.model]" @input="getTransformString()" :maxlength="field.maxLength && field.maxLength">
+											<!-- Regular Props -->
+											<input v-if="!field.transform && field.model" type="text" :id="'field' + field.model" :placeholder="field.placeholder" v-model="keyframes[currentStep.left].properties[field.model]" @input="saveStep()" :maxlength="field.maxLength && field.maxLength">
+											<!-- Other Props -->
+											<!-- Perspective -->
+											<input v-if="field.perspective" v-model="perspective" type="text" :id="'transformOrigin' + index" :placeholder="field.placeholder" @input="saveStep()" :maxlength="field.maxLength && field.maxLength">
 										</div>
-										Transform Origin
-									</label>
-									<div class="input-wrapper">
-										<input type="text" id="transformOrigin" placeholder="bottom left" v-model="keyframes[currentStep.left].properties.transformOrigin" @input="saveStep()" maxlength="22">
 									</div>
 								</div>
-								<!-- Rotate -->
-								<div class="field-set">
-									<label>Rotate</label>
-									<div class="input-wrapper">
-										<input type="text" id="transformRotate" placeholder="45deg" v-model="keyframes[currentStep.left].transformProps.rotate" @input="getTransformString();" maxlength="10">
-									</div>
-								</div>
-								<!-- Scale -->
-								<div class="field-set">
-									<label>Scale</label>
-									<div class="input-wrapper">
-										<input type="text" id="transformScale" placeholder="1.5" v-model="keyframes[currentStep.left].transformProps.scale" @input="getTransformString();" maxlength="6">
-									</div>
-								</div>
-								<!-- Translate -->
-								<div class="field-set">
-									<label>Translate</label>
-									<div class="input-wrapper">
-										<input type="text" id="transformTranslate" placeholder="50px, 100px" v-model="keyframes[currentStep.left].transformProps.translate" @input="getTransformString();" maxlength="12">
-									</div>
-								</div>
-								<!-- Skew -->
-								<div class="field-set">
-									<label>Skew</label>
-									<div class="input-wrapper">
-										<input type="text" id="transformSkew" placeholder="-45deg" v-model="keyframes[currentStep.left].transformProps.skew" @input="getTransformString();">
-									</div>
-								</div>
-							</div>
-						</transition> <!-- End transform: -->
-						<!-- 
-							3d Transform
-						-->
-						<button class="property-header" @click="propertiesToggles.transform3d = !propertiesToggles.transform3d" v-bind:class="{'active':propertiesToggles.transform3d}">
-							<i v-bind:class="propertiesToggles.transform3d == 1 ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
-							<span>3d Transform</span>
-							<i class="mleft-xs far fa-cube"></i>
-						</button>
-						<!-- 3dTransform fields -->
-						<transition name="basic">
-							<div class="property-group" v-if="propertiesToggles.transform3d">
-								<!-- Perspective -->
-								<div class="field-set">
-									<label>Perspective</label>
-									<div class="input-wrapper">
-										<input type="text" id="perspective" placeholder="500px" v-model="perspective" @input="saveStep()" maxlength="22">
-									</div>
-								</div>
-								<!-- Translate3d -->
-								<div class="field-set">
-									<label>Translate3d</label>
-									<div class="input-wrapper">
-										<input type="text" id="translate3d" placeholder="42px, -62px, -155px" v-model="keyframes[currentStep.left].transformProps.translate3d" @input="getTransformString();">
-									</div>
-								</div>
-								<!-- scale3d -->
-								<div class="field-set">
-									<label>Scale3d</label>
-									<div class="input-wrapper">
-										<input type="text" id="scale3d" placeholder="1, 2, 5" v-model="keyframes[currentStep.left].transformProps.scale3d" @input="getTransformString();">
-									</div>
-								</div>
-								<!-- rotate3d -->
-								<div class="field-set">
-									<label>Rotate3d</label>
-									<div class="input-wrapper">
-										<input type="text" id="rotate3d" placeholder="0, 1, 1, 45deg" v-model="keyframes[currentStep.left].transformProps.rotate3d" @input="getTransformString();">
-									</div>
-								</div>
-							</div>
-						</transition> <!-- End transform: -->
-						<!-- 
-							Colors & Text
-						-->
-						<button class="property-header" @click="propertiesToggles.colors = !propertiesToggles.colors" v-bind:class="{'active':propertiesToggles.colors}">
-							<i v-bind:class="propertiesToggles.colors ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
-							<span>Colors & Text</span>
-							<i class="mleft-xs far fa-tint"></i>
-						</button>
-						<!-- Colors & Text Fields-->
-						<transition name="basic">
-							<div class="property-group" v-if="propertiesToggles.colors">
-								<!-- Background -->
-								<div class="field-set">
-									<label>Background</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="red" v-model="keyframes[currentStep.left].properties.background" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Opacity -->
-								<div class="field-set">
-									<label>Opacity</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="0.5" v-model="keyframes[currentStep.left].properties.opacity" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Color (Text) -->
-								<div class="field-set">
-									<label>Color (Text)</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="#0000FF" v-model="keyframes[currentStep.left].properties.color" @input="saveStep()">
-									</div>
-								</div>
-								<!-- FontSize -->
-								<div class="field-set">
-									<label>Font Size</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="14px" v-model="keyframes[currentStep.left].properties.fontSize" @input="saveStep()">
-									</div>
-								</div>
-							</div>
-						</transition> <!-- End colorors & Fonts -->
-
-						<!-- 
-							Sizing and spacing
-						-->
-						<button class="property-header" @click="propertiesToggles.sizing = !propertiesToggles.sizing" v-bind:class="{'active':propertiesToggles.sizing}">
-							<i v-bind:class="propertiesToggles.sizing ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
-							<span>Sizing & Spacing</span>
-							<i class="mleft-xs far fa-sort-size-up"></i>
-						</button>
-						<!-- Sizing and spacing -->
-						<transition name="basic">
-							<div class="property-group" v-if="propertiesToggles.sizing">
-								<!-- Width -->
-								<div class="field-set">
-									<label>Width</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="100px" v-model="keyframes[currentStep.left].properties.width" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Height -->
-								<div class="field-set">
-									<label>Height</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="100px" v-model="keyframes[currentStep.left].properties.height" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Margin -->
-								<div class="field-set">
-									<label>Margin</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="15px 15px" v-model="keyframes[currentStep.left].properties.margin" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Padding -->
-								<div class="field-set">
-									<label>Padding</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="10px 0 0 0" v-model="keyframes[currentStep.left].properties.padding" @input="saveStep()">
-									</div>
-								</div>
-							</div>
-						</transition> <!-- End Sizing & Spacing -->
-
-						<!-- 
-							Positioning
-						-->
-						<button class="property-header" @click="propertiesToggles.position = !propertiesToggles.position" v-bind:class="{'active':propertiesToggles.position}">
-							<i v-bind:class="propertiesToggles.position ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
-							<span>Position</span>
-							<i class="mleft-xs far fa-arrow-to-right"></i>
-						</button>
-						<!-- position -->
-						<transition name="basic">
-							<div class="property-group" v-if="propertiesToggles.position">
-								<!-- Top -->
-								<div class="field-set">
-									<label>Top</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="15px" v-model="keyframes[currentStep.left].properties.top" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Right -->
-								<div class="field-set">
-									<label>Right</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="50%" v-model="keyframes[currentStep.left].properties.right" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Bottom -->
-								<div class="field-set">
-									<label>Bottom</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="10vh" v-model="keyframes[currentStep.left].properties.bottom" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Left -->
-								<div class="field-set">
-									<label>Left</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="25px" v-model="keyframes[currentStep.left].properties.left" @input="saveStep()">
-									</div>
-								</div>
-							</div>
-						</transition> <!-- End Sizing & Spacing -->
-
-						<!-- 
-							Borders
-						-->
-						<button class="property-header" @click="propertiesToggles.borders = !propertiesToggles.borders" v-bind:class="{'active':propertiesToggles.borders}">
-							<i v-bind:class="propertiesToggles.borders ? 'far fa-chevron-circle-up' : 'far fa-chevron-circle-down'"></i>
-							<span>Borders</span>
-							<i class="mleft-xs fas fa-border-style-alt"></i>
-						</button>
-						<!-- Borders -->
-						<transition name="basic">
-							<div class="property-group" v-if="propertiesToggles.borders">
-								<!-- Border -->
-								<div class="field-set">
-									<label>Border</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="var(--borderWidth) solid red" v-model="keyframes[currentStep.left].properties.border" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Border Radius -->
-								<div class="field-set">
-									<label>Border Radius</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="50%" v-model="keyframes[currentStep.left].properties.borderRadius" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Box Shadow -->
-								<div class="field-set">
-									<label>Box Shadow</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="5px 5px 10px 5px rgba(0,0,0,0.2)" v-model="keyframes[currentStep.left].properties.boxShadow" @input="saveStep()">
-									</div>
-								</div>
-								<!-- Outline -->
-								<div class="field-set">
-									<label>Outline</label>
-									<div class="input-wrapper">
-										<input type="text" placeholder="2px solid rgba(0,0,0,0.2)" v-model="keyframes[currentStep.left].properties.outline" @input="saveStep()">
-									</div>
-								</div>
-							</div>
-						</transition>
+							</transition>
+						</div>
 
 						<!-- Spacer -->
 						<div class="mtop-md"></div>
@@ -539,7 +300,7 @@
 						<span v-if="!addingStep">Add Step</span>
 						<span v-else>Cancel</span>
 					</button>
-					<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.keyframes)[1] && currentStep.left != '0.0'">
+					<button aria-label="Delete current step" class="button red" @click="deleteStep()" v-if="Object.keys(this.keyframes)[1] && currentStep.left != '0.0%'">
 						<i class="far fa-trash-alt"></i>
 						<span>Delete {{roundValue(currentStep.left)}}%</span>
 					</button>
@@ -639,7 +400,7 @@
 		<!-- Append Styles to page -->
 		<v-style>
 			.timeline-marker.animated{
-				animation: animationTicker {{animationProperties.duration}} {{animationProperties.timing}} {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
+				animation: animationTicker {{animationProperties.duration}} linear {{animationProperties.delay}} {{animationProperties.iterations}} {{animationProperties.direction}} {{animationProperties.fillMode}};
 				animation-play-state: {{ animationPlaying ? 'running' : 'paused' }};
 			}
 			{{customTargetStyles}}
@@ -662,19 +423,89 @@
 			}
 		</v-style>
 
+
+		<!-- Help modal -->
+		<!-- <Help
+			v-bind:show="$store.getters.global.showHelp"
+			title="Animation Tips"
+			:slides="$store.getters.userPreferences.totalVisits == 1 ? 2 : 1"
+			:newUser="$store.getters.userPreferences.totalVisits == 1"
+			@dismissed="$store.getters.global.showHelp = false"> -->
+		<Help
+			v-bind:show="$store.getters.global.showHelp"
+			title="Animation Tips"
+			:slides="1"
+			:newUser="true"
+			@dismissed="$store.getters.global.showHelp = false">
+			
+			<template v-slot:newUser>
+				<i class="fal fa-ghost" id="animateHelpGhost"></i>
+				<!-- Help tips -->
+				<div class="help-tips">
+					<!-- Load Preset -->
+					<div class="tip">
+						<i class="far fa-car tip-icon"></i>
+						<span>
+							It looks like you're new here. Would you like to load an example animation?
+						</span>
+					</div>
+				</div>
+			</template>
+
+			<template v-slot:one>
+				<!-- Help tips -->
+				<div class="help-tips">
+					<!-- Syntax tip -->
+					<div class="tip">
+						<i class="far fa-brackets-curly tip-icon"></i>
+						<span>
+							If a property isn't working, make sure you have the correct syntax, and there's no target CSS overwriting it.
+						</span>
+					</div>
+					<!-- Property tip -->
+					<div class="tip">
+						<i class="far fa-badge-percent tip-icon"></i>
+						<span>
+							If you use a property, make sure it has a value at every step - even if it's the same value.
+						</span>
+					</div>
+					<!-- Shorthand -->
+					<div class="tip">
+						<i class="far fa-spell-check tip-icon"></i>
+						<span>
+							Mny properties can accept multiple values. So <code>5px</code> would be valid for the <code>margin</code> property, and so would <code>5px 15px 25px 35px</code>.
+						</span>
+					</div>
+				</div>
+			</template>
+
+		</Help>
+
+
 	</div>
 </template>
 
 <script>
-// @ is an alias to /src
+// Conponents
+import Tooltip from "@/components/ui/Tooltip";
+import Help from "@/components/ui/Help";
+
+// Mixins
 import metaMixin from "@/components/mixins/metaMixin.js";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 import screenResizeMixin from "@/components/mixins/ui/screenResizeMixin.js";
 
+// Data broken into separate file because it was long
+import data from "@/views/apps/apps-data/animate.js";
+
 export default {
+	
 	name: "animateApp",
 
+
 	components: {
+		Tooltip,
+		Help,
 	},
 
 	mixins: [
@@ -683,97 +514,13 @@ export default {
 		preferencesMixin,
 	],
 
+	// External data
 	data() {
-		return {
-			// Which tab are they editing
-			propertiesToggles: {
-				transform: true,
-				transform3d: false,
-				colors: false,
-				sizing: false,
-				position: false,
-				borders: false,
-			},
-			// Prop sidebar hides on mobile
-			togglePropSidebar: false,
-			// Perspective for 3d transformations
-			perspective: '',
-			// Show Output modal or not
-			showOutput: false,
-			// Enable hover timeline to add step
-			addingStep: false,
-			// When hovering an existing step
-			hideAddStep: false,
-			// Animation currently playing, and/or paused
-			animationPlaying: false,
-			animationPaused: false,
-			// Collapsible settings
-			showSaveLoad: false,
-			// Show modal to edit target
-			showEditTarget: false,
-			// Custom CSS for target
-			customTargetStyles: "#targetElement{\n   \n}",
-			customTargetCode: "<i class='fas fa-alien-monster kft'></i>",
-			// customTargetCode: "<i class='fal fa-alien-monster'></i>",
-			// Animation name to save
-			animationToSaveName: null,
-			// Previously saved animations
-			savedAnimations: null,
-			// Selected step position
-			currentStep: {
-				left: "0.0%",
-			},
-			// Hover position on timeline
-			timelinePosition: {
-				left: "0.0%"
-			},
-
-			// Keyframes
-			// Array of all steps and props
-			keyframes: {
-				'0.0%': {
-					"timelinePosition": {
-						"left": "0.0%"
-					},
-					"transformProps": {
-					},
-					"properties": {
-					}
-				}
-			},
-
-			// Animation timing
-			animationProperties: {
-				duration: "3s",
-				delay: "0s",
-				iterations: "infinite",
-				timing: "ease",
-				direction: "normal",
-				fillMode: "none"
-			},
-			// Timing options so users can toggle instead of type
-			timingProps: {
-				directionSelected: 0,
-				fillModeSelectetd: 0,
-				directions: [
-					"normal", "reverse", "alternate", "alternate-reverse"
-				],
-				fillModes: [
-					"normal", "none", "forwards", "backwards", "both"
-				],
-			},
-			// Holds all css at each step
-			// Backdoor to reference to update computed property - not really actually used
-			backdoor: 0,
-		};
+		return data;
 	},
 
 	mounted() {
 		this.updateMeta("Animate | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
-
-		// Create date and format (remove spaces, remove year)
-		// var dateName = new Date().toDateString().replace(/\s/g, '');
-		// this.animationToSaveName =  "" + dateName.substring(0,dateName.length - 4).substring(3,dateName.length - 4) + "-x" + (Math.floor(Math.random() * 666)+100).toString();
 	},
 
 	computed: {
@@ -804,7 +551,8 @@ export default {
 			}
 
 			// Return
-			return css;
+			return _.orderBy(css, ['timelinePosition.left'], ['asc']);
+			// return css;
 		},
 		// Get CSS as string from output
 		rawOutputCSS: function () {
@@ -897,16 +645,23 @@ export default {
 			var pos = this.timelinePosition.left;
 			var oldPos = this.currentStep.left;
 
+			// Round to 100
+			console.log("POS")
+			console.log(parseFloat(pos))
+			if(parseFloat(pos) > 99.5){
+				pos = "100%";
+			}
+
 			var propsToSave = _.cloneDeep(this.keyframes[oldPos]);
 			propsToSave['timelinePosition']['left'] = pos;
 
-			console.log(propsToSave)
 
 			// Save changes to keyframes at new step 
 			this.keyframes[pos] = propsToSave;
 			this.currentStep.left = pos; 
 
-			console.log(this.keyframes)
+			// Save step and calculate new output
+			this.saveStep();
 
 			// // No longer adding
 			this.addingStep = false;
@@ -915,17 +670,21 @@ export default {
 		// Delete selected Step
 		deleteStep: function(){
 
-			var stepToDelete = this.currentStep.left;
+			var stepToDelete = parseFloat(this.currentStep.left);
 
 			if(Object.keys(this.keyframes)[0]){
 				if(stepToDelete == "0.0"){
 					// Can't delete step at 0
-					console.log("Cannot delete 0% step.")
+					this.hello("You must have a step at 0%", "far fa-exclamation-triangle")
 				}else{
 					delete this.keyframes[stepToDelete]
+
+					// Save step and calculate new output
+					this.saveStep();
 				}
 				// Change to 0% step
 				this.currentStep.left = Object.keys(this.keyframes)[0];
+				
 			}else{
 				return;
 			}
@@ -1013,46 +772,32 @@ export default {
 			}
 		},
 
-		// Output
-		viewOutput: function(){
-			// Hide others
-			this.showSaveLoad = false;
-			this.showEditTarget = false;
+		//////////////////////
+		// Options toggles //
+		////////////////////
+		toggleOption: function(opt){
 
-			// If not already viewing output
-			if(!this.showOutput){
-				this.showOutput = true;
-			}else{
-				// Close it
-				this.showOutput = false;
-			}
-		},
-
-		// Save/Load
-		viewSaveLoad: function(){
-			// Hide others
-			this.showOutput = false;
-			this.showEditTarget = false;
-
-			if(this.showSaveLoad){
-				this.showSaveLoad = false;
-			}else{
+			// get local storage if that option is opened.
+			if(opt == "saveLoad" && !this.options.saveLoad){
 				this.loadAllSaved();
-				this.showSaveLoad = true;
 			}
-		},
 
-		editTarget: function(){			
-			// Hide others
-			this.showSaveLoad = false;
-			this.showOutput = false;
-
-			if(this.showEditTarget){
-				this.showEditTarget = false;
+			// If user clicked already open option, close it
+			if(this.options[opt] == true){
+				this.options[opt] = false;
 			}else{
-				this.showEditTarget = true;
+				// Set all false
+				this.options = {
+					output: false,
+					saveLoad: false,
+					editTarget: false,
+				}
+
+				// Then open clicked option
+				this.options[opt] = true;
 			}
 		},
+
 
 		////////////////////
 		////////////////////
@@ -1064,13 +809,14 @@ export default {
 				date: new Date(),
 				customTargetCode: this.customTargetCode,
 				customTargetStyles: this.customTargetStyles,
-				keyframes: this.keyframes
+				keyframes: this.keyframes,
+				animationProperties: this.animationProperties,
 			}
 			var stringified = JSON.stringify(animationData)
 			localStorage.setItem('animation_' + this.animationToSaveName.replace(/\s/g, ''), stringified);
 
 			this.toast("Animation Saved", "Your animation has been saved into your browser's local storage.", "", "far fa-save");
-			this.showSaveLoad = false;
+			this.options.saveLoad = false;
 		},
 		// Load saved
 		loadAllSaved: function(){
@@ -1099,19 +845,35 @@ export default {
 			this.keyframes = parsed.keyframes;
 			this.customTargetStyles = parsed.customTargetStyles;
 			this.customTargetCode = parsed.customTargetCode;
+			this.animationProperties = parsed.animationProperties;
 			// Set name to overwrite
 			this.animationToSaveName = name.substr(10);
 			// // this.allProperties = animation;
 
 			this.toast(name.substr(10) + " Loaded", "Your animation has been loaded.", "", "far fa-cloud-download");
-			this.viewSaveLoad();
+			this.options.saveLoad = false;
 		},
 		// Delete saved animation
 		deleteAnimationFromStorage: function(name){
 			localStorage.removeItem(name);
-			this.viewSaveLoad();
+			this.toast("Animation Deleted", name.substr(10) + " has been deleted from your saved animations.", "red", "far fa-trash-alt");
+			this.options.saveLoad = false;
 		},
 
+		// Open preset
+		openPreset: function(index){
+			var preset = this.presetAnimations[index];
+
+			// Set values
+			this.keyframes = preset.keyframes;
+			this.customTargetStyles = preset.targetStyles;
+			this.animationProperties = preset.animationProperties;
+			this.customTargetCode = "<i class='" + preset.targetClass + " kft'></i>";
+
+			// Close tab, alert
+			this.options.saveLoad = false;
+			this.hello(preset.name + " is ready to play!", preset.targetClass)
+		},
 
 		// Copy output to clipboard
 		copyOutput: function(){
@@ -1176,12 +938,18 @@ export default {
 						border-left: none;
 						border-top: none;
 						border-bottom: none;
+
 						&:last-child{
 							margin-right: 0;
 						}
 
 						i{
 							width: 16px;
+						}
+
+						// Increase size mobile
+						@media (max-width: @screenMD) {
+							height: 38px;
 						}
 					}
 
@@ -1250,19 +1018,12 @@ export default {
 								
 								// Specific target element that it starts with
 								.kft{
-									display: inline-flex;
-									color: var(--text);
-									background: var(--background);
-									border-radius: 50%;
-									height: 100px;
-									width: 100px;
-									font-size: 64px;
 									display: flex;
 									flex-direction: column;
+									height: 100%;
+									width: 100%;
 									justify-content: center;
 									text-align: center;
-									
-									transform-origin: 50% 50%;
 								}
 							}
 						}
@@ -1288,7 +1049,7 @@ export default {
 					flex-direction: column;
 					box-sizing: border-box;
 					padding: 0 0;
-					transition: var(--transitionFast);
+					transition: var(--bezierTransition);
 					z-index: 10;
 					border-left: var(--borderWidth) solid var(--border);
 
@@ -1303,8 +1064,8 @@ export default {
 						right: -375px;
 						width: 350px;
 						z-index: 50;
-						height: calc(~'100% - 31px');
-						margin-top: calc(~'0% + 31px');
+						height: calc(~'100% - 39px');
+						margin-top: calc(~'0% + 39px');
 						background-color: var(--transparent);
 					}
 					@media (max-width: @screenSM) {
@@ -1315,7 +1076,7 @@ export default {
 
 					&.toggled{
 						right: 0;
-						transition: var(--transitionFast);
+						transition: var(--bezierTransition);
 					}
 
 					// Top of sidebar, title
@@ -1391,7 +1152,7 @@ export default {
 						.property-group{
 							box-sizing: border-box;
 							padding: 0px 0 0 0;
-							overflow: hidden;
+							// overflow: hidden;
 
 							// Adjust fields
 							.field-set{
@@ -1401,6 +1162,11 @@ export default {
 								display: flex;
 								justify-content: space-between;
 								width: 100%;
+
+								// Adjust tooltip position
+								.tooltip{
+									margin-top: 8px;
+								}
 
 								label{
 									flex-grow: 3;
@@ -1833,6 +1599,16 @@ export default {
 
 
 	/////////////////////
+	//  Help Modal    //
+	///////////////////
+	#animateHelpGhost{
+		animation: error-ghost 2s ease-in-out 0s infinite alternate none;
+		font-size: 75px;
+		text-align: center;
+		margin: 55px 0 0 0;
+	}
+
+	/////////////////////
 	//    Settings    //
 	///////////////////
 	// Toggle-able settings over stage
@@ -1920,6 +1696,85 @@ export default {
 			white-space: pre;
 			min-height: 80px;
 		}
+	}
+
+
+
+	// Preset animations for preview
+	@keyframes preset-spooky {
+		0.0%{
+			transform: scale(1) translate(0, 0) skew(0deg);
+		}
+		5.1%{
+			transform: scale(1) translate(0, 0) skew(-12deg);
+		}
+		39.9%{
+			transform: scale(1) translate(30px, 0) skew(-5deg);
+		}
+		95.1%{
+			transform: scale(1) translate(0, 0) skew(12deg);
+		}
+		99.6%{
+			transform: scale(1) translate(0, 0) skew(0deg);
+		}
+		45.3%{
+			transform: scale(1) translate(30px, -2px) skew(0deg);
+		}
+		50.3%{
+			transform: scale(1) translate(30px, 0px) skew(0deg);
+		}
+		55.3%{
+			transform: scale(1) translate(30px, -4px) skew(0deg);
+		}
+		60.3%{
+			transform: scale(1) translate(30px, 0px) skew(5deg);
+		}
+	}
+
+	@keyframes preset-heart {
+		0.0%{
+			transform: scale(1);
+		}
+		40.3%{
+			transform: scale(1.35);
+		}
+		60.1%{
+			transform: scale(1.15);
+		}
+		79.6%{
+			transform: scale(1.35);
+		}
+		99.5%{
+			transform: scale(1);
+		}
+		20.1%{
+			transform: scale(1);
+		}
+	}
+
+	@keyframes preset-jet {
+		0.0%{
+			transform: translate(0, 0) rotate(0deg) scale(1);
+		}
+		14.7%{
+			transform: translate(30px, 0) rotate(0deg) scale(1);
+		}
+		99.7%{
+			transform: translate(300px, -50px) rotate(-20deg) scale(0);
+		}
+		26.3%{
+			transform: translate(300px, -50px) rotate(-20deg) scale(0);
+		}
+	}
+
+	.preset-spooky:hover .preset-icon{
+		animation: preset-spooky 6s ease 0s infinite normal forwards;
+	}
+	.preset-jet:hover .preset-icon{
+		animation: preset-jet 4s linear 0s infinite normal forwards;
+	}
+	.preset-heart:hover .preset-icon{
+		animation: preset-heart 2s ease 0s infinite normal forwards;
 	}
 
 
