@@ -20,6 +20,9 @@ import lodash from 'lodash'
 import random from 'lodash/random'
 import map from 'lodash/map'
 
+// Touch Events
+import Vue2TouchEvents from 'vue2-touch-events'
+
 // Plugins
 import plugins from "@/components/plugins.js";
 Vue.use(plugins)
@@ -33,6 +36,8 @@ Vue.use(require('vue-moment'));
 Vue.use(VueLodash, { name: 'animate' , lodash: { map, random } })
 // Color Converter
 window.convert = require('color-convert');
+// Touch Events
+Vue.use(Vue2TouchEvents)
 
 
 let app = '';

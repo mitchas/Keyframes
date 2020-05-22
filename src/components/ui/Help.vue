@@ -23,7 +23,7 @@
 		<!-- Modal -->
 		<transition name="modal">
 
-			<div class="help-wrapper" v-on:click.self="closeHelp()" v-if="show">
+			<div class="help-wrapper" v-on:click.self="closeHelp()" v-if="show" v-touch:swipe.self="closeHelp">
 
 				<div class="help-body">
 
@@ -44,17 +44,17 @@
 
 						<!-- Rest of slides, 3 max -->
 						<transition name="slide">
-							<div class="help-middle-content" v-if="slides > 0 && currentSlide == 1 && !newUser">
+							<div class="help-middle-content" v-if="slides > 0 && currentSlide == 1 && !newUser" v-touch:swipe.left="swipeForward">
 								<slot name="one"></slot>
 							</div>
 						</transition>
 						<transition name="slide">
-							<div class="help-middle-content" v-if="slides > 1 && currentSlide == 2">
+							<div class="help-middle-content" v-if="slides > 1 && currentSlide == 2" v-touch:swipe.left="swipeForward" v-touch:swipe.right="swipeBackward">
 								<slot name="two"></slot>
 							</div>
 						</transition>
 						<transition name="slide">
-							<div class="help-middle-content" v-if="slides > 2 && currentSlide == 3">
+							<div class="help-middle-content" v-if="slides > 2 && currentSlide == 3" v-touch:swipe.right="swipeBackward">
 								<slot name="three"></slot>
 							</div>
 						</transition>
@@ -131,7 +131,7 @@ export default {
 
 			setTimeout(function(){
 				_this.currentSlide = slide;
-			}, 180)
+			}, 110)
 		},
 		///////////////////
 		//  Close Help  //
@@ -143,7 +143,22 @@ export default {
 			if(this.newUser){
 				this.$emit('newUserViewed');
 			}
-		}
+		},
+		/////////////////////////
+		//  Swipe Navigating  //
+		///////////////////////
+		// Forward, plus one
+		swipeForward: function(){
+			if(this.slides > this.currentSlide){
+				var goto = this.currentSlide + 1;
+				this.changeSlide(goto);
+			}
+		},
+		// Backward, minus one
+		swipeBackward: function(){
+			var goto = this.currentSlide - 1;
+			this.changeSlide(goto);
+		},
 	}	
 }	
 
@@ -353,38 +368,25 @@ export default {
 	//////////////////////
 	// Use for blocks of several items/lists
 	.slide-enter-active {
-		animation: slide-animation-in .17s ease both 0.17s;
+		animation: slide-animation-in .1s ease-in-out both .1s;
 	}
 	.slide-leave-active {
-		animation: slide-animation-out .17s ease reverse both;
+		animation: slide-animation-out .1s ease-in-out both;
 	}
 	@keyframes slide-animation-out {
 		0% {
-			opacity: 0;
-			// transform: scaleX(0);
-			transform: scale(0);
-			transform-origin: center right;
-			// transform: translateX(30%);
+			transform: scaleX(1);
 		}
 		100% {
-			transform: scale(1);
-			// transform: scaleX(1);
-			// transform: translateX(0px);
-			opacity: 1;
+			transform: scaleX(0);
 		}
 	}
 	@keyframes slide-animation-in {
 		0% {
-			transform-origin: center left;
-			transform: scale(0);
-			// transform: scaleX(0);
-			opacity: 0;
-			// transform: translateX(-30%);
+			transform: scaleX(0);
 		}
 		100% {
-			// transform: scaleX(1);
-			transform: scale(1);
-			opacity: 1;
+			transform: scaleX(1);
 		}
 	}
 </style>

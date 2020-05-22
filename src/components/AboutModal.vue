@@ -82,6 +82,7 @@
 							<a href="https://fontawesome.com/" target="_blank">Font Awesome Pro</a> for icons,
 							<a href="https://www.npmjs.com/package/vue-moment" target="_blank">Vue/Moment</a> for date & time,
 							<a href="https://www.npmjs.com/package/vue-lodash" target="_blank">Vue/Lodash</a> for data,
+							<a href="https://www.npmjs.com/package/vue2-touch-events" target="_blank">Vue2-Touch-Events</a> for touch,
 							and <a href="https://www.npmjs.com/package/color-convert" target="_blank">Color Convert</a> for color stuff.
 						</span>
 					</div>

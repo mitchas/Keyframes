@@ -20,7 +20,9 @@
 //	- deleteColor(index)
 //  	deletes color at index - cannot delete all colors, one must remain
 //	- addColor()
-//		dds new color to palette - defaults to black
+//		adds new color to palette - defaults to black
+//	- createPalette()
+//		Takes color and generates 5 colors with different hues for a palette.
 //	- loadSavedPalettes()
 //		Gets palettes from local storage - gets on every tab click so it's up to date
 //	- savePalette()
@@ -87,8 +89,8 @@
 								</label>
 								<div class="saved-list">
 									<div class="saved-item" v-for="(name, index) in savedPalettes" :key="index">
-										<i class="far fa-times" @click.self.prevent="deletePalette(name)"></i>
 										<span @click="loadPalette(name)">{{name.substr(8)}}</span>
+										<i class="delete-saved-item far fa-times" @click.self.prevent="deletePalette(name)"></i>
 									</div>
 								</div>
 							</div>
@@ -123,7 +125,7 @@
 							<label for="horOffset">
 								<span>HEX</span>
 							</label>
-							<input type="text" v-model="palette[selectedPalette].hex" @input="hexChange()"/>
+							<input type="text" v-model="palette[selectedColor].hex" @input="hexChange()"/>
 						</div>
 
 						<!-- RGBA -->
@@ -131,7 +133,7 @@
 							<label for="horOffset">
 								<span>RGBA</span>
 							</label>
-							<input type="text" v-model="palette[selectedPalette].rgba" @input="rgbaTextChange()"/>
+							<input type="text" v-model="palette[selectedColor].rgba" @input="rgbaTextChange()"/>
 						</div>
 					</div>
 					
@@ -139,33 +141,33 @@
 					<div class="field">
 						<label for="rgbaRed" class="slider-label-value">
 							<span>Red</span>
-							<input type="number" v-model="palette[selectedPalette].r" min="0" max="255" @input="rgbaChange()"/>
+							<input type="number" v-model="palette[selectedColor].r" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" id="rgbaRed" v-model="palette[selectedPalette].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
+						<input type="range" id="rgbaRed" v-model="palette[selectedColor].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
 					</div>
 					<!-- Green -->
 					<div class="field">
 						<label for="rgbaGreen" class="slider-label-value">
 							<span>Green</span>
-							<input type="number" v-model="palette[selectedPalette].g" min="0" max="255" @input="rgbaChange()"/>
+							<input type="number" v-model="palette[selectedColor].g" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" id="rgbaGreen" v-model="palette[selectedPalette].g" min="0" max="255" step="1" @input="rgbaChange()"/>
+						<input type="range" id="rgbaGreen" v-model="palette[selectedColor].g" min="0" max="255" step="1" @input="rgbaChange()"/>
 					</div>
 					<!-- Blue -->
 					<div class="field">
 						<label for="rgbaBlue" class="slider-label-value">
 							<span>Blue</span>
-							<input type="number" v-model="palette[selectedPalette].b" min="0" max="255" @input="rgbaChange()"/>
+							<input type="number" v-model="palette[selectedColor].b" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" id="rgbaBlue" v-model="palette[selectedPalette].b" min="0" max="255" step="1" @input="rgbaChange()"/>
+						<input type="range" id="rgbaBlue" v-model="palette[selectedColor].b" min="0" max="255" step="1" @input="rgbaChange()"/>
 					</div>
 					<!-- Opacity -->
 					<div class="field">
 						<label for="rgbaOpacity" class="slider-label-value">
 							<span>Opacity</span>
-							<input type="number" v-model="palette[selectedPalette].a" min="0" max="255" @input="rgbaChange()"/>
+							<input type="number" v-model="palette[selectedColor].a" min="0" max="255" @input="rgbaChange()"/>
 						</label>
-						<input type="range" id="rgbaOpacity" v-model="palette[selectedPalette].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
+						<input type="range" id="rgbaOpacity" v-model="palette[selectedColor].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
 					</div>
 
 				</div>
@@ -195,31 +197,36 @@
 				<div id="colorPalette">
 					<!-- Saved color loop -->
 					<transition-group name="basic" class="color-wrapper">
-						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedPalette = index" :class="{'removing' : color.name == 'delete', 'active': selectedPalette == index}"
+						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedColor = index" :class="{'removing' : color.name == 'delete', 'active': selectedColor == index}"
 							:style="'background: ' + color.hex + '; color: ' + invertTextColor(palette[index].hex) + ';'">
 							<div class="color-codes">
 								<!-- Color name -->
 								<div class="name">{{color.name}}</div>
 								<!-- Hex code -->
-								<span class="color-value" @click="selectedPalette == index && copyToClipboard(color.hex, color.hex)">
+								<span class="color-value" @click="selectedColor == index && copyToClipboard(color.hex, color.hex)">
 									{{color.hex}}<i class="far fa-copy"></i>
 								</span>
 								<!-- Rgba value -->
-								<span class="color-value" @click="selectedPalette == index && copyToClipboard(color.rgba, 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')')">
+								<span class="color-value" @click="selectedColor == index && copyToClipboard(color.rgba, 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')')">
 									rgb({{color.r}}, {{color.g}}, {{color.b}})<i class="far fa-copy"></i>
 								</span>
 							</div>
 							<!-- Delete -->
 							<div class="color-actions">
-								<button class="color-delete" aria-label="Delete color from palette" @click.stop="deleteColor(index)">
-									<i class="fas fa-times"></i>
+								<button class="color-delete" aria-label="Delete color from palette" @click.stop="deleteColor(index)" v-if="palette.length > 1">
+									<i class="far fa-times"></i>
 								</button>
 							</div>
 						</div>
 						<!-- Add color tile - only shows on mobile -->
-						<div class="color add-color" @click="addColor()" key="0123123">
+						<div class="color color-button" @click="addColor()" key="0123123">
 							<i class="fal fa-plus"></i>
-							<span class="add-color-text">Add Color</span>
+							<span class="color-button-text">Add Color</span>
+						</div>
+						<!-- Add color tile - only shows on mobile -->
+						<div class="color color-button" @click="createPalette()" v-if="palette.length == 1" key="0923123">
+							<i class="fal fa-palette"></i>
+							<span class="color-button-text">Auto Palette</span>
 						</div>
 						<!-- Spacer-only on moible -->
 						<div class="color color-spacer"  key="012373">
@@ -228,11 +235,18 @@
 					</transition-group>
 				</div>
 
-				<!-- Add color -->
-				<button class="button invert mbottom-md" @click="addColor()" id="addColorButton">
-					<i class="far fa-plus-circle"></i>
-					<span>Add Color</span>
-				</button>
+				<div class="flex flex-between mtop-xs ptop-xs" id="paletteControlButtons">
+					<!-- Add color -->
+					<button class="button small invert mbottom-md" @click="addColor()">
+						<i class="far fa-plus-circle"></i>
+						<span>Add Color</span>
+					</button>
+					<!-- create Palette -->
+					<button class="button small blue mbottom-md" @click="createPalette()" v-if="palette.length == 1">
+						<i class="far fa-palette"></i>
+						<span>Auto Palette</span>
+					</button>
+				</div>
 				
 
 			</div>
@@ -243,14 +257,14 @@
 		<!-- Append color styles to preview on page -->
 		<v-style>
 			#colorEditorStage{
-				background: {{palette[selectedPalette].rgba}};
+				background: {{palette[selectedColor].rgba}};
 			}
 			.app-page-split-left{
 				background: {{options.stageBackground ? options.stageBackground : 'var(--layer)'}};
 			}
 
 			.invert-text label *, .invert-text span, .invert-text label, .invert-text div, .invert-text a, .invert-text i{
-				color: {{invertTextColor(palette[selectedPalette].hex)}};
+				color: {{invertTextColor(palette[selectedColor].hex)}};
 			}
 		</v-style>
 
@@ -274,7 +288,7 @@ export default {
 
 	data() {
 		return {
-			selectedPalette: 0,
+			selectedColor: 0,
 			// Save & Load
 			savedPalettes: [],
 			paletteToSaveName: "",
@@ -335,7 +349,7 @@ export default {
 
 			// For each hex in string
 			hexs.forEach(function(hex) {
-				
+
 				// Get formats
 				var rgbArray = convert.hex.rgb(hex);
 				var rgbaString = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
@@ -382,39 +396,39 @@ export default {
 		////////////////////
 		// Any r g b or a value change, calculate full rgba() and hex
 		rgbaChange: function(){
-			var red = parseInt(this.palette[this.selectedPalette].r);
-			var green = parseInt(this.palette[this.selectedPalette].g);
-			var blue = parseInt(this.palette[this.selectedPalette].b);
-			var opacity = parseFloat(this.palette[this.selectedPalette].a);
+			var red = parseInt(this.palette[this.selectedColor].r);
+			var green = parseInt(this.palette[this.selectedColor].g);
+			var blue = parseInt(this.palette[this.selectedColor].b);
+			var opacity = parseFloat(this.palette[this.selectedColor].a);
 
-			this.palette[this.selectedPalette].rgba = "rgba(" + red + ", " + green + ", " + blue + ", " + opacity + ")";
-			this.palette[this.selectedPalette].hex = "#" + convert.rgb.hex(red, green, blue);
-			this.palette[this.selectedPalette].name = convert.hex.keyword(this.palette[this.selectedPalette].hex);
+			this.palette[this.selectedColor].rgba = "rgba(" + red + ", " + green + ", " + blue + ", " + opacity + ")";
+			this.palette[this.selectedColor].hex = "#" + convert.rgb.hex(red, green, blue);
+			this.palette[this.selectedColor].name = convert.hex.keyword(this.palette[this.selectedColor].hex);
 
 			// get new hex string
 			this.makeHexString();
 		},
 		// hex change, calculate rgb values
 		hexChange: function(){
-			var hex = this.palette[this.selectedPalette].hex;
+			var hex = this.palette[this.selectedColor].hex;
 			if(hex[0] == "#"){
 				hex = hex.substring(1);
 			}else{
 				// Add hex to prop
-				this.palette[this.selectedPalette].hex = "#" + this.palette[this.selectedPalette].hex
+				this.palette[this.selectedColor].hex = "#" + this.palette[this.selectedColor].hex
 			}
 
 			// get rgb numbers
 			var rgbArray = convert.hex.rgb(hex);
 
 			// Set rgb values
-			this.palette[this.selectedPalette].rgba = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
-			this.palette[this.selectedPalette].r = rgbArray[0];
-			this.palette[this.selectedPalette].g = rgbArray[1];
-			this.palette[this.selectedPalette].b = rgbArray[2];
+			this.palette[this.selectedColor].rgba = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
+			this.palette[this.selectedColor].r = rgbArray[0];
+			this.palette[this.selectedColor].g = rgbArray[1];
+			this.palette[this.selectedColor].b = rgbArray[2];
 			// this.rgbaOpacity = 1;
 
-			this.palette[this.selectedPalette].name = convert.hex.keyword(hex);
+			this.palette[this.selectedColor].name = convert.hex.keyword(hex);
 
 			// get new hex string
 			this.makeHexString();
@@ -423,23 +437,23 @@ export default {
 		rgbaTextChange: function(){
 
 			// Get numbers from string
-			var rgbArray = this.palette[this.selectedPalette].rgba.replace(/[^\d,.]/g, '').split(',')
+			var rgbArray = this.palette[this.selectedColor].rgba.replace(/[^\d,.]/g, '').split(',')
 			// If there are at least 3 numbers, good enough format
 			if(rgbArray[2]){
-				this.palette[this.selectedPalette].r = rgbArray[0];
-				this.palette[this.selectedPalette].g = rgbArray[1];
-				this.palette[this.selectedPalette].b = rgbArray[2];
+				this.palette[this.selectedColor].r = rgbArray[0];
+				this.palette[this.selectedColor].g = rgbArray[1];
+				this.palette[this.selectedColor].b = rgbArray[2];
 
 				// If opacity exists, add it, otherwise default to 1
 				if(rgbArray[3]){
-					this.palette[this.selectedPalette].a = rgbArray[3]
+					this.palette[this.selectedColor].a = rgbArray[3]
 				}else{
-					this.palette[this.selectedPalette].a = 1;
+					this.palette[this.selectedColor].a = 1;
 				}
 
 				// Convert and set hex
-				this.palette[this.selectedPalette].hex = convert.rgb.hex(rgbArray)
-				this.palette[this.selectedPalette].name = convert.hex.keyword(this.palette[this.selectedPalette].hex);
+				this.palette[this.selectedColor].hex = convert.rgb.hex(rgbArray)
+				this.palette[this.selectedColor].name = convert.hex.keyword(this.palette[this.selectedColor].hex);
 
 				// get new hex string
 				this.makeHexString();
@@ -451,7 +465,6 @@ export default {
 		// Hex String
 		// Used for url params, and saving
 		makeHexString: function(){
-
 			var _this = this;
 
 			// Clear timeout so it only runs after 500ms delay
@@ -485,14 +498,16 @@ export default {
 		///////////////////////
 		// Delete Palette color
 		deleteColor: function(index){
+			console.log("DELETING " + index)
+			console.log("Length " + this.palette.length)
+			console.log(this.palette)
 			let _this = this;
 
+			var total = this.palette.length - 1;
 
 			// Select previous color on palette
-			if(index > 1){
-				this.selectedPalette = this.selectedPalette - 1;
-			}else{
-				this.selectedPalette = 0;
+			if(index == total){
+				this.selectedColor = total - 1;
 			}
 
 			// If there is more than one color left, they can delete it, else error
@@ -511,20 +526,64 @@ export default {
 			this.makeHexString();
 		},
 		// Add new color to palette
-		// Takes current color, adjusts hue a little bit
+		// Random rgb color
 		addColor: function(){
+			
+			var r = parseInt(Math.random() * (255 - 0) + 0);
+			var g = parseInt(Math.random() * (255 - 0) + 0);
+			var b = parseInt(Math.random() * (255 - 0) + 0);
+			var rgbStr = "rgba(" + r + ", " + g + ", " + b + ", 1)"
+			var hex = convert.rgb.hex(r, g, b)
+			var keyword = convert.rgb.keyword(r, g, b)
+
 			this.palette.push({
-				name: "Dodgerblue",
-				hex: "#0868FE",
-				rgba: "rgba(8,104,254, 1)",
-				r: 8,
-				g: 104,
-				b: 254,
+				name: keyword,
+				hex: "#" + hex,
+				rgba: rgbStr,
+				r: r,
+				g: g,
+				b: b,
 				a: 1,
 			})
 
 			// Set as selected
-			this.selectedPalette = this.palette.length - 1;
+			this.selectedColor = this.palette.length - 1;
+		},
+
+		// Create Palette
+		// Takes current color, adjusts hues and ceates palette with 4 more colors
+		createPalette: function(){
+
+			var start = this.palette[this.selectedColor].hex;
+			var hexes = this.palette[this.selectedColor].hex.substring(1);
+
+			for (var index = 1; index < 5; index++) { 
+				
+				// Change Hue in HSL
+				var hsl = convert.hex.hsl(start)
+
+				// This creates 5 different colors.
+				// So modify the hue by 72 (360/5) in both directions
+				// Make sure it doesn't go over 360
+				var newHsl = hsl[0] + (72 * index);
+				if(newHsl > 360){
+					newHsl = newHsl - 360;
+				}
+
+				hsl[0] = newHsl;
+
+				// // Get HEX from HSL
+				var hex = convert.hsl.hex(hsl);
+				hexes = hexes + "," + hex
+			} 
+
+			// Set palette
+			this.hexString = hexes;
+			this.setPalette(hexes);
+
+			this.rgbaChange()
+
+			
 		},
 
 
@@ -692,15 +751,16 @@ export default {
 				height: 100%;
 				min-width: 200px;
 				margin: 0 10px 0 0;
-				transform: scale(0.85);
+				transform: scale(0.875);
 
 				&:first-child{
 					margin-left: 20px;
 				}
 			}
 
-			// Add color
-			&.add-color{
+			// Color buton - shown on mobile
+			// Buttons after the colors - add color, auto palette
+			&.color-button{
 				background: transparent;
 				color: var(--text);
 				flex-direction: column;
@@ -710,6 +770,9 @@ export default {
 				transition: var(--transitionFast);
 				box-sizing: border-box;
 				padding: 8px 0;
+				width: 140px;
+				max-width: 140px;
+				min-width: 140px;
 
 				@media (max-width: @screenMD) {
 					min-height: 100%;
@@ -717,12 +780,12 @@ export default {
 					flex-grow: 3;
 				}
 
-				i.fa-plus,
-				.add-color-text{
+				i,
+				.color-button-text{
 					text-align: center;
 				}
 
-				i.fa-plus{
+				i{
 					font-size: 36px;
 					margin: 0 0 5px 0;
 					transition: var(--transitionFast);
@@ -756,6 +819,10 @@ export default {
 			// Animation to remove
 			&.removing{
 				animation: remove-color 0.3s ease  0s 1  normal  forwards;
+
+				@media (max-width: @screenMD) {
+					animation: remove-color-mobile 0.15s ease  0s 1  normal  forwards;
+				}
 			}
 
 
@@ -811,6 +878,7 @@ export default {
 			.color-actions{
 				opacity: 0;
 				transition: 0.08s;
+
 				// mix-blend-mode: difference;
 				.color-delete{
 					font-size: 20px;
@@ -824,11 +892,11 @@ export default {
 					transform: scale(1);
 					opacity: 0.75;
 
-					// Shrink mobile
+					// Increase size mobile
 					@media (max-width: @screenMD) {
-						width: 24px;
-						height: 24px;
-						font-size: 18px;
+						width: 38px;
+						height: 38px;
+						font-size: 20px;
 					}
 
 					&:hover{
@@ -887,7 +955,7 @@ export default {
 
 
 	// Add color button
-	#addColorButton{
+	#paletteControlButtons{
 		// Hide on mobile because tile is used instead
 		@media (max-width: @screenMD) {
 			display: none;
@@ -917,6 +985,17 @@ export default {
 			height: 0px;
 			margin: 0;
 			border: none;
+		}
+	}
+	@keyframes remove-color-mobile {
+		0% {
+			transform-origin: bottom center;
+			transform: scale(1);
+			opacity: 1;
+		}
+		100% {
+			transform: scale(0);
+			opacity: 0;
 		}
 	}
 

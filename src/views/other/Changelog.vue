@@ -188,6 +188,9 @@ export default {
 	},
 	
 	methods: {
+		test: function(){
+			console.log("TEST")
+		}
 		
 	}
 };

@@ -401,7 +401,7 @@ export default {
 			i{
 				color: var(--text);
 				font-size: 52px;
-				animation: home-ghost 10s ease-in-out  0s infinite  normal  forwards;
+				animation: home-ghost 10s ease-in-out infinite  normal  backwards 1s;
 				transform-origin: center center;
 			}
 		}
@@ -428,7 +428,7 @@ export default {
 
 				&.active{
 					background-color: var(--red);
-					animation: animationTicker 10s linear  0s infinite  normal  forwards;
+					animation: animationTicker 10s linear  infinite  normal  backwards 1s;
 					height: 130%;
 					top: -15%;
 					margin-left: -10px;

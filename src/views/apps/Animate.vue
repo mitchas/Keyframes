@@ -249,7 +249,7 @@
 				//////////////////////////
 			-->
 			<div id="animateRight">
-				<div id="animateSidebar" v-bind:class="{'toggled': togglePropSidebar}">
+				<div id="animateSidebar" v-bind:class="{'toggled': togglePropSidebar}" v-touch:swipe.right="() => togglePropSidebar = false">
 					<!-- Top of sidebar - 50px height to match buttons on left -->
 					<h4 id="animateSidebarTop">
 						<span>CSS Properties</span> 
@@ -520,6 +520,7 @@
 					</div>
 				</div>
 			</template>
+
 
 		</Help> <!-- End Help -->
 

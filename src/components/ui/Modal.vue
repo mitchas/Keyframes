@@ -39,11 +39,11 @@
 		<!-- Modal -->
 		<transition name="modal">
 
-			<div class="modal-wrapper" v-on:click.self="$emit('dismissed')" v-if="show">
+			<div class="modal-wrapper" v-on:click.self="$emit('dismissed')" v-if="show" v-touch:swipe.self="() => $emit('dismissed')">
 
 				<div class="modal" v-bind:class="size">
 					<!-- Header -->
-					<div class="modal-title">
+					<div class="modal-title" v-touch:swipe.down="() => $emit('dismissed')">
 						<slot name="header"></slot>
 					</div>
 					<!-- Body Content -->

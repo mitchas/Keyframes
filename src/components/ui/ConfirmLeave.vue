@@ -15,7 +15,7 @@
 		<!-- Modal -->
 		<transition name="modal">
 
-			<div class="modal-wrapper" v-on:click.self="show = false" v-if="show">
+			<div class="modal-wrapper" v-on:click.self="show = false" v-if="show" v-touch:swipe.self="() => show = false">
 
 				<div class="modal small">
 					<!-- Header -->
@@ -25,7 +25,7 @@
 					</div>
 					<!-- Body Content -->
 					<div class="modal-body">
-						Are you sure you want to leave this page? If you have any unsaved changes, they will be lost.
+						Are you sure you want to leave this page? If you have any unsaved changes, they may be lost.
 					</div>
 					<!-- Footer/Buttons -->
 					<div class="modal-footer">
