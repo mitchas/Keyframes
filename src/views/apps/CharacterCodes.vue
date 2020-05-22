@@ -33,7 +33,7 @@
 						<!-- CSS code -->
 						<div class="code" @click="copyToClipboard('\\00' + char.css, '\\00' + char.css)">
 							<span>CSS</span>
-							<span>\00{{char.css}}</span>
+							<span>\{{char.css}}</span>
 						</div>
 						<!-- HTML code - show name if available, otherwise number -->
 						<div class="code" @click="copyToClipboard('&' + char.htmlName + ';', '&' + char.htmlName + ';')" v-if="char.htmlName">
@@ -132,6 +132,7 @@ export default {
 			margin: 0 auto;
 			max-width: 500px;
 			width: 90%;
+
 
 			h1{
 				text-align: center;

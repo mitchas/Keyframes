@@ -14,7 +14,8 @@
 // 	
 // 	invertText(hex): takes hex value and returns hex with proper contrast black or white
 // 	
-// 	hello(message, icon): Shows tiny yellow toast for a brief moment
+// 	hello(message, icon, color): Shows tiny yellow toast for a brief moment
+// 			- optional colors: red, blue, green, invert
 //  
 // 	toast(): provides easy this.toast() call to use in any component.
 //
@@ -104,8 +105,8 @@ export default {
 		Vue.prototype.toast = function(title, body, color, icon) {
 			this.$root.$children[0].$refs.toastComponent.showToast(title, body, color, icon);
 		}
-		Vue.prototype.hello = function(message, icon) {
-			this.$root.$children[0].$refs.alertComponent.showAlert(message, icon);
+		Vue.prototype.hello = function(message, icon, color) {
+			this.$root.$children[0].$refs.alertComponent.showAlert(message, icon, color);
 		}
 	}
  }

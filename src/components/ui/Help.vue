@@ -83,9 +83,16 @@
 </template>
 
 <script>
+// Keyboard shortcuts mixin - esc closes modal
+import shortcut from "@/components/mixins/keyboardShortcutsMixin.js";
+
 export default {
 	name: "Help",
 	mixins: [
+		// Dismiss modal with escape
+		shortcut('escape', function() {
+			this.closeHelp();
+		}),
 	],
 	components: {
 	},

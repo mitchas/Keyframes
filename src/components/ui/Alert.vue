@@ -12,7 +12,7 @@
 
 		<!-- <div id="alert" v-if="!alertVisible" @click="hideAlert()"> -->
 		<div id="alert" v-if="alertVisible" @click="alertVisible = false;">
-			<b>
+			<b :class="alertColor">
 				<i :class="alertIcon"></i>
 				<span>{{alertMessage}}</span>
 			</b>
@@ -31,6 +31,7 @@ export default {
 			alertIcon: 'fas fa-house',
 			alertVisible: false,
 			hideTimer: null,
+			alertColor: ""
 		};
 	},
 	mounted(){
@@ -39,7 +40,7 @@ export default {
 		/////////////////////
 		//   Show Alert   //
 		///////////////////
-		showAlert: function(message, icon){
+		showAlert: function(message, icon, color){
 
 			let _this = this;
 
@@ -50,14 +51,15 @@ export default {
 				clearTimeout(this.hideTimer);
 				// re-call alert after 150ms - bounce out and in effect
 				setTimeout(function(){
-					_this.showAlert(message, icon)
+					_this.showAlert(message, icon, color)
 				}, 150)
 			}else{
 				// Else show alert
-
+				
 				// Set new alert data
 				_this.alertMessage = message;
 				_this.alertIcon = icon;
+				_this.alertColor = color;
 				_this.alertVisible = true;
 
 				// Hide after 2.5 seconds
@@ -122,6 +124,23 @@ export default {
 
 			&:hover{
 				cursor: pointer;
+			}
+
+			// Color variations
+			&.blue{
+				background-color: var(--blue);
+				color: var(--white);
+			}
+			&.red{
+				background-color: var(--red);
+				color: var(--white);
+			}
+			&.invert{
+				background-color: var(--text);
+				color: var(--background);
+			}
+			&.green{
+				background-color: var(--green);
 			}
 		}
 	}

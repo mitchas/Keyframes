@@ -222,7 +222,7 @@ export default {
 
 			// Increase padding on smaller screens
 			@media (max-width: @screenSM) {
-				padding: 18px 25px 23px 15px;
+				padding: 18px 25px 18px 15px;
 			}
 
 			// Icon left on toast
@@ -240,6 +240,8 @@ export default {
 				height: auto;
 				@media (max-width: @screenSM) {
 					font-size: 46px;
+					min-width: 60px;
+					max-width: 60px;
 				}
 			}
 

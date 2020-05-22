@@ -52,11 +52,16 @@ export default {
 		display: flex;
 		width: 100%;
 		box-sizing: border-box;
-		padding: 0 15px 0 60px;
+		padding: 0 15px 0 100px;
 		border-radius: var(--borderRadius);
 		position: relative;
 		background-color: var(--layer);
 		border: var(--borderWidth) solid var(--border);
+
+		// Shrink a bit on mobile
+		@media (max-width: @screenSM) {
+			padding: 0 10px 0 80px;
+		}
 
 		// Icon
 		.callout-icon{
@@ -64,31 +69,42 @@ export default {
 			left: 0;
 			top: 0;
 			height: 100%;
-			width: 60px;
+			width: 100px;
 			text-align: center;
 			box-sizing: border-box;
-			font-size: 30px;
+			font-size: 40px;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			color: var(--blue);
+
+			// Shrink a bit on mobile
+			@media (max-width: @screenSM) {
+				font-size: 34px;
+				width: 80px;
+			}
 		}
 
 		// Text
 		.callout-body{
-			font-size: 14px;
-			line-height: 24px;
+			font-size: 16px;
+			line-height: 28px;
 			font-weight: 500;
-			letter-spacing: 0.55px;
+			letter-spacing: 0.15px;
 			font-family: var(--systemFont);
 			color: var(--text);
 			padding: 15px 0 15px 0;
 
 			@media (max-width: @screenSM) {
-				line-height: 16px;
-				font-size: 12px;
+				line-height: 22px;
+				font-size: 14px;
+				font-weight: 400;
 				padding: 12px 0 12px 0;
 			}	
+
+			h1,h2,h3,h4,h5,h6{
+				margin: 0 0 5px 0;
+			}
 
 
 			b{

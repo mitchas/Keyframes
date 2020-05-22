@@ -50,8 +50,8 @@
 				<!-- Version 2.0.71 -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>v2.0.71</b>
-						<span>(May 21, 2020)</span>
+						<b>v2.0.75</b>
+						<span>(May 22, 2020)</span>
 					</div>
 				</div>
 				<div class="changelog-change">
@@ -85,6 +85,10 @@
 				<div class="changelog-change">
 					<i class="fas fa-sync-alt cat-upgrade"></i>
 					<span>Confirm exit when leaving an app page - can be disabled in settings</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>A few keyboard shortcuts. A cheatsheet and more shortcuts soon.</span>
 				</div>
 				<div class="changelog-change">
 					<i class="fas fa-sync-alt cat-upgrade"></i>
@@ -177,7 +181,7 @@ import Callout from "@/components/ui/Callout";
 import metaMixin from "@/components/mixins/metaMixin.js";
 
 export default {
-	name: "home",
+	name: "Chngelog",
 
 	components: {
 		Callout
@@ -200,10 +204,6 @@ export default {
 	},
 	
 	methods: {
-		test: function(){
-			console.log("TEST")
-		}
-		
 	}
 };
 

@@ -51,7 +51,7 @@
 						Start Page
 						<small>Select the page you'd like to see first when you visit keyframes.app.</small>
 					</label>
-					<div class="custom-picker no-scrollbars mtop-xs mbottom-sm">
+					<div class="custom-picker nowrap no-scrollbars mtop-xs mbottom-sm">
 						<label class="option" v-for="option in startPages" :key="option.label" :for="'cat_' + option.label" v-bind:class="{'active': $store.getters.userPreferences.startPage == option.path}">
 							<i :class="[option.icon]"></i>
 							<span>{{option.label}}</span>
@@ -207,6 +207,10 @@ export default {
 					path: '/colors/',
 					icon: 'fal fa-tint',
 					label: 'Colors'
+				},{
+					path: '/characters/',
+					icon: 'fal fa-tilde',
+					label: 'Characters'
 				}
 			]
 		};

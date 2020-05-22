@@ -537,6 +537,8 @@ import Help from "@/components/ui/Help";
 import metaMixin from "@/components/mixins/metaMixin.js";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 import screenResizeMixin from "@/components/mixins/ui/screenResizeMixin.js";
+// Keyboard shortcuts
+import shortcut, { PRIMARY } from "@/components/mixins/keyboardShortcutsMixin.js";
 
 // Data broken into separate file because it was long
 import data from "@/views/apps/apps-data/animate.js";
@@ -555,6 +557,20 @@ export default {
 		metaMixin,
 		screenResizeMixin,
 		preferencesMixin,
+
+		// Save shortcut
+		// Opens save window if no name, saves if name
+		shortcut('s', PRIMARY, function(event) {
+			// Prevent save event
+			event.preventDefault();
+
+			if(this.animationToSaveName){
+				this.saveAnimation();
+			}else{
+				this.toggleOption('saveLoad');
+				this.hello("Give your animation a name, then you can use CTRL/CMD + s", "far fa-save")
+			}
+		})
 	],
 
 	// External data

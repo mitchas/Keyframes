@@ -7,7 +7,6 @@
 // 			- show: condition to show modal
 // 			- size: large (default/empty), small
 // 			- color: primary (default/empty), other button colors
-// 			- title: Text string for modal title
 // 			- reverseFooter: reverse direction of footer
 // 			- dismissText: text for dismiss button
 // 			- confirmText: text for main action/confirm button
@@ -72,9 +71,16 @@
 </template>
 
 <script>
+// Keyboard shortcuts mixin - esc closes modal
+import shortcut from "@/components/mixins/keyboardShortcutsMixin.js";
+
 export default {
 	name: "Modal",
 	mixins: [
+		// Dismiss modal with escape
+		shortcut('escape', function() {
+			this.$emit('dismissed')
+		}),
 	],
 	components: {
 	},
@@ -82,7 +88,6 @@ export default {
 		'show',
 		'size',
 		'color',
-		'title',
 		'reverseFooter',
 		'dismissText',
 		'confirmText',
@@ -273,18 +278,16 @@ export default {
 
 				@media (max-width: @screenSM) {
 					border-radius: 0;
-					padding: 0;
-					height: 50px;
-					min-height: 50px;
+					padding: 10px 5px;
+					height: 60px;
+					min-height: 60px;
 
 					button{
 						border-radius: 0;
-						border-top: none;
-						border-bottom: none;
-						border-right: none;
 						height: 100%;
 						width: 100%;
 						font-weight: 500;
+						margin: 0 5px;
 
 						&:first-child{
 							border-left: none;

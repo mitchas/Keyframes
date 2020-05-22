@@ -31,6 +31,7 @@ import CharacterCodes from './views/apps/CharacterCodes.vue';
 // Everything else
 import Error404 from './views/other/error404.vue';
 import Changelog from './views/other/Changelog.vue';
+import Commands from './views/other/Commands.vue';
 
 Vue.use(Router);
 
@@ -63,6 +64,14 @@ const router = new Router({
 			path: '/changelog/',
 			name: 'Changelog',
 			component: Changelog,
+		},
+		///////////////
+		// Commands //
+		/////////////
+		{
+			path: '/commands/',
+			name: 'Commands',
+			component: Commands,
 		},
 
 		///////////

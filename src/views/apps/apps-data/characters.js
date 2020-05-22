@@ -449,7 +449,7 @@ export default {
 		{
 			name: "euro sign",
 			css: "20AC",
-			htmlNumber: "8482",
+			htmlNumber: "8364",
 			htmlName: "euro",
 			character: "€",
 		},
