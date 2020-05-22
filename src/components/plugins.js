@@ -35,8 +35,6 @@ export default {
 
 	install(Vue, options){
 
-		console.log("Installing Vue Plugins")
-
 		/////////////////////
 		//    Navigate    //
 		///////////////////
