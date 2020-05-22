@@ -39,7 +39,7 @@
 				<div id="aboutVersion">
 					<div class="badge green">
 						<i class="far fa-code-branch"></i>
-						<span>v2.0.5, May 21 2020</span>
+						<span>v2.0.7, May 22 2020</span>
 					</div>
 					<a @click="$emit('aboutModalClosed'); navigate('/changelog/')">View Changelog</a>
 				</div>

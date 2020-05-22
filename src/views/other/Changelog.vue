@@ -47,10 +47,10 @@
 			<!-- Actual Chngelog -->
 			<div id="changelog">
 
-				<!-- Version 2.0.5 -->
+				<!-- Version 2.0.7 -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>Version 2.0.5</b>
+						<b>v2.0.7</b>
 						<span>(May 21, 2020)</span>
 					</div>
 				</div>
@@ -69,6 +69,18 @@
 				<div class="changelog-change">
 					<i class="fas fa-sparkles cat-new"></i>
 					<span>Tooltips & settings to hide tooltips</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Touch and swipe support on touchscreens</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Auto color palette function</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>Progressive Web App support - install through Chrome on your phone or computer and use it offline</span>
 				</div>
 				<div class="changelog-change">
 					<i class="fas fa-sync-alt cat-upgrade"></i>

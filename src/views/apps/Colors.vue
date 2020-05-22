@@ -197,7 +197,7 @@
 				<div id="colorPalette">
 					<!-- Saved color loop -->
 					<transition-group name="basic" class="color-wrapper">
-						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedColor = index" :class="{'removing' : color.name == 'delete', 'active': selectedColor == index}"
+						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedColor = index" :class="{'active': selectedColor == index}"
 							:style="'background: ' + color.hex + '; color: ' + invertTextColor(palette[index].hex) + ';'">
 							<div class="color-codes">
 								<!-- Color name -->
@@ -213,7 +213,7 @@
 							</div>
 							<!-- Delete -->
 							<div class="color-actions">
-								<button class="color-delete" aria-label="Delete color from palette" @click.stop="deleteColor(index)" v-if="palette.length > 1">
+								<button class="color-delete" aria-label="Delete color from palette" @click.stop="deleteColor(index)" v-if="palette.length > 1 && selectedColor == index">
 									<i class="far fa-times"></i>
 								</button>
 							</div>
@@ -498,32 +498,14 @@ export default {
 		///////////////////////
 		// Delete Palette color
 		deleteColor: function(index){
-			console.log("DELETING " + index)
-			console.log("Length " + this.palette.length)
-			console.log(this.palette)
-			let _this = this;
 
-			var total = this.palette.length - 1;
-
-			// Select previous color on palette
-			if(index == total){
-				this.selectedColor = total - 1;
+			// Select prev color unless 0
+			if(index != 0){
+				this.selectedColor = index - 1;
 			}
-
-			// If there is more than one color left, they can delete it, else error
-			if(this.palette.length > 1){
-				this.palette[index].name = 'delete';
-
-				// Actually delete after 300ms delay
-				setTimeout(function(){
-					_this.palette.splice(index, 1);
-				}, 300)
-			}else{
-				this.toast("Hey don't do that.", "You can't delete every color. You have to have at lest one.", "red", "far fa-tint");
-			}
-
-			// Make new hex string
-			this.makeHexString();
+			
+			// Delete from pallete
+			this.palette.splice(index, 1);
 		},
 		// Add new color to palette
 		// Random rgb color
@@ -548,6 +530,9 @@ export default {
 
 			// Set as selected
 			this.selectedColor = this.palette.length - 1;
+
+			// Make new hex string
+			this.makeHexString();
 		},
 
 		// Create Palette
@@ -815,17 +800,6 @@ export default {
 				}
 			}
 
-
-			// Animation to remove
-			&.removing{
-				animation: remove-color 0.3s ease  0s 1  normal  forwards;
-
-				@media (max-width: @screenMD) {
-					animation: remove-color-mobile 0.15s ease  0s 1  normal  forwards;
-				}
-			}
-
-
 			.color-codes{
 				display: flex;
 				flex-direction: column;	
@@ -876,15 +850,14 @@ export default {
 
 			// Color actions
 			.color-actions{
-				opacity: 0;
 				transition: 0.08s;
 
 				// mix-blend-mode: difference;
 				.color-delete{
 					font-size: 20px;
 					border-radius: 50%;
-					height: 30px;
-					width: 30px;
+					height: 40px;
+					width: 40px;
 					box-sizing: border-box;
 					color: inherit;
 					opacity: 1;
@@ -970,34 +943,6 @@ export default {
 		}
 	}
 
-
-
-	// Amimation to remove colors from palette
-	@keyframes remove-color {
-		0% {
-			transform: translateX(0);
-		}
-		99% {
-			height: 100px;
-		}
-		100% {
-			transform: translateX(120%);
-			height: 0px;
-			margin: 0;
-			border: none;
-		}
-	}
-	@keyframes remove-color-mobile {
-		0% {
-			transform-origin: bottom center;
-			transform: scale(1);
-			opacity: 1;
-		}
-		100% {
-			transform: scale(0);
-			opacity: 0;
-		}
-	}
 
 
 
