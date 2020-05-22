@@ -47,10 +47,10 @@
 			<!-- Actual Chngelog -->
 			<div id="changelog">
 
-				<!-- Version 2.0.7 -->
+				<!-- Version 2.0.71 -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>v2.0.7</b>
+						<b>v2.0.71</b>
 						<span>(May 21, 2020)</span>
 					</div>
 				</div>

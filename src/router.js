@@ -26,6 +26,8 @@ import Home from './views/Home.vue';
 import Animate from './views/apps/Animate.vue';
 import Shadows from './views/apps/Shadows.vue';
 import Colors from './views/apps/Colors.vue';
+import CharacterCodes from './views/apps/CharacterCodes.vue';
+
 // Everything else
 import Error404 from './views/other/error404.vue';
 import Changelog from './views/other/Changelog.vue';
@@ -82,11 +84,16 @@ const router = new Router({
 			component: Shadows
 		},
 		// Colors
-		// Optional color parameter to share
 		{
 			path: '/colors/',
 			name: 'Colors',
 			component: Colors
+		},
+		// Character Codes
+		{
+			path: '/characters/',
+			name: 'CharacterCodes',
+			component: CharacterCodes
 		},
 		//////////////////////
 		// Everything Else //

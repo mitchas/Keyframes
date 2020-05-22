@@ -273,11 +273,11 @@
 </template>
 
 <script>
-// @ is an alias to /src
+// Mixins
 import metaMixin from "@/components/mixins/metaMixin.js";
 
 export default {
-	name: "shadowApp",
+	name: "ColorApp",
 
 	components: {
 	},

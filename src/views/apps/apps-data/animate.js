@@ -1,4 +1,6 @@
-// data.js
+// animate.js
+// Broke off data definitions for animate page because they are long
+
 export default {
 	// Holds all css at each step
 	// Backdoor to reference to update computed property - not really actually used

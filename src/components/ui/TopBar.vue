@@ -74,6 +74,11 @@
 								<span>Shadows</span>
 								<i class="fas fa-eclipse"></i>
 							</button>
+							<!-- Charcter codes -->
+							<button class="popover-link" @click="navigate('/characters/')">
+								<span>Character Codes</span>
+								<i class="fas fa-tilde"></i>
+							</button>
 						</div>
 					</div>
 				</div>
