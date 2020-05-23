@@ -90,7 +90,7 @@
 					<div class="nav-dropdown" @click="toggleDropdown('settings')">
 						<!-- Hover label to show dropdown -->
 						<button class="hover-label">
-							<span>Settings</span>
+							<span>More</span>
 							<!-- Chevron down -->
 							<i v-bind:class="{'far fa-toggle-off': !showSettingsPopover, 'far fa-toggle-on': showSettingsPopover}"></i>
 						</button>
@@ -119,7 +119,7 @@
 								<hr v-if="$store.getters.device.standalone" />
 								<button class="popover-link" @click="share('Check this out!')" v-if="$store.getters.device.standalone">
 									<span>Share</span>
-									<i class="fas fa-share"></i>
+									<i class="far fa-share-alt"></i>
 								</button>
 
 								<hr/>
@@ -438,8 +438,9 @@ export default {
 
 					// Change spacing on default hr
 					hr{
-						margin: 7px 0 5px 0;
+						margin: 2px 0 2px 0;
 						border-color: #686E7E;
+						opacity: 0.75;
 					}
 
 					// Links

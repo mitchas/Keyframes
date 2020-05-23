@@ -42,6 +42,7 @@ export const store = new Vuex.Store({
 			animations: true,
 			tooltips: true,
 			startPage: '/',
+			installed: false,
 			viewed: {
 				animateIntro: false,
 			},

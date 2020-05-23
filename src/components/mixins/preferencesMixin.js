@@ -147,6 +147,14 @@ export default {
 			// If running in standalone PWA mode
 			if (window.matchMedia('(display-mode: standalone)').matches) {
 				deviceProps.standalone = true;
+
+				// If 'installed' is not already true in prefs, 
+				// user is opening for first time after install - track it, then update pref so it doesn't track again
+				if(!this.$store.getters.userPreferences.installed){
+					_paq.push(['trackEvent', 'Action', 'Install', "PWA"]);
+					this.$store.getters.userPreferences.installed = true;
+				}
+				
 			}
 
 			// Save back to store
@@ -176,6 +184,9 @@ export default {
 			}
 			if(!this.$store.getters.userPreferences.viewed){
 				this.$store.getters.userPreferences.viewed = {};
+			}
+			if(!this.$store.getters.userPreferences.installed){
+				this.$store.getters.userPreferences.installed = false;
 			}
 		},
 

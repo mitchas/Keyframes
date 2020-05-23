@@ -1,20 +1,41 @@
 {
-  "name": "Keyframes.app",
-  "short_name": "Keyframes",
-  "icons": [
-    {
-      "src": "./img/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#110F1F",
-  "theme_color": "#110F1F"
+  	"name": "Keyframes.app",
+  	"short_name": "Keyframes",
+ 	 "icons": [
+    	{
+      		"src": "./img/icons/android-chrome-192x192.png",
+      		"sizes": "192x192",
+      		"type": "image/png"
+    	},
+    	{
+      		"src": "./img/icons/android-chrome-512x512.png",
+      		"sizes": "512x512",
+      		"type": "image/png"
+    	}
+  	],
+  	"start_url": "/",
+  	"display": "standalone",
+  	"background_color": "#110F1F",
+	  "theme_color": "#110F1F",
+	  
+  	"shortcuts": [
+		{
+			"name": "New Animation",
+			"short_name": "Animation",
+			"url": "/animate/",
+			"icons": [{
+				"src": "./img/icons/android-chrome-192x192.png",
+				"sizes": "192x192"
+			}]
+		},
+		{
+			"name": "Colors",
+			"short_name": "Colors",
+			"url": "/colors/",
+			"icons": [{
+				"src": "./img/icons/android-chrome-192x192.png",
+				"sizes": "192x192"
+			}]
+		}
+	]
 }
