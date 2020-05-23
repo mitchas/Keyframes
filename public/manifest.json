@@ -1,6 +1,12 @@
 {
-  	"name": "Keyframes.app",
-  	"short_name": "Keyframes",
+	"name": "Keyframes.app",
+	"short_name": "Keyframes",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#110F1F",
+	"theme_color": "#110F1F",
+	"description": "A straightforward way to create CSS animations, shadows, colors, & more.",
+
  	 "icons": [
     	{
       		"src": "./img/icons/android-chrome-192x192.png",
@@ -13,10 +19,6 @@
       		"type": "image/png"
     	}
   	],
-  	"start_url": "/",
-  	"display": "standalone",
-  	"background_color": "#110F1F",
-	  "theme_color": "#110F1F",
 	  
   	"shortcuts": [
 		{

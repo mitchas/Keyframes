@@ -23,6 +23,9 @@ export const store = new Vuex.Store({
 	// Defs:
 	// userPreferences: settings visitors can toggle.
 	state: {
+		// Get package version from package.json
+		packageVersion: process.env.PACKAGE_VERSION || '0',
+		// Lock scrolling - for modals, etc to prevent behind scroll
 		scrollLock: false,
 		// UI
 		// If screen size is mobile - watched by resize
@@ -44,6 +47,7 @@ export const store = new Vuex.Store({
 			tooltips: true,
 			startPage: '/',
 			installed: false,
+			version: "0", // Doesnt matter if not accurate - just a placeholder
 			viewed: {
 				animateIntro: false,
 			},
@@ -74,5 +78,6 @@ export const store = new Vuex.Store({
 		device: state => state.device,
 		userPreferences: state => state.userPreferences,
 		global: state => state.global,
+		appVersion: state => state.packageVersion,
 	}
 })

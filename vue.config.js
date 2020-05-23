@@ -1,6 +1,23 @@
 const manifestJSON = require('./public/manifest.json')
+var webpack = require('webpack');
+
+// Get version
+const fs = require('fs')
+const packageJson = fs.readFileSync('./package.json')
+const version = JSON.parse(packageJson).version || 0
 
 module.exports = {
+	// Make version number available
+	configureWebpack: {
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    PACKAGE_VERSION: '"' + version + '"'
+                }
+            })
+        ]
+	},
+	
 	publicPath: process.env.NODE_ENV === 'production'
 	  ? '/' 
 	  // Change this ^^ path if the app won't be at root level ie website.com/app/ - put "/app/"

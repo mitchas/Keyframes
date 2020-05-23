@@ -47,10 +47,10 @@
 			<!-- Actual Chngelog -->
 			<div id="changelog">
 
-				<!-- Version 2.0.8 -->
+				<!-- Current version -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>v2.0.9</b>
+						<b>v{{$store.getters.appVersion}}</b>
 						<span>(May 22, 2020)</span>
 					</div>
 				</div>
@@ -76,10 +76,10 @@
 				</div>
 
 
-				<!-- Version 2.0.7 -->
+				<!-- Version 2.05 -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>v2.0.7</b>
+						<b>v2.0.5</b>
 						<span>(May 20, 2020)</span>
 					</div>
 				</div>

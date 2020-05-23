@@ -140,11 +140,12 @@ export default {
 
 			// Save device info
 			var deviceProps = this.$store.getters.device;
-			// We know it's touch because this function ran
+
+			// Touch Screen
 			if(('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) {
 				deviceProps.hasTouch = true;
 			}
-			// If running in standalone PWA mode
+			// Standalone mode
 			if (window.matchMedia('(display-mode: standalone)').matches) {
 				deviceProps.standalone = true;
 
@@ -157,13 +158,14 @@ export default {
 				
 			}
 
-			// Check for orientation sensors
+			// Orientation Sensors
 			if (window.DeviceOrientationEvent || window.MozOrientation) {
 				deviceProps.orientationSensor = true;
 			}
 
 			// Save back to store
 			this.$store.commit('device', deviceProps);
+
 			
 
 			// Dark mode
@@ -193,6 +195,39 @@ export default {
 			if(!this.$store.getters.userPreferences.installed){
 				this.$store.getters.userPreferences.installed = false;
 			}
+			if(!this.$store.getters.userPreferences.version){
+				this.$store.getters.userPreferences.version = "0.0.0";
+			}
+
+
+
+			// App Version
+			// Get last loaded version number (saved in local storage)
+			// If lower than latest, alert about update, then store new version
+			var userAppVersion = this.$store.getters.userPreferences.version;
+			var latestAppVersion = this.$store.getters.appVersion;
+
+			// Strip periods and parse into to compare numbers
+			userAppVersion = parseInt(userAppVersion.replace(/\D/g,''));
+			// Create new var for latest int so regular x.x.x format can be stored.
+			var latestVersionInt = parseInt(latestAppVersion.replace(/\D/g,''));
+
+			// If user's version is lower than latest
+			// If userAppVersion is 0 - they just visited for the first time
+			if(userAppVersion < latestVersionInt){
+				// Update version in local storage
+				this.$store.getters.userPreferences.version = latestAppVersion;
+
+				// Tell them about the update if it's not their first visit - default v for new users is 0
+				if(userAppVersion > 0){
+					var _this = this;
+					setTimeout(function(){
+						_this.hello("Keyframes updated to v" + latestAppVersion + "", "fas fa-sparkles")
+					}, 500)
+				}
+				
+			}
+
 		},
 
 	}

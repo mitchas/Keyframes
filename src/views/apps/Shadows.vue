@@ -408,12 +408,29 @@ export default {
 
 			// Get sensor type if its available
 			var sensor = "";
-			if (window.DeviceOrientationEvent) {
-				sensor = "deviceorientation";
+			
+
+			// iOS requires permission request before
+			if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+				DeviceOrientationEvent.requestPermission()
+				.then(permissionState => {
+					if (permissionState === 'granted') {
+						sensor = "deviceorientation";
+					}
+				})
+				.catch(console.error);
+			} else {
+				// No permission needed for other OSes
+				// Webkit
+				if (window.DeviceOrientationEvent) {
+					sensor = "deviceorientation";
+				}
+				// Firefox
+				if (window.MozOrientation) {
+					sensor = "MozOrientation";
+				}
 			}
-			if (window.MozOrientation) {
-				sensor = "MozOrientation";
-			}
+			
 
 
 			// If sensor, add listener

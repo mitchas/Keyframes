@@ -41,6 +41,14 @@ npm run lint
 
 # Other things to set up
 
+### App version updates
+The current version number of the app is used in a few different places - on the about modal, on the changelog, and also to determine if an update has been pushed, in order to force the cache/PWA to reload. 
+
+Before deploying, change the current version number in two places -
+ * package.json
+ * service-worker.js
+
+
 ### Environment Variables
 Fill in your VUE_APP_BASE_URL and VUE_APP_BASE_PATH in `.env` and `.env.production`. The base URL should be the bare URL it'll be hosted at (ie https://example.com - no trailing slash) and the base path should be the path at the URL (ie /app if it'll be at example.com/app). For the root, leave it at /.
 
