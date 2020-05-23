@@ -389,22 +389,22 @@ export default {
 		// Toggle Tilt Mode  //
 		//////////////////////
 		tiltShadow:function(event){
-
 			
 			var x, y;
-			if(event.beta){
+			if(event.beta || event.gamma){
 				y = Math.round(event.beta - 40) * 2;
 				x = Math.round(event.gamma) * 2;
-			}else if(event.y){
+			}else if(event.y || event.x){
 				y = Math.round(orientation.y - 40) * 2;
 				x = Math.round(orientation.x) * 2;
 			}
 
-			// Values must be reversed depeneing on landscape or portrait orientation
-			if(orientation === "landscape-secondary" || orientation === "landscape-primary"){
-				this.layers[this.selectedLayer - 1].horizontal_offset = y;
+			// If Landscape ios, values must be reversed for some reason?
+			if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
 				this.layers[this.selectedLayer - 1].vertical_offset = x;
+				this.layers[this.selectedLayer - 1].horizontal_offset = y;
 			}else{
+				// Otherwise regular
 				this.layers[this.selectedLayer - 1].vertical_offset = y;
 				this.layers[this.selectedLayer - 1].horizontal_offset = x;
 			}
@@ -427,7 +427,15 @@ export default {
 						sensor = "deviceorientation";
 						window.addEventListener(sensor, _this.tiltShadow)
 						_this.tiltMode = true;
-						_this.hello("Permission granted.", "far fa-exclamation-triangle")
+
+						if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
+							_this.hello("Permission granted. Mac + Landscape", "far fa-exclamation-triangle")
+						}else if(window.matchMedia("(orientation: landscape)").matches){
+							_this.hello("Permission granted. Lndscape no mac", "far fa-exclamation-triangle")
+						}else{
+							_this.hello("Permission granted. no landscape just mac", "far fa-exclamation-triangle")
+						}
+
 
 					}else{
 						_this.hello("Device orientation permission denied.", "far fa-times-circle")

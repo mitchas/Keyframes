@@ -24,7 +24,7 @@
 		<div id="topBar">
 			<!-- Branding - Logo -->
 			<div id="branding">
-				<div id="logo">
+				<div id="logo" v-if="$store.getters.device.isMac">
 					<img src="@/assets/branding/logo.png" @click="navigate('/')" title="Keyframes Logo" v-bind:class="{'invert': $store.getters.userPreferences.darkMode}"/>
 				</div>
 			</div>
