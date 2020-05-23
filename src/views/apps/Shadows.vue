@@ -388,8 +388,8 @@ export default {
 		// Toggle Tilt Mode  //
 		//////////////////////
 		tiltShadow:function(event){
-			
-			var vertical, horizontal;
+			// x/hor y/vert
+			var h, v;
 
 			// If the orientation is landscape-left or upside down, values must be negative
 			// if(this.$store.getters.device.orientation == 180 || this.$store.getters.device.orientation == -90){
@@ -398,22 +398,35 @@ export default {
 			// Else regular
 			// Webkit
 			if(event.beta || event.gamma){
-				vertical = Math.round(event.beta) * 2;
+				v = Math.round(event.beta) * 2;
 				// vertical = Math.round(event.beta - 40) * 2;
-				horizontal = Math.round(event.gamma) * 2;
+				h = Math.round(event.gamma) * 2;
 			}else if(event.y || event.x){
 				// Firefox uses orientation instead of event
-				vertical = Math.round(orientation.y) * 2;
+				v = Math.round(orientation.y) * 2;
 				// vertical = Math.round(orientation.y - 40) * 2;
-				horizontal = Math.round(orientation.x) * 2;
+				h = Math.round(orientation.x) * 2;
 			}
 
-			// if(this.$store.getters.device.orientation == 180){
-			// 	vertical = -vertical;
-			// }
-			// if(this.$store.getters.device.orientation == -90){
-			// 	horizontal = -horizontal;
-			// }
+			// Make adjustments for orientation
+			var deg = this.$store.getters.device.orientation;
+
+			var hOffset = h;
+			var vOffset = v;
+			// Regular format is (h, v)
+			// 90deg is -v,h
+			if(deg == 90){
+				hOffset = -v;
+				vOffset = h;
+			}else if(deg == 180){
+				// 180deg is -h,-v
+				hOffset = -h;
+				vOffset = -v;
+			}else if(deg == -90){
+				// -90 is -v,-h
+				hOffset = -h;
+				vOffset = -v;
+			}
 
 			// Set to shadow
 			this.tiltY = vertical;
