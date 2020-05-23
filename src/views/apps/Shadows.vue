@@ -416,6 +416,12 @@ export default {
 				.then(permissionState => {
 					if (permissionState === 'granted') {
 						sensor = "deviceorientation";
+						window.addEventListener(sensor, _this.tiltShadow)
+						_this.tiltMode = true;
+						_this.hello("Permission granted.", "far fa-exclamation-triangle")
+
+					}else{
+						_this.hello("Device orientation permission denied.", "far fa-times-circle")
 					}
 				})
 				.catch(console.error);
