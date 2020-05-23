@@ -392,11 +392,12 @@ export default {
 			
 			var vertical, horizontal;
 
-			// If Landscape ios, values must be reversed for some reason?
-			if(window.matchMedia("(orientation: landscape)").matches){
+			var orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
+			// If the orientation is secondary landscape, values must be reversed
+			if(orientation === "landscape-secondary"){
 			// if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
-				horizontal = -(Math.round(event.beta)) * 2; // Must reverse neg/pos
-				vertical = Math.round(event.gamma - 40) * 2;
+				horizontal = -(Math.round(event.beta) - 40) * 2; // Must reverse neg/pos
+				vertical = Math.round(event.gamma) * 2;
 
 			}else{
 				// Else regular
@@ -422,57 +423,53 @@ export default {
 
 			// Get sensor type if its available
 			var sensor = "";
-			
 
-			// iOS requires permission request before
-			if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-				DeviceOrientationEvent.requestPermission()
-				.then(permissionState => {
-					if (permissionState === 'granted') {
-						sensor = "deviceorientation";
-						window.addEventListener(sensor, _this.tiltShadow)
-						_this.tiltMode = true;
-
-						if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
-							_this.hello("Permission granted. Mac + Landscape", "far fa-exclamation-triangle")
-						}else if(window.matchMedia("(orientation: landscape)").matches){
-							_this.hello("Permission granted. Lndscape no mac", "far fa-exclamation-triangle")
-						}else{
-							_this.hello("Permission granted. no landscape just mac", "far fa-exclamation-triangle")
-						}
-
-
-					}else{
-						_this.hello("Device orientation permission denied.", "far fa-times-circle")
-					}
-				})
-				.catch(console.error);
-			} else {
-				// No permission needed for other OSes
-				// Webkit
-				if (window.DeviceOrientationEvent) {
-					sensor = "deviceorientation";
-				}
-				// Firefox
-				if (window.MozOrientation) {
-					sensor = "MozOrientation";
-				}
-			}
-			
-
-
-			// If sensor, add listener
-			if (sensor && !_this.tiltMode) {
+			var addListener = function(sensor){
 				_this.tiltMode = true;
 				window.addEventListener(sensor, _this.tiltShadow)
-			}else if(sensor && _this.tiltMode){
-				// Else stop it
-				window.removeEventListener(sensor, _this.tiltShadow); 
-				_this.tiltMode = false;
-			}else{
-				// No sensor available
-				_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle")
 			}
+			
+
+			// If it's already running, stop it
+			if(_this.tiltMode){
+				window.removeEventListener("deviceorientation", _this.tiltShadow); 
+				window.removeEventListener("MozOrientation", _this.tiltShadow); 
+				_this.tiltMode = false;
+			}
+			// Else start it
+			else{
+				// iOS requires permission request before
+				if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+					
+					DeviceOrientationEvent.requestPermission()
+					.then(permissionState => {
+						if (permissionState === 'granted') {
+							// _this.tiltMode = true;
+							// window.addEventListener("deviceorientation", _this.tiltShadow)
+							addListener("deviceorientation");
+						}else{
+							_this.hello("Device orientation permission denied.", "far fa-times-circle")
+						}
+					})
+					.catch(console.error);
+				}
+				// No permission needed for other OSes, just check for type
+				else if (window.DeviceOrientationEvent){
+					// Webkit
+					addListener("deviceorientation");
+				}else if (window.MozOrientation){
+					// Firefox
+					addListener("MozOrientation");
+				}else{
+					// Error 
+					_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle")
+				}
+			}
+				
+			
+
+
+			
 			
 		},
 		
