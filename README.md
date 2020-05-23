@@ -57,10 +57,10 @@ I tried to use as few as possible. Apart from Vue and everything required by it,
  * [Vue Lodash](https://www.npmjs.com/package/vue-lodash) For working with the data.
  * [Color Convert](https://www.npmjs.com/package/color-convert) for working with color values.
 
-
 ## Other Features
  * Fully responsive/PWA support
  * Soft keyboard detection to hide elements on mobile for more space when keyboard is visible.
  * Lock scrolling when modal is visible
  * LESS Styles with global light/dark themes
  * Preferences stored in local storage.
+

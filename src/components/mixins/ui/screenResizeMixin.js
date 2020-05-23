@@ -1,16 +1,11 @@
 // Screen Resize Mixin
 // _________________________
 //
-// 	mounted(): Checks window for orientation property  to determine if it's a mobile device.
-// 					orientation is *usually* undefined on desktop, so if it's defined, it's mobile
-// 			- if it's a mobile device, it adds an event listener to watch for screen resizing. 
-// 			- Calls watchSoftKeyboard() on resize.
+// 	mounted():
+// 			- if it's a touch device, it adds an event listener to watch for screen resizing. 
+// 			- Calls watchResize() on resize.
 // 
 // 	watchResize(): 
-// 			This function has two parts
-// 
-// 			- First, checks width on resize to see if it's mobile (less than 768px)
-// 
 // 			- Then checks height change for mobile devices
 // 				- Calculates the percentage change in height using the original size and the end size,
 // 				- if the difference is greater than 20%, it's likely because an on screen keyboard is showing
@@ -31,8 +26,12 @@ export default {
 	watch: {
 	},
 	mounted() {
-		window.addEventListener('resize', this.watchResize);	
-		this.watchResize();	
+		if(('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) {
+			//this is a touch device, watch for resize
+			window.addEventListener('resize', this.watchResize);	
+			this.watchResize();	
+		}
+
 	},
 	beforeDestroy() { 
 		// Remove resize listener
@@ -49,36 +48,37 @@ export default {
 
 			// Timer to prevent many firings
 			this.resizeTimer = setTimeout(function() {
+
+				// Get props
+				var deviceProps = _this.$store.getters.device;
+				// We know it's touch because this function ran
+				deviceProps.hasTouch = true;
+
 				
+				// Variable to watch if keyboard is currently visible
+				var softKeyboardOn = deviceProps.softKeyboardVisible;
+				// Get screen dimensions
 				var newScreenWidth = window.innerWidth;
+				var newScreenHeight = window.innerHeight;
+				var originalHeight = _this.windowHeightOnLoad;
 
-				// Check mobile (768px or narrower)
-				if(newScreenWidth <= 768){
-					// Is mobile 
-					_this.$store.commit('isMobile', true);
+				// Calculate percentage changed
+				var changePercent = parseInt(100 - ((newScreenHeight / originalHeight) * 100));
 
-					// Now check if keyboard is visible
-					var softKeyboardOn = _this.$store.getters.softKeyboard;
+				// If percent greater than 20, and keyboard isn't currently open
+				if(changePercent > 20 && !softKeyboardOn){
+					// Only update if change occurs
+					softKeyboardOn = true;
+					deviceProps.softKeyboardVisible = true;
 
-					var newScreenHeight = window.innerHeight;
-					var originalHeight = _this.windowHeightOnLoad;
-					// Calculate percentage changed
-					var changePercent = parseInt(100 - ((newScreenHeight / originalHeight) * 100));
-					// If percent greater than 20, and keyboard isn't currently open
-					if(changePercent > 20 && !softKeyboardOn){
-						softKeyboardOn = true;
-						// Only commit to store if change occurs
-						_this.$store.commit('softKeyboard', true);
-					}else if(softKeyboardOn && changePercent < 20){
-						// If keyboard is open, hide it
-						softKeyboardOn = false;
-						_this.$store.commit('softKeyboard', false);
-					}
-				}else{
-					_this.$store.commit('softKeyboard', false);
-					_this.$store.commit('isMobile', false);
+				}else if(softKeyboardOn && changePercent < 20){
+					// If keyboard is open, hide it
+					softKeyboardOn = false;
+					deviceProps.softKeyboardVisible = false;
 				}
 
+				// Commit current props back to store
+				_this.$store.commit('device', deviceProps);
 						
 			}, 300);
 

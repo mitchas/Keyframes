@@ -377,7 +377,7 @@
 			</div>
 
 			<!-- Timeline -->
-			<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}" v-if="!$store.getters.softKeyboard">
+			<div id="animateTimeline" @mousemove.self="addingStep && getTimelinePosition();" @click.self="addingStep && newStep();" v-bind:class="{'add-step': addingStep}" v-if="!$store.getters.device.softKeyboardVisible">
 				<!-- Animated marker that progresses with animation -->
 				<div class="timeline-marker animated" v-if="animationPlaying" v-bind:class="{'pause': animationPaused}">
 				</div>
@@ -521,7 +521,6 @@
 				</div>
 			</template>
 
-
 		</Help> <!-- End Help -->
 
 
@@ -538,7 +537,7 @@ import metaMixin from "@/components/mixins/metaMixin.js";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 import screenResizeMixin from "@/components/mixins/ui/screenResizeMixin.js";
 // Keyboard shortcuts
-import shortcut, { PRIMARY } from "@/components/mixins/keyboardShortcutsMixin.js";
+import shortcut, { PRIMARY, SHIFT } from "@/components/mixins/keyboardShortcutsMixin.js";
 
 // Data broken into separate file because it was long
 import data from "@/views/apps/apps-data/animate.js";
@@ -568,9 +567,16 @@ export default {
 				this.saveAnimation();
 			}else{
 				this.toggleOption('saveLoad');
-				this.hello("Give your animation a name, then you can use CTRL/CMD + s", "far fa-save")
+				this.hello("Give your animation a name, then you can use the shortcut.", "far fa-save")
 			}
-		})
+		}),
+		// Start/Stop animation shortcut
+		shortcut('enter', function(event) {
+			this.runAnimation();
+		}),
+		shortcut('enter', SHIFT, function(event) {
+			this.pauseAnimation();
+		}),
 	],
 
 	// External data

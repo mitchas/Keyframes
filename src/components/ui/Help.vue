@@ -138,7 +138,7 @@ export default {
 
 			setTimeout(function(){
 				_this.currentSlide = slide;
-			}, 110)
+			}, 130)
 		},
 		///////////////////
 		//  Close Help  //
@@ -207,7 +207,7 @@ export default {
 		.help-body{
 			display: flex;
 			flex-direction: column;
-			justify-content: space-between;
+			justify-content: space-around;
 			background-color: var(--pageBackground);
 			margin: 0 auto;
 			width: 94%;
@@ -375,25 +375,29 @@ export default {
 	//////////////////////
 	// Use for blocks of several items/lists
 	.slide-enter-active {
-		animation: slide-animation-in .1s ease-in-out both .1s;
+		animation: slide-animation-in .12s ease-in-out both;
 	}
 	.slide-leave-active {
-		animation: slide-animation-out .1s ease-in-out both;
+		animation: slide-animation-out .12s ease-in-out both;
 	}
 	@keyframes slide-animation-out {
 		0% {
 			transform: scaleX(1);
+			opacity: 1;
 		}
 		100% {
-			transform: scaleX(0);
+			transform: scaleX(0.5);
+			opacity: 0;
 		}
 	}
 	@keyframes slide-animation-in {
 		0% {
-			transform: scaleX(0);
+			transform: scaleX(0.5);
+			opacity: 0;
 		}
 		100% {
 			transform: scaleX(1);
+			opacity: 1;
 		}
 	}
 </style>

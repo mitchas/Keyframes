@@ -149,6 +149,11 @@ export default {
 				color: var(--green);
 			}
 		}
+		&.yellow{
+			.callout-icon, a{
+				color: var(--yellow);
+			}
+		}
 		// invert
 		&.invert{
 			background-color: var(--text);
@@ -165,6 +170,10 @@ export default {
 					color: var(--linksHover);
 				}
 			}
+		}
+		// borderless
+		&.borderless{
+			border-color: transparent;
 		}
 
 		// Sizing
@@ -225,14 +234,17 @@ export default {
 		}
 		// tiny means lil smaller icon and smaller text
 		&.tiny{
-			padding: 0 15px 0 60px;
+			padding: 0 10px 0 50px;
 			.callout-icon{
 				font-size: 22px;
+				width: 50px;
 			}
 			.callout-body{
 				font-size: 13px;
 				line-height: 16px;
 				letter-spacing: 0px;
+				padding: 10px 0;
+				letter-spacing: 0.3px;
 			}
 		}
 		

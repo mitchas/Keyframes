@@ -10,10 +10,6 @@
 // 					Toggles navigation dropdown by (name)
 // 				closeDropdowns()
 // 					Hides all dropdowns
-// 				showAbout()
-// 					Shows about modal
-// 				showSettings()
-// 					Shows settings modal
 // 				openHelp()
 // 					Button only shows based on route meta - when clicked, opens modal and tracks click
 // 
@@ -39,7 +35,7 @@
 
 				<!-- Help - only shows on pages with help modal -->
 				<div class="settings-nav" v-if="$route.meta.help">
-					<div class="settings-nav-dropdown" @click="openHelp()">
+					<div class="nav-dropdown" @click="openHelp()">
 						<button class="hover-label">
 							<span>Help</span>
 							<!-- Chevron down -->
@@ -50,7 +46,7 @@
 
 				<!-- App Switcher -->
 				<div class="settings-nav">
-					<div class="settings-nav-dropdown" @click="toggleDropdown('apps')">
+					<div class="nav-dropdown" @click="toggleDropdown('apps')">
 						<!-- Hover label to show dropdown -->
 						<button class="hover-label">
 							<span>Apps</span>
@@ -58,7 +54,7 @@
 							<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-times-circle': showAppSwitcher}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
-						<div class="settings-nav-popover" v-bind:class="{'visible': showAppSwitcher}">
+						<div class="nav-popover" v-bind:class="{'visible': showAppSwitcher}">
 							<!-- CSS Animations -->
 							<button class="popover-link" @click="navigate('/animate/')">
 								<span>Animations</span>
@@ -85,7 +81,7 @@
 
 				<!-- Settings -->
 				<div class="settings-nav">
-					<div class="settings-nav-dropdown" @click="toggleDropdown('settings')">
+					<div class="nav-dropdown" @click="toggleDropdown('settings')">
 						<!-- Hover label to show dropdown -->
 						<button class="hover-label">
 							<span>Settings</span>
@@ -93,7 +89,7 @@
 							<i v-bind:class="{'far fa-toggle-off': !showSettingsPopover, 'far fa-toggle-on': showSettingsPopover}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
-						<div class="settings-nav-popover" v-bind:class="{'visible': showSettingsPopover}">
+						<div class="nav-popover" v-bind:class="{'visible': showSettingsPopover}">
 							<!-- Toggle dark mode -->
 							<label for="topBarDarkModeToggle" class="popover-link" tabindex="1">
 								<span v-if="!$store.getters.userPreferences.darkMode">Dark Mode</span>
@@ -101,13 +97,21 @@
 								<i v-bind:class="{ 'fas fa-lightbulb-slash': !$store.getters.userPreferences.darkMode, 'fas fa-lightbulb-on': $store.getters.userPreferences.darkMode }"></i>
 							</label>
 							<input type="checkbox" id="topBarDarkModeToggle" v-model="$store.getters.userPreferences.darkMode" @change="toggleDarkMode()" hidden/>
-							<!-- Settings -->
-							<button class="popover-link" @click="showSettings()">
-								<span>All Settings</span>
-								<i class="fas fa-tools"></i>
+							<!-- Keyboard Shortcuts -->
+							<button class="popover-link" @click="showShortcutsModal = true">
+								<span>Shortcuts</span>
+								<i class="fas fa-keyboard"></i>
 							</button>
+							<!-- Settings -->
+							<button class="popover-link" @click="showSettingsModal = true">
+								<span>Preferences</span>
+								<i class="fas fa-toggle-on"></i>
+							</button>
+
+							<hr/>
+
 							<!-- About -->
-							<button class="popover-link" @click="showAbout()">
+							<button class="popover-link" @click="showAboutModal = true">
 								<span>About</span>
 								<i class="fas fa-ghost"></i>
 							</button>
@@ -124,29 +128,43 @@
 		<SettingsModal :showSettings="showSettingsModal" v-on:settingsModalClosed="showSettingsModal = false"></SettingsModal>
 		<!-- About modal -->
 		<AboutModal :showAbout="showAboutModal" v-on:aboutModalClosed="showAboutModal = false"></AboutModal>
+		<!-- Shortcuts modal -->
+		<ShortcutsModal :showShortcuts="showShortcutsModal" v-on:shortcutsModalClosed="showShortcutsModal = false"></ShortcutsModal>
 	</span>
 </template>
 
 <script>
 import SettingsModal from "@/components/SettingsModal";
 import AboutModal from "@/components/AboutModal";
+import ShortcutsModal from "@/components/ShortcutsModal";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
+// Keyboard shortcuts
+import shortcut, { PRIMARY } from "@/components/mixins/keyboardShortcutsMixin.js";
 
 
 export default {
 	name: "TopBar",
 	mixins: [
 		preferencesMixin,
+		// Toggle dark mode with cmd + d
+		shortcut('d', PRIMARY, function(event) {
+			// Prevent default
+			event.preventDefault();
+			// Toggle theme
+			this.darkModeShortcut(this.$store.getters.userPreferences.darkMode)
+		}),
 	],
 	components: {
 		AboutModal,
-		SettingsModal
+		SettingsModal,
+		ShortcutsModal,
 	},
 	data() {
 		return {
 			showSettingsPopover: false,
 			showSettingsModal: false,
 			showAboutModal: false,
+			showShortcutsModal: false,
 			showAppSwitcher: false
 		};
 	},
@@ -181,17 +199,6 @@ export default {
 			this.showSettingsPopover = false; 
 			this.showAppSwitcher = false
 		},
-		///////////////////
-		//    Modals    //
-		/////////////////
-		// Show about modal
-		showAbout: function(){
-			this.showAboutModal = true;
-		},
-		// Show settings modal
-		showSettings: function(){
-			this.showSettingsModal = true;
-		},
 		//////////////////
 		//  Open Help  //
 		////////////////
@@ -201,6 +208,16 @@ export default {
 			this.$store.getters.global.showHelp = true; 
 			// Track it
 			_paq.push(['trackEvent', 'Action', 'View', 'Help - ' + this.$route.name]);	
+		},
+		// Shortcut for dark mode
+		darkModeShortcut: function(state){
+			if(state){
+				this.toggleDarkMode(false);
+				this.$store.getters.userPreferences.darkMode = false;
+			}else{
+				this.toggleDarkMode(true);
+				this.$store.getters.userPreferences.darkMode = true;
+			}
 		},
 	}
 };
@@ -292,7 +309,7 @@ export default {
 			flex-direction: column;
 			justify-content: center;
 
-			.settings-nav-dropdown{
+			.nav-dropdown{
 				position: relative;
 				padding: 8px 0;
 				z-index: 100;
@@ -360,7 +377,7 @@ export default {
 
 
 				// Popup on hover
-				.settings-nav-popover{
+				.nav-popover{
 					display: block;
 					width: 220px;
 					position: absolute;
@@ -394,14 +411,13 @@ export default {
 						padding: 8px 10px 10px 10px;
 						overflow: 1;
 						box-shadow: var(--shadow);
-						border: var(--borderWidth) solid rgba(205,205,255,0.25);
 						border: var(--borderWidth) solid var(--border);
 					}
 
 					// Change spacing on default hr
 					hr{
-						margin: 5px 0;
-						border-color: var(--border);
+						margin: 7px 0 5px 0;
+						border-color: #686E7E;
 					}
 
 					// Links

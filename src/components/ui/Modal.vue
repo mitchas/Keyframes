@@ -288,10 +288,6 @@ export default {
 						width: 100%;
 						font-weight: 500;
 						margin: 0 5px;
-
-						&:first-child{
-							border-left: none;
-						}
 					}
 				}
 

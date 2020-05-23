@@ -47,11 +47,40 @@
 			<!-- Actual Chngelog -->
 			<div id="changelog">
 
-				<!-- Version 2.0.71 -->
+				<!-- Version 2.0.8 -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>v2.0.75</b>
+						<b>v2.0.8</b>
 						<span>(May 22, 2020)</span>
+					</div>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Touch and swipe support on touchscreens</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Auto color palette function</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>Progressive Web App support - install through Chrome on your phone or computer and use it offline</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Keyboard shortcuts & info window listing shortcuts specific to each page.</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-virus-slash cat-bug"></i>
+					<span>A bunch of bug fixes and small functionality improvements.</span>
+				</div>
+
+
+				<!-- Version 2.0.7 -->
+				<div class="changelog-title">
+					<div class="cl-version">
+						<b>v2.0.7</b>
+						<span>(May 20, 2020)</span>
 					</div>
 				</div>
 				<div class="changelog-change">
@@ -71,24 +100,8 @@
 					<span>Tooltips & settings to hide tooltips</span>
 				</div>
 				<div class="changelog-change">
-					<i class="fas fa-sparkles cat-new"></i>
-					<span>Touch and swipe support on touchscreens</span>
-				</div>
-				<div class="changelog-change">
-					<i class="fas fa-sparkles cat-new"></i>
-					<span>Auto color palette function</span>
-				</div>
-				<div class="changelog-change">
-					<i class="fas fa-sync-alt cat-upgrade"></i>
-					<span>Progressive Web App support - install through Chrome on your phone or computer and use it offline</span>
-				</div>
-				<div class="changelog-change">
 					<i class="fas fa-sync-alt cat-upgrade"></i>
 					<span>Confirm exit when leaving an app page - can be disabled in settings</span>
-				</div>
-				<div class="changelog-change">
-					<i class="fas fa-sparkles cat-new"></i>
-					<span>A few keyboard shortcuts. A cheatsheet and more shortcuts soon.</span>
 				</div>
 				<div class="changelog-change">
 					<i class="fas fa-sync-alt cat-upgrade"></i>

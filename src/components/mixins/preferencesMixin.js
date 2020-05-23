@@ -21,6 +21,7 @@ export default {
 		//    Dark Mode Toggle    //
 		///////////////////////////
 		toggleDarkMode: function(mode){
+			console.log("DATK MODE TOGGLED")
 
 			// If true/false argument passed
 			if(mode != null){

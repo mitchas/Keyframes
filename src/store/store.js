@@ -5,12 +5,12 @@
 // 		Definitions:
 //			-scrollLock
 // 				true/false to lock scrolling with CSS (use with full width/height elements so you can't scroll behind them)
-//			-softKeyboard
-// 				true/false - whether the on screen keyboard is visible on mobile devices (See softKeyboardMixin)
-//			-isMobile
-// 				watched by screenResize mixin, set if screen is mobile or smaller
+//			-device
+// 				object - device properties
 //			-userPreferences
 // 				object - user's saved preferences from localstorage
+//			-global
+// 				object - shortcuts for things to use throughout the project - easy to access and change
 // 
 
 import Vue from 'vue'
@@ -25,10 +25,13 @@ export const store = new Vuex.Store({
 	state: {
 		scrollLock: false,
 		// UI
-		// If soft keyboard visible on mobile
-		softKeyboard: false,
 		// If screen size is mobile - watched by resize
-		isMobile: false,
+		// isMac = navigator.appVersion.includes('Macintosh')
+		device: {
+			hasTouch: false,
+			isMac: navigator.appVersion.includes('Macintosh'),
+			softKeyboardVisible: false,
+		},
 		// UserPreferences
 		// Update 3 places in App.vue
 		// at var defaultPrefs
@@ -53,11 +56,8 @@ export const store = new Vuex.Store({
 		scrollLock(state, scrollLock) {
 			state.scrollLock = scrollLock
 		},
-		softKeyboard(state, softKeyboard) {
-			state.softKeyboard = softKeyboard
-		},
-		isMobile(state, isMobile) {
-			state.isMobile = isMobile
+		device(state, device) {
+			state.device = device
 		},
 		userPreferences(state, userPreferences) {
 			state.userPreferences = userPreferences
@@ -68,8 +68,7 @@ export const store = new Vuex.Store({
 	},
 	getters: {
 		scrollLock: state => state.scrollLock,
-		softKeyboard: state => state.softKeyboard,
-		isMobile: state => state.isMobile,
+		device: state => state.device,
 		userPreferences: state => state.userPreferences,
 		global: state => state.global,
 	}
