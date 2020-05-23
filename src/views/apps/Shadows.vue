@@ -116,7 +116,7 @@
 			<!-- Fields -->
 			<div class="app-fields">
 
-				<h4 class="mbottom-sm">Box Shadow</h4>
+				<h4 class="mbottom-sm">Box Shadow {{tiltX}}, {{tiltY}}</h4>
 
 				<!-- Horizontal Offset -->
 				<div class="field">
@@ -229,7 +229,6 @@ export default {
 			tiltMode: false,
 			tiltX: null,
 			tiltY: null,
-			tiltZ: null,
 			layers: [
 				{
 					horizontal_offset: 0,
@@ -399,22 +398,26 @@ export default {
 			// Else regular
 			// Webkit
 			if(event.beta || event.gamma){
-				vertical = Math.round(event.beta - 40) * 2;
+				vertical = Math.round(event.beta) * 2;
+				// vertical = Math.round(event.beta - 40) * 2;
 				horizontal = Math.round(event.gamma) * 2;
 			}else if(event.y || event.x){
 				// Firefox uses orientation instead of event
-				vertical = Math.round(orientation.y - 40) * 2;
+				vertical = Math.round(orientation.y) * 2;
+				// vertical = Math.round(orientation.y - 40) * 2;
 				horizontal = Math.round(orientation.x) * 2;
 			}
 
-			if(this.$store.getters.device.orientation == 180){
-				vertical = -vertical;
-			}
-			if(this.$store.getters.device.orientation == -90){
-				horizontal = -horizontal;
-			}
+			// if(this.$store.getters.device.orientation == 180){
+			// 	vertical = -vertical;
+			// }
+			// if(this.$store.getters.device.orientation == -90){
+			// 	horizontal = -horizontal;
+			// }
 
 			// Set to shadow
+			this.tiltY = vertical;
+			this.tiltX = horizontal;
 			this.layers[this.selectedLayer - 1].vertical_offset = vertical;
 			this.layers[this.selectedLayer - 1].horizontal_offset = horizontal;
 
