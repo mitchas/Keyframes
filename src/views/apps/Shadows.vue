@@ -429,10 +429,10 @@ export default {
 			}
 
 			// Set to shadow
-			this.tiltY = vertical;
-			this.tiltX = horizontal;
-			this.layers[this.selectedLayer - 1].vertical_offset = vertical;
-			this.layers[this.selectedLayer - 1].horizontal_offset = horizontal;
+			this.tiltY = vOffset;
+			this.tiltX = hOffset;
+			this.layers[this.selectedLayer - 1].vertical_offset = vOffset;
+			this.layers[this.selectedLayer - 1].horizontal_offset = hOffset;
 
 		},
 		toggleTilt: function(){
