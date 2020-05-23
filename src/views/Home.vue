@@ -46,6 +46,7 @@
 			<div class="home-hero">
 				<h1>Keyframes helps you write better CSS.</h1>
 				<h4>A straightforward way to create animations, shadows, colors, & more.</h4>
+				<p>{{$store.getters.device.orientation}}</p>
 			</div>
 
 			<!-- <p>
@@ -208,6 +209,7 @@ export default {
 	},
 
 	mounted() {
+		
 		let _this = this;
 
 		// Update title

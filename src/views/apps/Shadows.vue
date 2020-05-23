@@ -42,7 +42,7 @@
 					<!-- Spacer Flex grow -->
 					<div class="flex-grow"></div>
 					<!-- Tilt mode button - only shown if touch sreen and device orientation sensors -->
-					<button class="button small action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.orientationSensor && $store.getters.device.hasTouch">
+					<button class="button small action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
 						<i v-bind:class="{'fas fa-atom-alt': !tiltMode, 'fas fa-times-circle': tiltMode}"></i>
 						<span>Tilt Mode</span>
 					</button>
@@ -392,24 +392,26 @@ export default {
 			
 			var vertical, horizontal;
 
-			var orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
-			// If the orientation is secondary landscape, values must be reversed
-			if(orientation === "landscape-primary"){
-			// if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
-				horizontal = -(Math.round(event.beta) - 40) * 2; // Must reverse neg/pos
-				vertical = Math.round(event.gamma) * 2;
+			// If the orientation is landscape-left or upside down, values must be negative
+			// if(this.$store.getters.device.orientation == 180 || this.$store.getters.device.orientation == -90){
 
-			}else{
-				// Else regular
-				// Webkit
-				if(event.beta || event.gamma){
-					vertical = Math.round(event.beta - 40) * 2;
-					horizontal = Math.round(event.gamma) * 2;
-				}else if(event.y || event.x){
-					// Firefox uses orientation instead of event
-					vertical = Math.round(orientation.y - 40) * 2;
-					horizontal = Math.round(orientation.x) * 2;
-				}
+
+			// Else regular
+			// Webkit
+			if(event.beta || event.gamma){
+				vertical = Math.round(event.beta - 40) * 2;
+				horizontal = Math.round(event.gamma) * 2;
+			}else if(event.y || event.x){
+				// Firefox uses orientation instead of event
+				vertical = Math.round(orientation.y - 40) * 2;
+				horizontal = Math.round(orientation.x) * 2;
+			}
+
+			if(this.$store.getters.device.orientation == 180){
+				vertical = -vertical;
+			}
+			if(this.$store.getters.device.orientation == -90){
+				horizontal = -horizontal;
 			}
 
 			// Set to shadow
