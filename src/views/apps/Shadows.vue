@@ -393,31 +393,27 @@ export default {
 			var vertical, horizontal;
 
 			// If Landscape ios, values must be reversed for some reason?
-			if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
-
-				this.layers[this.selectedLayer - 1].vertical_offset = horizontal;
-				this.layers[this.selectedLayer - 1].horizontal_offset = vertical;
-
+			if(window.matchMedia("(orientation: landscape)").matches){
+			// if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
 				horizontal = -(Math.round(event.beta)) * 2; // Must reverse neg/pos
 				vertical = Math.round(event.gamma - 40) * 2;
 
-
 			}else{
 				// Else regular
-
+				// Webkit
 				if(event.beta || event.gamma){
 					vertical = Math.round(event.beta - 40) * 2;
 					horizontal = Math.round(event.gamma) * 2;
 				}else if(event.y || event.x){
+					// Firefox uses orientation instead of event
 					vertical = Math.round(orientation.y - 40) * 2;
 					horizontal = Math.round(orientation.x) * 2;
 				}
-				
-				// Otherwise regular
-				this.layers[this.selectedLayer - 1].vertical_offset = vertical;
-				this.layers[this.selectedLayer - 1].horizontal_offset = horizontal;
 			}
 
+			// Set to shadow
+			this.layers[this.selectedLayer - 1].vertical_offset = vertical;
+			this.layers[this.selectedLayer - 1].horizontal_offset = horizontal;
 
 		},
 		toggleTilt: function(){
