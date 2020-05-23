@@ -235,19 +235,31 @@
 					</transition-group>
 				</div>
 
-				<div class="flex flex-between mtop-xs ptop-xs" id="paletteControlButtons">
+				<div class="flex flex-between mtop-xs" id="paletteControlButtons">
 					<!-- Add color -->
-					<button class="button small invert mbottom-md" @click="addColor()">
+					<button class="button small invert mbottom-sm" @click="addColor()">
 						<i class="far fa-plus-circle"></i>
 						<span>Add Color</span>
 					</button>
 					<!-- create Palette -->
-					<button class="button small blue mbottom-md" @click="createPalette()" v-if="palette.length == 1">
+					<button class="button small blue mbottom-sm" @click="createPalette()" v-if="palette.length == 1">
 						<i class="far fa-palette"></i>
 						<span>Auto Palette</span>
 					</button>
 				</div>
-				
+
+				<!-- Flex spacer -->
+				<div class="flex-grow"></div>
+
+				<!-- Share -->
+				<Callout
+					icon="far fa-link"
+					class="mbottom-xs mtop-lg hide-md"
+					color="blue"
+					size="tiny">
+					<span>Easily share a color or palette: the URL automatically updates for every change.</span>
+				</Callout>
+					
 
 			</div>
 		</div>
@@ -275,11 +287,14 @@
 <script>
 // Mixins
 import metaMixin from "@/components/mixins/metaMixin.js";
+// Components
+import Callout from "@/components/ui/Callout";
 
 export default {
 	name: "ColorApp",
 
 	components: {
+		Callout,
 	},
 
 	mixins: [

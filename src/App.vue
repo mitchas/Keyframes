@@ -27,11 +27,19 @@
 				<!-- Logo, account dropdown, etc -->
 				<TopBar></TopBar>
 
+				
+
 				<!-- All page contetnt contained within main -->
 				<main id="content">
-				
 					<!-- Center/Main Content -->
 					<div class="body-content">
+
+						<button class="button" v-if="pwaPrompt != null" @click="pwaPrompt">
+							<span>Click</span>
+						</button>
+
+
+
 						<!-- page transition defined in base.less -->
 						<transition name="page" mode="out-in">
 							<router-view/>
@@ -77,6 +85,7 @@ export default {
 		return {
 			scrollLockPos: 0,
 			pageMounted: false,
+			pwaPrompt: null,
 		};
 	},
 	created: function () {
@@ -119,6 +128,8 @@ export default {
 	},
 	beforeDestroy() { 
 	},
+
+
 	methods: {
 
 	}

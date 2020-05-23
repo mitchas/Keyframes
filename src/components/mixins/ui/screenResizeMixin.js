@@ -51,9 +51,6 @@ export default {
 
 				// Get props
 				var deviceProps = _this.$store.getters.device;
-				// We know it's touch because this function ran
-				deviceProps.hasTouch = true;
-
 				
 				// Variable to watch if keyboard is currently visible
 				var softKeyboardOn = deviceProps.softKeyboardVisible;

@@ -18,6 +18,8 @@
 // 				Lightbox enter and leave animations
 // 			"fromtop"
 // 				Slide from top - settings, etc
+// 			"slide"
+// 				collapse slide from top - settings, etc
 // 
 
 ////////////////////////
@@ -262,6 +264,27 @@
 	}
 	100% {
 		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+
+// Collapses with transform origin at top middle 
+.slide-enter-active {
+	animation: slide-animation .1s ease both;
+}
+.slide-leave-active {
+	animation: slide-animation .1s ease reverse both;
+}
+@keyframes slide-animation {
+	0% {
+		transform: scaleY(0);
+		opacity: 0;
+		transform-origin: top center;
+	}
+	100% {
+		transform: scaleY(1);
+		transform-origin: top center;
 		opacity: 1;
 	}
 }

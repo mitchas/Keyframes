@@ -1,5 +1,3 @@
-// From https://medium.com/js-dojo/vuejs-pwa-cache-busting-8d09edd22a31
-
 import { register } from 'register-service-worker'
 
 if (process.env.NODE_ENV === 'production') {

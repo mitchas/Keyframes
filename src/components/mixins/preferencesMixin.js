@@ -21,7 +21,6 @@ export default {
 		//    Dark Mode Toggle    //
 		///////////////////////////
 		toggleDarkMode: function(mode){
-			console.log("DATK MODE TOGGLED")
 
 			// If true/false argument passed
 			if(mode != null){
@@ -138,6 +137,20 @@ export default {
 					document.documentElement.scrollTop = 0;
 				}
 			}
+
+			// Save device info
+			var deviceProps = this.$store.getters.device;
+			// We know it's touch because this function ran
+			if(('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) {
+				deviceProps.hasTouch = true;
+			}
+			// If running in standalone PWA mode
+			if (window.matchMedia('(display-mode: standalone)').matches) {
+				deviceProps.standalone = true;
+			}
+
+			// Save back to store
+			this.$store.commit('device', deviceProps);
 			
 
 			// Dark mode

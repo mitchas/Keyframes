@@ -50,7 +50,7 @@
 				<!-- Version 2.0.8 -->
 				<div class="changelog-title">
 					<div class="cl-version">
-						<b>v2.0.8</b>
+						<b>v2.0.9</b>
 						<span>(May 22, 2020)</span>
 					</div>
 				</div>

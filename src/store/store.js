@@ -31,6 +31,7 @@ export const store = new Vuex.Store({
 			hasTouch: false,
 			isMac: navigator.appVersion.includes('Macintosh'),
 			softKeyboardVisible: false,
+			standalone: false,
 		},
 		// UserPreferences
 		// Update 3 places in App.vue

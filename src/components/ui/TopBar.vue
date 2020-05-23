@@ -54,28 +54,30 @@
 							<i v-bind:class="{'far fa-shapes': !showAppSwitcher, 'far fa-times-circle': showAppSwitcher}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
-						<div class="nav-popover" v-bind:class="{'visible': showAppSwitcher}">
-							<!-- CSS Animations -->
-							<button class="popover-link" @click="navigate('/animate/')">
-								<span>Animations</span>
-								<i class="fas fa-stream"></i>
-							</button>
-							<!-- Colors -->
-							<button class="popover-link" @click="navigate('/colors/')">
-								<span>Colors</span>
-								<i class="fas fa-tint"></i>
-							</button>
-							<!-- CSS Shadows -->
-							<button class="popover-link" @click="navigate('/shadows/')">
-								<span>Shadows</span>
-								<i class="fas fa-eclipse"></i>
-							</button>
-							<!-- Charcter codes -->
-							<button class="popover-link" @click="navigate('/characters/')">
-								<span>Character Codes</span>
-								<i class="fas fa-tilde"></i>
-							</button>
-						</div>
+						<transition name="slide">
+							<div class="nav-popover" v-if="showAppSwitcher">
+								<!-- CSS Animations -->
+								<button class="popover-link" @click="navigate('/animate/')">
+									<span>Animations</span>
+									<i class="fas fa-stream"></i>
+								</button>
+								<!-- Colors -->
+								<button class="popover-link" @click="navigate('/colors/')">
+									<span>Colors</span>
+									<i class="fas fa-tint"></i>
+								</button>
+								<!-- CSS Shadows -->
+								<button class="popover-link" @click="navigate('/shadows/')">
+									<span>Shadows</span>
+									<i class="fas fa-eclipse"></i>
+								</button>
+								<!-- Charcter codes -->
+								<button class="popover-link" @click="navigate('/characters/')">
+									<span>Character Codes</span>
+									<i class="fas fa-tilde"></i>
+								</button>
+							</div>
+						</transition>
 					</div>
 				</div>
 
@@ -89,33 +91,42 @@
 							<i v-bind:class="{'far fa-toggle-off': !showSettingsPopover, 'far fa-toggle-on': showSettingsPopover}"></i>
 						</button>
 						<!-- Popup on hover/focus -->
-						<div class="nav-popover" v-bind:class="{'visible': showSettingsPopover}">
-							<!-- Toggle dark mode -->
-							<label for="topBarDarkModeToggle" class="popover-link" tabindex="1">
-								<span v-if="!$store.getters.userPreferences.darkMode">Dark Mode</span>
-								<span v-else>Light Mode</span>
-								<i v-bind:class="{ 'fas fa-lightbulb-slash': !$store.getters.userPreferences.darkMode, 'fas fa-lightbulb-on': $store.getters.userPreferences.darkMode }"></i>
-							</label>
-							<input type="checkbox" id="topBarDarkModeToggle" v-model="$store.getters.userPreferences.darkMode" @change="toggleDarkMode()" hidden/>
-							<!-- Keyboard Shortcuts -->
-							<button class="popover-link" @click="showShortcutsModal = true">
-								<span>Shortcuts</span>
-								<i class="fas fa-keyboard"></i>
-							</button>
-							<!-- Settings -->
-							<button class="popover-link" @click="showSettingsModal = true">
-								<span>Preferences</span>
-								<i class="fas fa-toggle-on"></i>
-							</button>
+						<transition name="slide">
+							<div class="nav-popover" v-if="showSettingsPopover">
+								<!-- Toggle dark mode -->
+								<label for="topBarDarkModeToggle" class="popover-link" tabindex="1">
+									<span v-if="!$store.getters.userPreferences.darkMode">Dark Mode</span>
+									<span v-else>Light Mode</span>
+									<i v-bind:class="{ 'fas fa-lightbulb-slash': !$store.getters.userPreferences.darkMode, 'fas fa-lightbulb-on': $store.getters.userPreferences.darkMode }"></i>
+								</label>
+								<input type="checkbox" id="topBarDarkModeToggle" v-model="$store.getters.userPreferences.darkMode" @change="toggleDarkMode()" hidden/>
+								<!-- Keyboard Shortcuts -->
+								<button class="popover-link" @click="showShortcutsModal = true">
+									<span>Shortcuts</span>
+									<i class="fas fa-keyboard"></i>
+								</button>
+								<!-- Settings -->
+								<button class="popover-link" @click="showSettingsModal = true">
+									<span>Preferences</span>
+									<i class="fas fa-toggle-on"></i>
+								</button>
 
-							<hr/>
+								<!-- Share -->
+								<hr v-if="$store.getters.device.standalone" />
+								<button class="popover-link" @click="share('Check this out!')" v-if="$store.getters.device.standalone">
+									<span>Share</span>
+									<i class="fas fa-share"></i>
+								</button>
 
-							<!-- About -->
-							<button class="popover-link" @click="showAboutModal = true">
-								<span>About</span>
-								<i class="fas fa-ghost"></i>
-							</button>
-						</div>
+								<hr/>
+
+								<!-- About -->
+								<button class="popover-link" @click="showAboutModal = true">
+									<span>About</span>
+									<i class="fas fa-ghost"></i>
+								</button>
+							</div>
+						</transition>
 					</div>
 				</div>
 
@@ -379,19 +390,17 @@ export default {
 				// Popup on hover
 				.nav-popover{
 					display: block;
-					width: 220px;
+					width: 200px;
+					max-width: 200px;
 					position: absolute;
 					top: 54px;
-					transition: 0.1s ease;
 					right: 0;
-					max-height: 0;
-					overflow: hidden;
-					box-sizing: border-box;
 					border-radius: var(--borderRadius);
-					padding: 0px 10px;
-					overflow: 0;
-					border: 0px solid transparent;
 					background-color: var(--popup);
+					padding: 8px 10px 10px 10px;
+					box-shadow: var(--shadow);
+					border: var(--borderWidth) solid var(--border);
+
 
 					@media (max-width: @screenMD) {
 						width: 220px;
@@ -401,18 +410,9 @@ export default {
 					}
 					@media (max-width: @screenSM) {
 						width: 210px;
-						padding: 0 6px;
+						padding: 8px 6px;
 					}
 
-					// Visible Class
-					&.visible{
-						max-height: 220px;
-						transition: 0.15s ease;
-						padding: 8px 10px 10px 10px;
-						overflow: 1;
-						box-shadow: var(--shadow);
-						border: var(--borderWidth) solid var(--border);
-					}
 
 					// Change spacing on default hr
 					hr{

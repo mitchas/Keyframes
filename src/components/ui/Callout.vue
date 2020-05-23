@@ -57,6 +57,7 @@ export default {
 		position: relative;
 		background-color: var(--layer);
 		border: var(--borderWidth) solid var(--border);
+		min-height: fit-content;
 
 		// Shrink a bit on mobile
 		@media (max-width: @screenSM) {

@@ -34,7 +34,7 @@
 
 			<!-- Modal Heder -->
 			<template v-slot:header>
-				<span>Settings</span>
+				<span>Preferences</span>
 				<i class="far fa-toggle-on"></i>
 			</template>
 

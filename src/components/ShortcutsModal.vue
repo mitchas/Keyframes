@@ -115,13 +115,13 @@
 					<!-- PWA Banner -->
 					<!-- Suggestions -->
 					<Callout
-						v-if="$route.name == 'Home' || $route.name == 'PromoHome'"
-						icon="far fa-cloud-download"
+						v-if="($route.name == 'Home' || $route.name == 'PromoHome') &&  !$store.getters.device.standalone"
+						icon="far fa-bullhorn"
 						class="mtop-sm"
 						color="borderless"
 						size="tiny margin-auto">
 						<span class="text-light">
-							<b>Tip:</b> You can install Keyframes as a progressive web app alongside your other apps if your browser supports it.
+							You can install Keyframes as a progressive web app alongside your other apps if your browser supports it.
 						</span>
 					</Callout>
 
