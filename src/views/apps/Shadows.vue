@@ -388,14 +388,19 @@ export default {
 		////////////////////////
 		// Toggle Tilt Mode  //
 		//////////////////////
-		test:function(event){
+		tiltShadow:function(event){
+			var x, y;
 			if(event.beta){
-				this.layers[this.selectedLayer - 1].vertical_offset = event.beta;
-				this.layers[this.selectedLayer - 1].horizontal_offset = event.gamma;
+				y = Math.round(event.beta - 40) * 2;
+				x = Math.round(event.gamma) * 2;
 			}else if(event.y){
-				this.layers[this.selectedLayer - 1].vertical_offset = orientation.y;
-				this.layers[this.selectedLayer - 1].horizontal_offset = orientation.x;
+				y = Math.round(orientation.y - 40) * 2;
+				x = Math.round(orientation.x) * 2;
 			}
+
+			this.layers[this.selectedLayer - 1].vertical_offset = y;
+			this.layers[this.selectedLayer - 1].horizontal_offset = x;
+
 		},
 		toggleTilt: function(){
 
@@ -414,10 +419,10 @@ export default {
 			// If sensor, add listener
 			if (sensor && !_this.tiltMode) {
 				_this.tiltMode = true;
-				window.addEventListener(sensor, _this.test)
+				window.addEventListener(sensor, _this.tiltShadow)
 			}else if(sensor && _this.tiltMode){
 				// Else stop it
-				window.removeEventListener(sensor, _this.test); 
+				window.removeEventListener(sensor, _this.tiltShadow); 
 				_this.tiltMode = false;
 			}else{
 				// No sensor available
