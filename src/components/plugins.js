@@ -11,8 +11,6 @@
 // 	tab(url): opens url in new tab
 // 
 // 	copyToClipboard(name, value): Copies value to clipboard, shows toast confirmation
-// 	 
-// 	share(shareText): share's current URL using native share function, otherwise just copies current url to clipboard
 // 	
 // 	invertText(hex): takes hex value and returns hex with proper contrast black or white
 // 	
@@ -85,25 +83,6 @@ export default {
 			this.hello(name + " has been copied to your clipboard!", "far fa-copy");
 		},
 
-		////////////////////
-		//// Share URL ////
-		//////////////////
-		Vue.prototype.share = function(shareText) {
-			var text = shareText;
-
-			if (navigator.share) {
-				navigator.share({
-					title: document.title,
-					text: shareText,
-					url: location.href,
-				})
-				  .then(() => console.log('Successful share'))
-				  .catch((error) => console.log('Error sharing', error));
-			}else{
-				this.copyToClipboard("This page URL", document.href)
-			}
-
-		},
 
 		/////////////////////
 		//  Invert Text   //

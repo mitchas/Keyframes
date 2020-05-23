@@ -12,6 +12,10 @@
 // 					Hides all dropdowns
 // 				openHelp()
 // 					Button only shows based on route meta - when clicked, opens modal and tracks click
+// 				darkModeShortcut()
+// 					Button only shows based on route meta - when clicked, opens modal and tracks click
+// 				share()
+// 					Button only shows in standalone mode - shares current url using native share menu - fallback copy to clipboard
 // 
 -->
 
@@ -162,7 +166,17 @@ export default {
 			// Prevent default
 			event.preventDefault();
 			// Toggle theme
-			this.darkModeShortcut(this.$store.getters.userPreferences.darkMode)
+			// this.darkModeShortcut()
+
+			if(this.$store.getters.userPreferences.darkMode){
+				this.toggleDarkMode(false);
+				this.$store.getters.userPreferences.darkMode = false;
+			}else{
+				this.toggleDarkMode(true);
+				this.$store.getters.userPreferences.darkMode = true;
+			}
+
+
 		}),
 	],
 	components: {
@@ -220,14 +234,22 @@ export default {
 			// Track it
 			_paq.push(['trackEvent', 'Action', 'View', 'Help - ' + this.$route.name]);	
 		},
+
+
 		// Shortcut for dark mode
-		darkModeShortcut: function(state){
-			if(state){
-				this.toggleDarkMode(false);
-				this.$store.getters.userPreferences.darkMode = false;
+		share: function(){
+			var text = "Check this out: ";
+
+			if (navigator.share) {
+				navigator.share({
+					title: document.title,
+					text: text,
+					url: location.href,
+				})
+				  .then(() => console.log('Successful share'))
+				  .catch((error) => console.log('Error sharing', error));
 			}else{
-				this.toggleDarkMode(true);
-				this.$store.getters.userPreferences.darkMode = true;
+				this.copyToClipboard("This page's URL", document.href)
 			}
 		},
 	}
