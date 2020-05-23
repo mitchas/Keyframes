@@ -394,7 +394,7 @@ export default {
 
 			var orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
 			// If the orientation is secondary landscape, values must be reversed
-			if(orientation === "landscape-secondary"){
+			if(orientation === "landscape-primary"){
 			// if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
 				horizontal = -(Math.round(event.beta) - 40) * 2; // Must reverse neg/pos
 				vertical = Math.round(event.gamma) * 2;
