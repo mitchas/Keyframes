@@ -39,8 +39,10 @@
 						<i v-bind:class="{'fas fa-brackets-curly': !controlToggles.output, 'fas fa-times-circle': controlToggles.output}"></i>
 						<span>Get CSS</span>
 					</button>
+					<!-- Spacer Flex grow -->
 					<div class="flex-grow"></div>
-					<button class="button action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'yellow': !tiltMode}">
+					<!-- Tilt mode button - only shown if touch sreen and device orientation sensors -->
+					<button class="button small action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.orientationSensor && $store.getters.device.hasTouch">
 						<i v-bind:class="{'fas fa-atom-alt': !tiltMode, 'fas fa-times-circle': tiltMode}"></i>
 						<span>Tilt Mode</span>
 					</button>
@@ -386,45 +388,47 @@ export default {
 		////////////////////////
 		// Toggle Tilt Mode  //
 		//////////////////////
+		test:function(event){
+			if(event.beta){
+				this.layers[this.selectedLayer - 1].vertical_offset = event.beta;
+				this.layers[this.selectedLayer - 1].horizontal_offset = event.gamma;
+			}else if(event.y){
+				this.layers[this.selectedLayer - 1].vertical_offset = orientation.y;
+				this.layers[this.selectedLayer - 1].horizontal_offset = orientation.x;
+			}
+		},
 		toggleTilt: function(){
 
 			var _this = this;
 
-
-			// If it's not already on, start it
-			if(!_this.tiltMode){
-
-				console.log("Starting tilt mode")
-
-				_this.tiltMode = true;
-
-				if (window.DeviceOrientationEvent) {
-					window.addEventListener("deviceorientation", function () {
-						_this.layers[_this.selectedLayer - 1].vertical_offset = event.beta;
-						_this.layers[_this.selectedLayer - 1].horizontal_offset = event.gamma;
-					}, true);
-				} else if (window.DeviceMotionEvent) {
-					window.addEventListener('devicemotion', function () {
-						_this.layers[_this.selectedLayer - 1].vertical_offset = orientation.y;
-						_this.layers[_this.selectedLayer - 1].horizontal_offset = orientation.x;
-					}, true);
-				} else {
-					window.addEventListener("MozOrientation", function () {
-						_this.layers[_this.selectedLayer - 1].vertical_offset = orientation.beta;
-						_this.layers[_this.selectedLayer - 1].horizontal_offset = orientation.gamma;
-					}, true);
-				}
-
-			}else{
-				_this.tiltMode = false;
-				window.removeEventListener('deviceorientation', this.watchResize); 
-				window.removeEventListener('devicemotion', this.watchResize); 
-				window.removeEventListener('MozOrientation', this.watchResize); 
+			// Get sensor type if its available
+			var sensor = "";
+			if (window.DeviceOrientationEvent) {
+				sensor = "deviceorientation";
 			}
+			if (window.MozOrientation) {
+				sensor = "MozOrientation";
+			}
+
+
+			// If sensor, add listener
+			if (sensor && !_this.tiltMode) {
+				_this.tiltMode = true;
+				window.addEventListener(sensor, _this.test)
+			}else if(sensor && _this.tiltMode){
+				// Else stop it
+				window.removeEventListener(sensor, _this.test); 
+				_this.tiltMode = false;
+			}else{
+				// No sensor available
+				_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle")
+			}
+			
 		},
 		
 	}
 };
+
 
 </script>
 

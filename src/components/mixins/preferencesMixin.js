@@ -157,6 +157,11 @@ export default {
 				
 			}
 
+			// Check for orientation sensors
+			if (window.DeviceOrientationEvent || window.MozOrientation) {
+				deviceProps.orientationSensor = true;
+			}
+
 			// Save back to store
 			this.$store.commit('device', deviceProps);
 			
