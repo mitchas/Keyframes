@@ -389,6 +389,8 @@ export default {
 		// Toggle Tilt Mode  //
 		//////////////////////
 		tiltShadow:function(event){
+
+			
 			var x, y;
 			if(event.beta){
 				y = Math.round(event.beta - 40) * 2;
@@ -398,8 +400,15 @@ export default {
 				x = Math.round(orientation.x) * 2;
 			}
 
-			this.layers[this.selectedLayer - 1].vertical_offset = y;
-			this.layers[this.selectedLayer - 1].horizontal_offset = x;
+			// Values must be reversed depeneing on landscape or portrait orientation
+			if(orientation === "landscape-secondary" || orientation === "landscape-primary"){
+				this.layers[this.selectedLayer - 1].horizontal_offset = y;
+				this.layers[this.selectedLayer - 1].vertical_offset = x;
+			}else{
+				this.layers[this.selectedLayer - 1].vertical_offset = y;
+				this.layers[this.selectedLayer - 1].horizontal_offset = x;
+			}
+
 
 		},
 		toggleTilt: function(){
