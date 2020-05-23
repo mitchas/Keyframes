@@ -279,8 +279,8 @@ export default {
 				@media (max-width: @screenSM) {
 					border-radius: 0;
 					padding: 10px 5px;
-					height: 60px;
-					min-height: 60px;
+					height: 66px;
+					min-height: 66px;
 
 					button{
 						border-radius: 0;

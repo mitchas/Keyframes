@@ -39,6 +39,11 @@
 						<i v-bind:class="{'fas fa-brackets-curly': !controlToggles.output, 'fas fa-times-circle': controlToggles.output}"></i>
 						<span>Get CSS</span>
 					</button>
+					<div class="flex-grow"></div>
+					<button class="button action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'yellow': !tiltMode}">
+						<i v-bind:class="{'fas fa-atom-alt': !controlToggles.output, 'fas fa-times-circle': controlToggles.output}"></i>
+						<span>Tilt Mode {{tiltX}},{{tiltY}},{{tiltZ}}</span>
+					</button>
 
 					<!--/////////////////////////////
 						Dropdown Content
@@ -218,6 +223,11 @@ export default {
 	data() {
 		return {
 			selectedLayer: 1,
+			// Fun tilt mode on phones
+			tiltMode: false,
+			tiltX: null,
+			tiltY: null,
+			tiltZ: null,
 			layers: [
 				{
 					horizontal_offset: 0,
@@ -371,6 +381,42 @@ export default {
 			this.layers.push(copyLayer);
 			// Select new layer
 			this.selectedLayer = this.layers.length;
+		},
+
+		////////////////////////
+		// Toggle Tilt Mode  //
+		//////////////////////
+		toggleTilt: function(){
+
+
+			// If it's not already on, start it
+			if(!this.tiltMode){
+
+				if (window.DeviceOrientationEvent) {
+					window.addEventListener("deviceorientation", function () {
+						this.layers[this.selectedLayer - 1].horizontal_offset = event.beta + "px";
+						this.layers[this.selectedLayer - 1].vertical_offset = event.gamma + "px";
+
+					}, true);
+				} else if (window.DeviceMotionEvent) {
+					window.addEventListener('devicemotion', function () {
+						this.layers[this.selectedLayer - 1].horizontal_offset = event.acceleration.x + "px";
+						this.layers[this.selectedLayer - 1].vertical_offset = event.acceleration.y + "px";
+					}, true);
+				} else {
+					window.addEventListener("MozOrientation", function () {
+						this.layers[this.selectedLayer - 1].horizontal_offset = orientation.beta + "px";
+						this.layers[this.selectedLayer - 1].vertical_offset = orientation.gamma + "px";
+					}, true);
+				}
+
+			}else{
+				// else Stop it
+				window.removeEventListener('deviceorientation', this.watchResize); 
+				window.removeEventListener('devicemotion', this.watchResize); 
+				window.removeEventListener('MozOrientation', this.watchResize); 
+
+			}
 		},
 		
 	}
