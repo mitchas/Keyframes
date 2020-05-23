@@ -390,23 +390,32 @@ export default {
 		//////////////////////
 		tiltShadow:function(event){
 			
-			var x, y;
-			if(event.beta || event.gamma){
-				y = Math.round(event.beta - 40) * 2;
-				x = Math.round(event.gamma) * 2;
-			}else if(event.y || event.x){
-				y = Math.round(orientation.y - 40) * 2;
-				x = Math.round(orientation.x) * 2;
-			}
+			var vertical, horizontal;
 
 			// If Landscape ios, values must be reversed for some reason?
 			if(window.matchMedia("(orientation: landscape)").matches && this.$store.getters.device.isMac){
-				this.layers[this.selectedLayer - 1].vertical_offset = x;
-				this.layers[this.selectedLayer - 1].horizontal_offset = y;
+
+				this.layers[this.selectedLayer - 1].vertical_offset = horizontal;
+				this.layers[this.selectedLayer - 1].horizontal_offset = vertical;
+
+				horizontal = -(Math.round(event.beta)) * 2; // Must reverse neg/pos
+				vertical = Math.round(event.gamma - 40) * 2;
+
+
 			}else{
+				// Else regular
+
+				if(event.beta || event.gamma){
+					vertical = Math.round(event.beta - 40) * 2;
+					horizontal = Math.round(event.gamma) * 2;
+				}else if(event.y || event.x){
+					vertical = Math.round(orientation.y - 40) * 2;
+					horizontal = Math.round(orientation.x) * 2;
+				}
+				
 				// Otherwise regular
-				this.layers[this.selectedLayer - 1].vertical_offset = y;
-				this.layers[this.selectedLayer - 1].horizontal_offset = x;
+				this.layers[this.selectedLayer - 1].vertical_offset = vertical;
+				this.layers[this.selectedLayer - 1].horizontal_offset = horizontal;
 			}
 
 
