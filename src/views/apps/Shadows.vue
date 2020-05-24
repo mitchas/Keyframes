@@ -55,7 +55,7 @@
 					<!-- Tilt mode button - only shown if touch sreen and device orientation sensors -->
 					<button class="button small action-btn" id="tiltButton" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
 						<i v-bind:class="{'fas fa-atom-alt': !tiltMode, 'fas fa-times-circle': tiltMode}"></i>
-						<span>Tilt</span>
+						<span>Tilt Mode</span>
 					</button>
 
 					<!--/////////////////////////////
@@ -473,6 +473,7 @@ export default {
 							// _this.tiltMode = true;
 							// window.addEventListener("deviceorientation", _this.tiltShadow)
 							addListener("deviceorientation");
+							_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt")
 						}else{
 							_this.hello("Device orientation permission denied.", "far fa-times-circle")
 						}
@@ -483,9 +484,11 @@ export default {
 				else if (window.DeviceOrientationEvent){
 					// Webkit
 					addListener("deviceorientation");
+					_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt")
 				}else if (window.MozOrientation){
 					// Firefox
 					addListener("MozOrientation");
+					_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt")
 				}else{
 					// Error 
 					_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle")

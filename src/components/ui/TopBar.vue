@@ -115,7 +115,7 @@
 								</button>
 								<!-- Settings -->
 								<button class="popover-link" @click="showSettingsModal = true">
-									<span>Preferences</span>
+									<span>Settings</span>
 									<i class="fas fa-toggle-on"></i>
 								</button>
 

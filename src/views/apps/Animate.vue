@@ -86,7 +86,7 @@
 								<!-- <small class="block">You can save your animation configuration and come back to it later</small> -->
 							</label>
 							<!-- animation name -->
-							<input id="newAnimationSaveName" aria-label="Save as Name" type="text" v-model="animationToSaveName" maxlength="12" placeholder="MyAnimation"/>
+							<input id="newAnimationSaveName" aria-label="Save as Name" type="text" v-model="animationToSaveName" maxlength="32" placeholder="MyAnimation"/>
 							<button aria-label="Save Animation" class="button blue small mtop-xs" @click="saveAnimation()">
 								<i class="far fa-save"></i>
 								<span>Save</span>

@@ -63,7 +63,7 @@
 									<small class="block">Save your color palette to come back to later.</small>
 								</label>
 								<!-- animation name -->
-								<input id="newPaletteSaveName" aria-label="Save as Name" type="text" v-model="paletteToSaveName" maxlength="12" placeholder="MyPalette"/>
+								<input id="newPaletteSaveName" aria-label="Save as Name" type="text" v-model="paletteToSaveName" maxlength="32" placeholder="MyPalette"/>
 								<button aria-label="Save Palette" class="button blue mtop-xs" @click="savePalette()">
 									<i class="far fa-save"></i>
 									<span>Save</span>
