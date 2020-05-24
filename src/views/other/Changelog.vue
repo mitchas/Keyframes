@@ -52,7 +52,7 @@
 				<div class="changelog-title">
 					<div class="cl-version">
 						<b>v{{$store.getters.appVersion}}</b>
-						<span>(May 22, 2020)</span>
+						<span>(May 23, 2020)</span>
 					</div>
 				</div>
 				<div class="changelog-change">
@@ -61,19 +61,23 @@
 				</div>
 				<div class="changelog-change">
 					<i class="fas fa-sparkles cat-new"></i>
-					<span>Auto color palette function</span>
+					<span>Added auto color palette function that rotates hue on current color and creates a palette.</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Added a "tilt" option to the shadow app for fun. Uses device's sensors to adjust the shadow with tilt (phones & tablets).</span>
 				</div>
 				<div class="changelog-change">
 					<i class="fas fa-sync-alt cat-upgrade"></i>
 					<span>Progressive Web App support - install through Chrome on your phone or computer and use it offline</span>
 				</div>
 				<div class="changelog-change">
-					<i class="fas fa-sparkles cat-new"></i>
-					<span>Keyboard shortcuts & info window listing shortcuts specific to each page.</span>
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>PWA shortcut support - only available in Chrome Canary right now though.</span>
 				</div>
 				<div class="changelog-change">
-					<i class="fas fa-virus-slash cat-bug"></i>
-					<span>A bunch of bug fixes and small functionality improvements.</span>
+					<i class="fas fa-sparkles cat-new"></i>
+					<span>Keyboard shortcuts & info window listing shortcuts specific to each page.</span>
 				</div>
 
 

@@ -55,7 +55,7 @@
 					<!-- Tilt mode button - only shown if touch sreen and device orientation sensors -->
 					<button class="button small action-btn" id="tiltButton" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
 						<i v-bind:class="{'fas fa-atom-alt': !tiltMode, 'fas fa-times-circle': tiltMode}"></i>
-						<span>Tilt Mode</span>
+						<span>Tilt</span>
 					</button>
 
 					<!--/////////////////////////////

@@ -20,11 +20,11 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
 
-	// Defs:
 	// userPreferences: settings visitors can toggle.
 	state: {
-		// Get package version from package.json
-		packageVersion: process.env.PACKAGE_VERSION || '0',
+		appVersion: "2.0.9-1",
+		// Get app version from package.json
+		// appVersion: process.env.PACKAGE_VERSION || '0',
 		// Lock scrolling - for modals, etc to prevent behind scroll
 		scrollLock: false,
 		// UI
@@ -78,6 +78,6 @@ export const store = new Vuex.Store({
 		device: state => state.device,
 		userPreferences: state => state.userPreferences,
 		global: state => state.global,
-		appVersion: state => state.packageVersion,
+		appVersion: state => state.appVersion,
 	}
 })

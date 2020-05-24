@@ -217,7 +217,7 @@ export default {
 		// Update title
 		_this.updateMeta("Keyframes", "Do cool stuff with CSS.")
 		// Get local storage
-		_this.getLocalStorage();
+		// _this.getLocalStorage();
 
 		// Start color cycle after 3s
 		setTimeout(function(){

@@ -45,7 +45,7 @@ npm run lint
 The current version number of the app is used in a few different places - on the about modal, on the changelog, and also to determine if an update has been pushed, in order to force the cache/PWA to reload. 
 
 Before deploying, change the current version number in two places -
- * package.json
+ * store.js
  * service-worker.js
 
 

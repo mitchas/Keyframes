@@ -251,7 +251,7 @@
 					class="mbottom-xs mtop-lg hide-md"
 					color="blue"
 					size="tiny">
-					<span>Easily share a color or palette: the URL automatically updates for every change.</span>
+					<span>Easily share your color or palette: the URL automatically updates for every change.</span>
 				</Callout>
 					
 
