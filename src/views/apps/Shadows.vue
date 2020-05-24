@@ -42,7 +42,7 @@
 					<!-- Spacer Flex grow -->
 					<div class="flex-grow"></div>
 					<!-- Tilt mode button - only shown if touch sreen and device orientation sensors -->
-					<button class="button small action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
+					<button class="button small action-btn" id="tiltButton" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
 						<i v-bind:class="{'fas fa-atom-alt': !tiltMode, 'fas fa-times-circle': tiltMode}"></i>
 						<span>Tilt Mode</span>
 					</button>
@@ -524,6 +524,13 @@ export default {
 		code{
 			background: var(--blue);
 			margin-top: 15px;
+		}
+	}
+
+	#tiltButton{
+		display: block;
+		@media (min-width: @screenLG) {
+			display: none;
 		}
 	}
 
