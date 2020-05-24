@@ -1,8 +1,19 @@
 <!-- 
-// 	Confirm Leave
-// 	_________________________
+// Confirm Leave component
+// _________________________
 // 
-// 	Asks user to confirm if they want to leave
+// 	Small modal that displays confirmation to leave defined pages,
+// 		Pages defined in plugins.js navigate() function
+// 
+//		#Template
+//			Small modal - nothing too different
+// 
+//		#Script
+//			methods
+//				confirmLeave()
+//					Called from navigate() in plugins, shows modal
+//				leave()
+//					Clicked if user confims leave, continues to desired route
 // 
 -->
 

@@ -8,16 +8,13 @@
 //		- Start page selector
 //		- Local Storage information
 //
-//	- Props:
-//		- graphic - curve
+//		Props:
+//			showSettings - true/false to show modal
 //
-//	- Functions:
-//		- viewLocalStorage()
-//			- Shows local storage help and tracks action
-//		- clearLocalStorage()
-//			- Clears all local storage for this site 
-//		- getAllLocalStorage()
-//			- Called on mount, gets all localstorage content 
+//		Functions:
+//			viewLocalStorage() Shows local storage help and tracks action
+//			clearLocalStorage() Clears all local storage for this site 
+//			getAllLocalStorage() Called on mount, gets all localstorage content 
 // 
 -->
 

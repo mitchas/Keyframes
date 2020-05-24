@@ -3,13 +3,13 @@
 // 		Store and get values across components 
 // 
 // 		Definitions:
-//			-scrollLock
+//			scrollLock
 // 				true/false to lock scrolling with CSS (use with full width/height elements so you can't scroll behind them)
-//			-device
+//			device
 // 				object - device properties
-//			-userPreferences
+//			userPreferences
 // 				object - user's saved preferences from localstorage
-//			-global
+//			global
 // 				object - shortcuts for things to use throughout the project - easy to access and change
 // 
 

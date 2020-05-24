@@ -6,12 +6,15 @@
 //	Home page view
 //	Landing page with links to and examples of each app
 //
-//		Functions
-//			getLocalStorage()
-//				Called on mount, gets local storage, sets arrays for display
-//			cycleColors(val)
-//				Cycles demo colors - updates value every x seconds. 
-// 				Called on mount, never stops. After timeout, calls itself with random val
+//		Layout
+// 			Banners at top, hero text, example of each app below. Some apps are interactive, most are animated
+//
+//		Scripts
+//			Methods
+//				getLocalStorage() Called on mount, gets local storage, sets preferences in UI
+//				cycleColors(val)
+//					Cycles demo colors - updates value every x seconds. 
+// 					Called on mount, stops if slider adjusts. After timeout, calls itself with random val
 //
 // -->
 

@@ -5,12 +5,15 @@
 // 	Shows modal containing keyboard shortcuts
 //		Universal message for every page - general shortcuts to use throughout the app
 //
-//		Specific message for app pages with their own shortcuts
+//		Template
+//			Specific message for app pages with their own shortcuts
 //			based on route - ex animate or shadow
 //
-//	- Functions:
-//		boop()
-//			Called when user presses keyboard shortcut - calls random alert message
+//		Props:
+//			showShortcuts - true/false to show modal
+//
+//		Functions:
+//			boop() Called when user presses keyboard shortcut - calls random alert message
 // 
 -->
 

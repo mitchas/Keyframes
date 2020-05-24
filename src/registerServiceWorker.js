@@ -1,3 +1,9 @@
+// 
+// registers /public/service-worker.js if production
+//
+// 		Reloads if new content found.
+// 
+
 import { register } from 'register-service-worker'
 
 if (process.env.NODE_ENV === 'production') {

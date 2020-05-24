@@ -1,20 +1,26 @@
+// 
 // Router
 // _________________________
 //
 //	Defines available routes and views
 //
-//
-//		- Routes
-// 			Text pages _____________________________________ 
-//					/																			- Home page
-//					/2/																			- Also Home page, but with v2 announcement & PH message
-//					/changelog/																	- Changelog
-// 			apps _____________________________________ 
-//					/animate/																	- Create CSS keyframe animations
-//					/shadows/																	- Generate CSS shadows
-//					/colors/																	- HEX/RGB converter and color palettes
-//			errors _____________________________________ 
+//		Routes
+// 			#BASIC 
+//					/									- Home page
+//					/2/									- Also Home page, but with v2 announcement & PH message
+//					/changelog/							- Changelog
+// 			TESTING
+//					/commands/							- Test and see different UI elements and functions - not linked to anywhere
+// 			#APPS 
+//					/animate/							- Create CSS keyframe animations
+//					/shadows/							- Generate CSS shadows
+//					/colors/							- HEX/RGB converter and color palettes
+//					/characters/						- Search and copy character codes
+//			#ERRORS  
 //					/404/
+//
+//		Meta options	
+//			help: if true, the help nav button will be shown on that route.
 // 
 
 // Imports

@@ -8,43 +8,30 @@
 //		The Animate page uses it's own not-really-reusable CSS layout
 //			Most other pages use the app-page-split setup - looks similar, but this had to be specific with the timeline
 //
-//  	Functions: 
-//  		getTransformString()
-//  			Called any time a transform prop is changed. It makes a string of all transform properties into one.
-//  		saveStep()
-//  			Backdoor trigger to force change - not exactly sure why.
-//  		newStep()
-//  			Enables mouse-click on timeline to add a new step - processes the click
-//  		deleteStep()
-//    			Delete current selected step
-// 			runAnimation
-// 			 	Stops other functions and begins animation
-// 			pauseAnimation
-// 				Pauses animation - can be resumed, unlike stopping
-// 			getTimelinePosition
-// 				Called when adding a step, while hovering timeline to get mouse position to find step %
-// 			roundValue(val)
-// 				round val to 0.1, and if it's greater than 99%, round to 100% to make the final step
-// 			toggleTiming(type)
-// 				Some animation timing inputs are toggles and not text inputs, this cycles through the options
-// 			toggleOption(option)
-// 				Toggle top tab/option popups
-// 			resetAnimation
-// 				Resets everything to default
-// 			saveAnimation
-// 				Saves animation to local storage
-// 			loadAllSaved
-// 				loads local storage and gets items w/prefix animation_
-// 			loadAnimation
-// 				Loads selected animation from local storage into editor
-// 			deleteAnimationFromStorage
-// 				deleted selected animation from local storage
-// 			openPreset(index)
-// 				Loads preset at index value in array
-// 			newUserPreset()
-// 				If new user chooses to load preset in new user modal
-// 			copyOutput
-// 				copies output to user's clipboard
+//  	Script
+//  		Mixins
+//  			CMD+S Shortcut to save 
+//  			ENTER Shortcut to runAnimation() 
+//  			SHIFT+ENTER Shortcut to pauseAnimation() 
+// 			Methods
+//  			getTransformString() Called any time a transform prop is changed. It makes a string of all transform properties into one.
+//  			saveStep() Backdoor trigger to force change - not exactly sure why.
+//   			newStep() Enables mouse-click on timeline to add a new step - processes the click
+//   			deleteStep() Delete current selected step
+// 				runAnimation() Stops other functions and begins animation
+// 				pauseAnimation() Pauses animation - can be resumed, unlike stopping
+// 				getTimelinePosition() Called when adding a step, while hovering timeline to get mouse position to find step %
+// 				roundValue(val) round val to 0.1, and if it's greater than 99%, round to 100% to make the final step
+// 				toggleTiming(type) Some animation timing inputs are toggles and not text inputs, this cycles through the options
+// 				toggleOption(option) Toggle top tab/option popups
+// 				resetAnimation Resets everything to default
+// 				saveAnimation() Saves animation to local storage
+// 				loadAllSaved() loads local storage and gets items w/prefix animation_
+// 				loadAnimation() Loads selected animation from local storage into editor
+// 				deleteAnimationFromStorage() deleted selected animation from local storage
+// 				openPreset(index) Loads preset at index value in array
+// 				newUserPreset() If new user chooses to load preset in new user modal
+// 				copyOutput() copies output to user's clipboard
 //
 // -->
 

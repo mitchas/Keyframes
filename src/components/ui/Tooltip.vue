@@ -1,14 +1,23 @@
-<!-- 
+<!--
+// 
 // Tooltip Component
 // _________________________
 // 
 // 	Tooltip icon - hover to show text and/or link,
-// 		Accepts props:  
-// 			- color: Default is green, optional others: red, blue, text, yellow
-// 			- icon: optional CSS fontawesome string (ie 'f6af') - default is question mark
-// 			- link: optional link - shown at bottom right of popup
+//
+//		#Template
+//			Renders icon. Click icon to show tooltip floating right, Link prop floats bottom right of tooltip 
+//			 
+//			Slots: 
+//				Single slot for body - can be text and links
 // 
+//		#Props
+// 			color: Default is green, optional others: red, blue, text, yellow
+// 			icon: optional CSS fontawesome string (ie 'f6af') - default is question mark
+// 			link: optional link - shown at bottom right of popup
+//
 -->
+
 <template>
 	<!-- Tooltip -->
 	<div class="tooltip left hover-right" v-bind:class="[color && color, {'show': show}]" @click="show = !show" v-if="$store.getters.userPreferences.tooltips">

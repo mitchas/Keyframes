@@ -1,14 +1,19 @@
 <!--
-// 
 // CharacterCodes.vue
 // _________________________
 //
 //	Search for characters, view their html and css content codes
 //
-//	- setPalette(hexString)
-// 		takes value as hexString ie ('ff0000,f0ff00,aa0f11') and loads them as a palette. Used for loading local storage or url params
+//		Layout
+// 			Large search bar, flex squares below with each character and codes
+//
+//	
+//		Scripts
+//			Computed
+//				searchCharacters - Returns filtered character list matching search - based on name
+//			Methods
+//
 // -->
-
 <template>
 	<div class="page">
 		<div id="characterPage">

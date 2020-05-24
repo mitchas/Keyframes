@@ -1,38 +1,32 @@
 <!--
-// 
 // Colors.vue
 // _________________________
 //
-//	Pick colors, convert rgb/hex, etc
+//	Pick colors, convert rgb/hex, make palettes, share URL
 //
-//	- setPalette(hexString)
-// 		takes value as hexString ie ('ff0000,f0ff00,aa0f11') and loads them as a palette. Used for loading local storage or url params
-//	- rgbaChange()
-// 		Whenever a value for r,g,b, or a is changed, change the other formats
-//	- hexChange()
-// 		change to hex input, update rgba values
-//	- rgbaTextChange()
-// 		Change to rgba input, update sliders and hex
-//	- invertTextColor(color)
-// 		returns color value for css - either black or white based on color passed
-// 			How it works:
-// 				converts passed (color) to hsl, gets the l value (brightness), and if it's > 50%, it's dark text, < is light
-//	- deleteColor(index)
-//  	deletes color at index - cannot delete all colors, one must remain
-//	- addColor()
-//		adds new color to palette - defaults to black
-//	- createPalette()
-//		Takes color and generates 5 colors with different hues for a palette.
-//	- loadSavedPalettes()
-//		Gets palettes from local storage - gets on every tab click so it's up to date
-//	- savePalette()
-//		saves palette to local storage
-//	- deletePalette()
-//		deletes palette from local storage
-//	- loadPalette(name)
-//		loads palette from local storage based on name, calls setPalette()
+//		Layout
+// 			Large search bar, flex squares below with each character and codes
+//
+//	
+//		Scripts
+//			Computed
+//				searchCharacters - Returns filtered character list matching search - based on name
+//			Methods
+//				setPalette(hexString) takes value as hexString ie ('ff0000,f0ff00,aa0f11') and loads them as a palette. Used for loading local storage or url params
+//				rgbaChange() Whenever a value for r,g,b, or a is changed, change the other formats
+//				hexChange() change to hex input, update rgba values
+//				rgbaTextChange() Change to rgba input, update sliders and hex
+//				invertTextColor(color) returns color value for css - either black or white based on color passed
+// 					How it works: converts passed (color) to hsl, gets the l value (brightness), and if it's > 50%, it's dark text, < is light
+//				deleteColor(index) deletes color at index - cannot delete all colors, one must remain
+//				addColor() adds new color to palette - defaults to black
+//				createPalette() Takes color and generates 5 colors with different hues for a palette.
+//				loadSavedPalettes() Gets palettes from local storage - gets on every tab click so it's up to date
+//				SavePalette() saves palette to local storage
+//				deletePalette() deletes palette from local storage
+//				loadPalette(name) loads palette from local storage based on name, calls setPalette()
+//
 // -->
-
 <template>
 	<div class="app-page-split">
 

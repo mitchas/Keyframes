@@ -3,10 +3,11 @@
 // _________________________
 // 
 // 	More visible text callout with icon on left,
-// 		Accepts props:  
-// 			- size: small (default/empty), big, narrow
-// 			- color: primary (default/empty), red, green, yellow
-// 			- icon: font awesome icon string
+// 
+//		Props
+// 			size: small (default/empty), big, narrow
+// 			color: primary (default/empty), red, green, yellow
+// 			icon: font awesome icon string
 // 
 -->
 <template>

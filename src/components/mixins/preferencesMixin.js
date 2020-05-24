@@ -12,7 +12,7 @@
 // 	getPrefs(): Gets preferences from local storage
 // 
 // 	savePrefs(): Saves preferences to local storage
-// 			saves current preferences object to firebase if user is signed in, otherwise nothing
+// 			- sets any missing prefs as default value
 // 
 
 export default {

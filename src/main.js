@@ -1,9 +1,9 @@
-// main
+// 
+// Main Vue Setup
 // _________________________
 //
 //	Sets up vue app
-//
-//		- Sets up app, imports, filters,
+//		App, imports, filters,
 // 
 // 
 

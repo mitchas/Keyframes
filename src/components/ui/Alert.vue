@@ -3,7 +3,18 @@
 // 	_________________________
 // 
 // 	Alert element to display short messages
+// 	Called with hello("message", "fa font-awesome-icon") defined in plugins.js
+//
+//		#Template
+//			Little yellow text box that floats at the center bottom of the screen - click to dismiss
+//			Shows short-text alerts. Icon on left.
 // 
+//		#Script
+//			methods
+//				showAlert()
+//					Sets alert icon and message, shows message, then hides after delay.
+//					if alert is showing, it hides it, waits, then re-calls it.
+
 -->
 
 <template>

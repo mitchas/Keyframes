@@ -4,11 +4,27 @@
 // 
 // Helper classes for modifying any element
 // 
-// 		.capitalize
-// 			capitalize text inside
-// 		.block
-// 			display block
-// 			flex classes
+// 		Text helpers
+// 			.capitalize
+// 			.align-center
+// 			.align-right
+// 		Display helpers
+// 			.block
+// 			.margin-auto
+// 			.hide-sm
+// 			.hide-md
+// 		Flex helpers
+// 			.flex
+// 			.flex-horizontal
+// 				.reverse
+// 			.flex-vertical
+// 				.reverse
+// 			.flex-around
+// 			.flex-between
+// 			.flex-end
+// 			.flex-center
+// 			.flex-grow
+// 			.flex-self
 // 		Spacing helpers
 // 			.[m/p][side]-[size]
 // 			mtop-xs, mbottom-lg, pleft-xl, etc
@@ -18,13 +34,13 @@
 //			.max-width - max width normal size
 // 
 
+////////////////////////////////
+////    Text Helpers    ////
+//////////////////////////////
+
 // Title case
 .capitalize{
 	text-transform: capitalize;
-}
-// Display block
-.block{
-	display: block;
 }
 .align-center{
 	text-align: center;
@@ -32,14 +48,35 @@
 .align-right{
 	text-align: right;
 }
-.accent{
-	color: var(--text);
+
+
+////////////////////////////////
+////    Display Helpers    ////
+//////////////////////////////
+
+// Display block
+.block{
+	display: block;
 }
 .margin-auto{
 	margin: 0 auto;
 }
+// Hide at different screen sizes
+.hide-sm{
+	@media (max-width: @screenSM) {
+		display: none
+	}
+}
+.hide-md{
+	@media (max-width: @screenMD) {
+		display: none
+	}
+}
 
-// Displays
+
+////////////////////////////////
+////    Flex    Helpers    ////
+//////////////////////////////
 .flex{
 	display: flex;
 }
@@ -71,25 +108,10 @@
 .flex-center{
 	justify-content: center;
 }
-
-
-// Other misc helpers
 .flex-grow{
 	flex-grow: 3;
 }
 
-
-// Hide on different screen sizes
-.hide-sm{
-	@media (max-width: @screenSM) {
-		display: none
-	}
-}
-.hide-md{
-	@media (max-width: @screenMD) {
-		display: none
-	}
-}
 
 
 ////////////////////////////////

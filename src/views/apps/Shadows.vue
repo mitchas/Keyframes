@@ -5,19 +5,30 @@
 //
 //	Generate CSS shadows
 //
-//	- calculateShadow()
-// 		Takes values and calculates layers for shadows
-//		Only runs if layers is more than 1.
-//	- rgbNumberFormat(input)
-// 		Pass it a number, it will return 0 if less than 0, or 255 if more
-// 			Just a quick fix for people who format badly.
-//	- copyShadowOutput()
-// 		Copies generated shadow CSS to clipboard
-//	- addLayer()
-// 		Adds new shadow layer
 // 
 // -->
-
+<!--
+// Shadows.vue
+// _________________________
+//
+//	Generate CSS box-shadows. Use slides to adjust offset, blur, spread. Change colors, add multiple layers
+//
+//		Layout
+// 			Split right-sidebar, sliders on right, shadow element on left. Option bar on top.
+//
+//		Scripts
+//			Computed
+//				searchCharacters - Returns filtered character list matching search - based on name
+//			Methods
+//				calculateShadow() Takes values and calculates layers for shadows
+//					Only runs if layers is more than 1.
+//				rgbNumberFormat(input) Pass it a number, it will return 0 if less than 0, or 255 if more
+// 					Just a quick fix for people who format badly.
+//				copyShadowOutput() Copies generated shadow CSS to clipboard
+//				addLayer() Adds new shadow layer
+//				tiltShadow() Detects compatibility (prompts permission on ios) then calls toggleTilt. Tilting device moves shadow.
+//				toggleTilt() Called with option button click - only shown below LG and on touch devices
+// -->
 <template>
 	<div class="app-page-split">
 
@@ -389,11 +400,7 @@ export default {
 			// x/hor y/vert
 			var h, v;
 
-			// If the orientation is landscape-left or upside down, values must be negative
-			// if(this.$store.getters.device.orientation == 180 || this.$store.getters.device.orientation == -90){
-
-
-			// Else regular
+			// Check for value
 			// Webkit
 			if(event.beta || event.gamma){
 				v = Math.round(event.beta) * 2;
@@ -436,7 +443,6 @@ export default {
 			// Set to shadow
 			this.layers[this.selectedLayer - 1].vertical_offset = vOffset;
 			this.layers[this.selectedLayer - 1].horizontal_offset = hOffset;
-
 		},
 		toggleTilt: function(){
 
@@ -450,7 +456,6 @@ export default {
 				window.addEventListener(sensor, _this.tiltShadow)
 			}
 			
-
 			// If it's already running, stop it
 			if(_this.tiltMode){
 				window.removeEventListener("deviceorientation", _this.tiltShadow); 
@@ -486,12 +491,6 @@ export default {
 					_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle")
 				}
 			}
-				
-			
-
-
-			
-			
 		},
 		
 	}

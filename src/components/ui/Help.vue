@@ -1,16 +1,39 @@
-<!-- 
+<!--
+// 
 //  Help Component
 //  _________________________
 // 
 // 	Show help modal with buttons at bottom,
-// 		Accepts props:  
-// 			- show: condition to show modal
-// 			- title: Text string for modal title
-// 			- color: Color of button and other accents
-// 			- dismissText: Text for close button
-// 			- dismissIcon: Font awesome icon string for close button
-// 			- newUser: if true, the first slide will be shown only to new users
-// 			- slides: Number of slides/slots in help
+//
+//		#Template
+//			Modal that floats in the middle of the screen at all sizes, 
+//			displays up to 3 slots as slides (or 1 extra for new uses), 
+//			Lightbox behind modal - click or swipe to dismiss, 
+//			 
+//			Slots: 
+//				This accepts up to 4 slots.    /   names "one", "two", "three", "newUser"
+//				slides prop must match number   /   newUser only shows if new user condition met
+// 
+//		#Script
+//			mixins
+//				defines escape key to close help modal
+//			props
+// 				show: condition to show modal
+// 				title: Text string for modal title
+// 				color: Color of button and other accents - red, blue, invert
+// 				dismissText: Text for close button
+// 				dismissIcon: Font awesome icon string for close button
+// 				newUser: if true, the first slide will be shown only to new users
+// 				slides: Number of slides/slots in help
+//			watch
+//				newUser - watches for changes and switches slide if changed
+//			mounted
+//				if new user, changes start slide
+//			methods
+//				changeSlide(slide) - switches to passed slide
+//				closeHelp() - closes modal, emits newUserViewed if user was new
+//				swipeBackward() - on swipe changes slide
+//				swipeForward() - on swipe changes slide
 // 
 -->
 

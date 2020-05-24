@@ -1,32 +1,31 @@
-<!-- 
+<!--
+// 
 //  Modal Component
 //  _________________________
 // 
-// 	Show modal with buttons at bottom,
-// 		Accepts props:  
-// 			- show: condition to show modal
-// 			- size: large (default/empty), small
-// 			- color: primary (default/empty), other button colors
-// 			- reverseFooter: reverse direction of footer
-// 			- dismissText: text for dismiss button
-// 			- confirmText: text for main action/confirm button
-// 			- confirmIcon: icon for confirm button
+// 	Show modal that accepts props for title and footer buttons, slot as content
+//
+//		#Template
+//			Modal that floats in the middle of the screen, on mobile it floats fixed bottom, full width, 
+//			Top header bar with title and optional icon, middle scoll content, fixed footer with buttons, 
+//			Lightbox behind modal - click or swipe to dismiss, 
+//			 
+//			Slots: 
+//				Single slot for modal body
 // 
+//		#Props
+// 			show: condition to show modal
+// 			size: large (default/empty), small
+// 			color: primary (default/empty), other button colors
+// 			reverseFooter: reverse direction of footer
+// 			dismissText: text for dismiss button
+// 			confirmText: text for main action/confirm button
+// 			confirmIcon: icon for confirm button
+//
+//		#Script
+// 			mixins
+//				defines escape key to close help modal
 // 
-// 		Styles
-// 		_____________________
-// 		.lightbox
-// 			- show with modal, darken and blur behind, click to dismiss modal
-// 		.modal-wrapper
-// 			- Outer element to center modal with flex
-// 			.modal
-// 				- Actual modal element
-// 				- Add class .small to decrease size to confirmation-like
-// 				
-// 				.modal-title
-// 				.modal-body
-// 				.modal-footer
-// 					Add class .center to align content in the middle, .right to right-justify
 -->
 
 <template>

@@ -4,6 +4,7 @@
 // _________________________
 //
 //	Changelog & Updates
+//		Static page. Not much to it.
 //
 // -->
 

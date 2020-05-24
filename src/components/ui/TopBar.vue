@@ -4,18 +4,22 @@
 // 
 // 	 Bar at top of screen with logo and account/settings dropdown, and app switcher
 // 		Visible on all screen sizes
-// 			 
-// 			Functions
-// 				toggleDropdown(name)
-// 					Toggles navigation dropdown by (name)
-// 				closeDropdowns()
-// 					Hides all dropdowns
-// 				openHelp()
-// 					Button only shows based on route meta - when clicked, opens modal and tracks click
-// 				darkModeShortcut()
-// 					Button only shows based on route meta - when clicked, opens modal and tracks click
-// 				share()
-// 					Button only shows in standalone mode - shares current url using native share menu - fallback copy to clipboard
+//
+//		#Template
+//			Logo on left, icons with drop downs on right 
+//			Includes all universal components that go with links (ie settings modal)
+// 
+//		#Script
+//			mixins
+//				defines CMD+d to toggle dark mode
+//			components
+//				AboutModal, SettingsModal, ShortcutsModal
+//			methods
+// 				toggleDropdown(name) Toggles navigation dropdown by (name)
+// 				closeDropdowns() Hides all dropdowns
+// 				openHelp() Button only shows based on route meta - when clicked, opens modal and tracks click
+// 				darkModeShortcut() Button only shows based on route meta - when clicked, opens modal and tracks click
+// 				share() Button only shows in standalone mode - shares current url using native share menu - fallback copy to clipboard
 // 
 -->
 

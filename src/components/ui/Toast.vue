@@ -2,20 +2,29 @@
 // 	Toast
 // 	_________________________
 // 
-// 	Toast element to display messages
-// 		Added to App component to be available on anay page/view
-// 		Uses global plugin method to send toast data to home component, which will then relay the data to this component
-// 		Maybe not the best way, but it made sense to me at the time
+// 	Larger/more visible than alert
+// 	Called with toast("title", "body", "color", "icon") defined in plugins.js
+//
+//		#Template
+//			Notification message with icon, title, and smaller body text - click to dismiss, no othe interaction
+//			Floats bottom right on desktop and md, full width bottom on mobile
 // 
-// 		Accepts: 
+//		#Props
 // 			visible - visiblity of toast
 // 			icon - Font Awesome full icon class (ex 'far fa-star')
 // 			color - color class - red, green, yellow, or primary (default)
 // 			title - Short bold text on top
 // 			body - the long text for the toast message
 // 
-// 
+//		#Script
+//			methods
+//				showToast()
+//					Sets alert icon and message, shows message, then hides after delay.
+//				hideToast()
+//					called on click - sets hidingToast to true, which transitions off page before hiding after delay.
+
 -->
+
 
 <template>
 	<!-- Toast notificaion -->

@@ -1,9 +1,20 @@
 <!--
-// 
 // Commands.vue
 // _________________________
 //
 //	An unlisted page to test different commands and functions
+//
+//		Layout
+// 			Large command input - type and hit enter, calls runCommand() 
+// 			List of possible commands and examples for each command. Click to preview. 
+//
+//		Scripts
+//			Data
+// 				Define example commands
+//			Methods
+//				runCommand() Takes input and runs different tasks if match
+//				resetModal() Resets modal to default after closing.
+//				getLocalStorage() Command to get and view all local storage
 //
 // -->
 

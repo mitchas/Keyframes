@@ -5,12 +5,24 @@
 //
 //	Main app component, present on all views
 //
-//		- Structure
-//			- Topbar
-//			- Body
-//			- Toast
+//		#Template
+//			Topbar
+//			Body
+//			Toast, Alert, Other components
 // 
-// 		- Styles
+//		#Script
+//			created
+//				tracks initial page view
+//			computed
+//				prefs - always gets up to date prefs from store
+//			watch
+//				prefs - watches for changes and updates local storage
+//				route - tracks page views if route *name* changes
+//			mounted
+//				pageMounted - sets pageMounted so page shows with animation
+//				getPrefs() - calls function in prefs mixin
+// 
+// 		#Styles
 // 			- #app
 // 			- main#content
 // 
@@ -61,7 +73,6 @@ import ConfirmLeave from "@/components/ui/ConfirmLeave";
 import TopBar from "@/components/ui/TopBar";
 // Mixins
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
-
 
 
 export default {
