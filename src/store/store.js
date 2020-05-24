@@ -36,7 +36,6 @@ export const store = new Vuex.Store({
 			softKeyboardVisible: false,
 			standalone: false,
 			orientationSensor: false,
-			orientation: "0",
 		},
 		// UserPreferences
 		// Update 3 places in App.vue

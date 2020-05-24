@@ -116,7 +116,7 @@
 			<!-- Fields -->
 			<div class="app-fields">
 
-				<h4 class="mbottom-sm">Box Shadow {{tiltX}}, {{tiltY}}</h4>
+				<h4 class="mbottom-sm">Box Shadow</h4>
 
 				<!-- Horizontal Offset -->
 				<div class="field">
@@ -227,8 +227,6 @@ export default {
 			selectedLayer: 1,
 			// Fun tilt mode on phones
 			tiltMode: false,
-			tiltX: null,
-			tiltY: null,
 			layers: [
 				{
 					horizontal_offset: 0,
@@ -409,28 +407,33 @@ export default {
 			}
 
 			// Make adjustments for orientation
-			var deg = this.$store.getters.device.orientation;
+			var deg = 0;
+			// Device orientation
+			if(window.orientation){
+				deg = window.orientation;
+			}
 
-			var hOffset = h;
-			var vOffset = v;
+			var hOffset, vOffset;
 			// Regular format is (h, v)
 			// 90deg is -v,h
 			if(deg == 90){
-				hOffset = -v;
-				vOffset = h;
+				hOffset = v;
+				vOffset = -h;
 			}else if(deg == 180){
 				// 180deg is -h,-v
 				hOffset = -h;
 				vOffset = -v;
 			}else if(deg == -90){
 				// -90 is -v,-h
-				hOffset = -h;
-				vOffset = -v;
+				hOffset = -v;
+				vOffset = h;
+			}else{
+				// Regular orientation
+				hOffset = h;
+				vOffset = v;
 			}
 
 			// Set to shadow
-			this.tiltY = vOffset;
-			this.tiltX = hOffset;
 			this.layers[this.selectedLayer - 1].vertical_offset = vOffset;
 			this.layers[this.selectedLayer - 1].horizontal_offset = hOffset;
 

@@ -163,13 +163,6 @@ export default {
 				deviceProps.orientationSensor = true;
 			}
 
-			// Device orientation
-			if(window.orientation){
-				deviceProps.orientation = window.orientation;
-			}else{
-				deviceProps.orientation = window.screen.orientation.angle;
-			}
-
 
 			// Save back to store
 			this.$store.commit('device', deviceProps);
