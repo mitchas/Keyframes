@@ -123,8 +123,6 @@ export default {
 		};
 	},
 	mounted() {
-		// Track settings open
-		_paq.push(['trackEvent', 'Action', 'View', 'About']);	
 	},
 	methods: {
 	

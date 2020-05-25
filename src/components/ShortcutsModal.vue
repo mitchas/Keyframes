@@ -166,8 +166,6 @@ export default {
 		};
 	},
 	mounted() {
-		// Track shortcuts open
-		_paq.push(['trackEvent', 'Action', 'View', 'Shortcuts']);	
 	},
 	methods: {
 

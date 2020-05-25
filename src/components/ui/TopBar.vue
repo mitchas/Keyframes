@@ -17,7 +17,7 @@
 //			methods
 // 				toggleDropdown(name) Toggles navigation dropdown by (name)
 // 				closeDropdowns() Hides all dropdowns
-// 				openHelp() Button only shows based on route meta - when clicked, opens modal and tracks click
+// 				openModal(name) Opens modal passed - tracks open
 // 				darkModeShortcut() Button only shows based on route meta - when clicked, opens modal and tracks click
 // 				share() Button only shows in standalone mode - shares current url using native share menu - fallback copy to clipboard
 // 
@@ -43,7 +43,7 @@
 
 				<!-- Help - only shows on pages with help modal -->
 				<div class="settings-nav" v-if="$route.meta.help">
-					<div class="nav-dropdown" @click="openHelp()">
+					<div class="nav-dropdown" @click="openModal('help')">
 						<button class="hover-label">
 							<span>Help</span>
 							<!-- Chevron down -->
@@ -109,12 +109,12 @@
 								</label>
 								<input type="checkbox" id="topBarDarkModeToggle" v-model="$store.getters.userPreferences.darkMode" @change="toggleDarkMode()" hidden/>
 								<!-- Keyboard Shortcuts -->
-								<button class="popover-link" @click="showShortcutsModal = true">
+								<button class="popover-link" @click="openModal('shortcuts')">
 									<span>Shortcuts</span>
 									<i class="fas fa-keyboard"></i>
 								</button>
 								<!-- Settings -->
-								<button class="popover-link" @click="showSettingsModal = true">
+								<button class="popover-link" @click="openModal('settings')">
 									<span>Settings</span>
 									<i class="fas fa-toggle-on"></i>
 								</button>
@@ -129,7 +129,7 @@
 								<hr/>
 
 								<!-- About -->
-								<button class="popover-link" @click="showAboutModal = true">
+								<button class="popover-link" @click="openModal('about');">
 									<span>About</span>
 									<i class="fas fa-ghost"></i>
 								</button>
@@ -231,16 +231,25 @@ export default {
 			this.showAppSwitcher = false
 		},
 		//////////////////
-		//  Open Help  //
+		//  Open Modal  //
 		////////////////
-		// Toogle help modal - button only shows if available per page
-		openHelp: function(){
-			// Toggle it
-			this.$store.getters.global.showHelp = true; 
-			// Track it
-			_paq.push(['trackEvent', 'Action', 'View', 'Help - ' + this.$route.name]);	
-		},
+		openModal: function(modal){
+			
+			// Track action
+			_paq.push(['trackEvent', 'Action', 'View', 'Local Storage']);
 
+			// Help, shortcuts, settings, about
+			if(modal == "help"){
+				this.$store.getters.global.showHelp = true; 
+			}else if(modal == "shortcuts"){
+				this.showShortcutsModal = true
+			}else if(modal == "settings"){
+				this.showSettingsModal = true
+			}else if(modal == "about"){
+				this.showAboutModal = true
+			}
+			
+		},
 
 		// Shortcut for dark mode
 		share: function(){
@@ -258,6 +267,7 @@ export default {
 				this.copyToClipboard("This page's URL", document.href)
 			}
 		},
+		
 	}
 };
 </script>

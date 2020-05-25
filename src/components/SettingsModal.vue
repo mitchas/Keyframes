@@ -216,13 +216,12 @@ export default {
 		// Show modal, lock scroll
 		this.getAllLocalStorage();
 		// Track settings open
-		_paq.push(['trackEvent', 'Action', 'View', 'Settings']);	
 	},
 	methods: {
 		// Open local storage help and track action
 		viewLocalStorage: function(){
 			this.showLocalStorageHelp = !this.showLocalStorageHelp;
-			_paq.push(['trackEvent', 'Action', 'View', 'Local Storage']);
+			// _paq.push(['trackEvent', 'Action', 'View', 'Local Storage']);
 		},
 	
 		// Delete all items from local storage
