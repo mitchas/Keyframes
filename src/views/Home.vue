@@ -30,7 +30,7 @@
 				color="orange"
 				size="">
 				<h5>Hi Product Hunt!</h5>
-				<span><a href="https://www.producthunt.com/posts/keyframes-app" target="_blank">Two years</a> after version 1, Keyframes 2 is here! A complete rewrite on Vue, everything is much more responsive. The animator has a ton of new features, and I've added new apps to make box shadows and color palettes. Also, v2 is open source, works on phones & tablets, and remembers your preferences & creations.</span>
+				<span><a href="https://www.producthunt.com/posts/keyframes-app" target="_blank">Two years</a> after version 1, Keyframes 2 is here! Rewritten on Vue - the animator has a ton of new features, and I've added a few brand new CSS tools, with more coming soon. Also, v2 is open source, works on phones & tablets, and remembers your preferences & creations.</span>
 			</Callout>
 
 			<!-- Regular Banner -->

@@ -39,10 +39,6 @@ module.exports = {
 	// Uncomment this to force https to test PWA stuff on phones
 	// It'll still be insecure, but you can bypass it.
 	// devServer: {
-	// 	https: {
-	// 		key: fs.readFileSync('./certs/example.com+5-key.pem'),
-	// 		cert: fs.readFileSync('./certs/example.com+5.pem'),
-	// 	},
-	// 	public: 'https://localhost:8080/'
+	// 	https: true,
 	// },
 }

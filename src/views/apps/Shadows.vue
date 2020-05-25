@@ -53,7 +53,7 @@
 					<!-- Spacer Flex grow -->
 					<div class="flex-grow"></div>
 					<!-- Tilt mode button - only shown if touch sreen and device orientation sensors -->
-					<button class="button small action-btn" id="tiltButton" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
+					<button class="button small action-btn" @click="toggleTilt()" v-bind:class="{'red': tiltMode, 'blue': !tiltMode}" v-if="$store.getters.device.hasTouch">
 						<i v-bind:class="{'fas fa-atom-alt': !tiltMode, 'fas fa-times-circle': tiltMode}"></i>
 						<span>Tilt Mode</span>
 					</button>
@@ -404,12 +404,10 @@ export default {
 			// Webkit
 			if(event.beta || event.gamma){
 				v = Math.round(event.beta) * 2;
-				// vertical = Math.round(event.beta - 40) * 2;
 				h = Math.round(event.gamma) * 2;
 			}else if(event.y || event.x){
 				// Firefox uses orientation instead of event
 				v = Math.round(orientation.y) * 2;
-				// vertical = Math.round(orientation.y - 40) * 2;
 				h = Math.round(orientation.x) * 2;
 			}
 
@@ -441,7 +439,8 @@ export default {
 			}
 
 			// Set to shadow
-			this.layers[this.selectedLayer - 1].vertical_offset = vOffset;
+			// Vertical offset has -50 because of how people naturally hold their devices.
+			this.layers[this.selectedLayer - 1].vertical_offset = vOffset - 50;
 			this.layers[this.selectedLayer - 1].horizontal_offset = hOffset;
 		},
 		toggleTilt: function(){
@@ -526,13 +525,6 @@ export default {
 		code{
 			background: var(--blue);
 			margin-top: 15px;
-		}
-	}
-
-	#tiltButton{
-		display: block;
-		@media (min-width: @screenLG) {
-			display: none;
 		}
 	}
 
