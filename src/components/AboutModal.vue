@@ -97,6 +97,18 @@
 						<span>Buy me a Coffee</span>
 					</button>
 				</div>
+
+				<!-- Hire Me -->
+				<Callout
+					icon="far fa-user-hard-hat"
+					class="mtop-sm mbottom-sm"
+					color="blue"
+					size="tiny margin-auto">
+					<span>
+						Like this site? I do freelance/project work - send me an email at hello@hotdi.sh :)
+					</span>
+				</Callout>
+
 			</template>
 
 		</Modal>
@@ -107,6 +119,7 @@
 <script>
 // Components
 import Modal from "@/components/ui/Modal.vue";
+import Callout from "@/components/ui/Callout";
 
 export default {
 	name: "AboutModal",
@@ -114,6 +127,7 @@ export default {
 	],
 	components: {
 		Modal,
+		Callout,
 	},
 	props: [
 		'showAbout'

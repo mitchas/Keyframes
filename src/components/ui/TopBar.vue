@@ -235,8 +235,6 @@ export default {
 		////////////////
 		openModal: function(modal){
 			
-			// Track action
-			_paq.push(['trackEvent', 'Action', 'View', 'Local Storage']);
 
 			// Help, shortcuts, settings, about
 			if(modal == "help"){
@@ -247,6 +245,14 @@ export default {
 				this.showSettingsModal = true
 			}else if(modal == "about"){
 				this.showAboutModal = true
+			}
+
+			// Track opens
+			// Track which page help was opened on
+			if(modal == "help"){
+				_paq.push(['trackEvent', 'Action', 'View', 'Viewed help on ' + this.$route.name]);
+			}else{
+				_paq.push(['trackEvent', 'Action', 'View', 'Opened ' + modal]);
 			}
 			
 		},
