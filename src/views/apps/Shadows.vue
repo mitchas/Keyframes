@@ -439,8 +439,8 @@ export default {
 			}
 
 			// Set to shadow
-			// Vertical offset has -50 because of how people naturally hold their devices.
-			this.layers[this.selectedLayer - 1].vertical_offset = vOffset - 50;
+			// Vertical offset has -30 because of how people naturally hold their devices.
+			this.layers[this.selectedLayer - 1].vertical_offset = vOffset - 30;
 			this.layers[this.selectedLayer - 1].horizontal_offset = hOffset;
 		},
 		toggleTilt: function(){

@@ -43,7 +43,7 @@ export default {
 		// then use @click to navigate()
 		Vue.prototype.navigate = function(route) {
 			// Confirm leave on these pages
-			var confirmPages = ['/animate/', '/colors/', '/shadows'];
+			var confirmPages = ['/animate/', '/colors/', '/shadows/'];
 
 			if(route == this.$route.path){
 				return;
