@@ -91,9 +91,9 @@
 
 				<!-- Settings -->
 				<div class="settings-nav">
-					<div class="nav-dropdown" @click="toggleDropdown('settings')">
+					<div class="nav-dropdown">
 						<!-- Hover label to show dropdown -->
-						<button class="hover-label">
+						<button class="hover-label" @click="toggleDropdown('settings')">
 							<span>More</span>
 							<!-- Chevron down -->
 							<i v-bind:class="{'far fa-toggle-off': !showSettingsPopover, 'far fa-toggle-on': showSettingsPopover}"></i>
@@ -257,7 +257,9 @@ export default {
 			
 		},
 
-		// Shortcut for dark mode
+		////////////////////
+		//  Native Shar  //
+		//////////////////
 		share: function(){
 			var text = "Check this out: ";
 
