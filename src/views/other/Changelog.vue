@@ -52,7 +52,7 @@
 				<div class="changelog-title">
 					<div class="cl-version">
 						<b>v{{$store.getters.appVersion}}</b>
-						<span>(May 23, 2020)</span>
+						<span>(May 25, 2020)</span>
 					</div>
 				</div>
 				<div class="changelog-change">
@@ -85,7 +85,7 @@
 				<div class="changelog-title">
 					<div class="cl-version">
 						<b>v2.0.5</b>
-						<span>(May 20, 2020)</span>
+						<span>(May 22, 2020)</span>
 					</div>
 				</div>
 				<div class="changelog-change">
@@ -125,7 +125,7 @@
 				<div class="changelog-title">
 					<div class="cl-version">
 						<b>Version 2.0</b>
-						<span>(May 17, 2020)</span>
+						<span>(May 18, 2020)</span>
 					</div>
 				</div>
 				<div class="changelog-change">

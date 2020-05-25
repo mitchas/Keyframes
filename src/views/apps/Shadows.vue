@@ -440,7 +440,7 @@ export default {
 
 			// Set to shadow
 			// Vertical offset has -30 because of how people naturally hold their devices.
-			this.layers[this.selectedLayer - 1].vertical_offset = vOffset - 30;
+			this.layers[this.selectedLayer - 1].vertical_offset = vOffset - 80;
 			this.layers[this.selectedLayer - 1].horizontal_offset = hOffset;
 		},
 		toggleTilt: function(){
