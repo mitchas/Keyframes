@@ -8,6 +8,7 @@
 // 			#BASIC 
 //					/									- Home page
 //					/2/									- Also Home page, but with v2 announcement & PH message
+//					/about/								- Basic about page text only
 //					/changelog/							- Changelog
 // 			TESTING
 //					/commands/							- Test and see different UI elements and functions - not linked to anywhere
@@ -38,6 +39,7 @@ import CharacterCodes from './views/apps/CharacterCodes.vue';
 import Error404 from './views/other/error404.vue';
 import Changelog from './views/other/Changelog.vue';
 import Commands from './views/other/Commands.vue';
+import About from './views/other/About.vue';
 
 Vue.use(Router);
 
@@ -62,6 +64,14 @@ const router = new Router({
 			path: '/v2/',
 			name: 'PromoHome',
 			component: Home,
+		},
+		////////////
+		// About //
+		//////////
+		{
+			path: '/about/',
+			name: 'About',
+			component: About,
 		},
 		////////////////
 		// Changelog //
