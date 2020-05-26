@@ -257,7 +257,7 @@ export default {
 			controlToggles: {
 				options: false,
 				output: false,
-			}
+			},
 		};
 	},
 
@@ -438,6 +438,7 @@ export default {
 				vOffset = v;
 			}
 
+
 			// Set to shadow
 			// Vertical offset has -30 because of how people naturally hold their devices.
 			this.layers[this.selectedLayer - 1].vertical_offset = (-vOffset) + 70;
@@ -460,6 +461,7 @@ export default {
 				window.removeEventListener("deviceorientation", _this.tiltShadow); 
 				window.removeEventListener("MozOrientation", _this.tiltShadow); 
 				_this.tiltMode = false;
+				this.tiltValues = [null, null];
 			}
 			// Else start it
 			else{

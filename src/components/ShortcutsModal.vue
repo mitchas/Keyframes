@@ -96,9 +96,11 @@
 							<div class="action">Toggle light or dark mode</div>
 							<div class="keys">
 								<div>
+									<span @click="boop()">Shift</span>
+									<i class="far fa-plus"></i>
 									<span @click="boop()">{{ctrlCmd()}}</span>
 									<i class="far fa-plus"></i>
-									<span @click="boop()">d</span>
+									<span @click="boop()">u</span>
 								</div>
 							</div>
 						</div>

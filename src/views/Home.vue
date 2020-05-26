@@ -30,7 +30,8 @@
 				color="orange"
 				size="">
 				<h5>Hi Product Hunt!</h5>
-				<span><a href="https://www.producthunt.com/posts/keyframes-app" target="_blank">Two years</a> after version 1, Keyframes 2 is here! Rewritten on Vue - the animator has a ton of new features, and I've added a few brand new CSS tools, with more coming soon. Also, v2 is open source, works on phones & tablets, and remembers your preferences & creations.</span>
+				<span>I made Keyframes because I wanted an easier & more visual way to create CSS animations. <a href="https://www.producthunt.com/posts/keyframes-app" target="_blank">Two years</a> later, I rewrote the entire thing, added new apps and a ton of new features, and now I'm ready to share it. I'd love to <a href="https://twitter.com/sleumasm" target="_blank">hear your feedback</a>&nbsp;<i class="fab fa-twitter"></i>.</span>
+				<!-- <span><a href="https://www.producthunt.com/posts/keyframes-app" target="_blank">Two years</a> after version 1, Keyframes 2 is here! Rewritten on Vue - the animator has a ton of new features, and I've added a few brand new CSS tools, with more coming soon. Also, v2 is open source, works on phones & tablets, and remembers your preferences & creations.</span> -->
 			</Callout>
 
 			<!-- Regular Banner -->

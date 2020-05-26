@@ -100,12 +100,12 @@
 
 				<!-- Hire Me -->
 				<Callout
-					icon="far fa-user-hard-hat"
+					icon="fal fa-user-hard-hat"
 					class="mtop-sm mbottom-sm"
 					color="blue"
 					size="tiny margin-auto">
 					<span>
-						Like this site? I do freelance/project work - send me an email at hello@hotdi.sh :)
+						Like this site? I also do freelance/project work - send me an email at hello@hotdi.sh if you need something made :)
 					</span>
 				</Callout>
 

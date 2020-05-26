@@ -158,7 +158,7 @@ import AboutModal from "@/components/AboutModal";
 import ShortcutsModal from "@/components/ShortcutsModal";
 import preferencesMixin from "@/components/mixins/preferencesMixin.js";
 // Keyboard shortcuts
-import shortcut, { PRIMARY } from "@/components/mixins/keyboardShortcutsMixin.js";
+import shortcut, { PRIMARY, SHIFT } from "@/components/mixins/keyboardShortcutsMixin.js";
 
 
 export default {
@@ -166,7 +166,7 @@ export default {
 	mixins: [
 		preferencesMixin,
 		// Toggle dark mode with cmd + d
-		shortcut('d', PRIMARY, function(event) {
+		shortcut('u', PRIMARY | SHIFT, function(event) {
 			// Prevent default
 			event.preventDefault();
 			// Toggle theme
