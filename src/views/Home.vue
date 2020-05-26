@@ -49,7 +49,8 @@
 			 -->
 			<div class="home-hero">
 				<h1>Keyframes helps you write better CSS.</h1>
-				<h4>A straightforward way to create animations, shadows, colors, & more.</h4>
+				<h4>Dead simple visual tools to help you generate CSS for your projects.</h4>
+				<!-- <h4>A straightforward way to create animations, shadows, & colors - instantly get the CSS to use in your projects.</h4> -->
 			</div>
 
 			<!-- <p>
@@ -61,124 +62,125 @@
 				Featured / App Launcher 
 				///////////////////////////// -->
 			<div id="featuredApps">
-			<!-- Animations -->
-			<div class="app-feature">
-				<div class="app-feature-text">
-					<h2>
-						<span>Animations</span>
-					</h2>
-					<p class="big">
-						Create basic or complex CSS @keyframe animations with a visual timeline editor similar to video-editing software.
-					</p>
-					<!-- Open animator -->
-					<button class="button invert mtop-sm" @click="navigate('/animate/')">
-						<i class="far fa-stream"></i>
-						<span>Create an Animation</span>
-					</button>
-				</div>
-				<div class="app-feature-demo">
-					<div id="featuredAnimatedTarget">
-						<i class="fal fa-ghost" @click="hello('Boo!', 'fas fa-exclamation')"></i>
+				<!-- Animations -->
+				<div class="app-feature">
+					<div class="app-feature-text">
+						<h2>
+							<span>Animations</span>
+						</h2>
+						<p class="big">
+							Create basic or complex CSS @keyframe animations with a visual timeline editor similar to video-editing software. 
+						</p>
+						<!-- Open animator -->
+						<button class="button invert mtop-sm" @click="navigate('/animate/')">
+							<i class="far fa-stream"></i>
+							<span>Create an Animation</span>
+						</button>
 					</div>
-					<!-- Timeline copy -->
-					<div id="featuredTimeline">
-						<div class="marker active"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-						<div class="marker dummy"></div>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Colors -->
-			<div class="app-feature reverse">
-				<div class="app-feature-text">
-					<h2>
-						<span>Colors</span>
-					</h2>
-					<p class="big">Pick your favorite colors, convert between hex and rgb, and create & save palettes.</p>
-					<!-- Open app -->
-					<button class="button invert mtop-sm" @click="navigate('/colors/')">
-						<i class="far fa-tint"></i>
-						<span>Play with Colors</span>
-					</button>
-				</div>
-				<div class="app-feature-demo">
-					<!-- Color Palette copy -->
-					<div id="featuredPalette">
-						<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-						<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-						<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-						<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-						<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-						<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-					</div>
-
-					<!-- Animated Slider -->
-					<div class="slider-wrapper">
-						<input type="range" @mousedown="colorRangeRunning = false" @input="colorRangeRunning = false" v-model="featuredColorsRange" min="0" max="360" step="1"/>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Shadows -->
-			<div class="app-feature">
-				<div class="app-feature-text">
-					<h2>
-						<span>Shadows</span>
-					</h2>
-					<p class="big">
-						Adjust sliders to preview and generate CSS for single or multi-layered box shadows.
-					</p>
-					<!-- Open app -->
-					<button class="button invert mtop-sm" @click="navigate('/shadows/')">
-						<i class="far fa-eclipse"></i>
-						<span>Cast Shadows</span>
-					</button>
-				</div>
-				<div class="app-feature-demo">
-					<!-- Shadow Example -->
-					<div id="featuredShadow">
-						<div class="sun">
-							<i class="fad fa-sun fa-swap-opacity"></i>
+					<div class="app-feature-demo">
+						<div id="featuredAnimatedTarget">
+							<i class="fal fa-ghost" @click="hello('Boo!', 'fas fa-exclamation')"></i>
 						</div>
-						<div class="shadow">
-							<i class="fas fa-globe-americas"></i>
+						<!-- Timeline copy -->
+						<div id="featuredTimeline">
+							<div class="marker active"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
+							<div class="marker dummy"></div>
 						</div>
 					</div>
 				</div>
+
+
+				<!-- Shadows -->
+				<div class="app-feature reverse">
+					<div class="app-feature-text">
+						<h2>
+							<span>Shadows</span>
+						</h2>
+						<p class="big">
+							Create single or multi-layer box shadows just by moving some sliders. Get the CSS output instantly.
+						</p>
+						<!-- Open app -->
+						<button class="button invert mtop-sm" @click="navigate('/shadows/')">
+							<i class="far fa-eclipse"></i>
+							<span>Make a Shadow</span>
+						</button>
+					</div>
+					<div class="app-feature-demo">
+						<!-- Shadow Example -->
+						<div id="featuredShadow">
+							<div class="sun">
+								<i class="fad fa-sun fa-swap-opacity"></i>
+							</div>
+							<div class="shadow">
+								<i class="fas fa-globe-americas"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- Colors -->
+				<div class="app-feature">
+					<div class="app-feature-text">
+						<h2>
+							<span>Colors</span>
+						</h2>
+						<p class="big">Pick your favorite colors, convert between hex and rgb, and create & save palettes.</p>
+						<!-- Open app -->
+						<button class="button invert mtop-sm" @click="navigate('/colors/')">
+							<i class="far fa-tint"></i>
+							<span>Play with Colors</span>
+						</button>
+					</div>
+					<div class="app-feature-demo">
+						<!-- Color Palette copy -->
+						<div id="featuredPalette">
+							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
+							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
+							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
+							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
+							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
+							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
+						</div>
+
+						<!-- Animated Slider -->
+						<div class="slider-wrapper">
+							<input type="range" @mousedown="colorRangeRunning = false" @input="colorRangeRunning = false" v-model="featuredColorsRange" min="0" max="360" step="1"/>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- Suggestions -->
+				<Callout
+					icon="fal fa-sparkles"
+					class=" mtop-lg"
+					color="invert"
+					size="fit margin-auto">
+					<p class="big padding-none">
+						More coming soon.
+					</p>
+					<p class="padding-none">
+						Have a suggestion for a feature or another app you would like to see?
+					</p>
+					<p class="small padding-none">
+						Send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a>
+					</p>
+				</Callout>
+
+				<!-- Spacer -->
+				<div class="pbottom-lg"></div>
+
 			</div>
-			</div>
-
-
-			<!-- Suggestions -->
-			<Callout
-				icon="fal fa-sparkles"
-				class=" mtop-lg"
-				color="invert"
-				size="fit margin-auto">
-				<p class="big padding-none">
-					More coming soon.
-				</p>
-				<p class="padding-none">
-					Have a suggestion for a feature or another app you would like to see?
-				</p>
-				<p class="small padding-none">
-					Send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a>
-				</p>
-			</Callout>
-
-			<!-- Spacer -->
-			<div class="pbottom-lg"></div>
-
 		</div>
 	</div>
 </template>
