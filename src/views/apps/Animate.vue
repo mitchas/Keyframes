@@ -732,19 +732,20 @@ export default {
 
 			var stepToDelete = parseFloat(this.currentStep.left);
 
+			console.log("DELETING " + stepToDelete)
+
 			if(Object.keys(this.keyframes)[0]){
 				if(stepToDelete == "0.0"){
 					// Can't delete step at 0
 					this.hello("You must have a step at 0%", "far fa-exclamation-triangle")
 				}else{
-					delete this.keyframes[stepToDelete]
+					delete this.keyframes[stepToDelete + "%"]
 
 					// Save step and calculate new output
 					this.saveStep();
 				}
 				// Change to 0% step
 				this.currentStep.left = Object.keys(this.keyframes)[0];
-				
 			}else{
 				return;
 			}
