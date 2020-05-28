@@ -26,6 +26,7 @@
 // 					Just a quick fix for people who format badly.
 //				copyShadowOutput() Copies generated shadow CSS to clipboard
 //				addLayer() Adds new shadow layer
+//				deleteLayer() Deletes selected layer
 //				tiltShadow() Detects compatibility (prompts permission on ios) then calls toggleTilt. Tilting device moves shadow.
 //				toggleTilt() Called with option button click - only shown below LG and on touch devices
 // -->
@@ -93,7 +94,7 @@
 							<code class="wrap">
 								<pre>
 									box-shadow: 
-									<div v-for="(layer, index) in layers" :key="index">{{layer.horizontal_offset}}px {{layer.vertical_offset}}px {{layer.blur}}px {{layer.spread}}px {{layer.color}}{{index + 1 != layers.length ? ', ' : ';'}}</div>
+									<div v-for="(layer, index) in layers" :key="index">{{layer.horizontal_offset}}px {{layer.vertical_offset}}px {{layer.blur}}px {{layer.spread}}px {{layer.color}}{{index != layers.length - 1 ? ', ' : ';'}}</div>
 								</pre>
 							</code>
 
@@ -133,37 +134,37 @@
 				<div class="field">
 					<label for="horOffset" class="slider-label-value">
 						<span>Horizontal Offset</span>
-						<input type="number" v-model="layers[selectedLayer - 1].horizontal_offset" min="-200" max="200"/>
+						<input type="number" v-model="layers[selectedLayer].horizontal_offset" min="-200" max="200"/>
 						<!-- <b>{{options.horizontal_offset}}px</b>	 -->
 					</label>
-					<input type="range" id="horOffset" v-model="layers[selectedLayer - 1].horizontal_offset" min="-200" max="200"/>
+					<input type="range" id="horOffset" v-model="layers[selectedLayer].horizontal_offset" min="-200" max="200"/>
 				</div>
 
 				<!-- Vertical Offset -->
 				<div class="field mtop-sm">
 					<label for="vertOffset" class="slider-label-value">
 						<span>Vertical Offset</span>
-						<input type="number" v-model="layers[selectedLayer - 1].vertical_offset" min="-200" max="200"/>
+						<input type="number" v-model="layers[selectedLayer].vertical_offset" min="-200" max="200"/>
 					</label>
-					<input type="range" id="vertOffset" v-model="layers[selectedLayer - 1].vertical_offset" min="-200" max="200"/>
+					<input type="range" id="vertOffset" v-model="layers[selectedLayer].vertical_offset" min="-200" max="200"/>
 				</div>
 
 				<!-- Blur -->
 				<div class="field mtop-sm">
 					<label for="shadowBlur" class="slider-label-value">
 						<span>Blur</span>
-						<input type="number" v-model="layers[selectedLayer - 1].blur" min="0" max="100"/>
+						<input type="number" v-model="layers[selectedLayer].blur" min="0" max="100"/>
 					</label>
-					<input type="range" id="shadowBlur" v-model="layers[selectedLayer - 1].blur" min="0" max="100"/>
+					<input type="range" id="shadowBlur" v-model="layers[selectedLayer].blur" min="0" max="100"/>
 				</div>
 
 				<!-- Spread -->
 				<div class="field mtop-sm">
 					<label for="shadowSpread" class="slider-label-value">
 						<span>Spread</span>
-						<input type="number" v-model="layers[selectedLayer - 1].spread" min="-200" max="200"/>
+						<input type="number" v-model="layers[selectedLayer].spread" min="-200" max="200"/>
 					</label>
-					<input type="range" id="shadowSpread" v-model="layers[selectedLayer - 1].spread" min="-200" max="200"/>
+					<input type="range" id="shadowSpread" v-model="layers[selectedLayer].spread" min="-200" max="200"/>
 				</div>
 
 				<!-- Color -->
@@ -171,16 +172,16 @@
 					<label for="shadowSpread">
 						Shadow Color
 					</label>
-					<input type="text" id="shadowColor" v-model="layers[selectedLayer - 1].color" @change="calculateShadow('color')"/>
+					<input type="text" id="shadowColor" v-model="layers[selectedLayer].color" @change="calculateShadow('color')"/>
 				</div>
 
 				<!-- Color Opacity -->
 				<div class="field mtop-sm mbottom-sm">
 					<label for="shadowTransparency" class="slider-label-value">
 						<span>Color Opacity</span>
-						<input type="number" v-model="layers[selectedLayer - 1].opacity" min="0" max="1"/>
+						<input type="number" v-model="layers[selectedLayer].opacity" min="0" max="1"/>
 					</label>
-					<input type="range" id="shadowTransparency" v-model="layers[selectedLayer - 1].opacity" min="0" max="1" step="0.01" @input="calculateShadow('color')"/>
+					<input type="range" id="shadowTransparency" v-model="layers[selectedLayer].opacity" min="0" max="1" step="0.01" @input="calculateShadow('color')"/>
 				</div>
 
 				<!-- Layers -->
@@ -190,12 +191,18 @@
 					</label>
 					<!-- Layer controls -->
 					<div class="layer-selector">
-						<div class="layer-button" v-for="(layer, index) in layers" :key="index" :class="{'active': selectedLayer == index + 1}" @click="selectedLayer = index + 1">{{index + 1}}</div>
+						<div class="layer-button" v-for="(layer, index) in layers" :key="index" :class="{'active': selectedLayer == index}" @click="selectedLayer = index">{{index + 1}}</div>
 						<!-- Add layer -->
 						<div class="layer-button" @click="addLayer()">
 							<i class="far fa-plus"></i>
 						</div>
 					</div>
+
+					<!-- Delete Layer -->
+					<button class="button small red mtop-sm mbottom-sm" @click="deleteLayer()" v-if="layers.length > 1">
+						<i class="far fa-trash-alt"></i>
+						<span>Delete Layer</span>
+					</button>
 				</div>
 
 			</div>
@@ -210,7 +217,7 @@
 			#targetElement{
 				box-shadow:
 				<template v-for="(layer, index) in layers">
-					{{layer.horizontal_offset}}px {{layer.vertical_offset}}px {{layer.blur}}px {{layer.spread}}px {{layer.color}} {{index + 1 != layers.length ? ', ' : ';'}}				
+					{{layer.horizontal_offset}}px {{layer.vertical_offset}}px {{layer.blur}}px {{layer.spread}}px {{layer.color}} {{index != layers.length - 1 ? ', ' : ';'}}				
 				</template>
 			}
 		</v-style>
@@ -235,7 +242,7 @@ export default {
 
 	data() {
 		return {
-			selectedLayer: 1,
+			selectedLayer: 0,
 			// Fun tilt mode on phones
 			tiltMode: false,
 			layers: [
@@ -296,7 +303,7 @@ export default {
 		// Runs shadow calculation - needed for multiple layers
 		calculateShadow: function(type){
 
-			var color = this.layers[this.selectedLayer - 1].color;
+			var color = this.layers[this.selectedLayer].color;
 
 
 			// Color only needs to update when color or opacity changes
@@ -308,7 +315,7 @@ export default {
 				// Convert hex to rgb
 				if(color.startsWith("#")){
 					rgbArray = convert.hex.rgb(color.substring(1,7));
-					this.layers[this.selectedLayer - 1].opacity = 1;
+					this.layers[this.selectedLayer].opacity = 1;
 				// Get numbers from RGB format
 				}else{
 					var numbers = color.replace(/[^\d,]/g, '').split(',')
@@ -325,11 +332,11 @@ export default {
 					+ this.rgbNumberFormat(rgbArray[0]) + ", "
 					+ this.rgbNumberFormat(rgbArray[1]) + ", "
 					+ this.rgbNumberFormat(rgbArray[2]) + ", "
-					+ this.layers[this.selectedLayer - 1].opacity + ")";
+					+ this.layers[this.selectedLayer].opacity + ")";
 
 				// Set to options
-				this.layers[this.selectedLayer - 1].color_format = formattedColor;
-				this.layers[this.selectedLayer - 1].color = formattedColor;
+				this.layers[this.selectedLayer].color_format = formattedColor;
+				this.layers[this.selectedLayer].color = formattedColor;
 
 				// Update color input
 			}
@@ -386,11 +393,25 @@ export default {
 		///////////////////
 		addLayer: function(){
 			// Copy selected layer to new layer
-			var copyLayer = _.cloneDeep(this.layers[this.selectedLayer - 1]);
+			var copyLayer = _.cloneDeep(this.layers[this.selectedLayer]);
 			// Push copied layer to layers arrray
 			this.layers.push(copyLayer);
 			// Select new layer
-			this.selectedLayer = this.layers.length;
+			this.selectedLayer = this.layers.length - 1;
+		},
+
+		/////////////////////
+		// Delete  Layer  //
+		///////////////////
+		deleteLayer: function(){
+
+			// Select prev color unless 0
+			if(this.selectedLayer != 0){
+				this.selectedLayer--;
+			}
+			
+			// Delete from pallete
+			this.layers.splice(this.selectedLayer, 1);
 		},
 
 		////////////////////////
@@ -441,8 +462,8 @@ export default {
 
 			// Set to shadow
 			// Vertical offset has -30 because of how people naturally hold their devices.
-			this.layers[this.selectedLayer - 1].vertical_offset = (-vOffset) + 70;
-			this.layers[this.selectedLayer - 1].horizontal_offset = -hOffset;
+			this.layers[this.selectedLayer].vertical_offset = (-vOffset) + 70;
+			this.layers[this.selectedLayer].horizontal_offset = -hOffset;
 		},
 		toggleTilt: function(){
 
