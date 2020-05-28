@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
 
 	// userPreferences: settings visitors can toggle.
 	state: {
-		appVersion: "2.1.04",
+		appVersion: "2.1.05",
 		// Get app version from package.json
 		// appVersion: process.env.PACKAGE_VERSION || '0',
 		// Lock scrolling - for modals, etc to prevent behind scroll

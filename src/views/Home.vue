@@ -37,20 +37,12 @@
 			<!-- Regular Banner -->
 			<Callout
 				v-if="$route.path == '/'"
-				icon="fab fa-product-hunt"
-				class="mbottom-md"
-				color="orange"
-				size="">
-				<span>Keyframes <a href="https://www.producthunt.com/posts/keyframes-app-2" target="_blank">is on Product Hunt</a> right now! Head over there to post some questions, feedback, or suggestions for any other tools you'd like to see on Keyframes. What's here now is just the start ;)</span>
-			</Callout>
-			<!-- <Callout
-				v-if="$route.path == '/'"
 				icon="far fa-shapes"
 				class="mbottom-md"
 				color="blue"
 				size="">
-				<span><b>Welcome to Keyframes 2.</b> A complete rewrite on Vue, version 2 has a ton of <a @click="navigate('/changelog')">new features</a> for the animator, new apps for colors & shadows, has dark more and other preferences, and works on phones & tablets. If needed, version 1 can be found <a href="https://mitchs.co/keyframes1/">here</a>.</span>
-			</Callout> -->
+				<span><b>Welcome to Keyframes.</b> It's brand new, so there may be some bugs. If you notice any issues, or have other feedback or suggestions, send me a message at hello@hotdi.sh. </span>
+			</Callout>
 
 			<!-- 
 				Hero
