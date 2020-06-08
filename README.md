@@ -9,6 +9,7 @@ This is a collection of web apps to live preview and generate various CSS styles
  * *Animations*: A video-editor like timeline to create CSS @Keyframe animations.
  * *Colors*: Full screen RGB color picker. Convert between HEX/RGB. Save palettes to local storge.
  * *Shadows*: A visual CSS box-shadow generator. Single or multi-layer shadows.
+ * *Character Codes*: Search for special characters and get their HTML or CSS codes.
  
 
 # Project Installation & Development
