@@ -165,7 +165,7 @@
 				<transition name="fromtop">
 					<div class="settings-display" v-show="options.output">
 						<!-- Output CSS -->
-						<pre id="outputCSS">
+						<pre id="outputCSS" class="no-scrollbars">
 							<!-- 
 								///////////////////////////
 								CSS output

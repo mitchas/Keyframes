@@ -22,7 +22,7 @@
 					Keyframes gives you a simple UI to adjust and create CSS properties - and see the results & get the output CSS instantly. It's a lot easier than editing more complex CSS - like @Keyframe animations or multi-layered box shadows - in your code editor, where you have to switch back and forth between your browser to see every little change you make.
 				</p>
 				<p>
-					You kind of have to be familiar with CSS to get any use from this site - especially the animations page, it can be kind of tricky if you don't know what you're doing. Be sure to follow whatever instructions or tutorials I have - and look at examples. I'll have more tutorials up soon.
+					You have to be at least somewhat familiar with CSS to get any use from this site - especially the animations page, it can be kind of tricky if you don't know what you're doing. Be sure to follow whatever instructions or tutorials I have - and look at examples. I'll have more tutorials up soon.
 				</p>
 				<p>
 					This is just a side project for me. There are no fees, no ads, and minimal tracking - I only count page views, no user-by-user tracking or cookies. It's also extremely mobile-friendly. Install it as a PWA on your phone or tablet to access easily while you're working on your computer. Finally, it's not finished - I have much more planned, and would be more than happy to hear any suggestions for tools you would find handy: <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a> or <a href="https://twitter.com/@sleumasm" target="_blank"><i class="fab fa-twitter"></i> @sleumasm</a>

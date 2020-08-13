@@ -41,7 +41,7 @@
 				class="mbottom-md"
 				color="blue"
 				size="">
-				<span><b>Welcome to Keyframes.</b> It's brand new, so there may be some bugs. If you notice any issues, or have other feedback or suggestions, send me a message at hello@hotdi.sh. </span>
+				<span><b>Welcome to Keyframes.</b> It's pretty new, so there may be some bugs. If you notice any issues, or have other feedback or suggestions, send me a message at hello@hotdi.sh. </span>
 			</Callout>
 
 			<!-- 

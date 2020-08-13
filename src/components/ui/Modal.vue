@@ -45,7 +45,7 @@
 						<slot name="header"></slot>
 					</div>
 					<!-- Body Content -->
-					<div class="modal-body">
+					<div class="modal-body no-scrollbars">
 						<slot name="body"></slot>
 					</div>
 					<!-- Footer/Buttons -->

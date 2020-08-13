@@ -337,7 +337,6 @@ export default {
 							code{
 								font-family: var(--mono);
 								font-weight: 600;
-								font-style: italic;
 								letter-spacing: -0.4px;
 							}
 						}

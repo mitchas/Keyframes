@@ -48,10 +48,30 @@
 			<!-- Actual Chngelog -->
 			<div id="changelog">
 
-				<!-- Current version -->
+				<!-- 2.1.10 -->
 				<div class="changelog-title">
 					<div class="cl-version">
 						<b>v{{$store.getters.appVersion}}</b>
+						<span>(August 13, 2020)</span>
+					</div>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-sync-alt cat-upgrade"></i>
+					<span>Updated some copy around the site</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-virus-slash cat-bug"></i>
+					<span>Fixed an issue with clicking timeline marker on animator</span>
+				</div>
+				<div class="changelog-change">
+					<i class="fas fa-virus-slash cat-bug"></i>
+					<span>Some UI Fixes with scrollbars, colors, etc</span>
+				</div>
+
+				<!-- 2.1.06 -->
+				<div class="changelog-title">
+					<div class="cl-version">
+						<b>v2.1.06</b>
 						<span>(June 3, 2020)</span>
 					</div>
 				</div>

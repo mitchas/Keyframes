@@ -35,7 +35,7 @@
 						<i class="far fa-file-times"></i>
 					</div>
 					<!-- Body Content -->
-					<div class="modal-body">
+					<div class="modal-body no-scrollbars">
 						Are you sure you want to leave this page? If you have any unsaved changes, they may be lost.
 					</div>
 					<!-- Footer/Buttons -->
