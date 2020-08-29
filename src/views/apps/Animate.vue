@@ -34,7 +34,6 @@
 // 				copyOutput() copies output to user's clipboard
 //
 // -->
-
 <template>
 	<div id="animateApp">	
 		
@@ -294,8 +293,8 @@
 			<div id="animationControls">
 				<!-- Left side, add step -->
 				<div class="steps">
-					<button aria-label="Add new step" class="button" @click="addingStep = !addingStep;" v-bind:class="{'red' : addingStep, 'invert': !addingStep}">
-						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-times-circle': addingStep}"></i>
+					<button aria-label="Add new step" class="button" @click="addingStep = !addingStep;" v-bind:class="{'orange' : addingStep, 'invert': !addingStep}">
+						<i class="far" v-bind:class="{'fa-plus-circle' : !addingStep, 'fa-ban': addingStep}"></i>
 						<span v-if="!addingStep">Add Step</span>
 						<span v-else>Cancel</span>
 					</button>
