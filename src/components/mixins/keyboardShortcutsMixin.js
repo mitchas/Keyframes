@@ -1,4 +1,4 @@
-// Scroll Lock Mixin
+// Keyboard Shortcut Mixin
 // 		from https://gist.github.com/loilo/2a1834dc20d842f63bd048ffbcf3dc19
 // _________________________
 //

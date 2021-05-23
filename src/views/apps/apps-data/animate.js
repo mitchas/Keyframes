@@ -219,7 +219,7 @@ export default {
 				},
 				"Left":{
 					"placeholder": "25px",
-					"model": "padding",
+					"model": "left",
 				},
 			},
 		},

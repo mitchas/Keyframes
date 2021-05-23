@@ -37,7 +37,7 @@
 				<div id="aboutVersion">
 					<div class="badge green">
 						<i class="far fa-code-branch"></i>
-						<span>v{{$store.getters.appVersion}}, June 8 2020</span>
+						<span>v{{$store.getters.appVersion}}, May 20, 2021</span>
 					</div>
 					<a @click="$emit('aboutModalClosed'); navigate('/changelog/')">View Changelog</a>
 				</div>

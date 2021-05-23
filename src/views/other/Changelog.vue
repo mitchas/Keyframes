@@ -19,7 +19,7 @@
 				size="giant">
 				<h4 class="mbottom-xs">Version 2.0</h4>
 				<p class="padding-none">
-					This is the first time Keyframes has been updated since 2018. I rewrote everything. It's a lot faster, has a bunch of new features and tools, and is a lot easier for me to make changes and add features to than the old site. But some things are different, and there may be some bugs. So if you want to use the old version, it's <a href="https://mitchs.co/keyframes1">here now</a>.
+					This is the first time Keyframes has been updated since 2018. I rewrote everything. It's a lot faster, has a bunch of new features and tools, and is a lot easier for me to make changes and add features to than the old site. But some things are different, and there may be some bugs. So if you want to use the old version, it's <a href="https://dev.hotdi.sh/keyframes-v1">here now</a>.
 				</p>
 			</Callout>
 

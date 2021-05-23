@@ -32,7 +32,7 @@
 				<h1 class="mtop-lg">Background</h1>
 
 				<p>
-					Two years ago, in May 2018, I had the idea and made <a href="https://mitchs.co/keyframes1" target="_blank">Keyframes version 1</a>. It took about a week. It worked, but the code was messy - thrown together with jQuery and didn't work at all on mobile. After I put it up, I didn't touch the code again. 
+					Two years ago, in May 2018, I had the idea and made <a href="https://dev.hotdi.sh/keyframes-v1" target="_blank">Keyframes version 1</a>. It took about a week. It worked, but the code was messy - thrown together with jQuery and didn't work at all on mobile. After I put it up, I didn't touch the code again. 
 				</p>
 				<p>
 					Fast forward two years. I still really like the idea, and knew it could be improved. I also have a bunch of free time. So I decided to rewrite the entire thing from scratch. I used it as an excuse to teach myself some things I didn't already know - frameworks or tools I hadn't used in any other projects.

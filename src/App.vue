@@ -57,7 +57,7 @@
 				<Toast ref="toastComponent"></Toast>
 				<!-- Alert Component -->
 				<Alert ref="alertComponent"></Alert>
-				<!-- Alert Component -->
+				<!-- Confirm leave Component -->
 				<ConfirmLeave ref="confirmLeaveComponent"></ConfirmLeave>
 
 			</div>

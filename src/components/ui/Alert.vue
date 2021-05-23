@@ -35,7 +35,7 @@
 <script>
 
 export default {
-	name: "Toast",
+	name: "Alert",
 	data() {
 		return {
 			alertMessage: 'This is an alert',
