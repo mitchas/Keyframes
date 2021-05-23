@@ -11,7 +11,7 @@
     "color-convert": "^2.0.1",
     "core-js": "^2.6.5",
     "eslint-loader": "^2.1.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
     "vue-lodash": "^2.1.1",
