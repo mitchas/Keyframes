@@ -758,7 +758,8 @@ export default {
 			this.backdoor++;
 			this.addingStep = false;
 			this.animationPaused = false;
-			this.currentStep.left = '0.0%';
+			this.currentStep.left = Object.keys(this.keyframes)[0];
+
 
 			// If it's already playing
 			if(this.animationPlaying){
