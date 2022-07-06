@@ -1,959 +1,632 @@
 <!--
-// Colors.vue
-// _________________________
-//
-//	Pick colors, convert rgb/hex, make palettes, share URL
-//
-//		Layout
-// 			Large search bar, flex squares below with each character and codes
-//
-//	
-//		Scripts
-//			Computed
-//				searchCharacters - Returns filtered character list matching search - based on name
-//			Methods
-//				setPalette(hexString) takes value as hexString ie ('ff0000,f0ff00,aa0f11') and loads them as a palette. Used for loading local storage or url params
-//				rgbaChange() Whenever a value for r,g,b, or a is changed, change the other formats
-//				hexChange() change to hex input, update rgba values
-//				rgbaTextChange() Change to rgba input, update sliders and hex
-//				invertTextColor(color) returns color value for css - either black or white based on color passed
-// 					How it works: converts passed (color) to hsl, gets the l value (brightness), and if it's > 50%, it's dark text, < is light
-//				deleteColor(index) deletes color at index - cannot delete all colors, one must remain
-//				addColor() adds new color to palette - defaults to black
-//				createPalette() Takes color and generates 5 colors with different hues for a palette.
-//				loadSavedPalettes() Gets palettes from local storage - gets on every tab click so it's up to date
-//				SavePalette() saves palette to local storage
-//				deletePalette() deletes palette from local storage
-//				loadPalette(name) loads palette from local storage based on name, calls setPalette()
-//
-// -->
+	Colors App
+-->
+
 <template>
-	<div class="app-page-split">
+	<div class="fixed-page" id="colorApp">
 
-		<!--/////////////////////////////
-			Left side of page - top bar, main view
-		/////////////////////////////-->
-		<div class="app-page-split-left">
+		<nav class="secondary-nav">
 
+			<!-- Add color -->
+			<button @click="addColor()">
+				<i class="fas fa-plus-circle"></i>
+				<span class="hint">Add Color</span>
+			</button>
+			<label>{{currentPalette.length}} color{{currentPalette.length > 1 ? 's' : ''}}</label>
 
-			<!--/////////////////////////////
-				Top bar - dropdown buttons - options, output
-			/////////////////////////////-->
-			<div class="app-page-split-left-top" id="colorOptionsBar">
+			<div class="spacer"></div>
+			<button>
+				<i class="fas fa-sliders-simple"></i>
+				<span class="hint left">Adjust All</span>
+			</button>
+			<button>
+				<i class="fas fa-glasses"></i>
+				<span class="hint left">Color Blindness</span>
+			</button>
+			<button>
+				<i class="fas fa-circle-half-stroke"></i>
+				<span class="hint left">Contrast</span>
+			</button>
+			<hr/>
+			<button @click="toggleSidebar('export')">
+				<i :class="viewSidebar == 'export' ? 'fas fa-times' : 'fas fa-share-nodes'"></i>
+				<span class="hint left">Export</span>
+			</button>
+			<button @click="toggleSidebar('save')">
+				<i :class="viewSidebar == 'save' ? 'fas fa-times' : 'fas fa-floppy-disk'"></i>
+				<span class="hint left">Save / Load</span>
+			</button>
+			<button @click="toggleSidebar('more')">
+				<i :class="viewSidebar == 'more' ? 'fas fa-times' : 'fas fa-bars'"></i>
+				<span class="hint left">More</span>
+			</button>
+		</nav>
 
-				<div class="option-dropdown">
-					<button class="button small action-btn" @click="controlTab('save')" v-bind:class="{'red': controlToggles.save, 'invert': !controlToggles.save}">
-						<i v-bind:class="{'fas fa-save': !controlToggles.save, 'fas fa-times-circle': controlToggles.save}"></i>
-						<span>Save/Load</span>
-					</button>
-					<button class="button small action-btn" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'transparent': !controlToggles.options}">
-						<i v-bind:class="{'fas fa-edit': !controlToggles.options, 'fas fa-times-circle': controlToggles.options}"></i>
-						<span>Options</span>
-					</button>
+		<div class="stage">
 
-					<!--/////////////////////////////
-						Dropdown Content
-					/////////////////////////////-->
-					<!-- Save/Load -->
-					<transition name="fromtop">
-						<div class="option-dropdown-content" v-if="controlToggles.save">
-							<!-- Save current animation -->
-							<div class="field">
-								<label for="newPaletteSaveName">
-									<small class="block">Save your color palette to come back to later.</small>
-								</label>
-								<!-- animation name -->
-								<input id="newPaletteSaveName" aria-label="Save as Name" type="text" v-model="paletteToSaveName" maxlength="32" placeholder="MyPalette"/>
-								<button aria-label="Save Palette" class="button blue mtop-xs" @click="savePalette()">
-									<i class="far fa-save"></i>
-									<span>Save</span>
-								</button>
-								<transition name="basic">
-									<div class="badge red mleft-xs" v-if="savedPalettes.includes('palette_' + paletteToSaveName)">
-										<i class="far fa-code-branch"></i>
-										<span>Overwriting {{paletteToSaveName}}</span>
-									</div>
-								</transition>
-							</div>
-							<!-- Saved animations -->
-							<div class="field mtop-sm">
-								<label>
-									Load a Saved Palette
-									<small v-if="!savedPalettes.length" class="block ptop-xs">You don't have any palettes saved yet</small>
-								</label>
-								<div class="saved-list">
-									<div class="saved-item" v-for="(name, index) in savedPalettes" :key="index">
-										<span @click="loadPalette(name)">{{name.substr(8)}}</span>
-										<i class="delete-saved-item far fa-times" @click.self.prevent="deletePalette(name)"></i>
-									</div>
+			<!-- Color Grid -->
+			<div id="colorGrid"  :style="'background-color: ' + colorPrefs.stageBackground">
+
+				<div v-for="(color, key) in currentPalette" :key="key" class="color_block"
+					:style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a) + ';  color: ' + getTextColor(color.r, color.g, color.b)">
+
+					<div class="color_block_info">
+
+						<!-- <button class="hex_code" @click="copyToClipboard('#' + color.hex, '#' + color.hex)">#{{color.hex}}</button> -->
+						<button class="hex_code" @click="copyToClipboard(RGBToHex(color.r, color.g, color.b, color.a).toUpperCase())">
+							{{RGBToHex(color.r, color.g, color.b, color.a)}}
+						</button>
+						
+						<button class="format_code" 
+							@click="
+							colorPrefs.enableOpacity && copyToClipboard('rgba' + '(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + (color.a / 255).toFixed(2) + ')');
+							!colorPrefs.enableOpacity && copyToClipboard('rgb' + '(' + color.r + ', ' + color.g + ', ' + color.b + ')');
+							">
+							rgb{{colorPrefs.enableOpacity ? 'a' : ''}}({{color.r}}, {{color.g}}, {{color.b}}<span v-if="colorPrefs.enableOpacity">, {{(color.a / 255).toFixed(2)}}</span>)
+						</button>
+
+						<div class="color_block_controls">
+							<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple"></i></button>
+							<button><i class="fas fa-lightbulb"></i></button>
+							<button @click="removeColor(key)"><i class="fas fa-trash-alt"></i></button>
+						</div>
+
+						<transition name="basic">
+							<div class="color_block_sliders" v-if="color.adjust">
+								<div class="cbs_row">
+									<label for="colorRedInput" class="vertical">Red</label>
+									<input type="range" class="red" id="colorRedInput" min="0" max="255" v-model="color.r"/>
+									<input type="number" id="colorRedInput" v-model="color.r" min="0" max="255"/>
+								</div>
+								<div class="cbs_row">
+									<label for="colorGreenInput" class="vertical">Green</label>
+									<input type="range" class="green" id="colorGreenInput" min="0" max="255" v-model="color.g"/>
+									<input type="number" id="colorGreenInput"  v-model="color.g" min="0" max="255"/>
+								</div>
+								<div class="cbs_row">
+									<label for="colorBlueInput" class="vertical">Blue</label>
+									<input type="range" class="blue" id="colorBlueInput" min="0" max="255"  v-model="color.b"/>
+									<input type="number" id="colorBlueInput" v-model="color.b" min="0" max="255"/>
+								</div>
+								<div class="cbs_row" v-if="colorPrefs.enableOpacity">
+									<label for="colorOpacityInput" class="vertical">Opacity</label>
+									<input type="range" id="colorOpacityInput" min="0" max="255" step="1"  v-model="color.a"/>
+									<input type="number" id="colorOpacityInput" v-model="color.a" min="0" max="255"/>
 								</div>
 							</div>
-						</div>
-					</transition>
-					<!-- Options -->
-					<transition name="fromtop">
-						<div class="option-dropdown-content" v-if="controlToggles.options">
-							<div class="field">
-								<label for="stageBackground">
-									<small class="block">Change the background behind the color stage to see what it looks like layered with opacity.</small>
-								</label>
-								<input type="text" id="stageBackground" v-model="options.stageBackground" placeholder="Orange"/>
-							</div>
-						</div>
-					</transition>
+						</transition>
+
+					</div>
+
 
 				</div>
-			</div> <!-- End page split left top -->
+			</div>
 
+			<!-- Sidebar -->
+			<div class="stage-sidebar" :class="{'expanded': viewSidebar != null}">
 
-			<!--/////////////////////////////
-				Stage
-			/////////////////////////////-->
-			<div class="app-stage" id="colorEditorStage">
+				<transition-group name="basic">
+					<!-- Export -->
+					<div class="stage-sidebar-content" v-if="viewSidebar == 'export'" :key="0">
+						<h3>Export</h3>
+						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
 
-				<div id="colorEditor" class="invert-text">
-
-					<div class="field-row">
-						<!-- HEX -->
-						<div class="field" id="hexField">
-							<label for="horOffset">
-								<span>HEX</span>
-							</label>
-							<input type="text" v-model="palette[selectedColor].hex" @input="hexChange()"/>
-						</div>
-
-						<!-- RGBA -->
-						<div class="field" id="rgbaField">
-							<label for="horOffset">
-								<span>RGBA</span>
-							</label>
-							<input type="text" v-model="palette[selectedColor].rgba" @input="rgbaTextChange()"/>
 						</div>
 					</div>
 					
-					<!-- Red -->
-					<div class="field">
-						<label for="rgbaRed" class="slider-label-value">
-							<span>Red</span>
-							<input type="number" v-model="palette[selectedColor].r" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaRed" v-model="palette[selectedColor].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
-					</div>
-					<!-- Green -->
-					<div class="field">
-						<label for="rgbaGreen" class="slider-label-value">
-							<span>Green</span>
-							<input type="number" v-model="palette[selectedColor].g" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaGreen" v-model="palette[selectedColor].g" min="0" max="255" step="1" @input="rgbaChange()"/>
-					</div>
-					<!-- Blue -->
-					<div class="field">
-						<label for="rgbaBlue" class="slider-label-value">
-							<span>Blue</span>
-							<input type="number" v-model="palette[selectedColor].b" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaBlue" v-model="palette[selectedColor].b" min="0" max="255" step="1" @input="rgbaChange()"/>
-					</div>
-					<!-- Opacity -->
-					<div class="field">
-						<label for="rgbaOpacity" class="slider-label-value">
-							<span>Opacity</span>
-							<input type="number" v-model="palette[selectedColor].a" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaOpacity" v-model="palette[selectedColor].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
-					</div>
+					<!-- Save / Load -->
+					<div class="stage-sidebar-content" v-if="viewSidebar == 'save'" :key="1">
+						<h3>Save</h3>
 
-				</div>
-				
-
-			</div>
-			
-		</div> <!-- End page left -->
-
-
-
-		<!--//////////////////////
-			//////////////////////
-			Right side - value editor
-			//////////////////////
-			//////////////////////-->
-		<div class="app-page-split-right mobile-small">
-			<!-- Fields -->
-			<div class="app-fields mobile-noscroll">
-
-				<h4 class="mbottom-sm" id="colorPaletteHeader">
-					<span>Palette</span>
-					<i class="far fa-swatchbook mleft-xs"></i>
-				</h4>
-
-				<!-- Color palette -->
-				<div id="colorPalette">
-					<!-- Saved color loop -->
-					<transition-group name="basic" class="color-wrapper">
-						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedColor = index" :class="{'active': selectedColor == index}"
-							:style="'background: ' + color.hex + '; color: ' + invertTextColor(palette[index].hex) + ';'">
-							<div class="color-codes">
-								<!-- Color name -->
-								<div class="name">{{color.name}}</div>
-								<!-- Hex code -->
-								<span class="color-value" @click="selectedColor == index && copyToClipboard(color.hex, color.hex)">
-									{{color.hex}}<i class="far fa-copy"></i>
-								</span>
-								<!-- Rgba value -->
-								<span class="color-value" @click="selectedColor == index && copyToClipboard(color.rgba, 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')')">
-									rgb({{color.r}}, {{color.g}}, {{color.b}})<i class="far fa-copy"></i>
-								</span>
-							</div>
-							<!-- Delete -->
-							<div class="color-actions">
-								<button class="color-delete" aria-label="Delete color from palette" @click.stop="deleteColor(index)" v-if="palette.length > 1 && selectedColor == index">
-									<i class="far fa-times"></i>
+						<!-- Save Form -->
+						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-md">
+							<div class="button-input">
+								<input type="text" placeholder="My Favorite Colors" v-model="nameToSave"/>
+								<button class="button" :disabled="!nameToSave.length">
+									<i class="fas fa-floppy-disk"></i>
+									<span>Save</span>
 								</button>
 							</div>
-						</div>
-						<!-- Add color tile - only shows on mobile -->
-						<div class="color color-button" @click="addColor()" key="0123123">
-							<i class="fal fa-plus"></i>
-							<span class="color-button-text">Add Color</span>
-						</div>
-						<!-- Add color tile - only shows on mobile -->
-						<div class="color color-button" @click="createPalette()" v-if="palette.length == 1" key="0923123">
-							<i class="fal fa-palette"></i>
-							<span class="color-button-text">Auto Palette</span>
-						</div>
-						<!-- Spacer-only on moible -->
-						<div class="color color-spacer"  key="012373">
+						</form>
+							
+							
+						<h3>Load</h3>
+						<!-- Scrollable saved list -->
+						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
+
+							<button v-for="(palette, key) in storedPalettes" class="load-palette-button mbottom-md padded" :key="key" @click="loadPalette(palette)">
+								<b>
+									{{key}}
+									<small>{{$date(palette.saved).format("MMMM D YYYY")}}</small>
+								</b>
+								<div class="palette-preview">
+									<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
+								</div>
+							</button>
+							
+							<div class="padded mtop-sm" v-if="!Object.keys(storedPalettes).length">
+								<Callout
+									icon="far fa-empty-set"
+									size="small"
+									color="red">
+									You haven't saved any palettes yet.
+								</Callout>
+							</div>
+
+
+
 						</div>
 
-					</transition-group>
-				</div>
+					</div>
 
-				<div class="flex flex-between mtop-xs" id="paletteControlButtons">
-					<!-- Add color -->
-					<button class="button small invert mbottom-sm" @click="addColor()">
-						<i class="far fa-plus-circle"></i>
-						<span>Add Color</span>
-					</button>
-					<!-- create Palette -->
-					<button class="button small blue mbottom-sm" @click="createPalette()" v-if="palette.length == 1">
-						<i class="far fa-palette"></i>
-						<span>Auto Palette</span>
-					</button>
-				</div>
+					<!-- More -->
+					<div class="stage-sidebar-content" v-if="viewSidebar == 'more'" :key="2">
+						<h3>More</h3>
+						<div class="stage-sidebar-content-scroll">
 
-				<!-- Flex spacer -->
-				<div class="flex-grow"></div>
+							<div class="padded mtop-md">
+								<!-- Color Format -->
+								<label>Color Format</label>
+								<div class="aselect mtop-xxs">
+									<select v-model="activeColorFormat">
+										<option v-for="format in colorFormats" :value="format" :key="format">{{format}}</option>
+									</select>
+								</div>
 
-				<!-- Share -->
-				<Callout
-					icon="far fa-link"
-					class="mbottom-xs mtop-lg hide-md"
-					color="blue"
-					size="tiny">
-					<span>Easily share your color or palette: the URL automatically updates for every change.</span>
-				</Callout>
-					
+								<div class="flex mtop-md flex-between">
+									<label class="vertical" for="enableColorOp">Enable Opacity</label>
+									<input type="checkbox" id="enableColorOp" class="toggle yes-no" v-model="colorPrefs.enableOpacity"/>
+								</div>
+
+								<transition name="basic">
+									<div class="mtop-md" v-if="colorPrefs.enableOpacity">
+										<label>Stage Background Color</label>
+										<input type="text" class="mtop-xxs" v-model="colorPrefs.stageBackground" :disabled="!colorPrefs.enableOpacity" placeholder="#FFFFFF"/>
+									</div>
+								</transition>
+
+
+							</div>
+
+
+
+						</div>
+					</div>
+				</transition-group>
+
 
 			</div>
+
 		</div>
-
-
-
-		<!-- Append color styles to preview on page -->
-		<v-style>
-			#colorEditorStage{
-				background: {{palette[selectedColor].rgba}};
-			}
-			.app-page-split-left{
-				background: {{options.stageBackground ? options.stageBackground : 'var(--layer)'}};
-			}
-
-			.invert-text label *, .invert-text span, .invert-text label, .invert-text div, .invert-text a, .invert-text i{
-				color: {{invertTextColor(palette[selectedColor].hex)}};
-			}
-		</v-style>
-
 
 	</div>
 </template>
 
 <script>
-// Mixins
-import metaMixin from "@/components/mixins/metaMixin.js";
 // Components
-import Callout from "@/components/ui/Callout";
+import Selections from "@/components/ui/Forms/Selections";
+import Callout from "@/components/ui/Common/Callout";
+
 
 export default {
-	name: "ColorApp",
+	name: "Colors",
 
 	components: {
+		Selections,
 		Callout,
 	},
 
 	mixins: [
-		metaMixin,
 	],
 
 	data() {
 		return {
-			selectedColor: 0,
-			// Save & Load
-			savedPalettes: [],
-			paletteToSaveName: "",
-			hexStringTimer: null,
-			hexString: "",
-			// Palette
-			palette: [
+			// App Functions
+			viewSidebar: null,
+			activeColorFormat: "RGB/A",
+			colorFormats: [
+				"RGB/A",
+				"HSB",
+				"HSL",
+				"CMYK"
+			],
+
+			// Settings
+			colorPrefs: {
+				enableOpacity: false,
+				stageBackground: "",
+			},
+
+			// Saving
+			nameToSave: "",
+
+			// Current Palette
+			currentPalette: [
 				{
-					name: "Turquoise",
-					hex: "#4AF9D6",
-					rgba: "rgba(74, 249, 214, 1)",
-					r: 74,
-					g: 249,
-					b: 214,
-					a: 1,
+					r: 255,
+					g: 0,
+					b: 0,
+					a: 255,
+					adjust: false,
 				},
 			],
-			// App options
-			options: {
-				stageBackground: "",
-				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-hands-wash'></i></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:var(--borderWidth) solid #f2f5f9;\n    color: #16023C;\n    border-radius: 3px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
-			},
-			// Which controls are visible
-			controlToggles: {
-				options: false,
-				save: false,
-			}
+
+			// Saved Palettes
+			storedPalettes: {},
+
+			
 		};
-	},
-
-	mounted() {
-		this.updateMeta("Colors | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
-	
-		// Get parms
-		if(this.$route.query.c){
-			this.hexString = this.$route.query.c;
-			this.setPalette();
-		}
-	},
-
-	computed: {
 	},
 
 	watch: {
 		
 	},
 	
+	mounted() {
+	},
+	created: function () {
+	},
+
+	beforeDestroy(){
+	},
+	
 	methods: {
-		/////////////////////////////
-		// Set palette from load  //
-		///////////////////////////
-		setPalette: function(hexString){
-			var hexs = this.hexString.split(",");
 
-			// Set up array to hold palette
-			var paletteArray = [];
-
-			// For each hex in string
-			hexs.forEach(function(hex) {
-
-				// Get formats
-				var rgbArray = convert.hex.rgb(hex);
-				var rgbaString = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
-				var name = convert.hex.keyword(hex);
-
-				var color = {
-					name: name,
-					hex: "#" + hex,
-					rgba: rgbaString,
-					r: rgbArray[0],
-					g: rgbArray[1],
-					b: rgbArray[2],
-					a: 1,
-				}
-
-				// Push to palette array
-				paletteArray.push(color);
-
-			});
-
-			// Set palette
-			this.palette = paletteArray;
-		},
-
-		//////////////////////////
-		// Switch Control Tab  //
-		////////////////////////
-		controlTab: function(tab){
-			if(tab == 'options' && !this.controlToggles.options){
-				this.controlToggles.options = true;
-				this.controlToggles.save = false;
-			}else if(tab == 'save' && !this.controlToggles.save){
-				// Load palettes from local storage on click
-				this.loadSavedPalettes();
-				this.controlToggles.save = true;
-				this.controlToggles.options = false;
+		toggleSidebar: function(name){
+			if(this.viewSidebar == name){
+				this.viewSidebar = null;
 			}else{
-				this.controlToggles.options = false;
-				this.controlToggles.save = false;
+				this.viewSidebar = name;
 			}
 		},
-		/////////////////////
-		// Color Changes  //
-		////////////////////
-		// Any r g b or a value change, calculate full rgba() and hex
-		rgbaChange: function(){
-			var red = parseInt(this.palette[this.selectedColor].r);
-			var green = parseInt(this.palette[this.selectedColor].g);
-			var blue = parseInt(this.palette[this.selectedColor].b);
-			var opacity = parseFloat(this.palette[this.selectedColor].a);
 
-			this.palette[this.selectedColor].rgba = "rgba(" + red + ", " + green + ", " + blue + ", " + opacity + ")";
-			this.palette[this.selectedColor].hex = "#" + convert.rgb.hex(red, green, blue);
-			this.palette[this.selectedColor].name = convert.hex.keyword(this.palette[this.selectedColor].hex);
-
-			// get new hex string
-			this.makeHexString();
-		},
-		// hex change, calculate rgb values
-		hexChange: function(){
-			var hex = this.palette[this.selectedColor].hex;
-			if(hex[0] == "#"){
-				hex = hex.substring(1);
-			}else{
-				// Add hex to prop
-				this.palette[this.selectedColor].hex = "#" + this.palette[this.selectedColor].hex
-			}
-
-			// get rgb numbers
-			var rgbArray = convert.hex.rgb(hex);
-
-			// Set rgb values
-			this.palette[this.selectedColor].rgba = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
-			this.palette[this.selectedColor].r = rgbArray[0];
-			this.palette[this.selectedColor].g = rgbArray[1];
-			this.palette[this.selectedColor].b = rgbArray[2];
-			// this.rgbaOpacity = 1;
-
-			this.palette[this.selectedColor].name = convert.hex.keyword(hex);
-
-			// get new hex string
-			this.makeHexString();
-		},
-		// hex change, calculate rgb values
-		rgbaTextChange: function(){
-
-			// Get numbers from string
-			var rgbArray = this.palette[this.selectedColor].rgba.replace(/[^\d,.]/g, '').split(',')
-			// If there are at least 3 numbers, good enough format
-			if(rgbArray[2]){
-				this.palette[this.selectedColor].r = rgbArray[0];
-				this.palette[this.selectedColor].g = rgbArray[1];
-				this.palette[this.selectedColor].b = rgbArray[2];
-
-				// If opacity exists, add it, otherwise default to 1
-				if(rgbArray[3]){
-					this.palette[this.selectedColor].a = rgbArray[3]
-				}else{
-					this.palette[this.selectedColor].a = 1;
-				}
-
-				// Convert and set hex
-				this.palette[this.selectedColor].hex = convert.rgb.hex(rgbArray)
-				this.palette[this.selectedColor].name = convert.hex.keyword(this.palette[this.selectedColor].hex);
-
-				// get new hex string
-				this.makeHexString();
-
-			}else{
-				// this.toast("Bad Color Format", "Please enter your color in either rgb() or #HEX format.", "red", "far fa-tint");
-			}
-		},
-		// Hex String
-		// Used for url params, and saving
-		makeHexString: function(){
-			var _this = this;
-
-			// Clear timeout so it only runs after 500ms delay
-			clearTimeout(_this.hexStringTimer);
-
-			// Timer to prevent many firings
-			_this.hexStringTimer = setTimeout(function() {
-
-				var string = '';
-
-				// Create comma seperated string of hex numbers
-				// used to save palette to local storage
-				// also set as URL params to share
-				_this.palette.forEach(function(color) {
-					string = string + color.hex.substring(1) + ","
-				});
-
-				// Set global var
-				_this.hexString = string.substring(0, string.length - 1);
-
-				// Set route query
-				_this.$router.replace({query: {..._this.$route.query, c: _this.hexString}})
-
-			}, 500);
-			
-
-		},
-
-		/////////////////////////
-		//  Palette Controls  //
-		///////////////////////
-		// Delete Palette color
-		deleteColor: function(index){
-
-			// Select prev color unless 0
-			if(index != 0){
-				this.selectedColor = index - 1;
-			}
-			
-			// Delete from pallete
-			this.palette.splice(index, 1);
-		},
-		// Add new color to palette
-		// Random rgb color
 		addColor: function(){
-			
-			var r = parseInt(Math.random() * (255 - 0) + 0);
-			var g = parseInt(Math.random() * (255 - 0) + 0);
-			var b = parseInt(Math.random() * (255 - 0) + 0);
-			var rgbStr = "rgba(" + r + ", " + g + ", " + b + ", 1)"
-			var hex = convert.rgb.hex(r, g, b)
-			var keyword = convert.rgb.keyword(r, g, b)
-
-			this.palette.push({
-				name: keyword,
-				hex: "#" + hex,
-				rgba: rgbStr,
-				r: r,
-				g: g,
-				b: b,
-				a: 1,
-			})
-
-			// Set as selected
-			this.selectedColor = this.palette.length - 1;
-
-			// Make new hex string
-			this.makeHexString();
-		},
-
-		// Create Palette
-		// Takes current color, adjusts hues and ceates palette with 4 more colors
-		createPalette: function(){
-
-			var start = this.palette[this.selectedColor].hex;
-			var hexes = this.palette[this.selectedColor].hex.substring(1);
-
-			for (var index = 1; index < 5; index++) { 
-				
-				// Change Hue in HSL
-				var hsl = convert.hex.hsl(start)
-
-				// This creates 5 different colors.
-				// So modify the hue by 72 (360/5) in both directions
-				// Make sure it doesn't go over 360
-				var newHsl = hsl[0] + (72 * index);
-				if(newHsl > 360){
-					newHsl = newHsl - 360;
-				}
-
-				hsl[0] = newHsl;
-
-				// // Get HEX from HSL
-				var hex = convert.hsl.hex(hsl);
-				hexes = hexes + "," + hex
-			} 
-
-			// Set palette
-			this.hexString = hexes;
-			this.setPalette(hexes);
-
-			this.rgbaChange()
-
-			
-		},
-
-
-		////////////////////
-		//  Save & Load  //
-		//////////////////
-		// Save
-		loadSavedPalettes: function(){
-			// Get all saved palettes
-			// Loop through all local storage, save sttorage names of palettes
-			// Palettes begin with "palette_"
-			var values = [];
-			var keys = Object.keys(localStorage);
-			var i = keys.length;
-			while( i-- ){
-				if(keys[i].startsWith("palette_")){
-					values.push(keys[i]);
-				}
+			var newColor = {
+				r: Math.floor(Math.random() * 255),
+				g: Math.floor(Math.random() * 255),
+				b: Math.floor(Math.random() * 255),
+				a: 255,
+				adjust: false,
 			}
-			this.savedPalettes = values;
+			this.currentPalette.push(newColor)
 		},
-		// Save
+
+		removeColor: function(index){
+			this.currentPalette.splice(index, 1);
+		},
+
+		// Save Palette
 		savePalette: function(){
-			var newPalette = {
-				date: new Date(),
-				hexString: this.hexString
+			var toSave = {
+				name: this.nameToSave,
+				colors: JSON.parse(JSON.stringify(this.currentPalette)),
+				saved: new Date()
 			}
-			var stringified = JSON.stringify(newPalette)
-			localStorage.setItem('palette_' + this.paletteToSaveName.replace(/\s/g, ''), stringified);
-
-			this.toast("Palette Saved", "Your palette has been saved to your browser's local storage.", "", "fas fa-swatchbook");
-			// Hide tab
-			this.controlToggles.save = false;
+			this.$set(this.storedPalettes, this.nameToSave, toSave);
+			this.hello(this.nameToSave + " Saved!", "fas fa-check-circle", "green");
 		},
-		// Delete
-		deletePalette: function(name){
-			localStorage.removeItem(name);
-			this.toast("Palette Deleted", "Your palette has been deleted.", "", "fas fa-trash");
-			// Hide tab
-			this.controlToggles.save = false;
-		},
-		// Load
-		loadPalette: function(name){
-			var saved = localStorage.getItem(name);
-			var parsed = JSON.parse(saved)
-			this.hexString = parsed.hexString;
 
-			this.setPalette();
-			// Hide tab
-			this.controlToggles.save = false;
-
-			// Set saved name as save input field name
-			this.paletteToSaveName = name.substr(8);
-			// Generate new hex string
-			this.makeHexString();
+		// Load Palette
+		loadPalette: function(palette){
+			this.currentPalette = palette.colors;
+			this.nameToSave = palette.name;
+			this.hello(this.nameToSave + " loaded!", "fas fa-check-circle", "green");
 		},
-		
-		
+
+
+		// Gets correct text color based on value passed
+		getTextColor: function(r, g, b){
+			var r = parseInt(r,16);
+			var g = parseInt(g,16);
+			var b = parseInt(b,16);
+			var yiq = ((r*299)+(g*587)+(b*114))/1000;
+			return (yiq >= 128) ? 'black' : 'white';
+		},
+
+		// Color Conversion Functions
+		// Takes r/g/b value and returns hex - ie 255 -> FF
+		numberHex: function(val){
+			val = parseInt(val).toString(16);
+			if (val.length == 1)
+				val = "0" + val;
+			return val;
+		},
+		// RGBtoHex
+		RGBToHex: function(r,g,b,a) {
+			r = parseInt(r).toString(16);
+			g = parseInt(g).toString(16);
+			b = parseInt(b).toString(16);
+			a = parseInt(a).toString(16);
+
+			if (r.length == 1)
+				r = "0" + r;
+			if (g.length == 1)
+				g = "0" + g;
+			if (b.length == 1)
+				b = "0" + b;
+			if (a.length == 1)
+				a = "0" + a;
+
+			if(this.colorPrefs.enableOpacity){
+				return "#" + r + g + b + a;
+			}else{
+				return "#" + r + g + b;
+			}
+		},
+		// Hex(a) to rgb(a)
+		HexToRGB: function(h){
+			let r = 0, g = 0, b = 0, a = 1;
+
+			// No opacity
+			if (h.length == 6) {
+				r = "0x" + h[0] + h[1];
+				g = "0x" + h[2] + h[3];
+				b = "0x" + h[4] + h[5];
+				return "rgb(" + +r + "," + +g + "," + +b + ")";
+			}
+			// With opacity
+			else if (h.length == 8) {
+				r = "0x" + h[0] + h[1];
+				g = "0x" + h[2] + h[3];
+				b = "0x" + h[4] + h[5];
+				a = "0x" + h[6] + h[7];
+				a = +(a / 255).toFixed(2);
+				return "rgba(" + +r + "," + +g + "," + +b + "," + a + ")";
+			}
+
+		},
+
+
+
 	}
 };
 
 </script>
 
 
-<style lang="less">
+<style lang="scss">
 
-	@import '~@/styles/variables.less';
+#colorApp{
+	display: flex;
+	flex-direction: column;
+}
 
-	// Hide top options bar - not yet needed for colors page
-	#colorOptionsBar{
-		border-bottom: var(--borderWidth) solid var(--border);
-		background-color: var(--background);
-	}
+.stage{
+	display: flex;
+	flex-grow: 3;
+	overflow: hidden;
 
-	// Main color picker stage
-	#colorEditorStage{
-		background-color: var(--blue);
-		border-radius: var(--borderRadius);
-		margin: 10px 10px 20px 10px;
-		transition: 0s;
+	#colorGrid{
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
 		overflow: auto;
-		
-		@media (max-width: @screenLG) {
-			margin: 10px;
-		}
 
-		// Color editor body - hex and rgb, r,g,b sliders, opacity slider
-		#colorEditor{
-			display: block;
-			margin: 0 auto;
-			width: 90%;
-			max-width: 350px;
+		.color_block{
+			flex-grow: 3;
+			background-color: var(--red);
+			min-width: 300px;
+			flex-basis: 33%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 
-			.field{
-				margin: 0 0 16px 0;
-				label span{
-					// background-color: var(--border);
-					width: fit-content;
-					font-size: 16px;
-					font-weight: 700;
-				}
-				label input{
+			.color_block_info{
+				text-align: center;
+				color: inherit;
+
+				.format_code,
+				.hex_code{
+					display: block;
+					font-weight: 600;
+					margin: 0;
+					padding: 8px 12px;
 					border-radius: var(--borderRadius);
+					text-align: center;
+					margin: 8px auto;
+					color: inherit;
+
+					&:hover{
+						background-color: rgba(0,0,0,0.1);
+					}
 				}
-				input{
-					background-color: var(--layer);
-					border-top-left-radius: 0;
-					border: var(--borderWidth) solid var(--border);
-					color: var(--text);
+				.hex_code{
+					text-transform: uppercase;
+					font-size: 2em;
+					font-weight: 900;
 				}
 			}
 
-			// Set widths for hex and rgba fields
-			#hexField{
-				width: 36%;
-				max-width: 36%;
-				min-width: 36%;
-			}
-			#rgbaField{
-				width: 60%;
-				max-width: 60%;
-				min-width: 60%;
+			.color_block_controls{
+				display: flex;
+				justify-content: center;
+				margin-top: 15px;
+				opacity: 0;
+				color: inherit;
+
+				@media (max-width: $screenSM) {
+					opacity: 1;
+				}
+
+				button{
+					font-size: 1em;
+					color: inherit;
+				}
 			}
 
-			
+			.color_block_sliders{
+				margin: 30px auto 0 auto;
+
+				.cbs_row{
+					display: flex;
+					// flex-wrap: wrap;
+					width: 100%;
+					justify-content: space-between;
+					max-width: 280px;
+					margin: 0 auto 0 auto;
+
+					label{
+						color: inherit;
+						font-size: 0.65em;
+						height: 20px;
+						width: 80px;
+						padding: 0 5px 0 0;
+						box-sizing: border-box;
+						margin: 0;
+						text-align: right;
+					}
+					input[type=number]{
+						-moz-appearance: textfield;
+						width: fit-content;
+						color: inherit;
+						border: none;
+						height: 20px;
+						width: 80px;
+						text-align: left;
+						position: relative;
+						left: 0;
+						font-size: 0.8em;
+						background-color: transparent;
+						padding: 0 0 0 5px;
+						&::-webkit-outer-spin-button,
+						&::-webkit-inner-spin-button {
+							-webkit-appearance: none;
+							margin: 0;
+						}
+
+					}
+
+					input[type=range]{
+						flex-grow: 3;
+						width: 100%;
+						margin-top: 4px;
+					}
+
+				}
+			}
+
+			&:hover,
+			&:focus-within{
+				.color_block_controls{
+					opacity: 1;
+				}
+			}
 		}
 	}
 
+	.stage-sidebar{
+		width: 0;
+		height: 100%;
+		transition: var(--transition);
+		background-color: var(--layer);
+		border-left: 1px solid var(--border);
+		box-shadow: var(--shadow);
+		@media (max-width: $screenSM) {
+			position: fixed;
+			right: 0;
+		}
 
+		&.expanded{
+			transition: var(--transition);
+			width: 33%;
+			max-width: 400px;
 
-	// Sidebar color palette list
-	#colorPalette{
-
-		@media (max-width: @screenMD) {
-			overflow: hidden;
-			flex-grow: 3;
-
-			.color-wrapper{
-				display: flex;
-				height: 100%;
-				overflow-y: auto;
-				box-sizing: border-box;
-				padding: 5px 0 0 0;
+			@media (max-width: $screenSM) {
+				width: 80vw;
+				max-width: 400px;
 			}
 		}
 
-		.color{
-			display: flex;
-			justify-content: space-between;
-			width: 100%;
-			height: auto;
-			border-radius: var(--borderRadius);
-			border: var(--borderWidth) solid var(--border);
-			margin: 0 0 15px 0;
-			box-sizing: border-box;
-			letter-spacing: 0.4px;
-			font-weight: 600;
-			color: var(--white);
-			transition: var(--transitionFast);
 
-			// Fixed width on mobile because it scrolls horizontally
-			@media (max-width: @screenMD) {
-				width: 200px;
-				max-height: 100%;
-				height: 100%;
-				min-width: 200px;
-				margin: 0 10px 0 0;
-				transform: scale(0.875);
+		// Content
+		.stage-sidebar-content{
+			display: flex;
+			box-sizing: border-box;
+			overflow: hidden;
+			flex-direction: column;
+			height: 100%;
+
+			h3{
+				width: 100%;
+				text-align: center;
+				font-size: 0.9em;
+				line-height: 0.9em;
+				margin: 0;
+				font-weight: 600;
+				padding: 16px 0;
+				border-bottom: 1px solid var(--borderFade);
+				background-color: var(--background);
+				border-top: 1px solid var(--borderFade);
 
 				&:first-child{
-					margin-left: 20px;
+					border-top: none;
 				}
 			}
 
-			// Color buton - shown on mobile
-			// Buttons after the colors - add color, auto palette
-			&.color-button{
-				background: transparent;
-				color: var(--text);
-				flex-direction: column;
-				justify-content: center;
-				display: none;
-				color: var(--textLight);
-				transition: var(--transitionFast);
+			.stage-sidebar-content-scroll{
+				flex-grow: 3;
+				overflow: auto;
 				box-sizing: border-box;
-				padding: 8px 0;
-				width: 140px;
-				max-width: 140px;
-				min-width: 140px;
-
-				@media (max-width: @screenMD) {
-					min-height: 100%;
-					display: flex;
-					flex-grow: 3;
-				}
-
-				i,
-				.color-button-text{
-					text-align: center;
-				}
-
-				i{
-					font-size: 36px;
-					margin: 0 0 5px 0;
-					transition: var(--transitionFast);
-				}
-
-				&:hover{
-					color: var(--text);
-					transition: var(--transitionFast);
-
-					i.fa-plus{
-						margin: 0 0 10px 0;
-						transition: var(--transitionFast);
-					}
-				}
+			}
+			.padded{
+				padding: 0 15px;
 			}
 
-			// Color Spacer
-			&.color-spacer{
-				max-width: 20px !important;
-				overflow: hidden;
-				min-width: 20px !important;
-				opacity: 0;
-				display: none;
-				
-				@media (max-width: @screenMD) {
-					display: block;
-				}
-			}
-
-			.color-codes{
-				display: flex;
-				flex-direction: column;	
-				justify-content: space-between;
-				height: 100%;
-				box-sizing: border-box;
-				padding: 10px 0 10px 10px;
-
-				.name{
-					text-transform: capitalize;
-					flex-grow: 3;
-					font-size: 18px;
-					font-weight: 700;
-					display: block;
-					margin-bottom: 12px;
-
-					// Shrink mobile
-					@media (max-width: @screenSM) {
-						font-size: 15px;
-					}
-				}
-				.color-value{
-					display: block;
-					margin-top: 5px;
-					font-size: 15px;
-					transition: 0.08s;
-					// opacity: 0;
-					font-weight: 600;
-
-					// Shrink mobile
-					@media (max-width: @screenMD) {
-						font-size: 14px;
-					}
-
-					i{
-						padding-left: 5px;
-						opacity: 0;
-					}
-
-					// Hover - click to copy
-					&:hover{
-						opacity: 1;
-						text-decoration: underline;
-					}
-				}
-
-			}
-
-			// Color actions
-			.color-actions{
-				transition: 0.08s;
-
-				// mix-blend-mode: difference;
-				.color-delete{
-					font-size: 20px;
-					border-radius: 50%;
-					height: 40px;
-					width: 40px;
-					box-sizing: border-box;
-					color: inherit;
-					opacity: 1;
-					transition: 0.08s;
-					transform: scale(1);
-					opacity: 0.75;
-
-					// Increase size mobile
-					@media (max-width: @screenMD) {
-						width: 38px;
-						height: 38px;
-						font-size: 20px;
-					}
-
-					&:hover{
-						cursor: pointer;
-						transition: 0.08s;
-						transform: scale(1.2);
-						opacity: 1;
-					}
-				}
-			}
-
-			// Hover color
-			&:hover{
-				transition: 0.08s;
-				cursor: pointer;
-				// width: calc(~'100% + 30px');
-				
-				.color-actions{
-					opacity: 1;
-					transition: 0.08s;
-				}
-				.color-value{
-					transition: 0.08s;
-				}
-				.name{
-					text-decoration: underline;
-				}
-			}
-
-			// Active is larger,
-			// has padding on bottom codes
-			&.active{
-				transition: var(--transitionFast);
-				height: 140px;
-
-				// Change active for mobile
-				@media (max-width: @screenMD) {
-					transform: scale(1);
-				}
-
-				.color-codes{
-
-					.name{
-						opacity: 1;
-					}
-					.color-value{
-						i{
-							opacity: 1;
-						}
-					}
-				}
-
-			}
 		}
 	}
 
+	
+}
 
-	// Add color button
-	#paletteControlButtons{
-		// Hide on mobile because tile is used instead
-		@media (max-width: @screenMD) {
-			display: none;
+
+.load-palette-button{
+	display: block;
+	width: 100%;
+	text-align: left;
+	padding: 0;
+	margin: 18px 0 0 0;
+
+	b{
+		font-size: 0.9em;
+		display: block;
+		padding-bottom: 5px;
+		font-weight: 600;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+
+		small{
+			color: var(--textFade);
+			font-weight: 500;
+			white-space: pre;
 		}
 	}
-	// Adjust header on mobile
-	#colorPaletteHeader{
-		// Add padding on left because it was removed for hor scroll
-		@media (max-width: @screenMD) {
-			padding-left: 20px;
-			margin: 0 0 8px 0;
+
+	&:hover{
+		b{
+			text-decoration: underline;
 		}
 	}
+}
+.palette-preview{
+	display: flex;
+	border-radius: var(--borderRadius);
 
+	.palette-preview-color{
+		display: block;
+		height: 42px;
+		flex-grow: 3;
 
-
+		&:first-child{
+			border-top-left-radius: var(--borderRadius);
+			border-bottom-left-radius: var(--borderRadius);
+		}
+		&:last-child{
+			border-top-right-radius: var(--borderRadius);
+			border-bottom-right-radius: var(--borderRadius);
+		}
+	}
+}
 
 
 </style>

@@ -1,0 +1,250 @@
+//! Typography
+// Header, Paragraph, and other text styles
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  line-height: 1.5rem;
+}
+h1 {
+  font-size: 4.042rem;
+  line-height: 4.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+h2 {
+  font-size: 3.228rem;
+  line-height: 3.5rem;
+  margin-top: 3rem;
+  margin-bottom: 0.9rem;
+  font-weight: 700;
+}
+h3 {
+  font-size: 2.214rem;
+  margin-bottom: 0.8rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+}
+h4 {
+  font-size: 1.407rem;
+  margin-bottom: 0.7rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+}
+h5 {
+  font-size: 1.01333333rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+h6 {
+  font-size: 0.89rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--textFade)
+}
+
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small{
+	font-size: 0.55em;
+	display: block;
+	font-weight: 500;
+}
+
+
+//   Text Elements 
+// Paragraphs
+p,
+.paragraph{
+	font-size: 1rem;
+	line-height: 1.75rem;
+	max-width: 700px;
+	padding: 12px 0;
+	color: var(--text);
+	font-weight: 400;
+
+	// Decrease sizing
+	&.small{
+		font-size: 0.8rem;
+		line-height: 1.6rem;
+	}
+	// Increase sizing
+	&.big{
+		font-size: 1.2rem;
+		line-height: 2.4rem;
+	}
+
+	// Bold
+	b{
+		font-weight: 700;
+	}
+
+	&.no-padding{
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+}
+// Emphasis
+em,
+.italic{
+	font-style: italic;
+}
+
+// Links
+a{
+	color: var(--primary);
+	transition: var(--transition);
+	letter-spacing: -0.1px;
+	font-weight: bold;
+	text-decoration: none;
+	
+	&:hover{
+		cursor: pointer;
+		transition: var(--transition);
+		outline-color: transparent;
+
+		:not(i) :not(p){
+			text-decoration: underline;
+		}
+	}
+
+}
+
+
+// Lists
+ul,
+ol{
+	display: block;
+	box-sizing: border-box;
+	padding: 6px 0 6px 25px;
+
+	li{
+		line-height: 1.4rem;
+		padding: 2px 0;
+	}
+}
+ol{
+	list-style-type: decimal;
+}
+ul{
+	list-style-type: disc;
+}
+
+
+
+//   Modifiers
+
+.text-small{
+	font-size: 0.8em;
+}
+.text-smaller{
+	font-size: 0.65em !important;
+}
+.text-large{
+	font-size: 1.2em;
+}
+.text-larger{
+	font-size: 1.45em;
+}
+.text-light{
+	font-weight: 400;
+	color: var(--textFade);
+}
+.text-fade{
+	color: var(--textFade);
+}
+.text-bright{
+	color: var(--text);
+}
+// Colored Text
+.text-primary{
+	color: var(--blue);
+}
+.text-red{
+	color: var(--red);
+}
+.text-blue{
+	color: var(--blue);
+}
+.text-green{
+	color: var(--greenDark);
+}
+.text-yellow{
+	color: var(--yellowDark);
+}
+.text-orange{
+	color: var(--orange);
+}
+.text-purple{
+	color: var(--purple);
+}
+.text-pink{
+	color: var(--pink);
+}
+.text-grey{
+	color: var(--greyDark);
+}
+
+
+// Horizontal Rule
+hr{
+	border: none;
+	border-top: 1px solid;
+	border-color: var(--borderFade);
+	height: 1px;
+	overflow: hidden;
+	margin: 8px auto;
+}
+
+// Small
+small{
+	font-size: 0.85em;
+	line-height: 1.4em;
+}
+
+// Code & Pre
+code{
+	width: fit-content;
+	background-color: var(--greyLight);
+	font-family: var(--monospace);
+	box-sizing: border-box;
+	padding: 4px;
+	background-color: var(--grey);
+	border-radius: calc(var(--borderRadius) / 2);
+
+	b{
+		font-weight: 700;
+	}
+	i{
+		font-style: italic;
+	}
+
+	&.full-width{
+		width: 100%;
+	}
+}
+pre{
+	max-width: 80vw;
+	overflow: auto;
+	display: block;
+	scrollbar-width: none;
+	// Hidden
+	&::-webkit-scrollbar{
+		width: 0px;
+		display: none;
+	}
+	// Scrollbar handle/thumb
+	&::-webkit-scrollbar-thumb{
+		display: none;
+		width: 0px;
+	}
+}

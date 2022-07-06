@@ -1,0 +1,70 @@
+//! Base  
+// Base body, html, and other global styles
+
+// Universal 
+body, html{
+	margin: 0 auto;
+	font-family: var(--primaryFont);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-size: var(--baseFontSize);
+	color: var(--text);
+	overflow-x: hidden;
+	background-color: var(--background);
+	@media (max-width: $screenSM) {
+		overscroll-behavior: contain;
+    }
+}
+
+// Disable default browser tap highlighting, smooth text
+// Disable text selection on mobile 
+*{
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
+	text-rendering: optimizeLegibility;
+}
+
+input, input:before, input:after {
+	-webkit-user-select: initial;
+	-khtml-user-select: initial;
+	-moz-user-select: initial;
+	-ms-user-select: initial;
+	user-select: initial;
+	box-shadow: none;
+}
+
+// Image - prevent drag
+img{
+	pointer-events: none;
+	user-select: none;
+}
+
+// Hide scrollbars
+.no-scrollbars,
+.no-scrollbars *{
+	scrollbar-width: none;
+	// Hidden
+	&::-webkit-scrollbar{
+		width: 0px;
+		display: none;
+	}
+	// Scrollbar handle/thumb
+	&::-webkit-scrollbar-thumb{
+		display: none;
+		width: 0px;
+	}
+}
+
+
+//    Text Selection    //
+::selection {
+	background: var(--primary);
+	color: var(--primaryText);
+}
+::-moz-selection {
+	background: var(--blue); // Gecko Brooowsers
+	color: var(--background);
+}
+
+

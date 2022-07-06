@@ -4,35 +4,35 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<title>Keyframes.app | CSS Toolbox</title>
-		<meta name="description" content="Keyframes helps you write better CSS with a suite of tools to create CSS @Keyframe animations, box shadows, colors, & more" />
-		<meta name="keywords" content="Keyframes, animation, css, css3, transform, translate, html, javascript, web design, web developemtn, web animations, editor, generator" />
-		<meta name="theme-color" content="#001020">
+		<title>Keyframes.app</title>
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta name="theme-color" content="#FFFFFF">
 		<!-- Icons -->
-        <link rel="shortcut icon" href="<%= VUE_APP_BASE_URL %>/img/icons/favicon-32x32.png">
-
+        <link rel="shortcut icon" href="/img/icons/favicon-32x32.png">
 
 		<!-- CDN Imports -->
-		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-IIED/eyOkM6ihtOiQsX2zizxFBphgnv1zbe1bKA+njdFzkr6cDNy16jfIKWu4FNH" crossorigin="anonymous">
-		<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+		<!-- Font Awesome -->
+		<script src="https://kit.fontawesome.com/7b62f3fe19.js" crossorigin="anonymous"></script>
+		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" rel="stylesheet"/>
+
 		
 		<!-- Social Media Meta -->
 		<!-- Facebook -->
-		<meta property="og:title" content="Keyframes.app | CSS Toolbox">
-		<meta property="og:description" content="Keyframes helps you write better CSS with a suite of tools to create CSS @Keyframe animations, box shadows, colors, & more">
+		<meta property="og:title" content="">
+		<meta property="og:description" content="">
 		<meta property="og:image" content="<%= VUE_APP_BASE_URL %>/img/meta/facebook.png">
 		<meta property="og:url" content="<%= VUE_APP_BASE_URL %>">
 
 		<!-- Twitter -->
-		<meta name="twitter:title" content="Keyframes.app | CSS Toolbox">
-		<meta name="twitter:description" content="Keyframes helps you write better CSS with a suite of tools to create CSS @Keyframe animations, box shadows, colors, & more">
+		<meta name="twitter:title" content="">
+		<meta name="twitter:description" content="">
 		<meta name="twitter:image" content="<%= VUE_APP_BASE_URL %>/img/meta/twitter.jpg">
 		<meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:image:alt" content="<%= VUE_APP_BASE_URL %>">
 		
 		<!-- Syles for no-js warning below -->
 		<style type="text/css">
-			
 			.no-js{
 				display: flex;
 				flex-direction: column;
@@ -41,13 +41,12 @@
 				top: 0;
 				left: 0;
 				width: 100vw;
-				height: 100%;
+				height: 100vh;
 				color: white;
 				text-align: right;
 				box-sizing: border-box;
 				padding-top: 35px;
 			}
-			
 			.no-js p{
 				margin: 0 auto;
 				width: 90%;
@@ -70,25 +69,6 @@
 			}
 		</style>
 
-		<!-- Matomo tracking code -->
-		<!-- All cookies disabled -->
-		<!-- Matomo -->
-		<script type="text/javascript">
-			var _paq = window._paq = window._paq || [];
-			_paq.push(["disableCookies"]);
-			/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-			(function() {
-			var u="https://hello.hotdi.sh/";
-			_paq.push(['setTrackerUrl', u+'matomo.php']);
-			_paq.push(['setSiteId', '1']);
-			var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-			g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-			})();
-		</script>
-		<!-- End Matomo Code -->
-		
-  
-
     </head>
     <body>
 
@@ -104,6 +84,21 @@
 
         
         <div id="app"></div>
-        <!-- built files will be auto injected -->
+		<!-- built files will be auto injected -->
+
+		<!-- Matomo -->
+		<script type="text/javascript">
+			var _paq = window._paq = window._paq || [];
+			/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+			(function() {
+			var u="https://hello.hotdi.sh/";
+			_paq.push(['setTrackerUrl', u+'js/']);
+			_paq.push(['setSiteId', '3']);
+			var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+			g.type='text/javascript'; g.async=true; g.src=u+'js/'; s.parentNode.insertBefore(g,s);
+			})();
+		</script>
+		<!-- End Matomo Code -->
+
   </body>
 </html>

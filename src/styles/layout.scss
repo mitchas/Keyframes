@@ -1,0 +1,369 @@
+//! Layout
+// 
+// Page layouts
+// Secondary Nav
+// Cards
+
+
+// Page Layouts
+.fixed-page{
+	display: block;
+	width: 100%;
+	height: calc(100vh - var(--topBarHeight));
+}
+
+
+// Secondary Nav
+.secondary-nav{
+	box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	background-color: var(--layer);
+	border-bottom: 1px solid var(--border);
+	height: var(--topBarHeight);
+	height: calc(var(--topBarHeight) * 0.75);
+	min-height: calc(var(--topBarHeight) * 0.75);
+	
+	.spacer{
+		flex-grow: 3;
+	}
+
+	button{
+		height: 100%;
+		font-size: 1.2em;
+		position: relative;
+		z-index: 13;
+		width: 40px;
+		text-align: center;
+		border-right: 1px solid white;
+
+		@media (max-width: 450px) {
+			width: 36px;
+			font-size: 1.1em;
+		}
+
+		i.fa-times{
+			color: var(--red);
+		}
+
+		.hint{
+			position: absolute;
+			left: 10%;
+			top: -52%;
+			background-color: var(--yellow);
+			line-height: 30px;
+			height: 30px;
+			font-size: 0.65em;
+			font-weight: 600;
+			white-space: pre;
+			box-sizing: border-box;
+			border-radius: calc(var(--borderRadius) / 2);
+			padding: 0;
+			transition: all 0.35s ease;
+			overflow: hidden;
+			max-width: 0px;
+			
+			@media (max-width: $screenSM) {
+				display: none;
+			}
+
+			&.left{
+				right: 10%;
+				left: unset;
+			}
+		}
+
+		&:hover .hint,
+		&:focus .hint{
+			padding: 0 12px;
+			transition: all 0.35s ease 0.75s;
+			max-width: 400px;
+		}
+
+		&:last-child{
+			margin-right: 15px;
+		}
+	}
+
+	// Text input
+	input{
+		height: 80%;
+		position: relative;
+		top: 10%;
+		max-width: 50px;
+		padding: 0 0 0 10px;
+	}
+
+	// Text Labels
+	label{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 0.8em;
+		line-height: 0.8em;
+		padding-top: 4px;
+	}
+
+	// Vertical Spacer
+	hr{
+		height: 50%;
+		width: 1px;
+		background-color: var(--borderFade);
+		margin: 0 10px;
+		position: relative;
+		top: 25%;
+
+		@media (max-width: $screenSM) {
+			display: none;
+		}
+	}
+}
+
+
+// Card Grid
+.card-grid{
+	display: flex;
+	gap: 30px;
+	flex-wrap: wrap;
+
+	&.center{
+		justify-content: center;
+	}
+
+	&.horizontal-scroll{
+		flex-wrap: nowrap;
+		overflow-y: auto;
+		justify-content: flex-start;
+
+		.card{
+			min-width: 300px;
+
+			&:first-child{
+				margin-left: 8vw;
+			}
+			&:last-child{
+				margin-right: 100px;
+			}
+		}
+	}
+
+	@media (max-width: $screenSM) {
+		gap: 15px
+	}
+
+	.card{
+		display: flex;
+		flex-direction: column;
+		min-width: 250px;
+		flex-basis: 20%;
+		max-width: 28%;
+		max-width: calc(25% - 30px);
+		flex-basis: calc(25% - 30px);
+		flex-grow: 3;
+		border-radius: var(--borderRadius);
+		// box-shadow: var(--shadow);
+		color: var(--text);
+		background-color: var(--layer);
+		border: 1px solid var(--border);
+
+		@media (max-width: $screenXL) {
+			flex-basis: 33%;
+			flex-basis: calc(33% - 30px);
+			max-width: unset;
+		}
+		@media (max-width: $screenSM) {
+			flex-basis: 100%;
+			max-width: 100%;
+			min-width: 100px;
+		}
+
+		&.inactive{
+			color: var(--textFade);
+
+			.card-main b,
+			.card-body p{
+				color: var(--textFade);
+			}
+			.card-main .card-icon{
+				background-color: transparent;
+				color: var(--textFade);
+			}
+			.tag{
+				opacity: 0.5;
+			}
+		}
+
+		.card-main{
+			box-sizing: border-box;
+			display: flex;
+			padding: 12px 12px 12px 12px;
+
+			@media (max-width: $screenSM) {
+				padding: 12px 12px 12px 12px;
+			}
+
+			.card-icon{
+				width: 50px;
+				height: 50px;
+				background-color: var(--grey);
+				border-radius: var(--borderRadius);
+				font-size: 28px;
+				text-align: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			b{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				flex-grow: 3;
+				font-size: 16px;
+				font-weight: 600;
+				box-sizing: border-box;
+				padding-left: 12px;
+			}
+			.card-input{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+		}
+		.card-body{
+			box-sizing: border-box;
+			padding: 0 12px 22px 12px;
+			flex-grow: 3;
+			text-align: left;
+
+			p{
+				margin: 0;
+				padding: 0;
+				line-height: 20px;
+				font-size: 14px;
+			}
+		}
+		// Footer
+		.card-footer{
+			display: flex;
+			justify-content: space-between;
+			box-sizing: border-box;
+			padding: 0 12px 12px 12px;
+			margin-top: -5px;
+
+			.card-tags{
+				display: flex;
+				gap: 10px;
+				text-transform: capitalize;
+
+				.tag{
+					&.Design{background-color: var(--yellow); color: var(--yellowText);}
+					&.Development{background-color: var(--green); color: var(--greenText)}
+					&.CSS{background-color: var(--purple); color: var(--purpleText)}
+				}
+			}
+			.card-actions{
+				flex-grow: 3;
+				display: flex;
+				justify-content: flex-end;
+				gap: 8px;
+				
+				.card-action-button{
+					height: 20px;
+					line-height: 20px;
+					font-size: 18px;
+					color: var(--text);
+					opacity: 0.2;
+					transition: var(--transition);
+					padding: 0;
+
+					&:hover,
+					&:focus{
+						opacity: 1;
+					}
+
+					&:disabled:hover,
+					&:disabled:focus{
+						opacity: 0.2;
+					}
+
+					&.active{
+						color: var(--blue);
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Padding for page content  
+.padded{
+	box-sizing: border-box;
+	padding: 0 var(--sidePadding) 0 var(--sidePadding);
+}
+
+// Narrow page 
+// Documents - Privacy Policy, Terms, Etc
+// max-width of 1100px. Centered margin,
+.narrow-page{
+	box-sizing: border-box;
+	padding: 25px var(--sidePadding) 25px var(--sidePadding);
+	min-height: 70vh;
+	max-width: 1100px;
+	margin: 0 auto;
+	
+	@media (max-width: $screenSM) {
+		max-width: unset;
+		width: 100%;
+		margin: 0 auto;
+	}
+}
+
+
+
+// Projects display - similar to grid, but more visual
+.project-display{
+	display: flex;
+	justify-content: flex-start;
+	width: 100%;
+	gap: 30px;
+	flex-wrap: wrap;
+
+	&.center{
+		justify-content: center;
+	}
+
+	.project{
+		background-color: var(--layer);
+		border: 1px solid var(--borderFade);
+		color: var(--text);
+		box-sizing: border-box;
+		padding: 15px;
+		max-width: 350px;
+		min-width: 250px;
+		flex-basis: 370px;
+		flex-grow: 3;
+		border-radius: var(--borderRadius);
+		display: flex;
+		gap: 15px;
+
+	@media (max-width: $screenSM) {
+		max-width: unset;
+	}
+
+		img{
+			width: 70px;
+			height: auto;
+			max-height: auto;
+		}
+
+		.project-info{
+
+			h4{
+				margin: 0 auto;
+			}
+		}
+
+	}
+}

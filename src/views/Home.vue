@@ -1,644 +1,253 @@
 <!--
-// 
-// Home.vue
-// _________________________
-//
-//	Home page view
-//	Landing page with links to and examples of each app
-//
-//		Layout
-// 			Banners at top, hero text, example of each app below. Some apps are interactive, most are animated
-//
-//		Scripts
-//			Methods
-//				getLocalStorage() Called on mount, gets local storage, sets preferences in UI
-//				cycleColors(val)
-//					Cycles demo colors - updates value every x seconds. 
-// 					Called on mount, stops if slider adjusts. After timeout, calls itself with random val
-//
-// -->
+	Home Page
+-->
 
 <template>
-	<div class="page no-scrollbars">
-		<div class="text-page-content">
+	<div>
 
 
-			<!-- Regular Banner -->
-			<!-- <Callout
-				v-if="$route.path == '/'"
-				icon="far fa-shapes"
-				class="mbottom-md"
-				color="blue"
-				size="">
-				<span><b>Welcome to Keyframes.</b> It's pretty new, so there may be some bugs. If you notice any issues, or have other feedback or suggestions, send me a message at hello@hotdi.sh. </span>
-			</Callout> -->
+		<div class="max-width margin-auto padded">
 
-			<!-- 
-				Hero
-			 -->
-			<div class="home-hero">
-				<h1>Keyframes helps you write better CSS.</h1>
-				<h4>Dead simple visual tools to help you generate CSS for your projects.</h4>
-				<a @click="navigate('/about')">Read More about Keyframes</a>
-				<!-- <h4>A straightforward way to create animations, shadows, & colors - instantly get the CSS to use in your projects.</h4> -->
+			<div id="homeLogo">
+				<img src="@/assets/branding/logo-light.png" title="Logo" alt="Logo" v-if="!$store.getters['User/darkMode']"/>
+				<img src="@/assets/branding/logo-dark.png"  title="Logo" alt="Logo" v-else />
+				<h1>Welcome to Camp</h1>
 			</div>
 
-			<!-- <p>
-				{{savedWork.animations}}
-				{{savedWork.palettes}}
-			</p> -->
+			<p class="big">
+				Keyframes.app is a collection of easy-to-use mini apps to help keep your life organized.
+			</p>
 
-			<!-- ///////////////////////////// 
-				Featured / App Launcher 
-				///////////////////////////// -->
-			<div id="featuredApps">
-				<!-- Animations -->
-				<div class="app-feature">
-					<div class="app-feature-text">
-						<h2>
-							<span>Animations</span>
-						</h2>
-						<p class="big">
-							Create basic or complex CSS @keyframe animations with a visual timeline editor similar to video-editing software. 
-						</p>
-						<!-- Open animator -->
-						<button class="button invert mtop-sm" @click="navigate('/animate/')">
-							<i class="far fa-stream"></i>
-							<span>Create an Animation</span>
-						</button>
-					</div>
-					<div class="app-feature-demo">
-						<div id="featuredAnimatedTarget">
-							<i class="fal fa-ghost" @click="hello('Boo!', 'fas fa-exclamation')"></i>
-						</div>
-						<!-- Timeline copy -->
-						<div id="featuredTimeline">
-							<div class="marker active"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-							<div class="marker dummy"></div>
-						</div>
-					</div>
-				</div>
+			<p>
+				Here are a few things you should know:
+			</p>
+			<p>
+				<ul>
+					<li><b>It's private.</b> Any data you enter on keyframes.app never leaves your device. Instead, we use your device's own storage - keeping everything private.</li>
+					<li class="ptop-sm"><b>It's free.</b> Plus no ads, no cookies, no accounts, minimal tracking, and no <br/><em><i class="fas fa-sparkles"></i> engaging content <i class="fas fa-sparkles"></i></em></li>
+					<li class="ptop-sm"><b>It's customizable.</b> Hide apps you don't use, choose your own colors, fonts, and other preferences.</li>
+					<li class="ptop-sm"><b>It's open source.</b> Want to create your own app? The source code is on <a href="https://github.com/mitchas/tidycamp" target="_blank">GitHub</a></li>
+				</ul>
+			</p>
 
 
-				<!-- Shadows -->
-				<div class="app-feature reverse">
-					<div class="app-feature-text">
-						<h2>
-							<span>Shadows</span>
-						</h2>
-						<p class="big">
-							Create single or multi-layer box shadows just by moving some sliders. Get the CSS output instantly.
-						</p>
-						<!-- Open app -->
-						<button class="button invert mtop-sm" @click="navigate('/shadows/')">
-							<i class="far fa-eclipse"></i>
-							<span>Make a Shadow</span>
-						</button>
-					</div>
-					<div class="app-feature-demo">
-						<!-- Shadow Example -->
-						<div id="featuredShadow">
-							<div class="sun">
-								<i class="fad fa-sun fa-swap-opacity"></i>
-							</div>
-							<div class="shadow">
-								<i class="fas fa-globe-americas"></i>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-
-				<!-- Colors -->
-				<div class="app-feature">
-					<div class="app-feature-text">
-						<h2>
-							<span>Colors</span>
-						</h2>
-						<p class="big">Pick your favorite colors, convert between hex and rgb, and create & save palettes.</p>
-						<!-- Open app -->
-						<button class="button invert mtop-sm" @click="navigate('/colors/')">
-							<i class="far fa-tint"></i>
-							<span>Play with Colors</span>
-						</button>
-					</div>
-					<div class="app-feature-demo">
-						<!-- Color Palette copy -->
-						<div id="featuredPalette">
-							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-							<div class="color" :style="'filter: hue-rotate(' + featuredColorsRange + 'deg);'"></div>
-						</div>
-
-						<!-- Animated Slider -->
-						<div class="slider-wrapper">
-							<input type="range" @mousedown="colorRangeRunning = false" @input="colorRangeRunning = false" v-model="featuredColorsRange" min="0" max="360" step="1"/>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Suggestions -->
-				<Callout
-					icon="fal fa-sparkles"
-					class=" mtop-lg"
-					color="invert"
-					size="fit margin-auto">
-					<p class="big padding-none">
-						More coming soon.
-					</p>
-					<p class="padding-none">
-						Have a suggestion for a feature or another app you would like to see?
-					</p>
-					<p class="small padding-none">
-						Send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a>
-					</p>
-				</Callout>
-
-				<!-- Spacer -->
-				<div class="pbottom-lg"></div>
-
-			</div>
+			<h2 class="mtop-xl mbottom-lg align-center">Apps</h2>
 		</div>
+
+		<!-- Horizontal app scroll -->
+		<div class="card-grid center mtop-md no-scrollbars padded" v-if="sortedApps">
+
+			<router-link class="card" v-for="(app, key) in sortedApps" :key="key" :class="{'inactive': appData[app.id] && appData[app.id].enabled == false}" :to="app.path">
+				<div class="card-main" v-if="sortedApps[key]">
+					<i :class="'card-icon ' + app.icon"></i>
+					<b class="ul">{{app.title}}</b>
+				</div>
+				<!-- Card Body -->
+				<div class="card-body">
+					<p>{{app.description}}</p>
+				</div>
+				<!-- Footer controls -->
+				<div class="card-footer">
+					<div class="card-tags">
+						<span :class="'tag ' + app.category">{{app.category}}</span>
+					</div>
+				</div>
+			</router-link>
+
+		</div>
+
+
+
+		<!-- Q & A -->
+		<div class="max-width margin-auto mtop-xl padded">
+			<h2 class="align-center">Q & A</h2>
+			<p class="align-center">Have more questions about what this is and how it works? We've got answers!</p>
+
+			<h4 class="mtop-lg">How does this handle my data?</h4>
+			<p>
+				Keyframes.app runs off your device's own "local storage" - meaning everything you do here is only stored on your device. What does that mean for you?
+				<ul>
+					<li>Your data is only on the device you're using</li>
+					<li>Nobody can see your data unless they have your device</li>
+					<li>If you use keyframes.app on another device, your data will not be there</li>
+					<li>You can delete your data any time through the app or by clearing your browser cache/storage.</li>
+				</ul>
+
+				<small class="mtop-sm block">This site does use very basic analytics tracking - just things like page views and general location using self-hosted analytics. No third-party services or APIs are used on this site.</small>
+			</p>
+
+			<h4 class="mtop-lg">Can I backup or move my data to another device?</h4>
+			<p>
+				Yes! But it's not automatic. On the <router-link to="/settings">Settings Page</router-link> you can view and download your data and preferences - then simply transfer it to the device you want and upload it.
+				<br/><br/>
+				In the future there <b><i>may</i></b> be ways to automatically backup/sync your data using other services like Google Drive, iCloud, or others.
+			</p>
+
+			<h4 class="mtop-lg">Who are you?</h4>
+			<p>
+				My name is Mitch - I make neat websites & apps without all the clutter and tracking you find everywhere else. See what else I'm up to at <a href="https://hotdi.sh/?ref=camp">Hotdi.sh</a>.
+			</p>
+
+			<h4 class="mtop-lg">What's the point of this?</h4>
+			<p>
+				I hate downloading apps that have a single purpose, and most websites that would work as an alternative are so filled with ads they're almost unusable. So I decided to make my own collection of very simple mini-apps I use frequently.
+			</p>
+
+			<h4 class="mtop-lg">Have feedback or suggestions?</h4>
+			<p>
+				Send me an email at <a href="mailto:hello@hotdi.sh" target="_blank" class="ul">hello@hotdi.sh</a>, or bug me on Twitter <a href="https://twitter.com/sleumasm" target="_blank" class="ul">@sleumasm</a>.
+				<br/>
+				<small>Or simply create an issue on the <a href="https://github.com/mitchas/tidycamp" target="_blank" class="ul">GitHub Repo</a> if you know what those words mean.</small>
+			</p>
+
+
+			<!-- Other apps -->
+			<h2 class="align-center mtop-xl">But wait, there's more</h2>
+			<p class="align-center">
+				Different tools, just as private & easy to use. 
+			</p>
+		</div>
+
+		<div class="project-display center mtop-md padded">
+
+			<!-- Keyframes -->
+			<a href="https://tidy.camp" target="_blank" class="project">
+				<div><img src="@/assets/projects/tidycamp.png"/></div>
+				<div class="project-info">
+					<h4 class="ul">Tidy.camp</h4>
+					<p class="small">
+						Dead simple visual tools to for web designers & developers. Easily create @keyframe animations, color palettes, box shadows, and more.
+					</p>
+				</div>
+			</a>
+
+			<!-- Ceev -->
+			<a href="https://ceev.io" target="_blank" class="project">
+				<div><img src="@/assets/projects/ceev.png"/></div>
+				<div class="project-info">
+					<h4 class="ul">Ceev.io</h4>
+					<p class="small">
+						An incredibly easy way to create and design a resume in minutes, for free. Export as a PDF, or save it to edit later.
+					</p>
+				</div>
+			</a>
+
+
+		</div>
+
+		<div class="max-width margin-auto mtop-xl padded">
+			<h4>Hey!</h4>
+			<p>These apps are free - but if you find them useful and want to help keep them running, <a href="https://www.buymeacoffee.com/mitchs" target="_blank" class="ul">Buy me a Coffee</a>, or <a href="https://account.venmo.com/u/mitchas" target="_blank" class="ul">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank" class="ul">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank" class="ul">PayPal</a>.</p>
+		</div>
+
+
+
+
+
+
+
+		<h6 class="mtop-xl ptop-xl pleft-md">Happy Camping</h6>
+
+
+
+
+		<!-- Spacer -->
+		<div class="mtop-xl"></div>
+
+
 	</div>
 </template>
 
 <script>
 // Components
-import Callout from "@/components/ui/Callout";
-// Mixins
-import metaMixin from "@/components/mixins/metaMixin.js";
+// import Callout from "@/components/ui/Common/Callout";
+import _orderBy from "lodash/orderBy";
+
 
 export default {
 	name: "home",
 
 	components: {
-		Callout
+		// Callout
 	},
 
 	mixins: [
-		metaMixin,
 	],
 
 	data() {
 		return {
-			// Saved work from apps - animations, palettes, etc
-			savedWork: {
-			},
-			// Hue rotate range for color preview
-			featuredColorsRange: 0,
-			colorRangeRunning: true,
+			apps: this.$store.getters["Site/apps"],
 		};
 	},
 
-	mounted() {
+	watch: {
 		
-		let _this = this;
-
-		// Update title
-		_this.updateMeta("Keyframes", "Do cool stuff with CSS.")
-		// Get local storage
-		// _this.getLocalStorage();
-
-		// Start color cycle after 3s
-		setTimeout(function(){
-			_this.cycleColors(0);
-		}, 3000)
 	},
 
 	computed: {
+
+		// test: {
+		// 	get() {
+		// 		return this.$store.getters["User/preferences"];
+		// 	},
+		// },
+		sortedApps() {
+			return _orderBy(this.apps, "category");
+		},
+		userPreferences: {
+			get() {
+				return this.$store.getters["User/preferences"];
+			},
+		},
+		appData: {
+			get() {
+				return this.$store.getters["User/apps"];
+			},
+		},
+		
+	},
+	
+	mounted() {
+	},
+	created: function () {
+	},
+
+	beforeDestroy(){
 	},
 	
 	methods: {
-		////////////////////////
-		// Get Local Storage //
-		//////////////////////
-		// Gets all saved projects - animations, color palettes, etc
-		getLocalStorage: function(){
-			// Loop through all local storage, save sttorage names of animations
-			// Animations begin with "animation_", Palettes are "palette_"
-			var animations = [];
-			var palettes = [];
-			var keys = Object.keys(localStorage);
-			console.log("KEYS")
-			console.log(keys)
-			var i = keys.length;
-			while( i-- ){
-				if(keys[i].startsWith("animation_")){
-					animations.push(keys[i]);
-				}
-				if(keys[i].startsWith("palette_")){
-					palettes.push(keys[i]);
-				}
 
-			}
 
-			// Save to data
-			this.savedWork.animations = animations;
-			this.savedWork.palettes = palettes;
-		},
-
-		///////////////////
-		// Cycle Colors //
-		/////////////////
-		// Cycles through color demo hue-rotate - updates range slider
-		cycleColors: function(value){
-			let _this = this;
-
-			// Set color
-			_this.featuredColorsRange = value;
-
-			// If user hasn't changed value, run it again after 2s
-			if(_this.colorRangeRunning){
-				setTimeout(function(){
-					// Get random number between 1 and 36 - add 0 to it
-					var random = Math.random() * (36 - 0) + 0;
-					random = random * 10;
-					// Run again
-					_this.cycleColors(random)
-				}, 2000)
-			}
-		}
-
-		
 	}
 };
 
 </script>
 
 
-<style lang="less">
+<style lang="scss">
 
-	@import '~@/styles/variables.less';
+#homeLogo{
+	margin: 0 auto;
 
-	// Hero
-	.home-hero{
-		box-sizing: border-box;
-		text-align: center;
-		padding: 55px 0;
+	img{
+		height: 70px;
+		width: auto;
+		display: block;
+		margin: 85px 0 0 0;
 
-		h1{
-			margin: 0 auto;
-			font-size: 44px;
-			line-height: 54px;
-			max-width: 590px;
-			color: var(--text);
+		@media (max-width: $screenSM) {
+			height: 80px;
+			margin: 45px auto 0 auto;
 		}
-
-		h4{
-			margin: 0 auto;
-			line-height: 32px;
-			max-width: 450px;
-			padding-top: 25px;
-			color: var(--textLight);
-			
-		}
-
-		a{
-			margin: 25px auto 0 auto;
-			font-size: 16px;
-			display: block;
+	}
+	h1{
+		display: block;
+		@media (max-width: $screenSM) {
+			text-align: center;
 			width: 100%;
-			max-width: 400px;
+			font-weight: 800;
 		}
 	}
-
-
-	// Featured apps
-	#featuredApps{
-		display: flex;
-		flex-direction: column;
-
-		.app-feature{
-			width: 100%;
-			display: block;
-			// border: var(--borderWidth) solid var(--border);
-			// background-color: var(--layer);
-			box-sizing: border-box;
-			padding: 65px 0;
-			border-radius: var(--borderRadius);
-			display: flex;
-			justify-content: space-between;
-
-			// Full width mobile, stacked
-			@media (max-width: @screenMD) {
-				flex-direction: column-reverse;
-				max-width: 550px;
-				padding: 45px 0;
-				margin: 0 auto;
-			}
-
-			// Reverse flex
-			&.reverse{
-				flex-direction: row-reverse;
-				// No reverse on mobile
-				@media (max-width: @screenMD) {
-					flex-direction: column-reverse;
-				}
-			}
-
-
-			.app-feature-text{
-				width: 46%;
-				@media (max-width: @screenMD) {
-					width: 100%;
-					padding: 25px 0 0 0;
-				}
-
-				// Header text
-				h2{
-					font-size: 30px;
-					letter-spacing: -0.4px;
-					font-weight: 700;	
-
-					display: flex;
-					justify-content: space-between;
-					max-width: none;
-
-					// Shrink on mobile
-					@media (max-width: @screenSM) {
-						font-size: 30px;
-					}
-				}
-				p{
-					margin: 0;
-					padding: 10px 0 0 0;
-				}
-			}
-
-			// Demo of section
-			.app-feature-demo{
-				width: 46%;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-
-				@media (max-width: @screenMD) {
-					width: 100%;
-				}
-			}
-		}
-
-
-		// Animation feature block
-		// Animated element and timeline
-		#featuredAnimatedTarget{
-			box-sizing: border-box;
-			padding: 22px 0 15px 0;
-			position: relative;
-
-			@media (max-width: @screenMD) {
-				padding: 0 0 15px 0;
-			}
-			
-			i{
-				color: var(--text);
-				font-size: 52px;
-				animation: home-ghost 10s ease-in-out infinite  normal  backwards 1s;
-				transform-origin: center center;
-			}
-		}
-		#featuredTimeline{
-			display: block;
-			border: 3px solid var(--border);
-			height: 60px;
-			border-radius: var(--borderRadiusMd);
-			position: relative;
-			background-color: var(--layer);
-			opacity: 0.9;
-
-			.marker{
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				height: 80%;
-				width: 6px;
-				position: absolute;
-				top: 10%;
-				box-shadow: var(--shadow);
-				border-radius: 2px;
-				z-index: 5;
-
-				&.active{
-					background-color: var(--red);
-					animation: animationTicker 10s linear  infinite  normal  backwards 1s;
-					height: 130%;
-					top: -15%;
-					margin-left: -10px;
-					border-radius: 2px;
-					width: 8px;
-					z-index: 10;
-					opacity: 0.8;
-				}
-				&.dummy{
-					background-color: var(--text);
-
-					&:nth-child(2){left: 6px;}
-					&:nth-child(3){left: 5%;}
-					&:nth-child(4){left: 30%;}
-					&:nth-child(5){left: 40%;}
-					&:nth-child(6){left: 50%;}
-					&:nth-child(7){left: 60%;}
-					&:nth-child(8){left: 70%;}
-					&:nth-child(9){left: 93.5%;}
-					&:nth-child(10){left: 100%;margin-left: -12px;}
-				}
-			}
-		}
-
-		// Featured color palette
-		#featuredPalette{
-			display: flex;
-			justify-content: center;
-			box-sizing: border-box;
-			// Wrap mobile
-			@media (max-width: @screenMD) {
-			}
-
-			.color{
-				height: 60px;
-				width: 60px;
-				border-radius: 50%;
-				margin: 0 4px;
-				border: 3px solid var(--border);
-				box-sizing: border-box;
-				letter-spacing: 0.4px;
-				font-weight: 600;
-				text-transform: capitalize;
-				display: block;
-				position: relative;
-
-				// Shrink a bit under xl
-				@media (max-width: @screenLG) {
-					height: 50px;
-					width: 50px;
-				}
-
-				&:nth-child(1){background-color: var(--red);}
-				&:nth-child(2){background-color: var(--orange);}
-				&:nth-child(3){background-color: var(--yellow);}
-				&:nth-child(4){background-color: var(--green);}
-				&:nth-child(5){background-color: var(--blue);}
-				&:nth-child(6){background-color: var(--purple);}
-			}
-
-		}
-
-		// Range slider
-		.slider-wrapper{
-			box-sizing: border-box;
-			padding: 25px 20% 0 20%;
-			display: flex;
-			justify-content: flex-end;
-			background: transparent;
-
-			@media (max-width: @screenMD) {
-				padding: 25px 5% 0 5%;
-			}
-
-			input{
-				margin-bottom: 5px;
-			}
-		}
-
-		// Shadow example
-		#featuredShadow{
-			display: flex;
-			flex-direction: column;
-			box-sizing: border-box;
-			justify-content: center;
-			background-color: var(--white);
-			box-sizing: border-box;
-			padding: 35px 0;
-			border-radius: var(--borderRadius);
-			border: 3px solid var(--border);
-			width: fit-content;
-			min-width: 280px;
-			margin: 0 auto;
-
-			.sun{
-				text-align: center;
-				width: 50px;
-				font-size: 42px;
-				margin: 0 auto 0 auto;
-				color: var(--yellow);
-				animation: home-shadow-sun 10s linear 0s infinite alternate none;
-			}
-			.shadow{
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				text-align: center;
-				height: 50px;
-				width: 50px;
-				border-radius: 50%;
-				background: transparent;
-				color: var(--blue);
-				font-size: 52px;
-				margin: 0 auto;
-				animation: home-shadow 10s linear 0s infinite alternate none;
-			}
-		}
-	}
-
-
-
-	// Animations for home page
-
-	
-	// Keyframes for red animated ticker
-	@keyframes animationTicker{
-		0%{
-			left: 0%;
-		}
-		100%{
-			left: 100%;
-		}
-	}
-
-	/* Copy this @keyframes block to your CSS*/
-	@keyframes home-ghost {
-		0.0%{
-			transform: scale(0) translate(0, 0);
-		}
-		5.0%{
-			transform: scale(1) translate(0, 0);
-		}
-		30.0%{
-			transform: scale(1) translate(180px, 0);
-		}
-		35.0%{
-			transform: scale(1) translate(180px, -15px);
-		}
-		40.0%{
-			transform: scale(1) translate(180px, 0);
-		}
-		45.0%{
-			transform: scale(1) translate(180px, -12px);
-		}
-		50.0%{
-			transform: scale(1) translate(180px, 0px);
-		}
-		55.0%{
-			transform: scale(1) translate(180px, -6px);
-		}
-		60.0%{
-			transform: scale(1) translate(180px, 0px);
-		}
-		65.0%{
-			transform: scale(1) translate(180px, -12px);
-		}
-		70.0%{
-			transform: scale(1) translate(180px, 0px);
-		}
-		95.0%{
-			transform: scale(1) translate(0px, 0px);
-		}
-		100.0%{
-			transform: scale(0) translate(0px, 0px);
-		}
-	}	
-
-	// Shadow
-	@keyframes home-shadow {
-		0.0%{
-			box-shadow: 24px 14px 10px -2px rgba(30,30,60,0.45);
-		}
-		50%{
-			box-shadow: 0px 6px 2px -2px rgba(30,30,60,0.25);
-		}
-		100%{
-			box-shadow: -24px 14px 10px -2px rgba(30,30,60,0.45);
-		}
-	}
-	@keyframes home-shadow-sun {
-		0.0%{
-			transform: translate(-70px, 0);
-		}
-		25%{
-			transform: translate(-30px, -10px);
-		}
-		50%{
-			transform: translate(0px, -15px);
-		}
-		75%{
-			transform: translate(30px, -10px);
-		}
-		100%{
-			transform: translate(70px, 0);
-		}
-	}
+}
 
 </style>

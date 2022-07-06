@@ -1,0 +1,78 @@
+//!   Custom Forms   
+// Custom non-standard form elements
+
+// Tabs
+// Navigation or selects
+.tabs{
+	display: flex;
+	box-sizing: border-box;
+	width: fit-content;
+	overflow-y: auto;
+	z-index: 5;
+	overflow: visible;
+	max-width: calc(100vw - 100px);
+
+	// Full width mobile
+	@media (max-width: $screenSM) {
+		overflow-x: auto;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.tab{
+		height: 36px;
+		padding: 0 16px 0px 18px;
+		font-size: 0.8rem;
+		flex-grow: 3;
+		font-weight: 600;
+		color: var(--text);
+		text-align: center;
+		white-space: pre;
+		background-color: var(--background);
+		// box-shadow: var(--shadow);
+
+		&:first-child{
+			margin-left: var(--sidePadding);
+		}
+		&:last-child{
+			margin-right: 100px !important;
+			position: relative;
+
+			&:after{
+				content: ' ';
+				width: 100px;
+				position: absolute;
+			}
+		}
+
+		// Icon
+		i{
+			margin-right: 8px;
+			transform: scale(1.2);
+		}
+
+		// Hover
+		&:hover{
+			color: var(--text);
+			background-color: var(--background);
+			text-decoration: underline;
+		}
+
+		// Active tab
+		&.active{
+			color: var(--blueText);
+			background-color: var(--blue);
+			border-color: var(--border);
+			border-radius: 10px;
+			i{
+				color: var(--blueText);
+			}
+			&:hover{
+				border-color: var(--border);
+				span{
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}

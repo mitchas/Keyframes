@@ -1,8 +1,0 @@
-{
-  "editor.default_syntax" : "vue",
-  "tommasonegri.vue.serverRunning" : true,
-  "workspace.art_style" : 1,
-  "workspace.color" : 0,
-  "workspace.preview_type" : "custom",
-  "workspace.preview_url" : "localhost:8080"
-}

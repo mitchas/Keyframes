@@ -1,0 +1,85 @@
+// Primary Colors Theme
+
+[data-theme="primary"] {
+	--background: #FAFAFF;
+	--layer: #FFFFFF;
+	--backdrop: rgba(0,0,50,0.25);
+	--outline: var(--primary);
+
+	--primary: var(--blue);
+		--primaryText: var(--blueText);
+	--red: #FF0000;
+		--redText: #000000;
+	--orange: #FF6600;
+		--orangeText: #000000;
+	--yellow: #FFFF00;
+		--yellowText: #000000;
+	--green: #00FF00;
+		--greenText: #000000;
+	--blue: #0000FF;
+		--blueText: #FFFFFF;
+	--sky: #00CAFF;
+		--skyText: #000000;
+	--purple: #6600FF;
+		--purpleText: #FFFFFF;
+	--pink: #FFC0CB;
+		--pinkText: #000000;
+
+	--black: #000000;
+	--white: #FFFFFF;
+	--grey: #E0E1F1;
+		--greyFade: rgba(236, 237, 247, 0.7);
+		--greyText: var(--text);
+	--border: #000000;
+		--borderFade: rgba(0,0,0, 0.2);
+		--borderText: var(--white);
+
+	--text: #000;
+		--textFade: rgba(0,0,0, 0.5);
+
+	--shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+	--shadow-Hover: 0px 2px 20px -5px rgba(30, 30, 60, 0.15);
+}
+
+
+
+[data-theme="primary_dark"] {
+	--background: #000000;
+	--layer: #141414;
+	--backdrop: rgba(150,150,150,0.25);
+	--outline: var(--yellow);
+
+	--primary: var(--blue);
+		--primaryText: var(--blueText);
+	--red: #FF0000;
+		--redText: #000000;
+	--orange: #FF6600;
+		--orangeText: #000000;
+	--yellow: #FFFF00;
+		--yellowText: #000000;
+	--green: #00FF00;
+		--greenText: #000000;
+	--blue: #0000FF;
+		--blueText: #FFFFFF;
+	--sky: #00CAFF;
+		--skyText: #000000;
+	--purple: #6600FF;
+		--purpleText: #FFFFFF;
+	--pink: #FFC0CB;
+		--pinkText: #000000;
+
+	--black: #000000;
+	--white: #FFFFFF;
+	--grey: #282828;
+		--greyFade: rgba(40,40,40, 0.7);
+		--greyText: var(--white);
+	--border: #949494;
+		--borderFade: rgba(148, 148, 148, 0.2);
+		--borderText: var(--background);
+
+	--text: #FFFFFF;
+		--textFade: rgba(255,255,255, 0.6);
+
+	--shadow: rgba(0,0,0, .25) 0px 4px 12px;
+		--shadow-Hover: 0px 2px 20px -5px rgba(30, 30, 60, 0.15);
+}

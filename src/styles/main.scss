@@ -1,0 +1,24 @@
+//! Main 
+// Main SCSS file to import all others
+
+// Then variables
+@import 'variables.scss';
+// Then reset
+@import 'reset.scss';
+// Then base
+@import 'base.scss';
+// Then everything else
+@import 'modal.scss';
+@import 'typography.scss';
+@import 'animations.scss';
+@import 'forms.scss';
+@import 'custom-forms.scss';
+@import 'layout.scss';
+@import 'helpers.scss';
+@import 'ui.scss';
+
+// Themes
+@import 'themes/default.scss';
+@import 'themes/primary.scss';
+@import 'themes/muted.scss';
+@import 'themes/greys.scss';

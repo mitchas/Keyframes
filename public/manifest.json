@@ -3,18 +3,18 @@
 	"short_name": "Keyframes",
 	"start_url": "/",
 	"display": "standalone",
-	"background_color": "#110F1F",
-	"theme_color": "#110F1F",
-	"description": "A straightforward way to create CSS animations, shadows, colors, & more.",
+	"background_color": "#483BF3",
+	"theme_color": "#483BF3",
+	"description": ".",
 
  	 "icons": [
     	{
-      		"src": "./img/icons/android-chrome-192x192.png",
+      		"src": "./img/icons/icon-192x192.png",
       		"sizes": "192x192",
       		"type": "image/png"
     	},
     	{
-      		"src": "./img/icons/android-chrome-512x512.png",
+      		"src": "./img/icons/icon-512x512.png",
       		"sizes": "512x512",
       		"type": "image/png"
     	}
@@ -22,18 +22,9 @@
 	  
   	"shortcuts": [
 		{
-			"name": "New Animation",
-			"short_name": "Animation",
-			"url": "/animate/",
-			"icons": [{
-				"src": "./img/icons/android-chrome-192x192.png",
-				"sizes": "192x192"
-			}]
-		},
-		{
-			"name": "Colors",
-			"short_name": "Colors",
-			"url": "/colors/",
+			"name": "Settings",
+			"short_name": "Settings",
+			"url": "/settings/",
 			"icons": [{
 				"src": "./img/icons/android-chrome-192x192.png",
 				"sizes": "192x192"
