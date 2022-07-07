@@ -98,7 +98,7 @@ UI Elements
 			Tags
 		</h2>
 
-		<div class="flex gap flex-wrap">
+		<div class="flex gap wrap">
 			<div class="tag inline-block">
 				Cow
 			</div>

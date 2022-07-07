@@ -60,7 +60,6 @@ Modal Component
 <script>
 import shortcut from "@/components/mixins/keyboard.js";
 
-
 export default {
 	name: "Modal",
 	mixins: [

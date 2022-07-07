@@ -31,7 +31,7 @@
 			</p>
 
 
-			<h2 class="mtop-xl mbottom-lg align-center">Apps</h2>
+			<h2 class="mtop-xl mbottom-lg center">Apps</h2>
 		</div>
 
 		<!-- Horizontal app scroll -->
@@ -60,8 +60,8 @@
 
 		<!-- Q & A -->
 		<div class="max-width margin-auto mtop-xl padded">
-			<h2 class="align-center">Q & A</h2>
-			<p class="align-center">Have more questions about what this is and how it works? We've got answers!</p>
+			<h2 class="center">Q & A</h2>
+			<p class="center">Have more questions about what this is and how it works? We've got answers!</p>
 
 			<h4 class="mtop-lg">How does this handle my data?</h4>
 			<p>
@@ -102,8 +102,8 @@
 
 
 			<!-- Other apps -->
-			<h2 class="align-center mtop-xl">But wait, there's more</h2>
-			<p class="align-center">
+			<h2 class="center mtop-xl">But wait, there's more</h2>
+			<p class="center">
 				Different tools, just as private & easy to use. 
 			</p>
 		</div>

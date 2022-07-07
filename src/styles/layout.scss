@@ -10,6 +10,7 @@
 	display: block;
 	width: 100%;
 	height: calc(100vh - var(--topBarHeight));
+	overflow: auto;
 }
 
 
@@ -23,6 +24,11 @@
 	height: var(--topBarHeight);
 	height: calc(var(--topBarHeight) * 0.75);
 	min-height: calc(var(--topBarHeight) * 0.75);
+	padding: 5px 10px;
+	box-sizing: border-box;
+	position: fixed;
+	top: var(--topBarHeight);
+	z-index: 12;
 	
 	.spacer{
 		flex-grow: 3;
@@ -34,8 +40,9 @@
 		position: relative;
 		z-index: 13;
 		width: 40px;
+		padding: 0;
 		text-align: center;
-		border-right: 1px solid white;
+		border-radius: var(--borderRadius);
 
 		@media (max-width: 450px) {
 			width: 36px;
@@ -49,7 +56,7 @@
 		.hint{
 			position: absolute;
 			left: 10%;
-			top: -52%;
+			top: -72%;
 			background-color: var(--yellow);
 			line-height: 30px;
 			height: 30px;
@@ -73,16 +80,16 @@
 			}
 		}
 
-		&:hover .hint,
-		&:focus .hint{
+		&:hover,
+		&:focus{
+			background-color: var(--greyFade);
+		}
+		&:hover .hint{
 			padding: 0 12px;
 			transition: all 0.35s ease 0.75s;
 			max-width: 400px;
 		}
 
-		&:last-child{
-			margin-right: 15px;
-		}
 	}
 
 	// Text input
@@ -169,7 +176,7 @@
 		@media (max-width: $screenXL) {
 			flex-basis: 33%;
 			flex-basis: calc(33% - 30px);
-			max-width: unset;
+			max-width: calc(33% - 20px);
 		}
 		@media (max-width: $screenSM) {
 			flex-basis: 100%;

@@ -1,7 +1,7 @@
 <!-- 
 Confirm Component
 Example: 
-<Confirm v-if="show" title="Title" body="Body" confirmText="Yes" cancelText="No, Cancel" v-on:confirmFalse="show = false" v-on:confirmTrue="doSomething()"></Confirm>
+<Confirm v-if="show" icon="far fa-times" title="Title" color="red" confirmText="Yes" cancelText="No, Cancel" v-on:confirmFalse="show = false" v-on:confirmTrue="doSomething()"></Confirm>
 -->
 <template>
 	<div>
@@ -20,7 +20,7 @@ Example:
 					<!-- Header -->
 					<div class="modal-title">
 						<span>{{title}}</span>
-						<i class="far fa-eraser"></i>
+						<i :class="icon"></i>
 					</div>
 					<!-- Body Content -->
 					<div class="modal-body no-scrollbars">
@@ -29,7 +29,7 @@ Example:
 					<!-- Footer/Buttons -->
 					<div class="modal-footer">
 						<!-- Dismiss -->
-						<button class="button invert" @click="cancel()" :aria-label="cancelText">
+						<button class="button invert" @click="cancel()" :aria-label="cancelText" ref="cancel">
 							<i class="far fa-times"></i>
 							<span>{{cancelText}}</span>
 						</button>
@@ -51,16 +51,22 @@ Example:
 
 
 <script>
+import shortcut from "@/components/mixins/keyboard.js";
 
 export default {
 	name: "Confirm",
 	mixins: [
+		// Dismiss modals with escape
+		shortcut('escape', function() {
+			this.cancel();
+		}),
 	],
 	components: {
 	},
 	props: [
 		"title",
 		"color",
+		"icon",
 		"confirmText",
 		"confirmIcon",
 		"cancelText",
@@ -74,7 +80,12 @@ export default {
 
 	},
 	mounted(){
+		let _this = this;
+
 		this.show = true;
+		setTimeout(function(){
+			_this.$refs.cancel.focus();
+		}, 400	);
 	},
 	methods: {
 		// Confirm

@@ -110,7 +110,7 @@
 		<small class="italic" v-if="!$store.getters['User/preferences'].tooltips">You have tooltips disabled in your settings, so this demo won't show :)</small>
 
 		<!-- Basic Inputs -->
-		<div class="flex flex-wrap flex-between max-width-small mtop-sm">
+		<div class="flex wrap between max-width-small mtop-sm">
 			<!-- Text Input -->
 			<div class="max-width-small mright-sm mbottom-sm">
 				<input type="text" placeholder="Text Input"/>
@@ -137,7 +137,7 @@
 
 
 		<!-- Checkbox and Radio -->
-		<div class="flex flex-wrap mtop-md">
+		<div class="flex wrap mtop-md">
 			<!-- Checkbox -->
 			<div class="mright-md mbottom-sm">
 				<input id="testCheck" type="checkbox" class="check"/>
@@ -159,7 +159,7 @@
 
 
 		<!-- Toggles -->
-		<div class="flex flex-wrap mtop-sm">
+		<div class="flex wrap mtop-sm">
 
 			<!-- Toggles -->
 			<div class="mright-md mbottom-sm">

@@ -33,7 +33,7 @@ export const routes = [
 			}
 		},
 		{
-			path: "/colors",
+			path: "/colors/:urlColors?",
 			name: "colors",
 			component: () => import(/* webpackChunkName: "colors" */ "./views/apps/Colors.vue"),
 			meta: {

@@ -16,7 +16,7 @@ const state = {
 	
 	// User Preferences
 	preferences: {
-		confirm_leave: true,
+		confirm_action: true,
 		tooltips: true,
 		animations: true,
 		outlines: true,

@@ -5,7 +5,7 @@
 // Breadcrumbs
 // Tooltips
 // Page Footer
-
+// Notification Dots
 
 // Tag
 .tag{
@@ -213,4 +213,33 @@
 }
 
 
+// Notification Dot
+// Floats little dot relative top right on element
+.notifiaction-dot{
+	position: relative;
+	&:after{
+		content: "";
+		display: block;
+		height: 8px;
+		width: 8px;
+		position: absolute;
+		bottom: 4px;
+		left: 50%;
+		margin-left: -4px;
+		background-color: var(--red);
+		border-radius: calc(var(--borderRadius) * 4)
+	}
+}
 
+
+// Button Grid
+.button-grid{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	flex-basis: 33%;
+
+	button{
+		flex-grow: 3;
+	}
+}

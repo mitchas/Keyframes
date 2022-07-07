@@ -100,7 +100,7 @@ export default {
 		// Text
 		.callout-body{
 			flex-grow: 3;
-			padding: 15px 0 15px 0;
+			padding: 15px 15px 15px 0;
 			display: flex;
 			flex-direction: column;
 			font-size: 1rem;
@@ -218,7 +218,7 @@ export default {
 				font-size: 1.5rem;
 			}
 			.callout-body{
-				padding: 10px 0 10px 0;
+				padding: 12px 15px 14px 0;
 				letter-spacing: 0px;
 				font-size: 0.9rem;
 			}

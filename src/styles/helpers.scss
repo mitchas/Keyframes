@@ -1,59 +1,30 @@
 //! Helpers 
 // Helper classes for modifying any element
+// Colorblind Filters
+
 
 // Fonts
 // Title case
-.capitalize{
-	text-transform: capitalize;
-}
-.lowercase{
-	text-transform: lowercase;
-}
-.sans{
-	font-family: var(--sans);
-}
-.mono{
-	font-family: var(--monospace);
-}
-.serif{
-	font-family: var(--serif);
-}
+.capitalize{text-transform: capitalize;}
+.lowercase{text-transform: lowercase;}
+.sans{font-family: var(--sans);}
+.mono{font-family: var(--monospace);}
+.serif{font-family: var(--serif);}
 // bold
-.bold{
-	font-weight: bold;
-}
-.code{
-	font-family: var(--monospace);
-}
-// Display inline
-.inline{
-	display: inline;
-}
-// Display inline-block
-.inline-block{
-	display: inline-block;
-}
-// Break word
-.break-word{
-	word-wrap: break-word;
-}
+.bold{font-weight: bold;}
+.code{font-family: var(--monospace);}
 // Display block
-.block{
-	display: block;
-}
+.block{display: block;}
+// Display inline
+.inline{display: inline;}
+// Display inline-block
+.inline-block{display: inline-block;}
+// Break word
+.break-word{word-wrap: break-word;}
 // Position relative
-.relative{
-	position: relative;
-}
-.align-center{
-	text-align: center;
-}
-.align-right{
-	text-align: right;
-}
-.accent{
-	color: var(--blue);
-}
+.relative{position: relative;}
+.center{text-align: center;}
+.align-right{text-align: right;}
 .margin-auto{
 	margin-left: auto;
 	margin-right: auto;
@@ -68,37 +39,15 @@
 .flex{
 	display: flex;
 
-	&.column{
-		flex-direction: column;
-	}
+	&.column{flex-direction: column;}
+	&.center{justify-content: center;}
+	&.between{justify-content: space-between;}
+	&.end{justify-content: flex-end;}
+	&.flex-wrap{flex-wrap: wrap;}
+	&.grow{flex-grow: 3;}
+	&.gap{gap: 20px;}
 }
-.flex-center{
-	justify-content: center;
-}
-.flex-between{
-	justify-content: space-between;
-}
-.flex-end{
-	justify-content: flex-end;
-}
-.self-end{
-	justify-self: flex-end;
-}
-.flex-wrap{
-	flex-wrap: wrap;
-}
-.flex-grow{
-	flex-grow: 3;
-}
-.gap{
-	gap: 20px;
-}
-.row-reverse{
-	flex-direction: row-reverse;
-}
-.column-reverse{
-	flex-direction: column-reverse;
-}
+
 
 // Pointer Events
 .no-pointer-events{
@@ -135,33 +84,35 @@
 }
 
 //  Size Helpers
-.fit-content{
-	min-width: fit-content;
-}
 .max-width-tiny{
 	max-width: 300px;
 	max-width: calc(var(--maxWidthSmall / 2));
 }
-.max-width-small{
-	max-width: var(--maxWidthSmall);
-}
-.max-width{
-	max-width: var(--maxWidth);
-}
-.max-width-large{
-	max-width: var(--maxWidthLarge);
-}
-.max-width-none{
-	max-width: none;
-}
-.max-width-fit{
-	max-width: fit-content;
-}
+.max-width-small{max-width: var(--maxWidthSmall);}
+.max-width{max-width: var(--maxWidth);}
+.max-width-large{max-width: var(--maxWidthLarge);}
+.max-width-none{max-width: none;}
+.max-width-fit{max-width: fit-content;}
 
-// Border changes
-.no-border-radius{
-	border-radius: 0 !important;
-}
+
+// Colorblind Filters
+// Using SVG From https://github.com/hail2u/color-blindness-emulation
+// Protanopia
+.colorblind_protanopia{filter: url('~@/assets/color_blind_filters.svg#protanopia');}
+// Protanomaly
+.colorblind_protanomaly{filter: url('~@/assets/color_blind_filters.svg#protanomaly');}
+// Deuteranopia
+.colorblind_deuteranopia{filter: url('~@/assets/color_blind_filters.svg#deuteranopia');}
+// Deuteranomaly
+.colorblind_deuteranomaly{filter: url('~@/assets/color_blind_filters.svg#deuteranomaly');}
+// Tritanopia
+.colorblind_tritanopia{filter: url('~@/assets/color_blind_filters.svg#tritanopia');}
+// Tritanomaly
+.colorblind_tritanomaly{filter: url('~@/assets/color_blind_filters.svg#tritanomaly');}
+// Achromatopsia
+.colorblind_achromatopsia{filter: url('~@/assets/color_blind_filters.svg#achromatopsia');}
+// Achromatomaly
+.colorblind_achromatomaly{filter: url('~@/assets/color_blind_filters.svg#achromatomaly');}
 
 
 // Spacing helpers

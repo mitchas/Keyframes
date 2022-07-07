@@ -4,8 +4,8 @@
 // Blank div with lightbox class
 .lightbox{
 	background-color: var(--backdrop);
-	backdrop-filter: blur(3px);
-	// backdrop-filter: grayscale(80%);
+	// backdrop-filter: blur(3px);
+	// backdrop-filter: grayscale(80%) contrast(150%);
 	display: block;
 	height: 100vh;
 	width: 100vw;

@@ -3,30 +3,33 @@ Top nav bar - fixed
 -->
 
 <template>
-	<div id="nav">
+	<div>
+		<nav id="nav">
 
-		<div id="branding">
+			<div id="branding">
 
-			<button @click="!$store.getters['User/app_launcher'] ? navigate('/') : toggleAppLauncher()" tabindex="0">
-				<img src="@/assets/branding/logo-light.png" title="Logo" alt="Logo" v-if="!$store.getters['User/darkMode']"/>
-				<img src="@/assets/branding/logo-dark.png"  title="Logo" alt="Logo" v-else />
-			</button>
+				<button @click="!$store.getters['User/app_launcher'] ? navigate('/') : toggleAppLauncher()" tabindex="0">
+					<img src="@/assets/branding/logo-light.png" title="Logo" alt="Logo" v-if="!$store.getters['User/darkMode']"/>
+					<img src="@/assets/branding/logo-dark.png"  title="Logo" alt="Logo" v-else />
+				</button>
 
-		</div>
+			</div>
 
 
-		<div id="appList" class="no-scrollbars" @click="appLauncherVisible = false">
+			<div id="appList" class="no-scrollbars" @click="appLauncherVisible = false">
 
-		
-			<!-- Links - loop -->
-			<router-link v-for="(app, key) in appLinks" :key="key" :class="{'active': $route.path == app.path, 'hidden': !appData[key].enabled}" :to="app.path">
-				<i :class="app.icon"></i>
-				<b>{{app.title}}</b>
-			</router-link>
-			<!-- Blank/Gap -->
-			<a>&nbsp;</a>
+			
+				<!-- Links - loop -->
+				<router-link v-for="(app, key) in appLinks" :key="key" :class="{'active': $route.path == app.path, 'hidden': !appData[key].enabled}" :to="app.path">
+					<i :class="app.icon"></i>
+					<b>{{app.title}}</b>
+				</router-link>
+				<!-- Blank/Gap -->
+				<a>&nbsp;</a>
 
-		</div>
+			</div>
+		</nav>
+
 
 
 		<!-- App Launcher -->
@@ -127,7 +130,6 @@ export default {
 		z-index: 12;
 		transition: all 0.2s ease;
 		width: 100%;
-		height: 98vh;
 		height: var(--topBarHeight);
 		background-color: var(--layer);
 		border-bottom: 1px solid var(--border);
@@ -139,8 +141,12 @@ export default {
 			justify-content: center;
 			padding: 0 0 0 15px;
 
-			button:active{
-				transform: scale(0.9);
+			button{
+				margin: 0;
+				padding: 0;
+				&:active{
+					transform: scale(0.9);
+				}
 			}
 
 			img{
@@ -219,110 +225,7 @@ export default {
 				z-index: 250;
 				height: fit-content;
 			}
-			&.expandexd{
-				position: fixed;
-				top: 60px;
-				left: 0;
-				height: auto;
-				max-height: 100vh;
-				max-height: calc(100vh - 60px);
-				gap: 10px 30px;
-				flex-wrap: wrap;
-				box-sizing: border-box;
-				padding: 8vh 5vw;
-				overflow-x:scroll;
-				backdrop-filter: blur(8px);
-				z-index: 240;
 
-				@media (max-width: $screenSM) {
-					padding: 4vh 5vw;
-					gap: 15px 30px;
-				}
-
-
-				a{
-					flex-wrap: wrap;
-					flex-basis: 320px;
-					min-width: 220px;
-					max-width: 400px;
-					border-radius: var(--borderRadius);
-					// box-shadow: var(--shadow);
-					border: 1px solid var(--border);
-					color: var(--text);
-					background-color: var(--layer);
-					margin: 0;
-					gap: 0;
-					white-space: normal;
-					flex-grow: 3;
-					max-height: 140px;
-					padding: 20px;
-					display: block;
-					box-sizing: border-box;
-
-					@media (max-width: $screenSM) {
-						max-height: unset;
-					}
-
-
-					i{
-						width: 50px;
-						height: 50px;
-						background-color: var(--grey);
-						border-radius: var(--borderRadius);
-						font-size: 28px;
-						text-align: center;
-						display: flex;
-						flex-direction: column;
-						justify-content: center;
-						display: inline-flex;
-						vertical-align: middle;
-					}
-					b{
-						display: flex;
-						flex-direction: column;
-						justify-content: center;
-						flex-grow: 3;
-						font-size: 16px;
-						font-weight: 600;
-						box-sizing: border-box;
-						padding-left: 10px;
-						display: inline-block;
-						vertical-align: middle;
-					}
-
-					p{
-						width: 100%;
-						line-height: 1.2rem;
-						font-size: 0.9rem;
-					}
-
-					&:last-child{
-						display: none;
-						border: none;
-						box-shadow: none;
-						margin-bottom: 10vh;
-						background-color: transparent;
-						@media (max-width: $screenSM) {
-							display: block;
-						}
-					}
-
-					&:hover{
-						p{
-							text-decoration: none;
-						}
-					}
-
-					&.active{
-						background-color: var(--primary);
-						b,p{
-							color: var(--white);
-						}
-						&:hover{
-						}
-					}
-				}
-			}
 		}
 
 	}

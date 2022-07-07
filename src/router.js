@@ -62,9 +62,6 @@ router.beforeEach((to, from, next) => {
 	next();
 
 
-	// Stop loading
-	store.dispatch("Hold/STOP_LOAD");
-
 });
 
 

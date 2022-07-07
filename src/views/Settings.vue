@@ -295,9 +295,9 @@
 			</p>
 
 			<!-- Confirm text -->
-			<div class="max-width-tiny margin-auto align-center ptop-md">
+			<div class="max-width-tiny margin-auto center ptop-md">
 				<label>Type "delete" to confirm:</label>
-				<input class="align-center" v-model="hardResetConfirmation" type="text" placeholder="delete"/>
+				<input class="center" v-model="hardResetConfirmation" type="text" placeholder="delete"/>
 			</div>
 
 
@@ -372,10 +372,10 @@ export default {
 					icon: "fas fa-grid",
 					description: "Use the logo in the top left to toggle the app launcher instead of home page.",
 				},
-				"confirm_leave": {
-					title: "Confirm Leave",
-					icon: "fas fa-arrow-right-from-bracket",
-					description: "Confirmation before you leave a page so you don't lose any work.",
+				"confirm_action": {
+					title: "Confirm Actions",
+					icon: "fas fa-check-double",
+					description: "Confirmation window before you do certain things - deleting, leaving pages, etc.",
 				},
 				"tooltips": {
 					title: "Tooltips",

@@ -95,7 +95,7 @@ export default {
 			padding: 16px 22px 16px 22px;
 			border-radius: calc(var(--borderRadius) * 2);
 			border-bottom-right-radius: calc(var(--borderRadius) / 2);
-			font-size: 1rem;
+			font-size: 0.9rem;
 			box-shadow: var(--shadow);
 			font-weight: 600;
 			margin: 0 auto;
