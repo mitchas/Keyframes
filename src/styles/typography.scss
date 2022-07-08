@@ -72,10 +72,18 @@ p,
 	color: var(--text);
 	font-weight: 400;
 
+	&.tight{
+		line-height: 1.25rem;
+	}
+
 	// Decrease sizing
 	&.small{
 		font-size: 0.8rem;
 		line-height: 1.4rem;
+
+		&.tight{
+			line-height: 1.1em;
+		}
 	}
 	// Increase sizing
 	&.big{

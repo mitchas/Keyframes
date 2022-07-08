@@ -5,59 +5,46 @@
 <template>
 	<div class="fixed-page" id="colorApp">
 
+
+		<!-- Secondary nav / Toolbar -->
 		<nav class="secondary-nav">
 
 			<!-- Add color -->
 			<button @click="addColor()">
-				<i class="fas fa-plus-circle"></i>
-				<span class="hint">Add Color</span>
+				<i class="fas fa-plus-circle"></i><span class="hint">Add Color</span>
 			</button>
 			<label>{{currentPalette.length}} color{{currentPalette.length > 1 ? 's' : ''}}</label>
 
+			<!-- Gap -->
 			<div class="spacer"></div>
-			<button @click="updateURLParams()">
-				<i class="fas fa-sliders-simple"></i>
-				<span class="hint left">Adjust All</span>
-			</button>
-			<button @click="toggleSidebar('colorblind')" :class="{'notifiaction-dot': colorPrefs.colorblind != 'none'}">
-				<i :class="view_sidebar == 'colorblind' ? 'fas fa-times' : 'fas fa-glasses'"></i>
-				<span class="hint left">Color Blindness</span>
-			</button>
-			<button @click="toggleSidebar('contrast')">
-				<i :class="view_sidebar == 'contrast' ? 'fas fa-times' : 'fas fa-circle-half-stroke'"></i>
-				<span class="hint left">Contrast</span>
-			</button>
-			<hr/>
-			<button @click="toggleSidebar('export')">
-				<i :class="view_sidebar == 'export' ? 'fas fa-times' : 'fas fa-share-nodes'"></i>
-				<span class="hint left">Export</span>
-			</button>
-			<button @click="toggleSidebar('save')">
-				<i :class="view_sidebar == 'save' ? 'fas fa-times' : 'fas fa-floppy-disk'"></i>
-				<span class="hint left">Save / Load</span>
-			</button>
-			<button @click="toggleSidebar('more')">
-				<i :class="view_sidebar == 'more' ? 'fas fa-times' : 'fas fa-bars'"></i>
-				<span class="hint left">More</span>
+
+			<!-- Loop for other secondary buttons -->
+			<button v-for="(button, key) in secondaryNav" :key="key" @click="toggleSidebar(button.id)" 
+				:class="{'notification-dot': (button.id == 'colorblind' && colorPrefs.colorblind != 'none') || (button.id == 'contrast' && contrastEnabled)}">
+				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<span class="hint left">{{button.title}}</span>
 			</button>
 		</nav>
 
+		
+		<!-- Main stage area -->
 		<div :class="'stage colorblind_' + colorPrefs.colorblind">
 
 			<!-- Color Grid -->
-			<div id="colorGrid"  :style="'background-color: ' + colorPrefs.stageBackground" :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity}">
+			<div id="colorGrid" :style="'background-color: ' + colorPrefs.stageBackground" :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity || colorPrefs.colorGap, 'gap': colorPrefs.colorGap}" :data-count="currentPalette.length">
 
-				<div v-for="(color, key) in currentPalette" :key="key" class="color_block"
-					:style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a) + ';  color: ' + getTextColor(color.r, color.g, color.b)">
+				<!-- Loop for Current Palette -->
+				<div class="color_block" v-for="(color, key) in currentPalette" :key="key" :style="colorStyleProperties(key)">
 
 					<div class="color_block_info">
-						<input class="color_transparent_input name hide-print" v-if="colorPrefs.customNames" type="text" v-model="color.name" placeholder="Name" />
-						<h6 class="print-only">{{color.name}}</h6>
-
+						<!-- Name -->
+						<input class="color_name_input hide-print" v-if="colorPrefs.customNames" type="text" v-model="color.name" placeholder="Name" @change="color.name = color.name.replace(/ /g, '')" />
+						<h6 class="print-only" v-if="colorPrefs.customNames">{{color.name}}</h6>
+						<!-- HEX -->
 						<button class="hex_code" @click="copyToClipboard(RGBToHex(color.r, color.g, color.b, color.a).toUpperCase())">
 							{{RGBToHex(color.r, color.g, color.b, color.a)}}
 						</button>
-						
+						<!-- RGB -->
 						<button class="format_code" 
 							@click="
 							colorPrefs.enableOpacity && copyToClipboard('rgba' + '(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + (color.a / 255).toFixed(2) + ')');
@@ -65,52 +52,75 @@
 							">
 							rgb{{colorPrefs.enableOpacity ? 'a' : ''}}({{color.r}}, {{color.g}}, {{color.b}}<span v-if="colorPrefs.enableOpacity">, {{(color.a / 255).toFixed(2)}}</span>)
 						</button>
-
-						<div class="color_block_controls">
-							<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple"></i></button>
-							<button><i class="fas fa-lamp"></i></button>
-							<button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)"><i class="fas fa-trash-alt"></i></button>
-						</div>
-
-						<transition name="basic">
-							<div class="color_block_edit" id="color_block_sliders" v-if="color.adjust">
-								<div class="cbs_row">
-									<label for="colorRedInput" class="vertical">Red</label>
-									<input type="range" class="red" id="colorRedInput" min="0" max="255" v-model="color.r"/>
-									<input type="number" id="colorRedInput" v-model="color.r" min="0" max="255"/>
-								</div>
-								<div class="cbs_row">
-									<label for="colorGreenInput" class="vertical">Green</label>
-									<input type="range" class="green" id="colorGreenInput" min="0" max="255" v-model="color.g"/>
-									<input type="number" id="colorGreenInput"  v-model="color.g" min="0" max="255"/>
-								</div>
-								<div class="cbs_row">
-									<label for="colorBlueInput" class="vertical">Blue</label>
-									<input type="range" class="blue" id="colorBlueInput" min="0" max="255"  v-model="color.b"/>
-									<input type="number" id="colorBlueInput" v-model="color.b" min="0" max="255"/>
-								</div>
-								<div class="cbs_row" v-if="colorPrefs.enableOpacity">
-									<label for="colorOpacityInput" class="vertical">Opacity</label>
-									<input type="range" class="opacity" id="colorOpacityInput" min="0" max="255" step="1"  v-model="color.a"/>
-									<input type="number" id="colorOpacityInput" v-model="color.a" min="0" max="255"/>
-								</div>
-								<!-- Edit hex value input -->
-								<div class="cbs_row">
-									<input class="color_transparent_input" type="text" placeholder="HEX Value" :value="RGBToHex(color.r, color.g, color.b, color.a).toUpperCase()" @change="updateRGBValue($event, key)"/>
-								</div>
-							</div>
-						</transition>
-
 					</div>
 
 
-				</div>
-			</div>
+					<!-- Color Control Buttons -->
+					<div class="color_block_controls">
+						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple"></i></button>
+						<button><i class="fas fa-lamp"></i></button>
+						<button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)"><i class="fas fa-trash-alt"></i></button>
+					</div>
+
+					<!-- Color Editor - Sliders -->
+					<transition name="basic">
+						<div id="color_block_sliders" v-if="color.adjust">
+							<!-- Loop through slider definitions -->
+							<div class="cbs_row" v-for="(option, key) in sliderDefinitions" :key="key">
+								<input type="range" :id="'slider'+option.id" min="0" max="255" v-model="color[option.id]"/>
+								<!-- class="option.sliderClass -->
+								<label :for="'slider'+option.id" class="vertical">{{option.label}}</label>
+								<input type="number" v-model="color[option.id]" min="0" max="255"/>
+							</div>
+							<!-- Opacity Slider -->
+							<div class="cbs_row" v-if="colorPrefs.enableOpacity">
+								<input type="range" class="opacityx" id="colorOpacityInput" min="0" max="255" step="1"  v-model="color.a"/>
+								<label for="colorOpacityInput" class="vertical">Opacity</label>
+								<input type="number" id="colorOpacityInput" :value="(color.a / 255).toFixed(2)" @change="event => color.a = (parseFloat(event.target.value) * 255)" min="0" max="1"/>
+								<!-- <input type="number" id="colorOpacityInput" v-model="color.a" min="0" max="255"/> -->
+							</div>
+							<!-- Edit hex value input -->
+							<div class="cbs_row">
+								<input class="color_transparent_input" type="text" placeholder="HEX Value" :value="RGBToHex(color.r, color.g, color.b, color.a).toUpperCase()" @change="updateRGBValue($event, key)"/>
+							</div>
+						</div>
+					</transition>
+
+					<!-- Contrast Text & Info -->
+					<div class="color_block_contrast" v-if="contrastEnabled" :class="{'lage-aa': contrastRatio(color)}">
+						<label class="ratio"><b>{{contrastRatio(color)}}</b>:1</label>
+						<div class="large-text">{{contrastDemoText ? contrastDemoText : "Large Text"}}</div>
+						<div class="tags">
+							<span class="wcag-tag mright-xxs" :class="{'green': contrastRatio(color) >= 3.0}">AA</span>
+							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 4.5}">AAA</span>
+						</div>
+						<p>{{contrastDemoText ? contrastDemoText : "Normal Text"}}</p>
+						<div class="tags">
+							<span class="wcag-tag mright-xxs " :class="{'green': contrastRatio(color) >= 4.5}">AA</span>
+							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 7.0}">AAA</span>
+						</div>
+					</div>
+
+					
+				</div> <!-- End Color Block-->
+			</div><!-- End ColorGrid -->
+
 
 			<!-- Sidebar -->
 			<div class="stage-sidebar" :class="{'expanded': view_sidebar != null}">
 
 				<transition-group name="basic">
+
+
+					<!-- Adjustments -->
+					<!-- <div class="stage-sidebar-content" v-if="view_sidebar == 'adjust'" :key="0">
+						<h3>Adjust (Preview)</h3>
+						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
+
+						</div>
+					</div> -->
+
+
 					<!-- Color Blind -->
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'colorblind'" :key="0">
 						<h3>Color Blindness</h3>
@@ -131,11 +141,48 @@
 					</div>
 
 
-					<!-- Export -->
+					<!-- Contrast -->
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'contrast'" :key="3">
 						<h3>Contrast</h3>
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
-							{{currentPalette}}
+						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
+							<div class="flex mtop-sm margin-auto between">
+								<label class="vertical" for="contrastTog">View Contrast</label>
+								<input type="checkbox" id="contrastTog" class="toggle yes-no" v-model="contrastEnabled"/>
+							</div>
+							<transition name="basic">
+								<div v-if="contrastEnabled">
+									<!-- Contrast colors -->
+									<label class="mtop-md">{{contrastReverse ? "Text" : "Background"}} Color (R, G, B)</label>
+									<div class="flex gap small-number mtop-xxs">
+										<input type="number" min="0" max="255" class="small" v-model="contrastColorR" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrastColorG" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrastColorB" placeholder="255"/>
+									</div>
+									<!-- Demo Contrast Text -->
+									<label class="mtop-sm">Demo Text</label>
+									<input type="text" class="mtop-xxs" v-model="contrastDemoText" placeholder=""/>
+									<!-- Reverse Colors -->
+									<div class="flex mtop-md margin-auto between">
+										<label class="vertical" for="contrastRev">Reverse Colors</label>
+										<input type="checkbox" id="contrastRev" class="toggle " v-model="contrastReverse"/>
+									</div>
+								</div>
+							</transition>
+
+							<!-- Information -->
+							<h5 class="mtop-lg">How does this work?</h5>
+							<p class="small">
+								This tool is based off Web Content Accessibility Guidelines, or WCAG, which are guidelines for making websites accessible.
+							</p>
+							<div class="wcag-tag green mtop-xs">AA</div>
+							<p class="small">
+								<b>AA (Minimum Contrast)</b> requires a contrast ratio of at least 4.5:1 for normal text (14pt / 18.5px), and 3:1 for large (18pt / 24px) or bold text.
+							</p>
+							<div class="wcag-tag green mtop-xs">AAA</div>
+							<p class="small mbottom-md">
+								<b>AAA (Enhanced Contrast)</b> requires a contrast ratio of at least 7:1 for normal text (14pt / 18.5px), and 4.5:1 for large (18pt / 24px) or bold text.
+							</p>
+
 						</div>
 					</div>
 
@@ -144,65 +191,65 @@
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'export'" :key="3">
 						<h3>Export</h3>
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
-
+							<!-- Loop export_options to create grid of buttons -->
 							<div class="button-grid padded">
 								<button class="button large-icon grey" v-for="(option, key) in export_options" :key="key" @click="exportWith(key)">
 									<i :class="option.icon"></i>
 									<span>{{option.type}}</span>
 								</button>
 							</div>
-
+							<!-- Printing tip -->
+							<div class="padded mtop-md">
+								<Callout icon="far fa-info-circle" size="small" color="blue">
+									<p class="small tight">
+										When printing, make sure "Background Graphics" are enabled.
+										<small class="ptop-xxs block">You can also print to PDF.</small>
+									</p>
+								</Callout>
+							</div>
 						</div>
 					</div>
-					
+
+
 					<!-- Save / Load -->
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'save'" :key="4">
 						<h3>Save</h3>
-
 						<!-- Save Form -->
-						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-md">
+						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
 							<div class="button-input">
-								<input type="text" placeholder="My Favorite Colors" v-model="nameToSave"/>
+								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave"/>
 								<button class="button" :disabled="!nameToSave.length">
 									<i class="fas fa-floppy-disk"></i>
 									<span>Save</span>
 								</button>
 							</div>
 						</form>
-							
-							
+						<!-- Load existing -->
 						<h3>Load</h3>
 						<!-- Scrollable saved list -->
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
-
+							<!-- Stored palettes from local storage, loop to create display -->
 							<button v-for="(palette, key) in storedPalettes" class="load-palette-button mbottom-md padded" :key="key" @click="loadPalette(palette)">
-								<b>
-									{{key}}
-									<small>{{$date(palette.saved).format("MMMM D YYYY")}}</small>
-								</b>
+								<b>{{key}}<small>{{$date(palette.saved).format("MMMM D YYYY")}}</small></b>
+								<!-- Preview -->
 								<div class="palette-preview">
 									<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
 								</div>
 							</button>
-							
+							<!-- No palettes saved -->
 							<div class="padded mtop-sm" v-if="!Object.keys(storedPalettes).length">
-								<Callout
-									icon="far fa-empty-set"
-									size="small"
-									color="red">
-									You haven't saved anything yet.
+								<Callout icon="far fa-empty-set" size="small" color="red">
+									<p class="small">You haven't saved anything yet.</p>
 								</Callout>
 							</div>
-
 						</div>
-
 					</div>
 
-					<!-- More -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'more'" :key="2">
-						<h3>More</h3>
-						<div class="stage-sidebar-content-scroll">
 
+					<!-- Settings -->
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'settings'" :key="2">
+						<h3>Settings</h3>
+						<div class="stage-sidebar-content-scroll">
 							<div class="padded mtop-md">
 								<!-- Color Format -->
 								<label>Color Format</label>
@@ -215,35 +262,34 @@
 										<option disabled>CMYK - Coming Soon</option>
 									</select>
 								</div>
-
+								<!-- Enable Opacity -->
 								<div class="flex mtop-md between">
 									<label class="vertical" for="enableColorOp">Enable Opacity</label>
 									<input type="checkbox" id="enableColorOp" class="toggle yes-no" v-model="colorPrefs.enableOpacity"/>
 								</div>
-
-								<transition name="basic">
-									<div class="mtop-sm" v-if="colorPrefs.enableOpacity">
-										<label>Page Background Color</label>
-										<input type="text" class="mtop-xxs" v-model="colorPrefs.stageBackground" :disabled="!colorPrefs.enableOpacity" placeholder="#FFFFFF"/>
-										
-										<div class="flex mtop-sm between">
-											<label class="vertical" for="enableCheckers">Checkered Background</label>
-											<input type="checkbox" id="enableCheckers" class="toggle on-off" v-model="colorPrefs.enableCheckers"/>
-										</div>
-									</div>
-
-								</transition>
-
+								<!-- Page background options -->
+								<label for="bgcolIn" class="mtop-sm">Page Background Color</label>
+								<input type="text" id="bgcolIn" class="mtop-xxs" v-model="colorPrefs.stageBackground" placeholder="#FFFFFF"/>
+								<div class="flex mtop-sm between">
+									<label class="vertical" for="enableCheckers">Checkered Background</label>
+									<input type="checkbox" id="enableCheckers" class="toggle on-off" v-model="colorPrefs.enableCheckers"/>
+								</div>
 								<!-- Color Names -->
 								<div class="flex mtop-md between">
 									<label class="vertical" for="enableColorNames">Name Colors</label>
 									<input type="checkbox" id="enableColorNames" class="toggle yes-no" v-model="colorPrefs.customNames"/>
 								</div>
-
-
+								<!-- Separate colors -->
+								<div class="flex mtop-md between">
+									<label class="vertical" for="colorGapTog">Gap Between Colors</label>
+									<input type="checkbox" id="colorGapTog" class="toggle yes-no" v-model="colorPrefs.colorGap"/>
+								</div>
+								<!-- Reset Palette -->
+								<button class="button mtop-lg mbottom-lg margin-auto block" @click="clearPalette()" :class="{'red' : resetting_palette, 'grey': !resetting_palette}">
+									<i :class="{'far fa-exclamation-circle' : resetting_palette, 'far fa-eraser' : !resetting_palette}"></i>
+									<span>{{resetting_palette ? "Again to Confirm" : "Reset Palette"}}</span>
+								</button>
 							</div>
-
-
 
 						</div>
 					</div>
@@ -330,9 +376,69 @@ export default {
 
 	data() {
 		return {
+			// App Settings
+			colorPrefs: {
+				enableOpacity: false,
+				enableCheckers: false,
+				stageBackground: "#FFFFFF",
+				customNames: false,
+				colorblind: "none",
+				colorGap: true,
+			},
+
+			// Current Palette
+			currentPalette: [
+				{
+					r: 0,
+					g: 71,
+					b: 219,
+					a: 255,
+					adjust: false,
+					name: "Color-1",
+				},
+			],
+
+			// Saved Palettes
+			storedPalettes: {},
+
 			// App Functions
 			view_sidebar: null,
 			active_color_format: "RGB/A",
+			// Saving
+			nameToSave: "",
+			// Exporting
+			export_modal: false,
+			exporting_as: "CSS",
+			// Deleting
+			deleting_color: null,
+			resetting_palette: false,
+			// Adjustments / View
+			gradientEnabled: true,
+			// Contrast
+			contrastEnabled: false,
+			contrastDemoText: "",
+			contrastColorR: 255,
+			contrastColorG: 255,
+			contrastColorB: 255,
+			contrastReverse: false,
+			re_enableOpacity: false,
+
+
+
+			// App Definitions / Loops
+			secondaryNav: [
+				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
+				{title: "Color Blindness", id: "colorblind",  icon: "fas fa-glasses"},
+				{title: "Contrast", id: "contrast",  icon: "fas fa-circle-half-stroke"},
+				{title: "Export", id: "export",  icon: "fas fa-share-nodes"},
+				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
+				{title: "Settings", id: "settings",  icon: "fas fa-bars"},
+			],
+			sliderDefinitions: [
+				{label: "Red", id: "r", sliderClass: "red"},
+				{label: "Green", id: "g", sliderClass: "green"},
+				{label: "Blue", id: "b", sliderClass: "blue"},
+			],
 			color_formats: [
 				"RGB/A",
 				"HSB",
@@ -358,43 +464,16 @@ export default {
 				"Print": {type: "Print", icon: "fas fa-print"},
 				"Link": {type: "Link", icon: "fas fa-link"},
 			},
-			export_modal: false,
-			exporting_as: "CSS",
-
-			deleting_color: null,
-
-			// Settings
-			colorPrefs: {
-				enableOpacity: false,
-				enableCheckers: false,
-				stageBackground: "",
-				customNames: true,
-				colorblind: "none",
-			},
-
-			// Saving
-			nameToSave: "",
-
-			// Current Palette
-			currentPalette: [
-				{
-					r: 0,
-					g: 71,
-					b: 219,
-					a: 255,
-					adjust: false,
-					name: "Color-1",
-				},
-			],
-
-			// Saved Palettes
-			storedPalettes: {},
 
 			
 		};
 	},
 
+	computed: {
+	},
+
 	watch: {
+		// When current palette changes, update URL
 		currentPalette: {
 			handler: function(value) {
 				this.debounceURLParams();
@@ -404,8 +483,9 @@ export default {
 	},
 	
 	mounted() {
+		// Load Params if they exist
 		if(this.$route.params.urlColors){
-			// Load colors into stage
+			this.loadURLColors();
 		}
 	},
 	created: function () {
@@ -416,31 +496,81 @@ export default {
 	
 	methods: {
 		
+		// Debounce so URL Params are only updated ever second, max
 		debounceURLParams: debounce(function(){
 			this.updateURLParams();
 		}, 1000),
-
 		updateURLParams: function(){
 			let _this = this;
 			var urlParams = "";
 			Object.keys(_this.currentPalette).forEach(function(key){
-				urlParams = urlParams + _this.currentPalette[key].r + "," + _this.currentPalette[key].g + "," + _this.currentPalette[key].b + "-"
+				var loopParams = _this.currentPalette[key].name + "=" + _this.currentPalette[key].r + "," + _this.currentPalette[key].g + "," + _this.currentPalette[key].b + "," + _this.currentPalette[key].a;
+				if(key == 0){
+					urlParams =  loopParams;
+				}else{
+					urlParams = urlParams + "&" + loopParams;
+				}
 			});
-			// this.currentPalette[0].r
-			this.$router.replace({ name: "colors", params: {urlColors: urlParams} })
+			if(this.currentPalette.length){
+				this.$router.replace({ name: "colors", params: {urlColors: urlParams} }).catch(()=>{});
+			}
+		},
+		// Load Colors from URL into app
+		loadURLColors: function(){
+			let _this = this;
+			var splitColors = this.$route.params.urlColors.split("&");
+
+			var loadedPalette = []
+			splitColors.forEach(function(color) {
+				var colorSplit = color.split("=");
+				var rgbSplit = colorSplit[1].split(",");
+
+				// If any colors are opaque, enable opacity
+				if(rgbSplit[3] && rgbSplit[3] < 255){
+					_this.colorPrefs.enableOpacity = true;
+				}
+
+				var singleColor = {
+					name: colorSplit[0],
+					r: rgbSplit[0],
+					g: rgbSplit[1],
+					b: rgbSplit[2],
+					a: rgbSplit[3] || 255,
+					adjust: false,
+				}
+
+				loadedPalette.push(singleColor);
+			});
+
+			// Set current palette from load
+			this.currentPalette = loadedPalette
+
 		},
 
 
 		// Make sidebar visible
 		toggleSidebar: function(name){
+			// // Disable opacity when contrast viewed
+			if(name == "contrast" && this.colorPrefs.enableOpacity){
+				this.hello("Disabling Opacity...", "fas fa-wand-magic-sparkles", "yellow");
+				this.colorPrefs.enableOpacity = false;
+				this.re_enableOpacity = true;
+			}else if(this.re_enableOpacity){
+				this.hello("Opacity is back...", "fas fa-eyes", "yellow");
+				this.colorPrefs.enableOpacity = true;
+				this.re_enableOpacity = false;
+			}
+
+			// Clear if same one clicked
 			if(this.view_sidebar == name){
 				this.view_sidebar = null;
 			}else{
+				// Else set as name
 				this.view_sidebar = name;
 			}
 		},
 
-		// Add new random color to palette
+		// Add new (random) color to palette
 		addColor: function(){
 			var newColor = {
 				r: Math.floor(Math.random() * 255),
@@ -458,6 +588,29 @@ export default {
 			this.currentPalette.splice(index, 1);
 			this.deleting_color = null;
 		},
+
+		// Reset Palette
+		clearPalette: function(){
+			let _this = this;
+
+			if(this.resetting_palette){
+				this.currentPalette = [{
+					r: 0,
+					g: 71,
+					b: 219,
+					a: 255,
+					adjust: false,
+					name: "Color-1",
+				}];
+				this.resetting_palette = false;
+				this.hello("Poof!", "fas fa-wand-magic-sparkles", "yellow");
+			}else{
+				this.resetting_palette = true;
+				setTimeout(function(){
+					_this.resetting_palette = false;
+				}, 5000);
+			}
+		},	
 
 		// Save Palette
 		savePalette: function(){
@@ -479,6 +632,7 @@ export default {
 
 		exportWith: function(key){
 			if(key == "Link"){
+				this.copyToClipboard(window.location.href);
 				this.hello("Link copied to Clipboard!", "far fa-copy", "green")
 			}else if(key == "Print"){
 				this.hello("Printing!", "far fa-print", "green");
@@ -501,15 +655,50 @@ export default {
 			var yiq = ((r*299)+(g*587)+(b*114))/1000;
 			return (yiq >= 128) ? 'black' : 'white';
 		},
+		colorStyleProperties: function(key){
+			var props = {};
+			var color = this.currentPalette[key];
+			// Viewing Contrast
+			if(this.contrastEnabled){
+				if(this.contrastReverse){
+					var props = {
+						color: "rgb(" + this.contrastColorR + "," + this.contrastColorG + "," + this.contrastColorB + ")",
+						backgroundColor: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
+					}
+				}else{
+					var props = {
+						color: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
+						backgroundColor: "rgb(" + this.contrastColorR + "," + this.contrastColorG + "," + this.contrastColorB + ")",
+					}
+				}
 
+			}else{
+				// Color background, Automatic black/white text fron getTextColor()
+				var props = {
+					color: this.getTextColor(color.r, color.g, color.b),
+					backgroundColor: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
+					// backgroundColor: this.RGBToHex(color.r, color.g, color.b, color.a),
+				}
+			};
+			// Add border if color Gap enabled
+			// if(this.colorPrefs.colorGap){
+			// 	props["border"] = "4px solid "+ this.colorPrefs.stageBackground;
+			// }
+			return props;
+		},
 
-
+		// Updates RGB value when user enters their own HEX
 		updateRGBValue: function(event, key){
 			let _this = this;
 			this.HexToRGB(event.target.value).then(function(rgb) {			
 				_this.currentPalette[key].r = rgb[0];
 				_this.currentPalette[key].g = rgb[1];
 				_this.currentPalette[key].b = rgb[2];
+				if(rgb[3]){
+					_this.currentPalette[key].a = rgb[3];
+				}else{
+					_this.currentPalette[key].a = 255;
+				}
 			}).catch(function(error) {
 				_this.hello("Invalid HEX. Try again.", "fas fa-frown", "red")
 			});
@@ -576,18 +765,32 @@ export default {
 					g = "0x" + h[2] + h[3];
 					b = "0x" + h[4] + h[5];
 					a = "0x" + h[6] + h[7];
-					a = +(a / 255).toFixed(2);
+					// a = +(a / 255).toFixed(2);
 					var final = [+r, +g, +b, +a];
 					resolve(final);
 				}else{
 					reject()
 				}
 			});
-
-
-			
-
 		},
+
+		// Luminance
+		luminance: function(r, g, b){
+			var a = [r, g, b].map(function (v) {
+				v /= 255;
+				return v <= 0.03928
+					? v / 12.92
+					: Math.pow( (v + 0.055) / 1.055, 2.4 );
+			});
+			return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+		},
+		// Calculate Contrast Ratio
+		contrastRatio: function(color){
+			var color1Lum = this.luminance(color["r"], color["g"], color["b"]);
+			var color2Lum = this.luminance(this.contrastColorR, this.contrastColorG, this.contrastColorB);
+			var ratio = (color2Lum + 0.05) / (color1Lum + 0.05);
+			return ratio.toFixed(2);
+		}
 
 
 
@@ -602,31 +805,7 @@ export default {
 #colorApp{
 	display: flex;
 	flex-direction: column;
-	max-height: 100vh;
-
-	.color_transparent_input{
-		background-color: transparent;
-		border: none;
-		max-width: 174px;
-		text-align: center;
-		color: inherit;
-		font-weight: bold;
-		font-size: 1em;
-		margin: 0 auto;
-		padding: 5px 15px;
-		height: auto;
-		background-color: rgba(255,255,255,0.1);
-		
-		&.name{
-			font-size: 0.8em;
-			margin-bottom: 12px;
-			font-weight: 500;
-			letter-spacing: 0.1px;
-			background-color: transparent;
-		}
-	} 
-
-	
+	max-height: 100vh;	
 }
 
 .stage{
@@ -723,6 +902,12 @@ export default {
 		background-size:25px 25px; /* Must be a square */
 		background-position:0 0, 12.5px 0, 12.5px -12.5px, 0px 12.5px; /* Must be half of one side of the square */
 	}
+	&.gap{
+		gap: 15px;
+		.color_block{
+			border-radius: var(--borderRadius);
+		}
+	}
 	&.padded{
 		padding: 12px;
 	}
@@ -730,25 +915,39 @@ export default {
 	.color_block{
 		flex-grow: 3;
 		background-color: var(--red);
-		min-width: 300px;
-		flex-basis: 33%;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		box-sizing: border-box;
-		padding: 15px 15px 15px 15px;
 		page-break-inside: avoid;
+		position: relative;
+
+		@media (min-width: $screenSM) {
+			min-height: 300px;
+		}
 
 		.color_block_info{
 			box-sizing: border-box;
-			text-align: center;
 			color: inherit;
+			box-sizing: border-box;
+			padding-top: 40px;
 
 			// Color Name
 			h6{
 				font-size: 0.75em;
 				font-weight: 500;
 				color: inherit;
+				margin: 0;
+				padding :10px 0 0 20px;
+			}
+			.color_name_input{
+				font-size: 0.8em;
+				border: none;
+				padding: 8px 12px;
+				margin: 0 8px 0 8px;
+				color: inherit;
+				background-color: transparent;
+				width: auto;
+				height: auto;
 			}
 
 			.format_code,
@@ -756,13 +955,13 @@ export default {
 				display: block;
 				font-weight: 600;
 				letter-spacing: 0.05em;
-				font-size: 0.9em;
+				font-size: 0.85em;
 				margin: 0;
-				padding: 6px 12px;
-				border-radius: var(--borderRadius);
-				text-align: center;
-				margin: 0px auto 0 auto;
+				padding: 6px 18px;
+				border-top-right-radius: var(--borderRadius);
+				border-bottom-right-radius: var(--borderRadius);
 				color: inherit;
+				text-align: left;
 
 				&:hover{
 					background-color: rgba(0,0,0,0.1);
@@ -770,65 +969,68 @@ export default {
 			}
 			.hex_code{
 				text-transform: uppercase;
-				font-size: 1.8em;
-				font-weight: 900;
+				font-size: 1.4em;
+				font-weight: 700;
 			}
 		}
 
+		// Control buttons for colors
 		.color_block_controls{
 			display: flex;
-			justify-content: center;
-			margin-top: 5px;
 			color: inherit;
 			opacity: 0;
-			gap: 6px;
+			padding-left: 10px;
+			position: absolute;
+			top: 8px;
+			left: 0px;
 
 			@media (max-width: $screenSM) {
-				opacity: 1;
+				opacity: 0.8;
 			}
 			@media print{
 				display: none;
 			}
 
 			button{
-				font-size: 1.2em;
+				font-size: 1em;
 				color: inherit;
 				border-radius: var(--borderRadius);
-				height: 40px;
-				width: 40px;
+				height: 32px;
+				width: 32px;
+				text-align: center;
 				border: 1px solid transparent;
+				padding: 0;
+
+				&:nth-child(2){margin-left:-4px;}
+				&:nth-child(3){margin-left:-8px;}
 
 				&:hover{
 					background-color: rgba(0,0,0,0.1);
-					font-size: 1.3em;
+					font-size: 1.1em;
 				}
 			}
 		}
 
-		.color_block_edit{
+		// Edit / Slider area
+		#color_block_sliders{
+			margin: 20px 20px 0 20px;
+
 			@media print{
 				display: none;
 			}
-		}
-		#color_block_sliders{
-			margin: 15px auto 0 auto;
 
 			.cbs_row{
 				display: flex;
 				// flex-wrap: wrap;
-				width: 100%;
 				justify-content: space-between;
-				max-width: 280px;
-				margin: 0 auto 0 auto;
-
-				
+				max-width: 240px;
 
 				label{
 					color: inherit;
-					font-size: 0.75em;
+					font-size: 0.7em;
 					height: 20px;
 					width: 80px;
-					padding: 0 5px 0 0;
+					padding: 0 0 0 8px;
 					box-sizing: border-box;
 					margin: 0;
 					text-align: right;
@@ -839,13 +1041,14 @@ export default {
 					color: inherit;
 					border: none;
 					height: 20px;
-					width: 80px;
-					text-align: left;
+					width: 50px;
+					overflow: visible;
+					text-align: right;
 					position: relative;
 					left: 0;
 					font-size: 0.8em;
 					background-color: transparent;
-					padding: 0 0 0 5px;
+					padding: 0 5px 0 5px;
 					&::-webkit-outer-spin-button,
 					&::-webkit-inner-spin-button {
 						-webkit-appearance: none;
@@ -853,31 +1056,104 @@ export default {
 					}
 
 				}
-
+				// Range adjustments
 				input[type=range]{
 					flex-grow: 3;
 					width: 100%;
 					margin-top: 4px;
 				}
+				// Edit HEX Input
+				.color_transparent_input{
+					background-color: transparent;
+					border: none;
+					max-width: 100%;
+					text-align: left;
+					color: inherit;
+					font-size: 0.9em;
+					padding: 7px 15px;
+					height: auto;
+					background-color: rgba(255,255,255,0.1);
+				} 
 
 			}
 			
+		}
+
+		//  Contrast Area
+		.color_block_contrast{
+			box-sizing: border-box;
+			padding: 20px;
+			color: inherit;
+			.ratio{
+				color: inherit;
+				font-size: 1.75em;
+				margin-bottom: 15px;
+
+				b{
+					font-size: 2.5rem;
+					font-weight: 800;
+				}
+			}
+			
+			.tags{
+				margin-top: 4px;
+				margin-bottom: 10px;
+			}
+			.large-text{
+				font-size: 18pt;
+				padding-bottom: 2px;
+			}
+			p{
+				font-size: 14pt;
+				line-height: 1.325em;
+				color: inherit;
+				padding: 0;
+			}
+			
+		}
+
+		// Luminance
+		.color_block_luminance{
+			background-color: red;
 		}
 		
 
 		&:hover,
 		&:focus-within{
 			.color_block_controls{
-				opacity: 1;
+				opacity: 0.8;
 			}
 		}
+	}
+	
+}
+
+// Special wcag tags
+.wcag-tag{
+	opacity: 0.85;
+	background-color: #fbd2d0;
+	color: #5f0d07;
+	border-radius: calc(var(--borderRadius) / 2);
+	box-sizing: border-box;
+	padding: 3px 4px;
+	display: inline-block;
+	font-size: 0.65rem;
+	font-weight: 700;
+	border: 2px solid #5f0d07;
+
+	&:after{content: " Fail";}
+
+	&.green{
+		border-color: #0d5f07;
+		background-color: #c6ffc3;
+		color: #0d5f07;
+		&:after{content: " Pass";}
 	}
 }
 
 
 
-
-
+// Button / Preview for palette
 .load-palette-button{
 	display: block;
 	width: 100%;

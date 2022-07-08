@@ -58,7 +58,6 @@ router.beforeEach((to, from, next) => {
 	// Path
 	const toPath = to.path;
 	const fromPath = from.path;
-
 	next();
 
 

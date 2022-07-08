@@ -29,3 +29,32 @@
 }
 
 
+// Color Page print styles
+// Sizing has to be off colors.vue so it is picked up by print area
+#colorGrid{
+	// Color block sizing based on count
+	.color_block{flex-basis: 33%;}
+	&[data-count="1"] .color_block {flex-basis: 100%;}
+	&[data-count="2"] .color_block {flex-basis: calc(50% - 8px);}
+	&[data-count="3"] .color_block {flex-basis: calc(33.33% - 16px);}
+	&[data-count="4"] .color_block {flex-basis: calc(25% - 24px);}
+	&[data-count="5"] .color_block {flex-basis: 20%;}
+	&[data-count="6"] .color_block {flex-basis: 33.33%;}
+	&[data-count="7"] .color_block {flex-basis: 14.28%;}
+	&[data-count="8"] .color_block {flex-basis: 25%;}
+	&[data-count="9"] .color_block {flex-basis: 33%;}
+	&[data-count="10"] .color_block {flex-basis: 20%;}
+
+	@media print{
+		&[data-count="1"] .color_block {flex-basis: 100%;}
+		&[data-count="2"] .color_block {flex-basis: 50%;}
+		&[data-count="3"] .color_block {flex-basis: 33%;}
+		&[data-count="4"] .color_block {flex-basis: 50%;}
+		&[data-count="5"] .color_block {flex-basis: 50%;}
+		&[data-count="6"] .color_block {flex-basis: 33%;}
+		&[data-count="7"] .color_block {flex-basis: 33%;}
+		&[data-count="8"] .color_block {flex-basis: 50%;}
+		&[data-count="9"] .color_block {flex-basis: 33%;}
+		&[data-count="10"] .color_block {flex-basis: 50%;}
+	}
+}

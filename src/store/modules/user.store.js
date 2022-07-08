@@ -95,8 +95,6 @@ const mutations = {
 		stateMerge(state.preferences, data);
 	},
 	SET_SINGLE_PREFERENCE(state, data) {
-		console.log("RECEIVED")
-		console.log(data)
 		state.preferences[data.key] = data.value;
 	},
 

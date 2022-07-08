@@ -20,7 +20,7 @@ Top nav bar - fixed
 
 			
 				<!-- Links - loop -->
-				<router-link v-for="(app, key) in appLinks" :key="key" :class="{'active': $route.path == app.path, 'hidden': !appData[key].enabled}" :to="app.path">
+				<router-link v-for="(app, key) in appLinks" :key="key" :class="{'active': $route.path.startsWith(app.path), 'hidden': !appData[key].enabled}" :to="app.path">
 					<i :class="app.icon"></i>
 					<b>{{app.title}}</b>
 				</router-link>

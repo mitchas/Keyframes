@@ -28,6 +28,13 @@
 		margin-left: 4px;
 	}
 
+	&.small{
+		font-size: .65em;
+		padding: 0.2rem 6px;
+		font-weight: bold;
+		border-width: 2px;
+	}
+
 	&.red{
 		// background-color: var(--red);
 		// color: var(--redText);
@@ -215,17 +222,17 @@
 
 // Notification Dot
 // Floats little dot relative top right on element
-.notifiaction-dot{
+.notification-dot{
 	position: relative;
 	&:after{
 		content: "";
 		display: block;
-		height: 8px;
-		width: 8px;
+		height: 6px;
+		width: 6px;
 		position: absolute;
-		bottom: 4px;
+		bottom: 0px;
 		left: 50%;
-		margin-left: -4px;
+		margin-left: -3px;
 		background-color: var(--red);
 		border-radius: calc(var(--borderRadius) * 4)
 	}

@@ -82,7 +82,6 @@ select,
 
         // Disable outline on mobile
         @media(max-width: $screenSM) {
-            ;
             // outline: none !important;
         }
     }
@@ -125,6 +124,15 @@ textarea {
     font-weight: 500;
     height: var(--inputHeight);
     background-color: var(--layer);
+
+	&.small{
+		padding: 0 8px;
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+	}
 
     // Hover and focus states
     &:hover,
@@ -714,7 +722,7 @@ input[type=range] {
 
     // Track
     &::-webkit-slider-runnable-track {
-        background: var(--borderFade);
+        background: rgba(124, 148, 198, 0.4);
         border: 0;
         border-radius: var(--borderRadius);
         width: 100%;
@@ -722,7 +730,7 @@ input[type=range] {
         cursor: pointer;
     }
     &::-moz-range-track {
-        background: var(--borderFade);
+        background: rgba(124, 148, 198, 0.4);
         border: 0;
         border-radius: var(--borderRadius);
         width: 100%;
@@ -760,7 +768,7 @@ input[type=range] {
         margin-top: -6px;
         width: 26px;
         height: 26px;
-        border: 4px solid var(--textFade);
+        border: 4px solid var(--text);
         background-color: var(--white);
         border-radius: calc(var(--borderRadius) * 3);
         cursor: pointer;
@@ -771,7 +779,7 @@ input[type=range] {
         margin-top: -6px;
         width: 26px;
         height: 26px;
-        border: 4px solid var(--textFade);
+        border: 4px solid var(--text);
         background-color: var(--white);
         border-radius: calc(var(--borderRadius) * 3);
         cursor: pointer;
