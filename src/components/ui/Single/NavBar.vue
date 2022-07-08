@@ -196,7 +196,7 @@ export default {
 				&.active{
 					color: var(--primary);
 					background-color: var(--primary);
-					color: var(--background);
+					color: var(--white);
 
 					&:hover{
 						background-color: var(--primary);

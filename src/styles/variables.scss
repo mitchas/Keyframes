@@ -3,6 +3,27 @@
 // Responsive Variables must be sass variables
 // because CSS variables can't be used in @media
 
+// Custom Fonts - Variable
+// Sans - Inter
+@font-face {
+	font-family: 'Inter';
+	src: url('~@/assets/fonts/inter.ttf') format('truetype');
+	font-weight: 100 1000;
+}
+// Serif - Soruce Serif
+@font-face {
+	font-family: 'Source Serif';
+	src: url('~@/assets/fonts/sourceSerif.ttf') format('truetype');
+	font-weight: 100 1000;
+}
+// Mono - Source Code
+@font-face {
+	font-family: 'Source Code';
+	src: url('~@/assets/fonts/sourceCode.ttf') format('truetype');
+	font-weight: 100 1000;
+}
+
+
 $screenXS: 380px;
 $screenSM: 768px;
 $screenLG: 1020px;
@@ -12,9 +33,12 @@ $screenXL: 1400px;
 :root {
 
 	// Fonts
-	--sans:  var(--systemFont);
-	--monospace: monospace;
-	--serif: serif;
+	// --sans:  var(--systemFont);
+	// --monospace: monospace;
+	// --serif: serif;
+	--sans:  "Inter", sans-serif;
+	--monospace: "Source Code", monospace;
+	--serif: "Source Serif", serif;
 	--fontAwesome: 'Font Awesome 6 Pro';
 	--fontAwesomeBrands: 'Font Awesome 6 Brands';
 	--systemFont: -apple-system, BlinkMacSystemFont, "Segoe UI", "Verdana", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";

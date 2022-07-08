@@ -623,8 +623,8 @@ input[type="checkbox"]:focus {
         width: 27px;
         height: 27px;
         border-radius: calc(var(--borderRadius) * 3);
-        background: var(--background);
-        color: var(--textFade);
+        background: var(--layer);
+        color: var(--text);
         transition: var(--transition);
         box-sizing: border-box;
         transform: scale(1) translateX(0px);
@@ -657,7 +657,7 @@ input[type="checkbox"]:focus {
             transform: scale(1) translateX(17px);
             content: '';
             opacity: 1;
-            color: var(--primary);
+            color: var(--text);
         }
         &:focus:not(:disabled),
         &:hover:not(:disabled) {
@@ -765,26 +765,25 @@ input[type=range] {
 
     // Thumb
     &::-webkit-slider-thumb {
-        margin-top: -6px;
-        width: 26px;
-        height: 26px;
-        border: 4px solid var(--text);
-        background-color: var(--white);
+        margin-top: -5px;
+        width: 24px;
+        height: 24px;
+        border: 5px solid rgba(20,20,40,0.95);
+		background-color: var(--white);
         border-radius: calc(var(--borderRadius) * 3);
         cursor: pointer;
         -webkit-appearance: none;
-        box-shadow: 0 0 2px 1px rgba(30, 30, 60, 0.25);
+        box-shadow: 0 0 0px 2px rgba(255, 255, 255, 0.35);
     }
     &::-moz-range-thumb {
-        margin-top: -6px;
-        width: 26px;
-        height: 26px;
-        border: 4px solid var(--text);
-        background-color: var(--white);
+        margin-top: -5px;
+        width: 24px;
+        height: 24px;
+        border: 5px solid rgba(20,20,40,0.95);
         border-radius: calc(var(--borderRadius) * 3);
         cursor: pointer;
         -webkit-appearance: none;
-        box-shadow: 0 0 2px 1px rgba(30, 30, 60, 0.25);
+        box-shadow: 0 0 0px 2px rgba(255, 255, 255, 0.35);
     }
     // Thumb colors
     &.red::-webkit-slider-thumb {

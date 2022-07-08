@@ -397,10 +397,10 @@ export default {
 			currentPalette: [
 				{
 					r: 0,
-					g: 71,
-					b: 219,
+					g: 70,
+					b: 220,
 					a: 255,
-					adjust: false,
+					adjust: true,
 					shades: false,
 					name: "Color-1",
 				},
@@ -587,6 +587,7 @@ export default {
 				b: Math.floor(Math.random() * 255),
 				a: 255,
 				adjust: false,
+				shades: false,
 				name: "Color-" + (this.currentPalette.length + 1),
 			}
 			this.currentPalette.push(newColor)
@@ -966,13 +967,14 @@ export default {
 				display: block;
 				font-weight: 600;
 				letter-spacing: 0.05em;
-				font-size: 0.85em;
+				font-size: 1em;
 				margin: 0;
 				padding: 6px 18px;
 				border-top-right-radius: var(--borderRadius);
 				border-bottom-right-radius: var(--borderRadius);
 				color: inherit;
 				text-align: left;
+				font-family: inherit;
 
 				&:hover{
 					background-color: rgba(0,0,0,0.1);
@@ -980,7 +982,7 @@ export default {
 			}
 			.hex_code{
 				text-transform: uppercase;
-				font-size: 1.4em;
+				font-size: 1.65em;
 				font-weight: 700;
 			}
 		}
@@ -1095,6 +1097,7 @@ export default {
 			left: 0;
 			width: 100%;
 			height: 100%;
+			z-index: 100;
 			display: flex;
 			flex-direction: column;
 
@@ -1107,8 +1110,8 @@ export default {
 				font-size: 0.8em;
 
 				&:hover{
-					padding-top: 15px;
-					padding-bottom: 15px;
+					padding-top: 18px;
+					padding-bottom: 18px;
 				}
 			}
 		}

@@ -3,7 +3,7 @@
 :root {
 	--background: #F9F9FB;
 	--layer: #FFFFFF;
-	--backdrop: rgba(240,240,255,0.35);
+	--backdrop: rgba(200,200,215,0.65);
 	--outline: var(--primary);
 
 	--primary: var(--blue);
@@ -44,9 +44,9 @@
 
 // Dark Theme
 [data-theme="dark"] {
-	--background: var(--black);
-	--layer: #080814;
-	--backdrop: rgba(10,10,20,0.5);
+	--background: #191923;
+	--layer: var(--black);
+	--backdrop: rgba(50,50,60,0.6);
 	--outline: var(--yellow);
 
 	--primary: var(--blue);
@@ -70,13 +70,13 @@
 
 	--black: #000000;
 	--white: #FFFFFF;
-	--text: #FFFFFF;
+	--text: #F5F5FF;
 		--textFade: rgba(255,255,255, 0.5);
-	--grey: #242535;
-		--greyFade: rgba(36, 37, 53, 0.7);
+	--grey: #2E2F3F;
+		--greyFade: rgba(46, 47, 63, 0.7);
 		--greyText: var(--white);
-	--border: rgba(255,255,255,0.425);
-		--borderFade: rgba(124, 148, 198, 0.2);
+	--border: rgba(215,215,255,0.35);
+		--borderFade: rgba(215,215,255,0.15);
 		--borderText: var(--background);
 
 	--shadow: rgba(0,0,0, .25) 0px 4px 12px;

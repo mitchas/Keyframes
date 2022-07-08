@@ -5,6 +5,39 @@
     width: 100%;
     height: 100%;
 }
+// Footer / Branding for print
+#printFooter{
+	display: none;
+	justify-content: flex-end;
+	position: fixed;
+	bottom: 0;
+	margin: 0 auto;
+	box-sizing: border-box;
+	padding: 18px;
+	font-size: 0.6em;
+	font-weight: 600;
+	color: rgba(0,0,0,0.8);
+	font-family: var(--monospace);
+	width: 100%;
+	
+	span{
+		display: inline-block;
+		border-radius: 20px;
+		padding: 6px 11px 4px 11px;
+		background-color: rgba(255,255,255,1);
+	}
+
+	img{
+		height: 16px;
+		margin-left: 2px;
+		opacity: 0.8;
+		width: auto;
+		position: relative;
+		top: -2px;
+	}
+}
+
+// Only show on print
 .print-only{
 	display: none;
 }
@@ -25,6 +58,11 @@
 	}
 	.hide-print{
 		display: none !important;
+	}
+
+	// Footer, show when print
+	#printFooter{
+		display: flex;
 	}
 }
 
@@ -56,5 +94,9 @@
 		&[data-count="8"] .color_block {flex-basis: 50%;}
 		&[data-count="9"] .color_block {flex-basis: 33%;}
 		&[data-count="10"] .color_block {flex-basis: 50%;}
+
+		.color_block_info{
+			padding-top: 15px !important;
+		}
 	}
 }

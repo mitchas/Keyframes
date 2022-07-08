@@ -43,6 +43,7 @@
 		padding: 0;
 		text-align: center;
 		border-radius: var(--borderRadius);
+		color: var(--text);
 
 		@media (max-width: 450px) {
 			width: 36px;
