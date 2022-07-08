@@ -20,7 +20,7 @@
 
 			<!-- Loop for other secondary buttons -->
 			<button v-for="(button, key) in secondaryNav" :key="key" @click="toggleSidebar(button.id)" 
-				:class="{'notification-dot': (button.id == 'colorblind' && colorPrefs.colorblind != 'none') || (button.id == 'contrast' && contrastEnabled)}">
+				:class="{'notification-dot': (button.id == 'colorblind' && colorblind != 'none') || (button.id == 'contrast' && contrastEnabled)}">
 				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
@@ -28,7 +28,7 @@
 
 		
 		<!-- Main stage area -->
-		<div :class="'stage colorblind_' + colorPrefs.colorblind">
+		<div :class="'stage colorblind_' + colorblind">
 
 			<!-- Color Grid -->
 			<div id="colorGrid" :style="'background-color: ' + colorPrefs.stageBackground" :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity || colorPrefs.colorGap, 'gap': colorPrefs.colorGap}" :data-count="currentPalette.length">
@@ -57,9 +57,10 @@
 
 					<!-- Color Control Buttons -->
 					<div class="color_block_controls">
-						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple"></i></button>
-						<button><i class="fas fa-lamp"></i></button>
-						<button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)"><i class="fas fa-trash-alt"></i></button>
+						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple" title="Adjust RGB"></i></button>
+						<!-- <button><i class="fas fa-lamp"></i></button> -->
+						<button><i class="fas fa-shutters" @click="color.shades = !color.shades" title="Color Shades"></i></button>
+						<button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button>
 					</div>
 
 					<!-- Color Editor - Sliders -->
@@ -85,6 +86,13 @@
 							</div>
 						</div>
 					</transition>
+
+					<!-- Shades - floats on top -->
+					<div class="color_block_shades" v-if="color.shades" @click="color.shades = false">
+						<button class="shade" v-for="i in 13" :key="i" :style="'background-color: rgb(' + (i * color.r / 6.5) + ', ' + (i *color.g / 6.5) + ', ' + (i *color.b / 6.5) + ');'" @click="color.r = parseInt(i * color.r / 6.5) ; color.g = parseInt(i *color.g / 6.5); color.b = parseInt(i *color.b / 6.5);">
+							<i class="fas fa-circle" v-if="i == 7"></i>
+						</button>
+					</div>
 
 					<!-- Contrast Text & Info -->
 					<div class="color_block_contrast" v-if="contrastEnabled" :class="{'lage-aa': contrastRatio(color)}">
@@ -130,7 +138,7 @@
 							</p>
 
 							<div class="flex mtop-xs" v-for="(type, key) in colorblind_types" :key="key">
-								<input type="radio" class="radio mright-xs" :id="'colorblind_' + key" v-model="colorPrefs.colorblind" :value="type.class"/>
+								<input type="radio" class="radio mright-xs" :id="'colorblind_' + key" v-model="colorblind" :value="type.class"/>
 								<label class="vertical text-small" :for="'colorblind_' + key">
 									{{type.name}}
 									<small>{{type.description}}</small>
@@ -382,8 +390,7 @@ export default {
 				enableCheckers: false,
 				stageBackground: "#FFFFFF",
 				customNames: false,
-				colorblind: "none",
-				colorGap: true,
+				colorGap: false,
 			},
 
 			// Current Palette
@@ -394,6 +401,7 @@ export default {
 					b: 219,
 					a: 255,
 					adjust: false,
+					shades: false,
 					name: "Color-1",
 				},
 			],
@@ -412,8 +420,8 @@ export default {
 			// Deleting
 			deleting_color: null,
 			resetting_palette: false,
-			// Adjustments / View
-			gradientEnabled: true,
+			// Colorblind
+			colorblind: "none",
 			// Contrast
 			contrastEnabled: false,
 			contrastDemoText: "",
@@ -537,6 +545,7 @@ export default {
 					b: rgbSplit[2],
 					a: rgbSplit[3] || 255,
 					adjust: false,
+					shades: false,
 				}
 
 				loadedPalette.push(singleColor);
@@ -790,7 +799,8 @@ export default {
 			var color2Lum = this.luminance(this.contrastColorR, this.contrastColorG, this.contrastColorB);
 			var ratio = (color2Lum + 0.05) / (color1Lum + 0.05);
 			return ratio.toFixed(2);
-		}
+		},
+
 
 
 
@@ -906,6 +916,7 @@ export default {
 		gap: 15px;
 		.color_block{
 			border-radius: var(--borderRadius);
+			overflow: hidden;
 		}
 	}
 	&.padded{
@@ -1001,8 +1012,6 @@ export default {
 				border: 1px solid transparent;
 				padding: 0;
 
-				&:nth-child(2){margin-left:-4px;}
-				&:nth-child(3){margin-left:-8px;}
 
 				&:hover{
 					background-color: rgba(0,0,0,0.1);
@@ -1079,11 +1088,37 @@ export default {
 			
 		}
 
+		// Shades
+		.color_block_shades{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+
+			.shade{
+				display: block;
+				width: 100%;
+				flex-grow: 3;
+				color: inherit;
+				font-weight: 600;
+				font-size: 0.8em;
+
+				&:hover{
+					padding-top: 15px;
+					padding-bottom: 15px;
+				}
+			}
+		}
+
 		//  Contrast Area
 		.color_block_contrast{
 			box-sizing: border-box;
 			padding: 20px;
 			color: inherit;
+
 			.ratio{
 				color: inherit;
 				font-size: 1.75em;
