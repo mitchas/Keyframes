@@ -314,7 +314,6 @@
 <script>
 // Components
 // import Callout from "@/components/ui/Common/Callout";
-import Confirm from "@/components/ui/Modals/Confirm";
 import Modal from "@/components/ui/Modals/Modal";
 import ThemeEditor from "@/components/ui/Single/ThemeEditor";
 
@@ -325,7 +324,6 @@ export default {
 
 	components: {
 		// Callout,
-		Confirm,
 		Modal,
 		ThemeEditor,
 	},

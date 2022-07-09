@@ -57,7 +57,7 @@ export default {
 	name: "Confirm",
 	mixins: [
 		// Dismiss modals with escape
-		shortcut('escape', function() {
+		shortcut("escape", function() {
 			this.cancel();
 		}),
 	],

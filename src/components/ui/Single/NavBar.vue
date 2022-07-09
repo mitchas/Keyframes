@@ -87,7 +87,7 @@ export default {
 	},
 	mixins: [
 		// Dismiss modals with escape
-		shortcut('escape', function() {
+		shortcut("escape", function() {
 			this.appLauncherVisible = false;
 		}),
 	],
@@ -101,7 +101,7 @@ export default {
 			return this.$store.getters["Site/apps"];
 		},
 		appData(){
-			return this.$store.getters["User/apps"]
+			return this.$store.getters["User/apps"];
 		},
   	},
 	watch:{

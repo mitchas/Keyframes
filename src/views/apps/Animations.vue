@@ -24,14 +24,12 @@
 
 <script>
 // Components
-import Callout from "@/components/ui/Common/Callout";
 
 
 export default {
-	name: "home",
+	name: "animations",
 
 	components: {
-		Callout
 	},
 
 	mixins: [

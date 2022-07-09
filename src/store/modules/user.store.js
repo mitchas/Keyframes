@@ -31,23 +31,23 @@ const state = {
 
 	// Individual app data and preferences
 	apps: {
-		"animations": {
+		animations: {
 			enabled: true,
 			data: null,
 		},
-		"shadows": {
+		shadows: {
 			enabled: true,
 			data: null,
 		},
-		"colors": {
+		colors: {
 			enabled: true,
 			data: null,
 		},
-		"characters": {
+		characters: {
 			enabled: true,
 			data: null,
 		},
-		"settings": {
+		settings: {
 			enabled: true,
 			data: null,
 		}
@@ -65,6 +65,10 @@ const getters = {
 	apps( state ) {
 		return state.apps;
 	},
+		// Colors app data
+		colorsData( state ) {
+			return state.apps.colors.data;
+		},
 
 	// User app preferences
 	preferences( state ) {
@@ -102,9 +106,15 @@ const mutations = {
 	SET_APP_DATA(state, data) {
 		stateMerge(state.apps, data);
 	},
-	SET_SINGLE_APP_DATA(state, data) {
-		state.apps[data.key].data = data.value;
-	},
+		SET_SINGLE_APP_DATA(state, data) {
+			state.apps[data.key].data = data.value;
+		},
+		SET_APP_DATA_FIELD(state, field) {
+			state.apps[field.app].data[field.key] = field.value;
+		},
+		SET_REMOVE_APP_DATA_FIELD(state, field) {
+			delete state.apps[field.app].data[field.key];
+		},
 	SET_TOGGLE_APP(state, data) {
 		state.apps[data.key].enabled = data.value;
 	},
@@ -156,7 +166,6 @@ const actions = {
 
 			// No prefs saved, determine dark mode based on device
 			if(!userPreferences){
-				console.log("CHECKING DARK MODE")
 				if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
 					commit("SET_SINGLE_PREFERENCE", {key: "dark_mode", value: true});
 					dispatch("CHANGE_THEME");
@@ -184,20 +193,30 @@ const actions = {
 
 	// Save preferences into local storage
 	SAVE_APP_DATA({ commit, getters }, key) {
-		localStorage.setItem('appData', JSON.stringify(getters.apps));
+		localStorage.setItem("appData", JSON.stringify(getters.apps));
 	},
 	// Debounce with 3s delay
 	DEBOUNCE_SAVE_APP_DATA: debounce(({ dispatch }) => {
 		dispatch("SAVE_APP_DATA");
 	}, 3000),
 
-	// Update App Data
-	UPDATE_APP_DATA({ commit }, data) {
+	// Update all App Data
+	UPDATE_APP_DATA({ commit, dispatch }, data) {
 		commit("SET_SINGLE_APP_DATA", data);
-
 		// Store changes
 		dispatch("DEBOUNCE_SAVE_APP_DATA");
 	},
+		ADD_APP_DATA_FIELD({ commit, dispatch }, data) {
+			commit("SET_APP_DATA_FIELD", data);
+			// Store changes
+			dispatch("DEBOUNCE_SAVE_APP_DATA");
+		},
+		REMOVE_APP_DATA_FIELD({ commit, dispatch }, data) {
+			commit("SET_REMOVE_APP_DATA_FIELD", data);
+			// Store changes
+			dispatch("DEBOUNCE_SAVE_APP_DATA");
+		},
+
 	// Toggle App on/off
 	TOGGLE_APP({ commit, getters, dispatch }, key) {
 		var switchValue = !getters.apps[key].enabled;
@@ -207,6 +226,7 @@ const actions = {
 		// Store changes
 		dispatch("DEBOUNCE_SAVE_APP_DATA");
 	},
+
 	// Clears data for one specific app
 	CLEAR_APP_DATA({ commit, dispatch }, key) {
 		commit("SET_CLEAR_APP_DATA", key);
@@ -218,7 +238,7 @@ const actions = {
 
 	// Save preferences into local storage
 	SAVE_PREFERENCES({ commit, getters }, key) {
-		localStorage.setItem('preferences', JSON.stringify(getters.preferences));
+		localStorage.setItem("preferences", JSON.stringify(getters.preferences));
 	},
 	// Debounce with 3s delay
 	DEBOUNCE_SAVE_PREFERENCES: debounce(({ dispatch }) => {

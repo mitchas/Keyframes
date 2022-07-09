@@ -115,13 +115,13 @@ textarea {
     width: 100%;
     font-size: 1rem;
     box-sizing: border-box;
-    padding: 0 20px;
+    padding: 0 15px;
     color: var(--text);
     border: none;
     border-radius: var(--borderRadius);
     border: 1px solid var(--border);
     transition: all 0.1s ease, border-color 0.15s ease;
-    font-weight: 500;
+    font-weight: normal;
     height: var(--inputHeight);
     background-color: var(--layer);
 
@@ -279,6 +279,11 @@ select {
             opacity: 1;
         }
     }
+	&.small button{
+		font-size: 0.8em;
+		padding-left: 12px;
+		padding-right: 12px;
+	}
     input,
     select {
         border-top-right-radius: 0;
@@ -291,6 +296,11 @@ select {
             border-bottom-left-radius: var(--borderRadius);
         }
     }
+	&.small input,
+	&.small select{
+		font-size: 0.9em;
+		padding: 0 12px;
+	}
 }
 
 

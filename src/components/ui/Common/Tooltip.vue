@@ -74,7 +74,7 @@ export default {
 	},
 	computed: {
 		tooltipsEnabled(){
-			return this.$store.getters['User/preferences'].tooltips
+			return this.$store.getters["User/preferences"].tooltips;
 		},
 	},
 	created() {

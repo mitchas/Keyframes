@@ -96,7 +96,7 @@ export default {
 		screenResizeMixin,
 
 		// Toggle Dark Mode witth 
-		shortcut('d', CTRL, function(event) {
+		shortcut("d", CTRL, function(event) {
 			event.preventDefault();
 			this.$store.dispatch("User/TOGGLE_PREFERENCE", "dark_mode");
 		}),

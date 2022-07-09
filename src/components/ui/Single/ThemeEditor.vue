@@ -115,13 +115,13 @@ export default {
 			"muted": {name: "Muted Colors"},
 			"primary": {name: "Primary Colors"},
 			"greys": {name: "Greys"},
-		}
+		};
 		this.selectedTheme = themeKeys[this.userPreferences.theme].name;
 	},
 	computed: {
 		userPreferences: {
 			get() {
-				return this.$store.getters["User/preferences"]
+				return this.$store.getters["User/preferences"];
 			},
 		},
   	},
@@ -137,16 +137,16 @@ export default {
 				"Muted Colors": {name: "muted"},
 				"Primary Colors": {name: "primary"},
 				"Greys": {name: "greys"},
-			}
+			};
 
 			// Change theme
 			var name = themeNames[theme].name;
-			this.$store.dispatch('User/CHANGE_THEME', name);
+			this.$store.dispatch("User/CHANGE_THEME", name);
 		},
 
 		changeFont: function(font){
 			var data = {key: "font", value: font};
-			this.$store.dispatch("User/UPDATE_PREFERENCE", data)
+			this.$store.dispatch("User/UPDATE_PREFERENCE", data);
 		},
 		
 

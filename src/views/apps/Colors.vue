@@ -19,8 +19,8 @@
 			<div class="spacer"></div>
 
 			<!-- Loop for other secondary buttons -->
-			<button v-for="(button, key) in secondaryNav" :key="key" @click="toggleSidebar(button.id)" 
-				:class="{'notification-dot': (button.id == 'colorblind' && colorblind != 'none') || (button.id == 'contrast' && contrastEnabled)}">
+			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" 
+				:class="{'notification-dot': (button.id == 'colorblind' && colorblind != 'none') || (button.id == 'contrast' && contrast_enabled)}">
 				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
@@ -60,14 +60,15 @@
 						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple" title="Adjust RGB"></i></button>
 						<!-- <button><i class="fas fa-lamp"></i></button> -->
 						<button><i class="fas fa-shutters" @click="color.shades = !color.shades" title="Color Shades"></i></button>
-						<button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button>
+						<button @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'color', key ] : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button>
+						<!-- <button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button> -->
 					</div>
 
 					<!-- Color Editor - Sliders -->
 					<transition name="basic">
 						<div id="color_block_sliders" v-if="color.adjust">
 							<!-- Loop through slider definitions -->
-							<div class="cbs_row" v-for="(option, key) in sliderDefinitions" :key="key">
+							<div class="cbs_row" v-for="(option, key) in slider_definitions" :key="key">
 								<input type="range" :id="'slider'+option.id" min="0" max="255" v-model="color[option.id]"/>
 								<!-- class="option.sliderClass -->
 								<label :for="'slider'+option.id" class="vertical">{{option.label}}</label>
@@ -95,14 +96,14 @@
 					</div>
 
 					<!-- Contrast Text & Info -->
-					<div class="color_block_contrast" v-if="contrastEnabled" :class="{'lage-aa': contrastRatio(color)}">
+					<div class="color_block_contrast" v-if="contrast_enabled" :class="{'lage-aa': contrastRatio(color)}">
 						<label class="ratio"><b>{{contrastRatio(color)}}</b>:1</label>
-						<div class="large-text">{{contrastDemoText ? contrastDemoText : "Large Text"}}</div>
+						<div class="large-text">{{contrast_demo_text ? contrast_demo_text : "Large Text"}}</div>
 						<div class="tags">
 							<span class="wcag-tag mright-xxs" :class="{'green': contrastRatio(color) >= 3.0}">AA</span>
 							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 4.5}">AAA</span>
 						</div>
-						<p>{{contrastDemoText ? contrastDemoText : "Normal Text"}}</p>
+						<p>{{contrast_demo_text ? contrast_demo_text : "Normal Text"}}</p>
 						<div class="tags">
 							<span class="wcag-tag mright-xxs " :class="{'green': contrastRatio(color) >= 4.5}">AA</span>
 							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 7.0}">AAA</span>
@@ -155,24 +156,24 @@
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
 							<div class="flex mtop-sm margin-auto between">
 								<label class="vertical" for="contrastTog">View Contrast</label>
-								<input type="checkbox" id="contrastTog" class="toggle yes-no" v-model="contrastEnabled"/>
+								<input type="checkbox" id="contrastTog" class="toggle yes-no" v-model="contrast_enabled"/>
 							</div>
 							<transition name="basic">
-								<div v-if="contrastEnabled">
+								<div v-if="contrast_enabled">
 									<!-- Contrast colors -->
-									<label class="mtop-md">{{contrastReverse ? "Text" : "Background"}} Color (R, G, B)</label>
+									<label class="mtop-md">{{contrast_reverse ? "Text" : "Background"}} Color (R, G, B)</label>
 									<div class="flex gap small-number mtop-xxs">
-										<input type="number" min="0" max="255" class="small" v-model="contrastColorR" placeholder="255"/>
-										<input type="number" min="0" max="255" class="small" v-model="contrastColorG" placeholder="255"/>
-										<input type="number" min="0" max="255" class="small" v-model="contrastColorB" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrast_color_r" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrast_color_g" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrast_color_b" placeholder="255"/>
 									</div>
 									<!-- Demo Contrast Text -->
 									<label class="mtop-sm">Demo Text</label>
-									<input type="text" class="mtop-xxs" v-model="contrastDemoText" placeholder=""/>
+									<input type="text" class="mtop-xxs" v-model="contrast_demo_text" placeholder=""/>
 									<!-- Reverse Colors -->
 									<div class="flex mtop-md margin-auto between">
 										<label class="vertical" for="contrastRev">Reverse Colors</label>
-										<input type="checkbox" id="contrastRev" class="toggle " v-model="contrastReverse"/>
+										<input type="checkbox" id="contrastRev" class="toggle " v-model="contrast_reverse"/>
 									</div>
 								</div>
 							</transition>
@@ -224,11 +225,11 @@
 						<h3>Save</h3>
 						<!-- Save Form -->
 						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
-							<div class="button-input">
+							<div class="button-input small">
 								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave"/>
-								<button class="button" :disabled="!nameToSave.length">
+								<button class="button" :disabled="!nameToSave.length" :class="{'green' : storedPalettes && storedPalettes[nameToSave]}">
 									<i class="fas fa-floppy-disk"></i>
-									<span>Save</span>
+									<span>{{storedPalettes && storedPalettes[nameToSave] ? "Save Changes" : "Save New"}}</span>
 								</button>
 							</div>
 						</form>
@@ -237,26 +238,36 @@
 						<!-- Scrollable saved list -->
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
 							<!-- Stored palettes from local storage, loop to create display -->
-							<button v-for="(palette, key) in storedPalettes" class="load-palette-button mbottom-md padded" :key="key" @click="loadPalette(palette)">
-								<b>{{key}}<small>{{$date(palette.saved).format("MMMM D YYYY")}}</small></b>
+							<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key">
 								<!-- Preview -->
-								<div class="palette-preview">
+								<div class="palette-preview hoverable " @click="loadPalette(palette)">
 									<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
 								</div>
-							</button>
-							<!-- No palettes saved -->
-							<div class="padded mtop-sm" v-if="!Object.keys(storedPalettes).length">
+								<!-- Palette Info & Controls -->
+								<div class="pv_bar">
+									<button class="pv__i">
+										<b>{{key}}</b>
+										{{$date(palette.saved).format("MMMM D YYYY")}}
+									</button>
+									<!-- Controls -->
+									<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
+								</div>
+							</div>
+
+							<!-- No stored palettes -->
+							<div class="padded mtop-sm" v-if="storedPalettes && !Object.keys(storedPalettes).length">
 								<Callout icon="far fa-empty-set" size="small" color="red">
 									<p class="small">You haven't saved anything yet.</p>
 								</Callout>
-							</div>
+							</div>	
+
 						</div>
 					</div>
 
 
 					<!-- Settings -->
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'settings'" :key="2">
-						<h3>Settings</h3>
+						<h3>Palette Settings</h3>
 						<div class="stage-sidebar-content-scroll">
 							<div class="padded mtop-md">
 								<!-- Color Format -->
@@ -310,8 +321,18 @@
 
 
 		<!-- Modals -->
-		<Confirm v-if="deleting_color != null" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" confirmText="Remove Color" confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" v-on:confirmFalse="deleting_color = null" v-on:confirmTrue="removeColor(deleting_color)">
-			<i class="fas fa-droplet mtop-xs mbottom-sm block center" :style="'font-size: 3em; color: ' + RGBToHex(currentPalette[deleting_color].r, currentPalette[deleting_color].g, currentPalette[deleting_color].b, currentPalette[deleting_color].a)""></i>
+		<!-- Confirm delete things -->
+		<Confirm v-if="confirm_modal && confirm_modal[0]" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" 
+			:confirmText="'Delete ' + (confirm_modal[0] == 'color' ? 'Color': 'Palette')" 
+			confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" 
+			v-on:confirmFalse="confirm_modal = null" v-on:confirmTrue="handleConfirmModal()">
+			<p class="no-padding" v-if="confirm_modal[0] == 'color'">
+				You are about to delete a color. <small class="block">This can <b>not</b> be undone.</small>
+			</p>
+			<p class="no-padding" v-else-if="confirm_modal[0] == 'palette'">
+				You are about to delete your palette <b>{{confirm_modal[1]}}</b>. <small class="block ptop-xs">This can <b>not</b> be undone.</small>
+			</p>
+			<p v-else>Something went wrong. I can't tell what you're trying to do. <small class="block">You're not ever supposed to see this.</small></p>
 		</Confirm>
 
 		<!-- Code Export Modal -->
@@ -362,7 +383,6 @@
 
 <script>
 // Components
-import Selections from "@/components/ui/Forms/Selections";
 import Callout from "@/components/ui/Common/Callout";
 import Confirm from "@/components/ui/Modals/Confirm";
 import Modal from "@/components/ui/Modals/Modal";
@@ -373,7 +393,6 @@ export default {
 	name: "Colors",
 
 	components: {
-		Selections,
 		Callout,
 		Confirm,
 		Modal,
@@ -383,6 +402,7 @@ export default {
 	],
 
 	data() {
+
 		return {
 			// App Settings
 			colorPrefs: {
@@ -407,11 +427,11 @@ export default {
 			],
 
 			// Saved Palettes
-			storedPalettes: {},
 
 			// App Functions
 			view_sidebar: null,
 			active_color_format: "RGB/A",
+			confirm_modal: null, // [type, key]
 			// Saving
 			nameToSave: "",
 			// Exporting
@@ -419,22 +439,22 @@ export default {
 			exporting_as: "CSS",
 			// Deleting
 			deleting_color: null,
+			deleting_palette: null,
 			resetting_palette: false,
 			// Colorblind
 			colorblind: "none",
 			// Contrast
-			contrastEnabled: false,
-			contrastDemoText: "",
-			contrastColorR: 255,
-			contrastColorG: 255,
-			contrastColorB: 255,
-			contrastReverse: false,
-			re_enableOpacity: false,
-
+			contrast_enabled: false,
+			contrast_demo_text: "",
+			contrast_color_r: 255,
+			contrast_color_g: 255,
+			contrast_color_b: 255,
+			contrast_reverse: false,
+			re_enable_opacity: false,
 
 
 			// App Definitions / Loops
-			secondaryNav: [
+			secondary_nav: [
 				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
 				{title: "Color Blindness", id: "colorblind",  icon: "fas fa-glasses"},
 				{title: "Contrast", id: "contrast",  icon: "fas fa-circle-half-stroke"},
@@ -442,7 +462,7 @@ export default {
 				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
 				{title: "Settings", id: "settings",  icon: "fas fa-bars"},
 			],
-			sliderDefinitions: [
+			slider_definitions: [
 				{label: "Red", id: "r", sliderClass: "red"},
 				{label: "Green", id: "g", sliderClass: "green"},
 				{label: "Blue", id: "b", sliderClass: "blue"},
@@ -478,7 +498,13 @@ export default {
 	},
 
 	computed: {
+		storedPalettes: {
+			get () {
+				return this.$store.getters["User/colorsData"];
+			},
+		},
 	},
+
 
 	watch: {
 		// When current palette changes, update URL
@@ -488,6 +514,7 @@ export default {
 			},
 			deep: true,
 		},
+		
 	},
 	
 	mounted() {
@@ -528,7 +555,7 @@ export default {
 			let _this = this;
 			var splitColors = this.$route.params.urlColors.split("&");
 
-			var loadedPalette = []
+			var loadedPalette = [];
 			splitColors.forEach(function(color) {
 				var colorSplit = color.split("=");
 				var rgbSplit = colorSplit[1].split(",");
@@ -546,13 +573,13 @@ export default {
 					a: rgbSplit[3] || 255,
 					adjust: false,
 					shades: false,
-				}
+				};
 
 				loadedPalette.push(singleColor);
 			});
 
 			// Set current palette from load
-			this.currentPalette = loadedPalette
+			this.currentPalette = loadedPalette;
 
 		},
 
@@ -563,11 +590,11 @@ export default {
 			if(name == "contrast" && this.colorPrefs.enableOpacity){
 				this.hello("Disabling Opacity...", "fas fa-wand-magic-sparkles", "yellow");
 				this.colorPrefs.enableOpacity = false;
-				this.re_enableOpacity = true;
-			}else if(this.re_enableOpacity){
+				this.re_enable_opacity = true;
+			}else if(this.re_enable_opacity){
 				this.hello("Opacity is back...", "fas fa-eyes", "yellow");
 				this.colorPrefs.enableOpacity = true;
-				this.re_enableOpacity = false;
+				this.re_enable_opacity = false;
 			}
 
 			// Clear if same one clicked
@@ -577,6 +604,17 @@ export default {
 				// Else set as name
 				this.view_sidebar = name;
 			}
+		},
+
+		// Actiona that need confirming
+		handleConfirmModal: function(){
+			var data = this.confirm_modal;
+			if(data[0] == "color"){
+				this.removeColor(data[1]);
+			}else if(data[0] == "palette"){
+				this.deletePalette(data[1]);
+			}
+			this.confirm_modal = null;
 		},
 
 		// Add new (random) color to palette
@@ -589,14 +627,13 @@ export default {
 				adjust: false,
 				shades: false,
 				name: "Color-" + (this.currentPalette.length + 1),
-			}
-			this.currentPalette.push(newColor)
+			};
+			this.currentPalette.push(newColor);
 		},
 
 		// Remove color from current palette
 		removeColor: function(index){
 			this.currentPalette.splice(index, 1);
-			this.deleting_color = null;
 		},
 
 		// Reset Palette
@@ -624,26 +661,39 @@ export default {
 
 		// Save Palette
 		savePalette: function(){
-			var toSave = {
+			var dataToSave = {
 				name: this.nameToSave,
-				colors: JSON.parse(JSON.stringify(this.currentPalette)),
-				saved: new Date()
-			}
-			this.$set(this.storedPalettes, this.nameToSave, toSave);
+				colors: {...this.currentPalette},
+				saved: new Date(),
+				preferences: {...this.colorPrefs},
+			};
+			// Save to store
+			this.$store.dispatch("User/ADD_APP_DATA_FIELD", {app: "colors", key: this.nameToSave, value: dataToSave});
 			this.hello(this.nameToSave + " Saved!", "fas fa-check-circle", "green");
+			// Toggle sidebar temp to show new palette
+			this.view_sidebar = null;
+			this.view_sidebar = "save";
 		},
 
 		// Load Palette
 		loadPalette: function(palette){
 			this.currentPalette = palette.colors;
+			this.colorPrefs = palette.preferences;
 			this.nameToSave = palette.name;
 			this.hello(this.nameToSave + " loaded!", "fas fa-check-circle", "green");
 		},
 
+		// Delete Palette
+		deletePalette: function(key){
+			// Dispatch to delete in store.
+			this.$store.dispatch("User/REMOVE_APP_DATA_FIELD", {app: "colors", key: key});
+		},
+
+		// Export functions
 		exportWith: function(key){
 			if(key == "Link"){
 				this.copyToClipboard(window.location.href);
-				this.hello("Link copied to Clipboard!", "far fa-copy", "green")
+				this.hello("Link copied to Clipboard!", "far fa-copy", "green");
 			}else if(key == "Print"){
 				this.hello("Printing!", "far fa-print", "green");
 				var printContent = document.querySelector("#colorGrid").outerHTML;
@@ -663,23 +713,23 @@ export default {
 			var g = parseInt(g,16);
 			var b = parseInt(b,16);
 			var yiq = ((r*299)+(g*587)+(b*114))/1000;
-			return (yiq >= 128) ? 'black' : 'white';
+			return (yiq >= 128) ? "black" : "white";
 		},
 		colorStyleProperties: function(key){
 			var props = {};
 			var color = this.currentPalette[key];
 			// Viewing Contrast
-			if(this.contrastEnabled){
-				if(this.contrastReverse){
+			if(this.contrast_enabled){
+				if(this.contrast_reverse){
 					var props = {
-						color: "rgb(" + this.contrastColorR + "," + this.contrastColorG + "," + this.contrastColorB + ")",
+						color: "rgb(" + this.contrast_color_r + "," + this.contrast_color_g + "," + this.contrast_color_b + ")",
 						backgroundColor: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
-					}
+					};
 				}else{
 					var props = {
 						color: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
-						backgroundColor: "rgb(" + this.contrastColorR + "," + this.contrastColorG + "," + this.contrastColorB + ")",
-					}
+						backgroundColor: "rgb(" + this.contrast_color_r + "," + this.contrast_color_g + "," + this.contrast_color_b + ")",
+					};
 				}
 
 			}else{
@@ -688,7 +738,7 @@ export default {
 					color: this.getTextColor(color.r, color.g, color.b),
 					backgroundColor: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
 					// backgroundColor: this.RGBToHex(color.r, color.g, color.b, color.a),
-				}
+				};
 			};
 			// Add border if color Gap enabled
 			// if(this.colorPrefs.colorGap){
@@ -710,7 +760,7 @@ export default {
 					_this.currentPalette[key].a = 255;
 				}
 			}).catch(function(error) {
-				_this.hello("Invalid HEX. Try again.", "fas fa-frown", "red")
+				_this.hello("Invalid HEX. Try again.", "fas fa-frown", "red");
 			});
 
 		},
@@ -744,12 +794,12 @@ export default {
 			}
 			 if(this.colorPrefs.enableOpacity){
 				var string = "";
-				if(hash != false){string = "#"}
+				if(hash != false){string = "#";}
 				var string = (string + r + g + b + a).toUpperCase();
 				return string;
 			}else{
 				var string = "";
-				if(hash != false){string = "#"}
+				if(hash != false){string = "#";}
 				var string = (string + r + g + b).toUpperCase();
 				return string;
 			}
@@ -779,7 +829,7 @@ export default {
 					var final = [+r, +g, +b, +a];
 					resolve(final);
 				}else{
-					reject()
+					reject();
 				}
 			});
 		},
@@ -797,7 +847,7 @@ export default {
 		// Calculate Contrast Ratio
 		contrastRatio: function(color){
 			var color1Lum = this.luminance(color["r"], color["g"], color["b"]);
-			var color2Lum = this.luminance(this.contrastColorR, this.contrastColorG, this.contrastColorB);
+			var color2Lum = this.luminance(this.contrast_color_r, this.contrast_color_g, this.contrast_color_b);
 			var ratio = (color2Lum + 0.05) / (color1Lum + 0.05);
 			return ratio.toFixed(2);
 		},
@@ -1190,40 +1240,69 @@ export default {
 }
 
 
-
-// Button / Preview for palette
-.load-palette-button{
-	display: block;
-	width: 100%;
-	text-align: left;
-	padding: 0;
-	margin: 18px 0 0 0;
-
-	b{
-		font-size: 0.9em;
-		display: block;
-		padding-bottom: 5px;
-		font-weight: 600;
+// List of palettes from local storage
+.palette-view{
+	.pv_bar{
 		width: 100%;
+		background-color: var(--grey);
+		box-sizing: border-box;
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-end;
+		padding:  0 7px 0 10px;
+		border-bottom-left-radius: var(--borderRadius);
+		border-bottom-right-radius: var(--borderRadius);
+	
+		.pv__i{
+			flex-grow: 3;
+			font-size: 0.65em;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: left;
+			padding: 5px 0;
 
-		small{
-			color: var(--textFade);
-			font-weight: 500;
-			white-space: pre;
+			b{
+				font-size: 0.95rem;
+				font-weight: 500;
+				padding-bottom: 2px;
+			}
 		}
-	}
+		// Palette view Actions
+		.pv__a{
+			font-size: 0.9em;
+			padding: 6px;
+			margin: 6px 0;
+			border-radius: var(--borderRadius);
+			opacity: 0;
+			@media (max-width: $screenSM) {opacity: 1;}
 
-	&:hover{
-		b{
-			text-decoration: underline;
+			&:hover{
+				overflow: 1;
+				cursor: pointer;
+				background-color: rgba(0,0,0,0.05);
+
+				&.red{color: var(--red);}
+			}
 		}
+
+		// Show action buttons on hover
+		&:hover{
+			.pv__a{
+				opacity: 1;
+			}
+		}
+
+
 	}
 }
+// Preview for palettes
 .palette-preview{
 	display: flex;
 	border-radius: var(--borderRadius);
+
+	&.hoverable:hover{
+		cursor :pointer;
+	}
 
 	.palette-preview-color{
 		display: block;
@@ -1232,11 +1311,11 @@ export default {
 
 		&:first-child{
 			border-top-left-radius: var(--borderRadius);
-			border-bottom-left-radius: var(--borderRadius);
+			// border-bottom-left-radius: var(--borderRadius);
 		}
 		&:last-child{
 			border-top-right-radius: var(--borderRadius);
-			border-bottom-right-radius: var(--borderRadius);
+			// border-bottom-right-radius: var(--borderRadius);
 		}
 	}
 }

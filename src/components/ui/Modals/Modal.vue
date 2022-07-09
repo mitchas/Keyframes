@@ -64,7 +64,7 @@ export default {
 	name: "Modal",
 	mixins: [
 		// Dismiss modals with escape
-		shortcut('escape', function() {
+		shortcut("escape", function() {
 			this.closeModal();
 		}),
 	],
