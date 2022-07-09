@@ -508,9 +508,9 @@ export default {
 	},
 
 	computed: {
-		storedPalettes_sort() {
+		// storedPalettes_sort() {
 			// return this.storedPalettes.slice().sort((a, b) => new Date(b.saved)- new Date(a.saved));
-		},
+		// },
 	},
 
 
@@ -530,8 +530,8 @@ export default {
 			this.loadURLColors();
 		}
 		// Get stored palettes from store/localstorage
-		if(this.$store.getters['User/apps'].colors.data["palettes"]){
-			this.storedPalettes = this.$store.getters['User/apps'].colors.data["palettes"];	
+		if(this.$store.getters["User/apps"].colors.data["palettes"]){
+			this.storedPalettes = this.$store.getters["User/apps"].colors.data["palettes"];	
 		}
 	},
 	created: function () {
@@ -688,9 +688,9 @@ export default {
 			// Save as new
 			if(this.editing_stored_key == null){
 				this.storedPalettes.push(dataToSave);
-				console.log("SAVING")
-				console.log(this.storedPalettes)
-				console.log(this.storedPalettes.length)
+				console.log("SAVING");
+				console.log(this.storedPalettes);
+				console.log(this.storedPalettes.length);
 				this.editing_stored_key = this.storedPalettes.length - 1;
 			}else{ // Changes
 				this.$set(this.storedPalettes, this.editing_stored_key, dataToSave);
@@ -701,8 +701,8 @@ export default {
 
 		// Load Palette
 		loadPalette: function(palette, key){
-			console.log("RECEIVED KEY")
-			console.log(key)
+			console.log("RECEIVED KEY");
+			console.log(key);
 			this.currentPalette = JSON.parse(JSON.stringify(palette.colors));
 			this.colorPrefs = JSON.parse(JSON.stringify(palette.preferences));
 			this.nameToSave = JSON.parse(JSON.stringify(palette.name));
