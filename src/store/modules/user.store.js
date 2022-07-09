@@ -109,22 +109,11 @@ const mutations = {
 		SET_SINGLE_APP_DATA(state, data) {
 			state.apps[data.key].data = data.value;
 		},
-
-		// Sets an *array* field inside app data. Creates array first if it doesn't exist
-		// example field = {app: "colors", key: "palettes", value: {arrayitem} }
-		SET_APP_DATA_ARRAY_FIELD(state, field) {
-			if(!state.apps[field.app].data[field.array]){
-				state.apps[field.app].data[field.array] = [];
-			}
-			state.apps[field.app].data[field.array].push(field.value);
-		},
-		SET_APP_DATA_ARRAY_FIELD_CHANGE(state, field) {
-			state.apps[field.app].data[field.array][field.key] = field.value;
-		},
-		// Splices app data array
-		// example field = {app: "colors", array: "palettes" key: <key to remove> }
-		SET_APP_DATA_ARRAY_FIELD_REMOVE(state, field) {
-			state.apps[field.app].data[field.array].splice(field.key, 1);
+		// Set single field within data. ie data["palettes"]
+		SET_APP_DATA_FIELD(state, field) {
+			console.log("SETTING FIELD")
+			console.log(field)
+			state.apps[field.app].data[field.key] = field.value;
 		},
 
 
@@ -212,7 +201,7 @@ const actions = {
 	// Debounce with 3s delay
 	DEBOUNCE_SAVE_APP_DATA: debounce(({ dispatch }) => {
 		dispatch("SAVE_APP_DATA");
-	}, 3000),
+	}, 1000),
 
 	// Update all App Data
 	UPDATE_APP_DATA({ commit, dispatch }, data) {

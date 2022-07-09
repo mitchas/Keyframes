@@ -226,7 +226,7 @@
 						<!-- Save Form -->
 						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
 							<div class="button-input small">
-								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave" :disabled="editing_stored_key != null"/>
+								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave"/>
 								<button class="button" :disabled="!nameToSave.length" :class="{'green' : editing_stored_key != null}">
 									<i class="fas fa-floppy-disk"></i>
 									<span>{{editing_stored_key != null ? "Save Changes" : "Save New"}}</span>
@@ -237,6 +237,7 @@
 						</form>
 						<!-- Load existing -->
 						<h3>Load</h3>
+						<!-- <span class="text-smaller">{{storedPalettes}}</span> -->
 						<!-- Scrollable saved list -->
 						<transition name="basicup">
 							<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
@@ -251,7 +252,7 @@
 										<div class="pv_bar">
 											<button class="pv__i" @click="loadPalette(palette, key)">
 												<b>{{palette.name}}</b>
-												{{$date(palette.saved).format("MMMM D YYYY HH:MM:ss")}}
+												{{$date(palette.saved).format("MMMM D YYYY - h:MMa")}}
 											</button>
 											<!-- Controls -->
 											<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
@@ -434,12 +435,13 @@ export default {
 			],
 
 			// Saved Palettes
+			storedPalettes: [],
 			editing_stored_key: null,
 
 			// App Functions
 			view_sidebar: null,
 			active_color_format: "RGB/A",
-			confirm_modal: null, // [type, key]
+			confirm_modal: null, // [tpe, key]
 			// Saving
 			nameToSave: "",
 			// Exporting
@@ -506,12 +508,9 @@ export default {
 	},
 
 	computed: {
-		storedPalettes() {
-			return this.$store.getters["User/apps"].colors.data.palettes || [];
+		storedPalettes_sort() {
+			// return this.storedPalettes.slice().sort((a, b) => new Date(b.saved)- new Date(a.saved));
 		},
-		// storedPalettes_sort() {
-		// 	return this.storedPalettes.slice().sort((a, b) => new Date(b.saved)- new Date(a.saved));
-		// },
 	},
 
 
@@ -529,6 +528,10 @@ export default {
 		// Load Params if they exist
 		if(this.$route.params.urlColors){
 			this.loadURLColors();
+		}
+		// Get stored palettes from store/localstorage
+		if(this.$store.getters['User/apps'].colors.data["palettes"]){
+			this.storedPalettes = this.$store.getters['User/apps'].colors.data["palettes"];	
 		}
 	},
 	created: function () {
@@ -669,43 +672,55 @@ export default {
 
 		// Save Palette
 		savePalette: function(){
-			let _this = this;
-			this.$store.dispatch("Hold/LOADING", "data");
+			// let _this = this;
+			// this.$store.dispatch("Hold/LOADING", "data");
 			var dataToSave = {
 				name: this.nameToSave,
-				colors: {...this.currentPalette},
+				colors:JSON.parse(JSON.stringify(this.currentPalette)),
+				// colors: {...this.currentPalette},
 				saved: new Date(),
-				preferences: {...this.colorPrefs},
+				colors:JSON.parse(JSON.stringify(this.currentPalette)),
+				preferences: JSON.parse(JSON.stringify(this.colorPrefs)),
 			};
-			// Save to store
-			// new
-			if(this.editing_stored_key == null){
-				this.$store.commit("User/SET_APP_DATA_ARRAY_FIELD", {app: "colors", array: "palettes", value: dataToSave});
-			}else{ // Changes
-				this.$store.commit("User/SET_APP_DATA_ARRAY_FIELD_CHANGE", {app: "colors", array: "palettes", key: this.editing_stored_key, value: dataToSave});
-			}
-			this.$store.dispatch("User/SAVE_APP_DATA");
+
 			this.hello(this.nameToSave + " Saved!", "fas fa-check-circle", "green");
-			setTimeout(function(){
-				_this.$store.dispatch("Hold/STOP_LOAD");
-				_this.editing_stored_key = _this.storedPalettes.length;
-			}, 500);
+
+			// Save as new
+			if(this.editing_stored_key == null){
+				this.storedPalettes.push(dataToSave);
+				console.log("SAVING")
+				console.log(this.storedPalettes)
+				console.log(this.storedPalettes.length)
+				this.editing_stored_key = this.storedPalettes.length - 1;
+			}else{ // Changes
+				this.$set(this.storedPalettes, this.editing_stored_key, dataToSave);
+			}
+
+			this.syncStoredPalettes();
 		},
 
 		// Load Palette
 		loadPalette: function(palette, key){
-			this.currentPalette = palette.colors;
-			this.colorPrefs = palette.preferences;
-			this.nameToSave = palette.name;
+			console.log("RECEIVED KEY")
+			console.log(key)
+			this.currentPalette = JSON.parse(JSON.stringify(palette.colors));
+			this.colorPrefs = JSON.parse(JSON.stringify(palette.preferences));
+			this.nameToSave = JSON.parse(JSON.stringify(palette.name));
 			this.hello(this.nameToSave + " loaded!", "fas fa-check-circle", "green");
 			this.editing_stored_key = key;
 		},
 
 		// Delete Palette
 		deletePalette: function(key){
-			// Dispatch to delete in store.
-			this.$store.commit("User/SET_APP_DATA_ARRAY_FIELD_REMOVE", {app: "colors", array: "palettes", key: key});
-			this.$store.dispatch("User/SAVE_APP_DATA");
+			this.storedPalettes.splice(key, 1);
+			// delete this.storedPalettes[key];
+			this.syncStoredPalettes();
+		},
+
+		// Sync stored palettes with store / local storage
+		syncStoredPalettes: function(){
+			this.$store.commit("User/SET_APP_DATA_FIELD", {app: "colors", key: "palettes", value: JSON.parse(JSON.stringify(this.storedPalettes)) });
+			this.$store.dispatch("User/DEBOUNCE_SAVE_APP_DATA");
 		},
 
 		// Export functions
