@@ -77,17 +77,17 @@ export default {
 
 		// Native Sharing
 		// Falls back to copy to clipboard
-		Vue.prototype.share = function(toShare, shareText ) {
+		Vue.prototype.share = function(toShare, kind ) {
 			let _this = this;
 
 			if (navigator.share) {
-				navigator.share({
-					text: shareText || "",
-					url: toShare,
-				})
-				.catch((error) => _this.$ope().error("Error sharing", error));
+				if(kind.toLowerCase() == "link"){
+					navigator.share({url: toShare}).catch((error) => _this.$ope().error("Error sharing", error));
+				}else{
+					navigator.share({text: toShare}).catch((error) => _this.$ope().error("Error sharing", error));
+				}
 			}else{
-				this.copyToClipboard("Link", toShare);
+				this.copyToClipboard(kind, toShare);
 			}
 		};
 

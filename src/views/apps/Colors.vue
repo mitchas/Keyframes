@@ -726,7 +726,7 @@ export default {
 		// Export functions
 		exportWith: function(key){
 			if(key == "Link"){
-				this.share("Link", window.location.href)
+				this.share(window.location.href, "Link")
 			}else if(key == "Print"){
 				this.hello("Printing!", "far fa-print", "green");
 				var printContent = document.querySelector("#colorGrid").outerHTML;
