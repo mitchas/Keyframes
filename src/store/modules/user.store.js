@@ -111,8 +111,6 @@ const mutations = {
 		},
 		// Set single field within data. ie data["palettes"]
 		SET_APP_DATA_FIELD(state, field) {
-			console.log("SETTING FIELD")
-			console.log(field)
 			state.apps[field.app].data[field.key] = field.value;
 		},
 
