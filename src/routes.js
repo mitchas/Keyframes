@@ -88,7 +88,7 @@ export const routes = [
 	{
 		path: "/404/",
 		name: "error-404",
-		component: () => import(/* webpackChunkName: "error-404" */ "./views/other/Error404.vue"),
+		component: () => import(/* webpackChunkName: "error-404" */ "./views/other/error.vue"),
 		meta: {
 			title: "404 - Page not Found — " + AppName,
 		}
