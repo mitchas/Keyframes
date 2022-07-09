@@ -726,7 +726,8 @@ export default {
 		// Export functions
 		exportWith: function(key){
 			if(key == "Link"){
-				this.copyToClipboard(window.location.href);
+				this.share("Link", window.location.href)
+				// this.copyToClipboard(window.location.href);
 				this.hello("Link copied to Clipboard!", "far fa-copy", "green");
 			}else if(key == "Print"){
 				this.hello("Printing!", "far fa-print", "green");

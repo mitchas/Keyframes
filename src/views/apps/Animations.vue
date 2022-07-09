@@ -15,7 +15,6 @@
 
 			<h2 class="ptop-sm">Tasks.</h2>
 
-
 		</div>
 
 
@@ -46,6 +45,7 @@ export default {
 	},
 	
 	mounted() {
+		
 	},
 	created: function () {
 	},
@@ -54,6 +54,10 @@ export default {
 	},
 	
 	methods: {
+
+		testVib: function(){
+				navigator.vibrate(15);
+		},
 
 
 	}

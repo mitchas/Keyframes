@@ -11,14 +11,14 @@ export default {
 		// Sends notifications to root component to display
 		Vue.prototype.toast = function(title, body, color, icon, path, info) {
 			this.$root.$children[0].$refs.toastComponent.showToast(title, body, color, icon, path, info);
-			if(this.$store.getters["Device/hasSmallScreen"] && this.$store.getters["Device/hasTouch"]){
-				// navigator.vibrate(15);
+			if(window.navigator.vibrate){
+				navigator.vibrate(15);
 			}
 		};
 		Vue.prototype.hello = function(message, icon, color) {
 			this.$root.$children[0].$refs.alertComponent.showAlert(message, icon, color);
-			if(this.$store.getters["Device/hasSmallScreen"] && this.$store.getters["Device/hasTouch"]){
-				// navigator.vibrate(15);
+			if(window.navigator.vibrate ){
+				navigator.vibrate(15);
 			}
 		};
 
