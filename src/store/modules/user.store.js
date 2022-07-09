@@ -33,23 +33,23 @@ const state = {
 	apps: {
 		animations: {
 			enabled: true,
-			data: null,
+			data: {},
 		},
 		shadows: {
 			enabled: true,
-			data: null,
+			data: {},
 		},
 		colors: {
 			enabled: true,
-			data: null,
+			data: {},
 		},
 		characters: {
 			enabled: true,
-			data: null,
+			data: {},
 		},
 		settings: {
 			enabled: true,
-			data: null,
+			data: {},
 		}
 	},
 
@@ -67,7 +67,7 @@ const getters = {
 	},
 		// Colors app data
 		colorsData( state ) {
-			return state.apps.colors.data;
+			return state.apps.colors.data["palettes"] || [];
 		},
 
 	// User app preferences
@@ -109,12 +109,26 @@ const mutations = {
 		SET_SINGLE_APP_DATA(state, data) {
 			state.apps[data.key].data = data.value;
 		},
-		SET_APP_DATA_FIELD(state, field) {
-			state.apps[field.app].data[field.key] = field.value;
+
+		// Sets an *array* field inside app data. Creates array first if it doesn't exist
+		// example field = {app: "colors", key: "palettes", value: {arrayitem} }
+		SET_APP_DATA_ARRAY_FIELD(state, field) {
+			if(!state.apps[field.app].data[field.array]){
+				state.apps[field.app].data[field.array] = [];
+			}
+			state.apps[field.app].data[field.array].push(field.value);
 		},
-		SET_REMOVE_APP_DATA_FIELD(state, field) {
-			delete state.apps[field.app].data[field.key];
+		SET_APP_DATA_ARRAY_FIELD_CHANGE(state, field) {
+			state.apps[field.app].data[field.array][field.key] = field.value;
 		},
+		// Splices app data array
+		// example field = {app: "colors", array: "palettes" key: <key to remove> }
+		SET_APP_DATA_ARRAY_FIELD_REMOVE(state, field) {
+			state.apps[field.app].data[field.array].splice(field.key, 1);
+		},
+
+
+
 	SET_TOGGLE_APP(state, data) {
 		state.apps[data.key].enabled = data.value;
 	},
@@ -177,7 +191,7 @@ const actions = {
 
 			// Navigate to default page
 			setTimeout(function(){
-				if(router.currentRoute.path == "/" && userPreferences.start){
+				if(router.currentRoute.path == "/" && userPreferences && userPreferences.start){
 					setTimeout(function(){
 						router.push(userPreferences.start);
 					}, 200);
@@ -206,16 +220,8 @@ const actions = {
 		// Store changes
 		dispatch("DEBOUNCE_SAVE_APP_DATA");
 	},
-		ADD_APP_DATA_FIELD({ commit, dispatch }, data) {
-			commit("SET_APP_DATA_FIELD", data);
-			// Store changes
-			dispatch("DEBOUNCE_SAVE_APP_DATA");
-		},
-		REMOVE_APP_DATA_FIELD({ commit, dispatch }, data) {
-			commit("SET_REMOVE_APP_DATA_FIELD", data);
-			// Store changes
-			dispatch("DEBOUNCE_SAVE_APP_DATA");
-		},
+
+
 
 	// Toggle App on/off
 	TOGGLE_APP({ commit, getters, dispatch }, key) {

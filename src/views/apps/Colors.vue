@@ -226,42 +226,49 @@
 						<!-- Save Form -->
 						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
 							<div class="button-input small">
-								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave"/>
-								<button class="button" :disabled="!nameToSave.length" :class="{'green' : storedPalettes && storedPalettes[nameToSave]}">
+								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave" :disabled="editing_stored_key != null"/>
+								<button class="button" :disabled="!nameToSave.length" :class="{'green' : editing_stored_key != null}">
 									<i class="fas fa-floppy-disk"></i>
-									<span>{{storedPalettes && storedPalettes[nameToSave] ? "Save Changes" : "Save New"}}</span>
+									<span>{{editing_stored_key != null ? "Save Changes" : "Save New"}}</span>
 								</button>
 							</div>
+							<!-- Save as new -->
+							<button type="button" v-if="editing_stored_key != null" @click="editing_stored_key = null" class="text-smaller align-center ptop-xxs text-primary">Or save as new Palette.</button>
 						</form>
 						<!-- Load existing -->
 						<h3>Load</h3>
 						<!-- Scrollable saved list -->
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
-							<!-- Stored palettes from local storage, loop to create display -->
-							<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key">
-								<!-- Preview -->
-								<div class="palette-preview hoverable " @click="loadPalette(palette)">
-									<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
-								</div>
-								<!-- Palette Info & Controls -->
-								<div class="pv_bar">
-									<button class="pv__i">
-										<b>{{key}}</b>
-										{{$date(palette.saved).format("MMMM D YYYY")}}
-									</button>
-									<!-- Controls -->
-									<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
-								</div>
+						<transition name="basicup">
+							<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
+								<!-- Stored palettes from local storage, loop to create display -->
+								<transition-group name="list">
+									<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key">
+										<!-- Preview -->
+										<div class="palette-preview hoverable" @click="loadPalette(palette, key)">
+											<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
+										</div>
+										<!-- Palette Info & Controls -->
+										<div class="pv_bar">
+											<button class="pv__i" @click="loadPalette(palette, key)">
+												<b>{{palette.name}}</b>
+												{{$date(palette.saved).format("MMMM D YYYY HH:MM:ss")}}
+											</button>
+											<!-- Controls -->
+											<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
+										</div>
+									</div>
+								</transition-group>
+
+								<!-- No stored palettes -->
+								<div class="padded mtop-sm" v-if="storedPalettes && !Object.keys(storedPalettes).length">
+									<Callout icon="far fa-empty-set" size="small" color="red">
+										<p class="small">You haven't saved anything yet.</p>
+									</Callout>
+								</div>	
+
 							</div>
+						</transition>
 
-							<!-- No stored palettes -->
-							<div class="padded mtop-sm" v-if="storedPalettes && !Object.keys(storedPalettes).length">
-								<Callout icon="far fa-empty-set" size="small" color="red">
-									<p class="small">You haven't saved anything yet.</p>
-								</Callout>
-							</div>	
-
-						</div>
 					</div>
 
 
@@ -427,6 +434,7 @@ export default {
 			],
 
 			// Saved Palettes
+			editing_stored_key: null,
 
 			// App Functions
 			view_sidebar: null,
@@ -498,11 +506,12 @@ export default {
 	},
 
 	computed: {
-		storedPalettes: {
-			get () {
-				return this.$store.getters["User/colorsData"];
-			},
+		storedPalettes() {
+			return this.$store.getters["User/apps"].colors.data.palettes || [];
 		},
+		// storedPalettes_sort() {
+		// 	return this.storedPalettes.slice().sort((a, b) => new Date(b.saved)- new Date(a.saved));
+		// },
 	},
 
 
@@ -514,7 +523,6 @@ export default {
 			},
 			deep: true,
 		},
-		
 	},
 	
 	mounted() {
@@ -661,6 +669,8 @@ export default {
 
 		// Save Palette
 		savePalette: function(){
+			let _this = this;
+			this.$store.dispatch("Hold/LOADING", "data");
 			var dataToSave = {
 				name: this.nameToSave,
 				colors: {...this.currentPalette},
@@ -668,25 +678,34 @@ export default {
 				preferences: {...this.colorPrefs},
 			};
 			// Save to store
-			this.$store.dispatch("User/ADD_APP_DATA_FIELD", {app: "colors", key: this.nameToSave, value: dataToSave});
+			// new
+			if(this.editing_stored_key == null){
+				this.$store.commit("User/SET_APP_DATA_ARRAY_FIELD", {app: "colors", array: "palettes", value: dataToSave});
+			}else{ // Changes
+				this.$store.commit("User/SET_APP_DATA_ARRAY_FIELD_CHANGE", {app: "colors", array: "palettes", key: this.editing_stored_key, value: dataToSave});
+			}
+			this.$store.dispatch("User/SAVE_APP_DATA");
 			this.hello(this.nameToSave + " Saved!", "fas fa-check-circle", "green");
-			// Toggle sidebar temp to show new palette
-			this.view_sidebar = null;
-			this.view_sidebar = "save";
+			setTimeout(function(){
+				_this.$store.dispatch("Hold/STOP_LOAD");
+				_this.editing_stored_key = _this.storedPalettes.length;
+			}, 500);
 		},
 
 		// Load Palette
-		loadPalette: function(palette){
+		loadPalette: function(palette, key){
 			this.currentPalette = palette.colors;
 			this.colorPrefs = palette.preferences;
 			this.nameToSave = palette.name;
 			this.hello(this.nameToSave + " loaded!", "fas fa-check-circle", "green");
+			this.editing_stored_key = key;
 		},
 
 		// Delete Palette
 		deletePalette: function(key){
 			// Dispatch to delete in store.
-			this.$store.dispatch("User/REMOVE_APP_DATA_FIELD", {app: "colors", key: key});
+			this.$store.commit("User/SET_APP_DATA_ARRAY_FIELD_REMOVE", {app: "colors", array: "palettes", key: key});
+			this.$store.dispatch("User/SAVE_APP_DATA");
 		},
 
 		// Export functions
