@@ -15,6 +15,12 @@
 
 			<h2 class="ptop-sm">Tasks.</h2>
 
+			<button class="button" @click="testVib()">
+			SHARE TEXT</button>
+			<button class="button" @click="testVib2()">
+			SHARE URL</button>
+
+
 		</div>
 
 
@@ -56,7 +62,14 @@ export default {
 	methods: {
 
 		testVib: function(){
-				navigator.vibrate(15);
+				navigator.share({
+					text: "TEST SHARE TEXT",
+				})
+		},
+		testVib2: function(){
+				navigator.share({
+					url: "https://google.com",
+				})
 		},
 
 
