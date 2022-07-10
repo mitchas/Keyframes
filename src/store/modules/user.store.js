@@ -120,7 +120,7 @@ const mutations = {
 		state.apps[data.key].enabled = data.value;
 	},
 	SET_CLEAR_APP_DATA(state, key) {
-		state.apps[key].data = null;
+		state.apps[key].data = {};
 	},
 
 };

@@ -91,7 +91,7 @@
 					<!-- Shades - floats on top -->
 					<div class="color_block_shades" v-if="color.shades" @click="color.shades = false">
 						<button class="shade" v-for="i in 13" :key="i" :style="'background-color: rgb(' + (i * color.r / 6.5) + ', ' + (i *color.g / 6.5) + ', ' + (i *color.b / 6.5) + ');'" @click="color.r = parseInt(i * color.r / 6.5) ; color.g = parseInt(i *color.g / 6.5); color.b = parseInt(i *color.b / 6.5);">
-							<i class="fas fa-circle" v-if="i == 7"></i>
+							<i class="far fa-circle-dot" v-if="i == 7" :class="{'invert': contrast_enabled}"></i>
 						</button>
 					</div>
 
@@ -130,8 +130,107 @@
 					</div> -->
 
 
+					<!-- Gradient -->
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'gradient'" key="gradient">
+						<h3>Gradient</h3>
+						<div class="ptop-sm padded">
+
+							<!-- Gradient View -->
+							<div id="gradientStage" :style="'background: ' + gradientStyle">
+
+								<div id="gradientStageButtons">
+									<!-- Toggle buttons -->
+									<button @click="gradient_shape = 'linear'" :class="{active : gradient_shape == 'linear'}">
+										<span class="hint bottom">Linear</span>
+										<i class="fas fa-dash"></i>
+									</button>
+									<button @click="gradient_shape = 'radial'" :class="{active : gradient_shape == 'radial'}">
+										<span class="hint bottom">Radial</span>
+										<i class="fas fa-bullseye"></i>
+									</button>
+									<button @click="gradient_shape = 'conic'" :class="{active : gradient_shape == 'conic'}">
+										<span class="hint bottom">Conic</span>
+										<i class="fas fa-rotate-right"></i>
+									</button>
+								</div>
+
+							</div>
+
+						</div>
+						<!-- Scroll adjustment area -->
+						<div class="stage-sidebar-content-scroll padded">
+
+							<!-- Angle -->
+							<transition name="basic">
+								<div class="flex" v-if="gradient_shape != 'radial'">
+									<label for="gradDeg" class="vertical pright-xs">Angle</label>
+									<input type="range" id="gradDeg" min="0" max="360" v-model="gradient_degree"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="gradient_degree" min="0" max="360"/></div>
+								</div>
+							</transition>
+							<!-- Radial Position -->
+							<transition name="basic">
+								<div class="aselect mtop-xs" v-if="gradient_shape == 'radial'">
+									<select v-model="gradient_radial_position">
+										<option value="closest-side">Closest Side</option>
+										<option value="closest-corner">Closest Corner</option>
+										<option value="farthest-side">Farthest Side</option>
+										<option value="farthest-corner">Farthest Corner</option>
+									</select>
+								</div>
+							</transition>
+
+							<!-- Circles Position -->
+							<transition name="basic">
+								<div v-if="gradient_shape != 'linear'">
+									<div class="flex">
+										<label for="gradConic" class="vertical text-small pright-xs">Start&nbsp;X</label>
+										<input type="range" id="gradConic" min="0" :max="100" v-model="gradient_conic_position[0]"/>
+										<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="gradient_conic_position[0]" min="0" max="100"/></div>
+									</div>
+									<div class="flex">
+										<label for="gradConicY" class="vertical text-small pright-xxs">Start&nbsp;Y</label>
+										<input type="range" id="gradConicY" min="0" :max="100" v-model="gradient_conic_position[1]"/>
+										<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="gradient_conic_position[1]" min="0" max="100"/></div>
+									</div>
+								</div>
+							</transition>
+							<!-- Auto Blend -->
+							<div class="flex mtop-sm margin-auto between">
+								<label class="vertical" for="autoBlendTog">Auto&nbsp;Blend</label>
+								<input type="checkbox" id="autoBlendTog" class="toggle on-off" v-model="gradient_autoblend"/>
+							</div>
+							<!-- Blend -->
+							<transition name="basic">
+								<div class="flex" v-if="!gradient_autoblend">
+									<label for="gradDeg" class="vertical text-small pright-xs">Blend</label>
+									<input type="range" id="gradDeg" min="0" :max="((100/currentPalette.length) / 2).toFixed(0)" v-model="gradient_blend"/>
+								</div>
+							</transition>
+							
+							<textarea v-model="gradientStyle" class="text-small code mtop-md mbottom-lg"></textarea>
+
+						</div>
+					</div>
+
+					<!-- Order -->
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'order'" key="order">
+						<h3>Order</h3>
+						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
+
+							<ul id="colorList">
+								<li v-for="(color, key) in currentPalette" :key="key" draggable="true">
+									<button :disabled="key == 0" @click="shiftPalette(key, key-1)"><i class="fas fa-angle-up"></i></button>
+									<span class="cp" :style="'background-color: rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')'"></span>
+									<button :disabled="key == currentPalette.length - 1" @click="shiftPalette(key, key+1)"><i class="fas fa-angle-down"></i></button>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+
 					<!-- Color Blind -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'colorblind'" :key="0">
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'colorblind'" key="colorblind">
 						<h3>Color Blindness</h3>
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
 							<p class="small">
@@ -151,7 +250,7 @@
 
 
 					<!-- Contrast -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'contrast'" :key="3">
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'contrast'" key="contrast">
 						<h3>Contrast</h3>
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
 							<div class="flex mtop-sm margin-auto between">
@@ -197,7 +296,7 @@
 
 
 					<!-- Export -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'export'" :key="3">
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'export'" key="export">
 						<h3>Export</h3>
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
 							<!-- Loop export_options to create grid of buttons -->
@@ -221,7 +320,7 @@
 
 
 					<!-- Save / Load -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'save'" :key="4">
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'save'" key="save">
 						<h3>Save</h3>
 						<!-- Save Form -->
 						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
@@ -274,7 +373,7 @@
 
 
 					<!-- Settings -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'settings'" :key="2">
+					<div class="stage-sidebar-content" v-if="view_sidebar == 'settings'" key="settings">
 						<h3>Palette Settings</h3>
 						<div class="stage-sidebar-content-scroll">
 							<div class="padded mtop-md">
@@ -354,10 +453,10 @@
 			color="green"
 			confirmIcon="fas fa-copy"
 			:reverseButtons="true"
-			@confirmed="export_modal = null"
+			@confirmed="copyExportToClipboard()"
 			@dismissed="export_modal = null">
 			<!-- CSS, SCSS, LESS -->
-			<pre class="code-box large" v-if="exporting_as != 'Code'">
+			<pre class="code-box large" v-if="exporting_as != 'Code'" id="cssCodeExport">
 				<div class="comment">{{export_options[exporting_as].commentStart}} HEX {{export_options[exporting_as].commentEnd || ""}}</div>
 				<div v-for="(color, key) in currentPalette" :key="key">{{export_options[exporting_as].prefix}}{{colorPrefs.customNames && color.name ? color.name : 'Color-' + (key + 1)}}: {{RGBToHex(color.r, color.g, color.b, color.a)}};</div>
 				<!-- RGB -->
@@ -365,7 +464,7 @@
 				<div v-for="(color, key) in currentPalette" :key="key">{{export_options[exporting_as].prefix}}{{colorPrefs.customNames && color.name ? color.name : 'Color-' + (key + 1)}}: rgb{{colorPrefs.enableOpacity ? 'a' : ''}}({{color.r}}, {{color.g}}, {{color.b}}{{colorPrefs.enableOpacity ? ', ' + (color.a / 255).toFixed(2) : ''}});</div>
 			</pre>
 			<!-- Code - CSV, XML, Etc. -->
-			<pre class="code-box large" v-else>
+			<pre class="code-box large" v-else id="regularCodeExport">
 				<div class="comment">{{export_options[exporting_as].commentStart}} HEX CSV {{export_options[exporting_as].commentEnd || ""}}</div>
 				<div><span v-for="(color, key) in currentPalette" :key="key">{{key > 0 ? ', ' : ''}}{{RGBToHex(color.r, color.g, color.b, color.a)}}</span></div>
 				<!-- Hex CSV without # -->
@@ -461,13 +560,23 @@ export default {
 			contrast_color_b: 255,
 			contrast_reverse: false,
 			re_enable_opacity: false,
+			// Gradient
+			gradient_shape: "linear",
+			gradient_degree: 90,
+			gradient_autoblend: true,
+			gradient_blend: 0,
+			gradient_radial_position: "closest-side",
+			gradient_repeat: false,
+			gradient_conic_position: [50, 50],
 
 
 			// App Definitions / Loops
 			secondary_nav: [
 				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
+				{title: "Order", id: "order",  icon: "fas fa-arrow-down-arrow-up"},
 				{title: "Color Blindness", id: "colorblind",  icon: "fas fa-glasses"},
 				{title: "Contrast", id: "contrast",  icon: "fas fa-circle-half-stroke"},
+				{title: "Gradient", id: "gradient",  icon: "fas fa-blender"},
 				{title: "Export", id: "export",  icon: "fas fa-share-nodes"},
 				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
 				{title: "Settings", id: "settings",  icon: "fas fa-bars"},
@@ -511,6 +620,126 @@ export default {
 		// storedPalettes_sort() {
 			// return this.storedPalettes.slice().sort((a, b) => new Date(b.saved)- new Date(a.saved));
 		// },
+		gradientStyle(){
+
+			var colors = this.currentPalette;
+			var shape = this.gradient_shape;
+			var gap = Number(this.gradient_blend);
+
+			// Create Gradient
+			var background = shape + "-gradient(";
+
+			// Degree for linear
+			if(shape == "linear"){
+				 background = background + this.gradient_degree + "deg, ";
+			}else if(shape == "conic"){
+				 background = background + "from " +  this.gradient_degree + "deg ";
+				 background = background + "at " + this.gradient_conic_position[0] + "% " + this.gradient_conic_position[1] + "%, ";
+			}else if(shape == "radial"){
+				 background = background + this.gradient_radial_position + " ";
+				 background = background + "at " + this.gradient_conic_position[0] + "% " + this.gradient_conic_position[1] + "%, ";
+			}
+			
+			// Loop through each color
+			for (var key in colors){
+				key = Number(key);
+
+				// Add Color
+				// Opacity included
+				if(this.colorPrefs.enableOpacity){
+					background = background + "rgba(" + colors[key].r + ", " + colors[key].g + ", " + colors[key].b + ", " + (colors[key].a/255).toFixed(2) + ") ";
+				}else{
+					background = background + "rgb(" + colors[key].r + ", " + colors[key].g + ", " + colors[key].b + ") ";
+				}
+
+				// Single color, repeat same.
+				if(colors.length == 1){
+					background = background + "0%, rgb(" + colors[key].r + ", " + colors[key].g + ", " + colors[key].b + ") 100%";
+				}
+
+				// Blending / Position
+				// Auto Blend
+				if(this.gradient_autoblend){
+
+					if(key == 0){
+						background = background + "0%"
+					// Last
+					}else if(colors.length -1 == key){
+						background = background + 100 + "%"
+					}else{
+						background = background + (100 / (colors.length - 1) * key) + "%"
+					}
+					
+				}else{ 
+					// Manual Blend
+					var width = (100/colors.length); // 20
+
+					// First
+					if(key == 0){
+						var position = (width - (gap * 2));
+						background = background + "0% " + (position).toFixed(2) + "%";
+					// Last
+					}else if(colors.length -1 == key){
+						var position = 100 - (width - (gap * 2));
+						background = background + (position).toFixed(2) + "%" +  " 100%";
+					}else{
+						// Mid -30%
+						var change = width - (width - gap);
+
+						var first = (width * key);
+						first = (first + change).toFixed(2);
+						var second = (width * key) + width;
+						second = (second - change).toFixed(2);
+						background = background + first + "% " + second + "%";
+					}
+
+				}
+
+				
+				// Position
+				// First color
+				// if(key == 0){
+				// 	if(gap == maxGap){
+				// 		background = background + "0%"
+				// 	}else{
+				// 		background = background + "0% "
+				// 		background = background + ((100/colors.length) - gap).toFixed(2) + "%"
+				// 	}
+				// // Last
+				// }else if(colors.length -1 == key){
+				// 	if(gap == maxGap){
+				// 		background = background + 100 + "%"
+				// 	}else{
+				// 		background = background + (((100/colors.length).toFixed(2) * key) + gap) + "% "
+				// 		background = background + " 100% "
+				// 	}
+				// }else{
+				// 	if(gap == maxGap){
+				// 		background = background + (100 / (colors.length - 1) * key) + "%"
+				// 	}else{
+				// 		console.log("CALC MID")
+				// 		console.log((((100/colors.length)) *  (key + 1)).toFixed(2))
+				// 		console.log(typeof (((100/colors.length)) *  (key + 1)).toFixed(2))
+
+				// 		background = background + (((100/colors.length) + gap).toFixed(2) * key) + "% "
+				// 		background = background + (  Number((100/colors.length) *  (key + 1)) - gap) + "%"
+				// 	}
+				// }
+
+				
+
+				// Add comma
+				if(key != colors.length -1){
+					background = background + ", "
+				}
+			}
+			// Close
+			background = background + ");"
+
+			return background;
+
+		},
+
 	},
 
 
@@ -533,6 +762,7 @@ export default {
 		if(this.$store.getters["User/apps"].colors.data["palettes"]){
 			this.storedPalettes = this.$store.getters["User/apps"].colors.data["palettes"];	
 		}
+
 	},
 	created: function () {
 	},
@@ -713,8 +943,10 @@ export default {
 		// Delete Palette
 		deletePalette: function(key){
 			this.storedPalettes.splice(key, 1);
-			// delete this.storedPalettes[key];
 			this.syncStoredPalettes();
+			if(key == this.editing_stored_key){
+				this.editing_stored_key = null;
+			}
 		},
 
 		// Sync stored palettes with store / local storage
@@ -738,6 +970,20 @@ export default {
 				this.export_modal = true;
 				this.exporting_as = key;
 			}
+		},
+		// Copy export code to clipboard
+		copyExportToClipboard: function(){
+			var el = "cssCodeExport";
+			if(this.exporting_as == 'Code'){
+				el = "regularCodeExport";
+			}
+			var range = document.createRange();
+			range.selectNode(document.getElementById(el));
+			window.getSelection().removeAllRanges(); // clear current selection
+			window.getSelection().addRange(range); // to select text
+			document.execCommand("copy");
+			window.getSelection().removeAllRanges();// to deselect
+			this.hello("Code Copied!", "fas fa-copy", "green");
 		},
 
 		// Gets correct text color based on value passed
@@ -888,6 +1134,35 @@ export default {
 
 
 
+		shiftPalette: function(old_index, new_index){
+
+			while (old_index < 0) {
+				old_index += this.currentPalette.length;
+			}
+			while (new_index < 0) {
+				new_index += this.currentPalette.length;
+			}
+			if (new_index >= this.currentPalette.length) {
+				var k = new_index - this.currentPalette.length;
+				while ((k--) + 1) {
+					arr.push(undefined);
+				}
+			}
+			this.currentPalette.splice(new_index, 0, this.currentPalette.splice(old_index, 1)[0]);
+		},
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 };
 
@@ -1009,7 +1284,6 @@ export default {
 
 	.color_block{
 		flex-grow: 3;
-		background-color: var(--red);
 		display: flex;
 		flex-direction: column;
 		box-sizing: border-box;
@@ -1190,7 +1464,10 @@ export default {
 				flex-grow: 3;
 				color: inherit;
 				font-weight: 600;
-				font-size: 0.8em;
+				font-size: 1em;
+
+				i{opacity: 0.8;}
+				i.invert{filter: invert(100%); opacity: 1;}
 
 				&:hover{
 					padding-top: 18px;
@@ -1247,6 +1524,48 @@ export default {
 		}
 	}
 	
+}
+
+// Gradient
+#gradientStage{
+	width: 100%;
+	min-height: 180px;
+	border-radius: var(--borderRadius);
+	margin: 15px auto 0 auto;
+	transition: background 0.5s ease;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	box-sizing: border-box;
+	border: 1px solid var(--border);
+	background-size: cover;
+	background-position: center center;
+
+	#gradientStageButtons{
+		display: flex;
+		box-sizing: border-box;
+		padding: 10px;
+		gap: 8px;
+		
+		button{
+			height: 34px;
+			width: 34px;
+			position: relative;
+			border-radius: var(--borderRadius);
+			background-color: rgba(255,255,255,0.25);
+			color: rgba(0,0,0,0.6);
+
+			&.active{
+				background-color: rgba(255,255,255,0.75);
+				color: var(--black);
+			}
+
+			&:hover:not(.active){
+				background-color: rgba(255,255,255,0.55);
+				color: rgba(0,0,0,0.8);
+			}
+		}
+	}
 }
 
 // Special wcag tags
@@ -1353,6 +1672,53 @@ export default {
 	}
 }
 
+
+
+
+
+
+#colorList{
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 0 0;
+
+	li{
+		height: 30px;
+		width: 100%;
+		border-radius: 0;
+		margin: 5px 0 5px 0;
+		display: flex;
+		justify-content: space-between;
+
+		button{
+			color: var(--textFade);
+
+			i{
+				font-size: 1.15em;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				width: 20px;
+				text-align: center;
+			}
+
+			&:disabled{
+				opacity: 0;
+			}
+			&:hover{
+				color: var(--text);
+			}
+		}
+
+		span.cp{
+			display: block;
+			height: 100%;
+			border-radius: calc(var(--borderRadius) / 2);
+			flex-grow: 3;
+		}
+	}
+}
 
 
 </style>

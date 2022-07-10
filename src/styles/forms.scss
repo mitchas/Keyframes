@@ -127,11 +127,16 @@ textarea {
 
 	&.small{
 		padding: 0 8px;
+		height: calc(var(--inputHeight) * 0.75);
+		
 		&::-webkit-outer-spin-button,
 		&::-webkit-inner-spin-button {
 			-webkit-appearance: none;
 			margin: 0;
 		}
+	}
+	&.fit{
+		width: fit-content;
 	}
 
     // Hover and focus states
@@ -160,6 +165,13 @@ textarea {
     &:focus {
         border-color: var(--blue) !important;
     }
+
+	// Hide controls
+	&.no-controls::-webkit-outer-spin-button,
+	&.no-controls::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 }
 
 // Textarea
@@ -511,6 +523,13 @@ a.button,
             pointer-events: none;
         }
     }
+}
+
+// Button hints - show on hover
+button:hover .hint{
+	padding: 0 12px;
+	transition: all 0.35s ease 0.75s;
+	max-width: 400px;
 }
 
 

@@ -54,43 +54,10 @@
 			color: var(--red);
 		}
 
-		.hint{
-			position: absolute;
-			left: 10%;
-			top: -72%;
-			background-color: var(--yellow);
-			line-height: 30px;
-			height: 30px;
-			font-size: 0.65em;
-			font-weight: 600;
-			white-space: pre;
-			box-sizing: border-box;
-			border-radius: calc(var(--borderRadius) / 2);
-			padding: 0;
-			transition: all 0.35s ease;
-			overflow: hidden;
-			max-width: 0px;
-			
-			@media (max-width: $screenSM) {
-				display: none;
-			}
-
-			&.left{
-				right: 10%;
-				left: unset;
-			}
-		}
-
 		&:hover,
 		&:focus{
 			background-color: var(--greyFade);
 		}
-		&:hover .hint{
-			padding: 0 12px;
-			transition: all 0.35s ease 0.75s;
-			max-width: 400px;
-		}
-
 	}
 
 	// Text input
@@ -124,6 +91,38 @@
 		@media (max-width: $screenSM) {
 			display: none;
 		}
+	}
+}
+
+// Button Hints
+.hint{
+	position: absolute;
+	left: 10%;
+	top: -72%;
+	background-color: var(--yellow);
+	line-height: 30px;
+	height: 30px;
+	font-size: 0.65em;
+	font-weight: 600;
+	white-space: pre;
+	box-sizing: border-box;
+	border-radius: calc(var(--borderRadius) / 2);
+	padding: 0;
+	transition: all 0.35s ease;
+	overflow: hidden;
+	max-width: 0px;
+	
+	@media (max-width: $screenSM) {
+		display: none;
+	}
+
+	&.left{
+		right: 10%;
+		left: unset;
+	}
+	&.bottom{
+		top: unset;
+		bottom: -72%;
 	}
 }
 
