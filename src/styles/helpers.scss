@@ -113,7 +113,9 @@
 // Achromatopsia
 .colorblind_achromatopsia{filter: url('~@/assets/color_blind_filters.svg#achromatopsia');}
 // Achromatomaly
-.colorblind_achromatomaly{filter: url('~@/assets/color_blind_filters.svg#achromatomaly');}
+.colorblind_achromatomaly{
+	filter: url('~@/assets/color_blind_filters.svg#achromatomaly');
+}
 
 
 // Spacing helpers

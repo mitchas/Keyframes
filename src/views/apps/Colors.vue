@@ -31,10 +31,11 @@
 		<div :class="'stage colorblind_' + colorblind">
 
 			<!-- Color Grid -->
-			<div id="colorGrid" :style="'background-color: ' + colorPrefs.stageBackground" :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity || colorPrefs.colorGap, 'gap': colorPrefs.colorGap}" :data-count="currentPalette.length">
+			<div id="colorGrid" :style="'background-color: ' + (colorPrefs.stageBackground ? colorPrefs.stageBackground : 'var(--background)') " :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity || colorPrefs.colorGap, 'gap': colorPrefs.colorGap}" :data-count="currentPalette.length">
 
 				<!-- Loop for Current Palette -->
-				<div class="color_block" v-for="(color, key) in currentPalette" :key="key" :style="colorStyleProperties(key)">
+				<div class="color_block" v-for="(color, key) in currentPalette" :key="key" :style="colorStyleProperties(key)" @dragover="dragSwapPosition(key)">
+				<!-- <div class="color_block" v-for="(color, key) in currentPalette" :key="key" :style="colorStyleProperties(key)" @drop.prevent="dragSwapPosition(key)" @dragenter.prevent @dragover.prevent> -->
 
 					<div class="color_block_info">
 						<!-- Name -->
@@ -57,11 +58,14 @@
 
 					<!-- Color Control Buttons -->
 					<div class="color_block_controls">
+						<!-- Adjust -->
 						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple" title="Adjust RGB"></i></button>
-						<!-- <button><i class="fas fa-lamp"></i></button> -->
+						<!-- Shades -->
 						<button><i class="fas fa-shutters" @click="color.shades = !color.shades" title="Color Shades"></i></button>
+						<!-- Delete -->
 						<button @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'color', key ] : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button>
-						<!-- <button @click="$store.getters['User/preferences'].confirm_action ? deleting_color = key : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button> -->
+						<!-- Drag -->
+						<button draggable="true" @dragstart="dragging = key" @dragend="dragging = null" v-if="!$store.getters['Device/hasTouch']"><i class="fas fa-grip-dots-vertical"></i></button>
 					</div>
 
 					<!-- Color Editor - Sliders -->
@@ -109,7 +113,6 @@
 							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 7.0}">AAA</span>
 						</div>
 					</div>
-
 					
 				</div> <!-- End Color Block-->
 			</div><!-- End ColorGrid -->
@@ -133,7 +136,7 @@
 					<!-- Gradient -->
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'gradient'" key="gradient">
 						<h3>Gradient</h3>
-						<div class="ptop-sm padded">
+						<div class="ptop-xs padded">
 
 							<!-- Gradient View -->
 							<div id="gradientStage" :style="'background: ' + gradientStyle">
@@ -159,7 +162,6 @@
 						</div>
 						<!-- Scroll adjustment area -->
 						<div class="stage-sidebar-content-scroll padded">
-
 							<!-- Angle -->
 							<transition name="basic">
 								<div class="flex" v-if="gradient_shape != 'radial'">
@@ -179,7 +181,6 @@
 									</select>
 								</div>
 							</transition>
-
 							<!-- Circles Position -->
 							<transition name="basic">
 								<div v-if="gradient_shape != 'linear'">
@@ -207,27 +208,18 @@
 									<input type="range" id="gradDeg" min="0" :max="((100/currentPalette.length) / 2).toFixed(0)" v-model="gradient_blend"/>
 								</div>
 							</transition>
-							
-							<textarea v-model="gradientStyle" class="text-small code mtop-md mbottom-lg"></textarea>
+							<!-- Gradient CSS Output -->
+							<div class="mtop-md"></div>
+							<h4>CSS Output</h4>
+							<textarea v-model="gradientStyle" class="text-small code mtop-sm" id="gradientCSS"></textarea>
+							<button class="button small mtop-xs mbottom-lg" @click="copyExportToClipboard('gradientCSS')">
+								<i class="fas fa-copy"></i>
+								<span>Copy</span>
+							</button>
 
 						</div>
 					</div>
 
-					<!-- Order -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'order'" key="order">
-						<h3>Order</h3>
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
-
-							<ul id="colorList">
-								<li v-for="(color, key) in currentPalette" :key="key" draggable="true">
-									<button :disabled="key == 0" @click="shiftPalette(key, key-1)"><i class="fas fa-angle-up"></i></button>
-									<span class="cp" :style="'background-color: rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')'"></span>
-									<button :disabled="key == currentPalette.length - 1" @click="shiftPalette(key, key+1)"><i class="fas fa-angle-down"></i></button>
-								</li>
-							</ul>
-
-						</div>
-					</div>
 
 					<!-- Color Blind -->
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'colorblind'" key="colorblind">
@@ -235,6 +227,7 @@
 						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
 							<p class="small">
 								Simulate color blindness with the options below. These filters are approximate.
+								<small class="block ptop-xs">Filters may not display on Safari or iOS browsers.</small>
 							</p>
 
 							<div class="flex mtop-xs" v-for="(type, key) in colorblind_types" :key="key">
@@ -267,8 +260,10 @@
 										<input type="number" min="0" max="255" class="small" v-model="contrast_color_b" placeholder="255"/>
 									</div>
 									<!-- Demo Contrast Text -->
-									<label class="mtop-sm">Demo Text</label>
-									<input type="text" class="mtop-xxs" v-model="contrast_demo_text" placeholder=""/>
+									<div class="input-group mtop-sm">
+										<label class="input-group-label small" for="demoTxt">Demo Text</label>
+										<input type="text" id="demoTxt" v-model="contrast_demo_text" placeholder=""/>
+									</div>
 									<!-- Reverse Colors -->
 									<div class="flex mtop-md margin-auto between">
 										<label class="vertical" for="contrastRev">Reverse Colors</label>
@@ -277,8 +272,11 @@
 								</div>
 							</transition>
 
+							<!-- Spacer -->
+							<div class="mtop-md"></div>
+
 							<!-- Information -->
-							<h5 class="mtop-lg">How does this work?</h5>
+							<h4>How does this work?</h4>
 							<p class="small">
 								This tool is based off Web Content Accessibility Guidelines, or WCAG, which are guidelines for making websites accessible.
 							</p>
@@ -335,7 +333,7 @@
 							<button type="button" v-if="editing_stored_key != null" @click="editing_stored_key = null" class="text-smaller align-center ptop-xxs text-primary">Or save as new Palette.</button>
 						</form>
 						<!-- Load existing -->
-						<h3>Load</h3>
+						<h3>Saved Palettes</h3>
 						<!-- <span class="text-smaller">{{storedPalettes}}</span> -->
 						<!-- Scrollable saved list -->
 						<transition name="basicup">
@@ -376,42 +374,69 @@
 					<div class="stage-sidebar-content" v-if="view_sidebar == 'settings'" key="settings">
 						<h3>Palette Settings</h3>
 						<div class="stage-sidebar-content-scroll">
-							<div class="padded mtop-md">
+							<div class="padded">
+
+								<h4>Order</h4>
+
+								<ul id="colorList" class="mtop-sm mbottom-sm">
+									<li v-for="(color, key) in currentPalette" :key="key" draggable="true">
+										<button :disabled="key == 0" @click="shiftPalette(key, key-1)"><i class="fas fa-angle-up"></i></button>
+										<span class="cp" :style="'background-color: rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')'"></span>
+										<button :disabled="key == currentPalette.length - 1" @click="shiftPalette(key, key+1)"><i class="fas fa-angle-down"></i></button>
+									</li>
+								</ul>
+
+								<h4>Preferences</h4>
+
 								<!-- Color Format -->
-								<label>Color Format</label>
-								<div class="aselect mtop-xxs">
-									<select v-model="active_color_format">
-										<!-- <option v-for="format in color_formats" :value="format" :key="format">{{format}}</option> -->
-										<option value="RGB/A">RGB/A</option>
-										<option disabled>HSB - Coming Soon</option>
-										<option disabled>HSL - Coming Soon</option>
-										<option disabled>CMYK - Coming Soon</option>
-									</select>
-								</div>
-								<!-- Enable Opacity -->
-								<div class="flex mtop-md between">
-									<label class="vertical" for="enableColorOp">Enable Opacity</label>
-									<input type="checkbox" id="enableColorOp" class="toggle yes-no" v-model="colorPrefs.enableOpacity"/>
-								</div>
-								<!-- Page background options -->
-								<label for="bgcolIn" class="mtop-sm">Page Background Color</label>
-								<input type="text" id="bgcolIn" class="mtop-xxs" v-model="colorPrefs.stageBackground" placeholder="#FFFFFF"/>
-								<div class="flex mtop-sm between">
-									<label class="vertical" for="enableCheckers">Checkered Background</label>
-									<input type="checkbox" id="enableCheckers" class="toggle on-off" v-model="colorPrefs.enableCheckers"/>
+								<div class="input-group max-width-small mtop-sm">
+									<span class="input-group-label small" for="colorFormatInput">Format</span>
+									<div class="aselect">
+										<select v-model="active_color_format" id="colorFormatInput">
+											<!-- <option v-for="format in color_formats" :value="format" :key="format">{{format}}</option> -->
+											<option value="RGB/A">RGB/A</option>
+											<option disabled>HSB - Coming Soon</option>
+											<option disabled>HSL - Coming Soon</option>
+											<option disabled>CMYK - Coming Soon</option>
+										</select>
+									</div>
 								</div>
 								<!-- Color Names -->
-								<div class="flex mtop-md between">
+								<div class="flex mtop-sm between">
 									<label class="vertical" for="enableColorNames">Name Colors</label>
 									<input type="checkbox" id="enableColorNames" class="toggle yes-no" v-model="colorPrefs.customNames"/>
 								</div>
 								<!-- Separate colors -->
-								<div class="flex mtop-md between">
+								<div class="flex mtop-sm between">
 									<label class="vertical" for="colorGapTog">Gap Between Colors</label>
 									<input type="checkbox" id="colorGapTog" class="toggle yes-no" v-model="colorPrefs.colorGap"/>
 								</div>
+								<!-- Enable Opacity -->
+								<div class="flex mtop-sm between">
+									<label class="vertical" for="enableColorOp">Enable Opacity</label>
+									<input type="checkbox" id="enableColorOp" class="toggle yes-no" v-model="colorPrefs.enableOpacity"/>
+								</div>
+								<transition name="basic">
+									<div v-if="colorPrefs.enableOpacity || colorPrefs.colorGap">
+										<!-- Checkered Background -->
+										<div class="flex mtop-sm between">
+											<label class="vertical" for="enableCheckers">Checkered Background</label>
+											<input type="checkbox" id="enableCheckers" class="toggle on-off" v-model="colorPrefs.enableCheckers"/>
+										</div>
+										<!-- Page BG Color -->
+										<div class="input-group max-width-small mtop-sm">
+											<span class="input-group-label small" for="bgcolIn">BG Color</span>
+											<input type="text" id="bgcolIn" v-model="colorPrefs.stageBackground" placeholder="#FFFFFF"/>
+										</div>
+									</div>
+								</transition>
+
+								<!-- Gap -->
+								<div class="mtop-md"></div>
+
+								<h4>Danger</h4>
 								<!-- Reset Palette -->
-								<button class="button mtop-lg mbottom-lg margin-auto block" @click="clearPalette()" :class="{'red' : resetting_palette, 'grey': !resetting_palette}">
+								<button class="button mtop-sm mbottom-lg margin-auto block" @click="clearPalette()" :class="{'red' : resetting_palette, 'grey': !resetting_palette}">
 									<i :class="{'far fa-exclamation-circle' : resetting_palette, 'far fa-eraser' : !resetting_palette}"></i>
 									<span>{{resetting_palette ? "Again to Confirm" : "Reset Palette"}}</span>
 								</button>
@@ -541,6 +566,7 @@ export default {
 			view_sidebar: null,
 			active_color_format: "RGB/A",
 			confirm_modal: null, // [tpe, key]
+			dragging: null,
 			// Saving
 			nameToSave: "",
 			// Exporting
@@ -573,7 +599,6 @@ export default {
 			// App Definitions / Loops
 			secondary_nav: [
 				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
-				{title: "Order", id: "order",  icon: "fas fa-arrow-down-arrow-up"},
 				{title: "Color Blindness", id: "colorblind",  icon: "fas fa-glasses"},
 				{title: "Contrast", id: "contrast",  icon: "fas fa-circle-half-stroke"},
 				{title: "Gradient", id: "gradient",  icon: "fas fa-blender"},
@@ -667,7 +692,7 @@ export default {
 					}else if(colors.length -1 == key){
 						background = background + 100 + "%"
 					}else{
-						background = background + (100 / (colors.length - 1) * key) + "%"
+						background = background + (100 / (colors.length - 1) * key).toFixed(2) + "%"
 					}
 					
 				}else{ 
@@ -955,6 +980,27 @@ export default {
 			this.$store.dispatch("User/DEBOUNCE_SAVE_APP_DATA");
 		},
 
+		// Re-order
+		shiftPalette: function(old_index, new_index){
+			while (old_index < 0) {
+				old_index += this.currentPalette.length;
+			}
+			while (new_index < 0) {
+				new_index += this.currentPalette.length;
+			}
+			if (new_index >= this.currentPalette.length) {
+				var k = new_index - this.currentPalette.length;
+				while ((k--) + 1) {
+					arr.push(undefined);
+				}
+			}
+			this.currentPalette.splice(new_index, 0, this.currentPalette.splice(old_index, 1)[0]);
+		},
+		dragSwapPosition:function(key){
+			this.shiftPalette(this.dragging, key);
+			this.dragging = key;
+		},
+
 		// Export functions
 		exportWith: function(key){
 			if(key == "Link"){
@@ -972,10 +1018,13 @@ export default {
 			}
 		},
 		// Copy export code to clipboard
-		copyExportToClipboard: function(){
+		copyExportToClipboard: function(element){
 			var el = "cssCodeExport";
 			if(this.exporting_as == 'Code'){
 				el = "regularCodeExport";
+			}
+			if(element){
+				el = element;
 			}
 			var range = document.createRange();
 			range.selectNode(document.getElementById(el));
@@ -1134,35 +1183,6 @@ export default {
 
 
 
-		shiftPalette: function(old_index, new_index){
-
-			while (old_index < 0) {
-				old_index += this.currentPalette.length;
-			}
-			while (new_index < 0) {
-				new_index += this.currentPalette.length;
-			}
-			if (new_index >= this.currentPalette.length) {
-				var k = new_index - this.currentPalette.length;
-				while ((k--) + 1) {
-					arr.push(undefined);
-				}
-			}
-			this.currentPalette.splice(new_index, 0, this.currentPalette.splice(old_index, 1)[0]);
-		},
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 };
 
@@ -1192,6 +1212,8 @@ export default {
 		border-left: 1px solid var(--border);
 		box-shadow: var(--shadow);
 		@media (max-width: $screenSM) {
+			max-height: 100%;
+			overflow: auto;
 			position: fixed;
 			right: 0;
 		}
@@ -1217,7 +1239,7 @@ export default {
 			flex-direction: column;
 			height: 100%;
 
-			h3{
+			h3, h4{
 				width: 100%;
 				text-align: center;
 				font-size: 0.9em;
@@ -1232,15 +1254,33 @@ export default {
 				&:first-child{
 					border-top: none;
 				}
+
+			}
+			h4{
+				font-size: 0.75em;
+				font-weight: 500;
+				padding: 8px 0;
 			}
 
 			.stage-sidebar-content-scroll{
 				flex-grow: 3;
 				overflow: auto;
 				box-sizing: border-box;
+				@media (max-width: $screenSM) {
+
+					&:last-child{
+						padding-bottom: 100px;
+					}
+				}
 			}
 			.padded{
-				padding: 0 15px;
+				padding-left: 15px;
+				padding-right: 15px;
+
+				h4{
+					width: calc(100% + 30px);
+					margin-left: -15px;
+				}
 			}
 
 		}
@@ -1510,12 +1550,6 @@ export default {
 			
 		}
 
-		// Luminance
-		.color_block_luminance{
-			background-color: red;
-		}
-		
-
 		&:hover,
 		&:focus-within{
 			.color_block_controls{
@@ -1679,7 +1713,6 @@ export default {
 
 #colorList{
 	list-style-type: none;
-	margin: 0;
 	padding: 0 0 0 0;
 
 	li{

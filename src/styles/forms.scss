@@ -17,7 +17,7 @@ label,
     padding: 2px 0 6px;
     display: block;
     color: var(--text);
-    font-size: 15px;
+    font-size: 0.9em;
     font-weight: 500;
 
     b {
@@ -32,6 +32,9 @@ label,
         flex-direction: column;
         justify-content: center;
     }
+	&.small{
+		font-size: 0.8em;
+	}
 
 }
 
@@ -237,7 +240,6 @@ select {
         border-bottom-left-radius: var(--borderRadius);
         background-color: var(--background);
         border: 1px solid var(--border);
-        border-right: none;
         white-space: nowrap;
 
         i {
