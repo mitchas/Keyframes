@@ -13,6 +13,97 @@
 	overflow: auto;
 }
 
+// Main App Layout
+.app-layout{
+	display: flex;
+	flex-grow: 3;
+	overflow: hidden;
+	box-sizing: border-box;
+	padding-top: calc(var(--topBarHeight) * 0.75);
+
+	.app-sidebar{
+		width: 0;
+		height: 100%;
+		transition: var(--transition);
+		background-color: var(--layer);
+		border-left: 1px solid var(--border);
+		box-shadow: var(--shadow);
+		@media (max-width: $screenSM) {
+			max-height: 100%;
+			overflow: auto;
+			position: fixed;
+			right: 0;
+		}
+
+		&.expanded{
+			transition: var(--transition);
+			width: 33%;
+			min-width: 320px;
+			max-width: 500px;
+
+			@media (max-width: $screenSM) {
+				width: 80vw;
+				max-width: 400px;
+			}
+		}
+
+
+		// Content
+		.app-sidebar-content{
+			display: flex;
+			box-sizing: border-box;
+			overflow: hidden;
+			flex-direction: column;
+			height: 100%;
+
+			h3, h4{
+				width: 100%;
+				text-align: center;
+				font-size: 0.9em;
+				line-height: 0.9em;
+				margin: 0;
+				font-weight: 600;
+				padding: 16px 0;
+				border-bottom: 1px solid var(--borderFade);
+				background-color: var(--background);
+				border-top: 1px solid var(--borderFade);
+
+				&:first-child{
+					border-top: none;
+				}
+
+			}
+			h4{
+				font-size: 0.75em;
+				font-weight: 500;
+				padding: 8px 0;
+			}
+
+			.app-sidebar-content-scroll{
+				flex-grow: 3;
+				overflow: auto;
+				box-sizing: border-box;
+				@media (max-width: $screenSM) {
+
+					&:last-child{
+						padding-bottom: 100px;
+					}
+				}
+			}
+			.padded{
+				padding-left: 15px;
+				padding-right: 15px;
+
+				h4{
+					width: calc(100% + 30px);
+					margin-left: -15px;
+				}
+			}
+
+		}
+	}
+
+}
 
 // Secondary Nav
 .secondary-nav{

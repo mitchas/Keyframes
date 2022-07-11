@@ -7,12 +7,8 @@ Terms of Service
 
 		<!-- Page Header -->
 		<h1 class="mtop-md">Terms of Service</h1>
-		<div class="tag inline-block yellow mtop-xs">
-			<i class="far fa-sync-alt"></i>
-			<span>{{lastUpdate}}</span>
-		</div>
 		<p>
-			{{company}}'s Terms of Service was last updated and went into effect <b>{{lastUpdate}}</b>.
+			{{company}}'s Terms of Service was last updated and went into effect <b>July 11, 2022</b>.
 		</p>
 
 		<!-- Start of terms -->
@@ -102,7 +98,6 @@ export default {
 	],
 	data() {
 		return {
-			lastUpdate: this.$store.getters["Changelog/lastupdate"],
 			company: process.env.VUE_APP_COMPANY_NAME,
 			url: process.env.VUE_APP_FULL_URL,
 		};

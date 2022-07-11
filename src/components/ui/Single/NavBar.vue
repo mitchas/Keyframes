@@ -24,11 +24,38 @@ Top nav bar - fixed
 					<i :class="app.icon"></i>
 					<b>{{app.title}}</b>
 				</router-link>
-				<!-- Blank/Gap -->
-				<a>&nbsp;</a>
+			
+				<!-- Featured Link -->
+				<button class="featured" @click="sponsorModal = true;">
+					<i class="fas fa-stars"></i>
+					<b>Your Project</b>
+				</button>
 
 			</div>
 		</nav>
+
+		<!-- Sponsor Modal -->
+		<!-- Export Data Modal -->
+		<Modal size=""
+			color="blue"
+			:show="sponsorModal"
+			title="Sponsor Keyframes.app"
+			icon="fas fa-circle-heart"
+			confirmIcon="fas fa-arrow-up-right-from-square"
+			confirmText="Become a Sponsor"
+			dismissText="Close"
+			@confirmed="navigate('/sponsor'); sponsorModal = false"
+			@dismissed="sponsorModal = false">
+
+			<p class="no-padding">
+				Promote your project or company to a bunch* of developers each week with a link (and/or a popup like this) right at the end of the nav bar.
+			</p>
+
+			<p class="no-padding small mtop-md">
+				* I don't actually know the number - because of very simple tracking for privacy reasons. The bare minimum visitors on any given day is around 250, much higher than that early in the week.
+			</p>
+
+		</Modal>
 
 
 
@@ -77,13 +104,14 @@ Top nav bar - fixed
 
 import shortcut from "@/components/mixins/keyboard.js";
 // import Launcher from "@/components/ui/Single/Launcher";
+import Modal from "@/components/ui/Modals/Modal";
 
 
 // Components
 export default {
 	name: "TopBar",
 	components: {
-		// Launcher,
+		Modal,
 	},
 	mixins: [
 		// Dismiss modals with escape
@@ -94,6 +122,7 @@ export default {
 	data() {
 		return {
 			appLauncherVisible: false,
+			sponsorModal: false,
 		};
 	},
 	computed: {
@@ -161,21 +190,22 @@ export default {
 		#appList{
 			width: 100%;
 			display: flex;
-			gap: 8px;
 			box-sizing: border-box;
 			padding-left: 25px;
 			overflow-x: auto;
+			gap: 10px;
 
 			@media (max-width: $screenSM) {
 				gap: 3px;
 			}
 
-			a{
+			a,
+			button{
 				display: flex;
 				font-size: 0.85rem;
 				font-weight: 500;
 				gap: 12px;
-				padding: 10px 20px;
+				padding: 10px 10px;
 				margin: 8px 0;
 				white-space: pre;
 				position: relative;
@@ -185,12 +215,15 @@ export default {
 				@media (max-width: $screenSM) {
 					font-size: 0.8rem;
 					gap: 8px;
-					padding: 8px 12px;
+					padding: 8px 10px;
 					margin: 8px 0;
 				}
 
 				&:hover{
 					background-color: var(--background);
+					b{
+						text-decoration: underline;
+					}
 				}
 
 				&.active{
@@ -202,13 +235,22 @@ export default {
 						background-color: var(--primary);
 					}
 				}
+				&.featured{
+					color: var(--greenText);
+					background-color: var(--green);
+
+					&:hover{
+						filter: brightness(94%);
+					}
+				}
 				i,b{
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
+					height: 100%;
 				}
 				i{
-					font-size: 1.4rem;
+					font-size: 1.3rem;
 					text-decoration: none !important;
 					@media (max-width: $screenSM) {
 						font-size: 1.2rem;
@@ -216,8 +258,11 @@ export default {
 				}
 
 				&:last-child{
-					padding-right: 55px;
+					margin-right: 55px;
 				}
+			}
+			button{
+				width: fit-content;
 			}
 
 			// Expanded App Launcher

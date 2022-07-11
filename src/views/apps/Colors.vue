@@ -11,9 +11,9 @@
 
 			<!-- Add color -->
 			<button @click="addColor()">
-				<i class="fas fa-plus-circle"></i><span class="hint">Add Color</span>
+				<i class="fas fa-plus-circle"></i><span class="hint">Add Color &#191;</span>
 			</button>
-			<label>{{currentPalette.length}} color{{currentPalette.length > 1 ? 's' : ''}}</label>
+			<label>{{currentPalette.length}} color{{currentPalette.length == 1 ? '' : 's'}}</label>
 
 			<!-- Gap -->
 			<div class="spacer"></div>
@@ -28,7 +28,7 @@
 
 		
 		<!-- Main stage area -->
-		<div :class="'stage colorblind_' + colorblind">
+		<div :class="'app-layout colorblind_' + colorblind">
 
 			<!-- Color Grid -->
 			<div id="colorGrid" :style="'background-color: ' + (colorPrefs.stageBackground ? colorPrefs.stageBackground : 'var(--background)') " :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity || colorPrefs.colorGap, 'gap': colorPrefs.colorGap}" :data-count="currentPalette.length">
@@ -119,22 +119,12 @@
 
 
 			<!-- Sidebar -->
-			<div class="stage-sidebar" :class="{'expanded': view_sidebar != null}">
+			<div class="app-sidebar" :class="{'expanded': view_sidebar != null}">
 
 				<transition-group name="basic">
 
-
-					<!-- Adjustments -->
-					<!-- <div class="stage-sidebar-content" v-if="view_sidebar == 'adjust'" :key="0">
-						<h3>Adjust (Preview)</h3>
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
-
-						</div>
-					</div> -->
-
-
 					<!-- Gradient -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'gradient'" key="gradient">
+					<div class="app-sidebar-content" v-if="view_sidebar == 'gradient'" key="gradient">
 						<h3>Gradient</h3>
 						<div class="ptop-xs padded">
 
@@ -161,7 +151,7 @@
 
 						</div>
 						<!-- Scroll adjustment area -->
-						<div class="stage-sidebar-content-scroll padded">
+						<div class="app-sidebar-content-scroll padded">
 							<!-- Angle -->
 							<transition name="basic">
 								<div class="flex" v-if="gradient_shape != 'radial'">
@@ -222,9 +212,9 @@
 
 
 					<!-- Color Blind -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'colorblind'" key="colorblind">
+					<div class="app-sidebar-content" v-if="view_sidebar == 'colorblind'" key="colorblind">
 						<h3>Color Blindness</h3>
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
+						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm padded">
 							<p class="small">
 								Simulate color blindness with the options below. These filters are approximate.
 								<small class="block ptop-xs">Filters may not display on Safari or iOS browsers.</small>
@@ -243,9 +233,9 @@
 
 
 					<!-- Contrast -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'contrast'" key="contrast">
+					<div class="app-sidebar-content" v-if="view_sidebar == 'contrast'" key="contrast">
 						<h3>Contrast</h3>
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm padded">
+						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm padded">
 							<div class="flex mtop-sm margin-auto between">
 								<label class="vertical" for="contrastTog">View Contrast</label>
 								<input type="checkbox" id="contrastTog" class="toggle yes-no" v-model="contrast_enabled"/>
@@ -294,9 +284,9 @@
 
 
 					<!-- Export -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'export'" key="export">
+					<div class="app-sidebar-content" v-if="view_sidebar == 'export'" key="export">
 						<h3>Export</h3>
-						<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm">
+						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm">
 							<!-- Loop export_options to create grid of buttons -->
 							<div class="button-grid padded">
 								<button class="button large-icon grey" v-for="(option, key) in export_options" :key="key" @click="exportWith(key)">
@@ -318,7 +308,7 @@
 
 
 					<!-- Save / Load -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'save'" key="save">
+					<div class="app-sidebar-content" v-if="view_sidebar == 'save'" key="save">
 						<h3>Save</h3>
 						<!-- Save Form -->
 						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
@@ -337,7 +327,7 @@
 						<!-- <span class="text-smaller">{{storedPalettes}}</span> -->
 						<!-- Scrollable saved list -->
 						<transition name="basicup">
-							<div class="stage-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
+							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
 								<!-- Stored palettes from local storage, loop to create display -->
 								<transition-group name="list">
 									<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key">
@@ -371,9 +361,9 @@
 
 
 					<!-- Settings -->
-					<div class="stage-sidebar-content" v-if="view_sidebar == 'settings'" key="settings">
+					<div class="app-sidebar-content" v-if="view_sidebar == 'settings'" key="settings">
 						<h3>Palette Settings</h3>
-						<div class="stage-sidebar-content-scroll">
+						<div class="app-sidebar-content-scroll">
 							<div class="padded">
 
 								<h4>Order</h4>
@@ -1197,96 +1187,7 @@ export default {
 	max-height: 100vh;	
 }
 
-.stage{
-	display: flex;
-	flex-grow: 3;
-	overflow: hidden;
-	box-sizing: border-box;
-	padding-top: calc(var(--topBarHeight) * 0.75);
 
-	.stage-sidebar{
-		width: 0;
-		height: 100%;
-		transition: var(--transition);
-		background-color: var(--layer);
-		border-left: 1px solid var(--border);
-		box-shadow: var(--shadow);
-		@media (max-width: $screenSM) {
-			max-height: 100%;
-			overflow: auto;
-			position: fixed;
-			right: 0;
-		}
-
-		&.expanded{
-			transition: var(--transition);
-			width: 33%;
-			min-width: 320px;
-			max-width: 500px;
-
-			@media (max-width: $screenSM) {
-				width: 80vw;
-				max-width: 400px;
-			}
-		}
-
-
-		// Content
-		.stage-sidebar-content{
-			display: flex;
-			box-sizing: border-box;
-			overflow: hidden;
-			flex-direction: column;
-			height: 100%;
-
-			h3, h4{
-				width: 100%;
-				text-align: center;
-				font-size: 0.9em;
-				line-height: 0.9em;
-				margin: 0;
-				font-weight: 600;
-				padding: 16px 0;
-				border-bottom: 1px solid var(--borderFade);
-				background-color: var(--background);
-				border-top: 1px solid var(--borderFade);
-
-				&:first-child{
-					border-top: none;
-				}
-
-			}
-			h4{
-				font-size: 0.75em;
-				font-weight: 500;
-				padding: 8px 0;
-			}
-
-			.stage-sidebar-content-scroll{
-				flex-grow: 3;
-				overflow: auto;
-				box-sizing: border-box;
-				@media (max-width: $screenSM) {
-
-					&:last-child{
-						padding-bottom: 100px;
-					}
-				}
-			}
-			.padded{
-				padding-left: 15px;
-				padding-right: 15px;
-
-				h4{
-					width: calc(100% + 30px);
-					margin-left: -15px;
-				}
-			}
-
-		}
-	}
-
-}
 
 // Color Grid / Display
 #colorGrid{

@@ -23,7 +23,7 @@ export const routes = [
 		}
 	},
 	// Apps
-		// Tasks
+		// Animate
 		{
 			path: "/animate",
 			name: "animations",
@@ -32,6 +32,7 @@ export const routes = [
 				title: "Animations — " + AppName,
 			}
 		},
+		// Colors
 		{
 			path: "/colors/:urlColors?",
 			name: "colors",
@@ -40,10 +41,36 @@ export const routes = [
 				title: "Colors — " + AppName,
 			}
 		},
+		{
+			path: "/colors2/",
+			name: "colors",
+			component: () => import(/* webpackChunkName: "colors" */ "./views/apps/OGColors.vue"),
+			meta: {
+				title: "Colors — " + AppName,
+			}
+		},
+		// Characters
+		{
+			path: "/characters",
+			name: "characters",
+			component: () => import(/* webpackChunkName: "colors" */ "./views/apps/Characters.vue"),
+			meta: {
+				title: "Colors — " + AppName,
+			}
+		},
 	// 
 	// ! Static Docs / Technical
 	//
 	// 
+	//* Sponsor
+	{
+		path: "/sponsor",
+		name: "sponsor",
+		component: () => import(/* webpackChunkName: "sponsor" */ "./views/other/docs/Sponsor.vue"),
+		meta: {
+			title: "Sponsor — " + AppName,
+		}
+	},
 	//* Changelog
 	{
 		path: "/changelog",

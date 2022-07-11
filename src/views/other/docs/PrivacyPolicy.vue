@@ -8,12 +8,8 @@ Privacy Policy Document document
 
 		<!-- Header -->
 		<h1 class="mtop-md">Privacy Policy</h1>
-		<div class="tag yellow mtop-xs inline-block">
-			<i class="far fa-sync-alt"></i>
-			<span>{{lastUpdate}}</span>
-		</div>		
 		<p>
-			{{company}}'s Privacy Policy was last updated and went into effect <b>{{lastUpdate}}</b>.
+			{{company}}'s Privacy Policy was last updated and went into effect <b>July 11, 2022</b>.
 		</p>
 
 		<!-- Start of policy -->
@@ -96,7 +92,6 @@ export default {
 	},
 	data() {
 		return {
-			lastUpdate: this.$store.getters["Changelog/lastupdate"],
 			company: process.env.VUE_APP_COMPANY_NAME,
 			url: process.env.VUE_APP_FULL_URL,
 		};
