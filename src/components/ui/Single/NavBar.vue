@@ -48,7 +48,7 @@ Top nav bar - fixed
 			@dismissed="sponsorModal = false">
 
 			<p class="no-padding">
-				Promote your project or company to a bunch* of developers each week with a link (and/or a popup like this) right at the end of the nav bar.
+				Promote your project or company to a bunch* of developers each week with a link and a popup like this right at the end of the nav bar.
 			</p>
 
 			<p class="no-padding small mtop-md">

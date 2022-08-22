@@ -1,9 +1,9 @@
 <!--
-	Animations App
+	Shadows App
 -->
 
 <template>
-	<div class="fixed-page" id="animationsApp">
+	<div class="fixed-page" id="shadowsApp">
 
 		<!-- Secondary nav / Toolbar -->
 		<nav class="secondary-nav">
@@ -29,7 +29,7 @@
 
 		<div class="app-layout">
 
-			<div class="app-stage" :style="'background: ' + working.background + ' !important;'">
+			<div class="app-stage">
 				{{view_sidebar}}
 			</div>
 
@@ -38,32 +38,9 @@
 			<div class="app-sidebar" :class="{'expanded': view_sidebar != null}">
 
 				<transition-group name="basic">
-
-					<!-- Target Element -->
-					<div class="app-sidebar-content" v-if="view_sidebar == 'target'" :key="0">
-						<h3>Target Element</h3>
-
-						<div class="app-sidebar-content-scroll padded">
-							<!-- Page BG Color -->
-							<div class="input-group max-width-small mtop-sm">
-								<span class="input-group-label small" for="bgcolIn">Background</span>
-								<input type="text" id="bgcolIn" v-model="working.background" placeholder="#FFFFFF"/>
-							</div>
-							<p class="small mtop-sm">
-								You can change the HTML and CSS for the animation target element, just make sure the element(s) you want the animation to run on to use the <code>#target</code> ID. 
-							</p>
-							<!-- Target HTML -->
-							<label class="mtop-sm">Target Element HTML</label>
-							<textarea v-model="working.targetHTML" class="text-small code mtop-xxs pre"></textarea>
-							<!-- Target CSS -->
-							<label class="mtop-md">Target Element CSS</label>
-							<textarea v-model="working.targetCSS" class="text-small code mtop-xxs tall mbottom-xl pre"></textarea>
-						</div>
-					</div>
-
-					<!-- Get CSS -->
-					<div class="app-sidebar-content" v-if="view_sidebar == 'code'" :key="0">
-						<h3>Get CSS</h3>
+					<!-- Export -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'export'" :key="0">
+						<h3>Export</h3>
 					</div>
 					
 					<!-- Save -->
@@ -98,8 +75,9 @@
 <script>
 // Components
 
+
 export default {
-	name: "Animations",
+	name: "Template",
 
 	components: {
 	},
@@ -109,12 +87,6 @@ export default {
 
 	data() {
 		return {
-			working: {
-				background: "#FFFFFF",
-				targetHTML: "<div class=\"s-card\" id=\"target\">\n    <i class=\"fas fa-hand-wave\">\n</div>",
-				targetCSS: ".s-card{\n    display: block; \n    box-sizing: border-box; \n    padding: 50px 100px; \n    border-radius: 5px; \n    background: #FFFFFF;\n    border: 1px solid rgba(24, 48, 98, 0.1);\n    font-size:52px;\n    color: #00131C; \n}",
-			},
-
 			view_sidebar: null,
 			resetting_default: false,
 
@@ -122,7 +94,7 @@ export default {
 				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
 				{title: "Shadow Layers", id: "layers",  icon: "fas fa-layer-group"},
 				{title: "Target Element", id: "target",  icon: "fas fa-bullseye"},
-				{title: "Get CSS", id: "code",  icon: "fas fa-code"},
+				{title: "Export", id: "export",  icon: "fas fa-share-nodes"},
 				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
 				{title: "Settings", id: "settings",  icon: "fas fa-bars"},
 			],
@@ -178,7 +150,7 @@ export default {
 
 <style lang="scss">
 
-#animationsApp{
+#shadowsApp{
 	display: flex;
 	flex-direction: column;
 }

@@ -41,12 +41,13 @@ export const routes = [
 				title: "Colors — " + AppName,
 			}
 		},
+		// Shadows
 		{
-			path: "/colors2/",
-			name: "colors",
-			component: () => import(/* webpackChunkName: "colors" */ "./views/apps/OGColors.vue"),
+			path: "/shadows/",
+			name: "shadows",
+			component: () => import(/* webpackChunkName: "shadows" */ "./views/apps/Shadows.vue"),
 			meta: {
-				title: "Colors — " + AppName,
+				title: "Shadows — " + AppName,
 			}
 		},
 		// Characters
@@ -58,6 +59,16 @@ export const routes = [
 				title: "Colors — " + AppName,
 			}
 		},
+		// Template
+		{
+			path: "/template/",
+			name: "template",
+			component: () => import(/* webpackChunkName: "colors" */ "./views/apps/AppTemplate.vue"),
+			meta: {
+				title: "Template — " + AppName,
+			}
+		},
+		
 	// 
 	// ! Static Docs / Technical
 	//

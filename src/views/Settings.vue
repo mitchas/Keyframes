@@ -131,7 +131,7 @@
 		</p>
 		<p class="small mbottom-md">
 			This means your data will <b>not</b> sync between devices, and if you clear your browser data, you will lose your {{appName}} data. 
-			Download and backup your data file regularly if you're worried. We may add accounts and syncing later.
+			Download and backup your data file regularly if you're worried. Snycing may be added later.
 		</p>
 
 		<!-- Data Controls -->
@@ -156,7 +156,7 @@
 		</p>
 		<p class="small mbottom-md">
 			<b>TL;DR:</b>
-			This app is as private as it gets. We don't save <b>any</b> of your data anywhere. It's all on your computer. There are no ads, third-party libraries, or cookies.
+			This app is as private as it gets. We don't save <b>any</b> of your data anywhere. It's all on your computer. No ad networks, third-party libraries, or cookies.
 			<br/>
 			It does have Analytics, but it's self-hosted and only tracks which pages or apps are viewed and how many times.
 		</p>
@@ -175,7 +175,11 @@
 
 		<!-- Development -->
 		<h3 class="mtop-xl">Development</h3>
-		<p class="mbottom-md">
+		<p class="mbottom-xxs">
+			<b>Stack: &nbsp;</b> <a href="https://vuejs.org/" target="_blank">Vue.js</a>, Local Storage, <a href="https://vercel.com" target="_blank">Vercel</a> hosting, <a href="https://matomo.org/" target="_blank">Matomo</a> self-hosted analytics.
+			<small class="block"><b>Third-Party: &nbsp;</b> <a href="https://day.js.org/" target="_blank">Day.js</a> for dates, <a href="http://numeraljs.com/" target="_blank">Numeral.js</a> for numbers, <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> Pro for icons.</small>
+		</p>
+		<p class="mbottom-sm">
 			View the changelog for the latest updates & changes. 
 			<br/>
 			The design page is for previewing UI elements.
@@ -192,41 +196,19 @@
 			<span>Design</span>
 		</router-link>
 
-		<!-- Other apps -->
-		<h3 class="mtop-xl">But wait, there's more</h3>
-		<p>
-			Different tools, just as private & easy to use. 
-		</p>
-
-		<div class="project-display mtop-md">
-
-			<!-- Keyframes -->
-			<a href="https://tidy.camp" target="_blank" class="project">
-				<div><img src="@/assets/projects/tidycamp.png"/></div>
-				<div class="project-info">
-					<h4>Tidy.Camp</h4>
-					<p class="small">
-						Dead simple visual tools to for web designers & developers. Easily create @keyframe animations, color palettes, box shadows, and more.
-					</p>
-				</div>
-			</a>
-
-			<!-- Ceev -->
-			<a href="https://ceev.io" target="_blank" class="project">
-				<div><img src="@/assets/projects/ceev.png"/></div>
-				<div class="project-info">
-					<h4>Ceev.io</h4>
-					<p class="small">
-						An incredibly easy way to create and design a resume in minutes, for free. Export as a PDF, or save it to edit later.
-					</p>
-				</div>
-			</a>
-
+		<div class="max-width mtop-xl">
+			<h3>Hey!</h3>
+			<p>These apps are free - but if you find them useful and want to motivate me to keep them updated and add more features,  <a href="https://www.buymeacoffee.com/mitchs" target="_blank" class="ul">Buy me a Coffee</a>, or send a tip on <a href="https://account.venmo.com/u/mitchas" target="_blank" class="ul">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank" class="ul">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank" class="ul">PayPal</a>.</p>
 		</div>
 
 		<div class="max-width mtop-xl">
-			<h3>Hey!</h3>
-			<p>These apps are free - but if you find them useful and want to help keep them running, <a href="https://www.buymeacoffee.com/mitchs" target="_blank">Buy me a Coffee</a>, or <a href="https://account.venmo.com/u/mitchas" target="_blank">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank">PayPal</a>.</p>
+			<h3>Have a project to promote?</h3>
+			<p class="mbottom-sm">Sponsor Keyframes and get your project in front of hundreds of developers each day.</p>
+			<router-link to="/sponsor" class="button grey mbottom-xs">
+				<i class="fas fa-heart-circle"></i>
+				<span>Become a Sponsor</span>
+			</router-link>
+
 		</div>
 
 		<!-- Export Data Modal -->

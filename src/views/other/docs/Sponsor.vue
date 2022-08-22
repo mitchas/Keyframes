@@ -8,11 +8,15 @@ Sponsor
 		<h2>Sponsor Keyframes.app</h2>
 
 		<p>
-			Rather than using ad networks that track everything, the only Ads on Keyframes are simple sponsor links and information that blend into the UI.
+			Get your business or side project in front of hundreds* of developers and designers each day.
 		</p>
 
 		<p>
-			Check out the options below then send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a> with the package you'd like. I'll get the content from you, send an invoice, and can usually get it live or scheduled within an hour.
+			Check out the options below then send me an email at <a href="mailto:hello@hotdi.sh" target="_blank">hello@hotdi.sh</a> with the package you would like. I'll get the content from you, send an invoice, and can usually get it live or scheduled within an hour or whenever you would like.
+		</p>
+
+		<p class="small">
+			*Because of limited tracking, I don't have an accurate user count. The bare minimum visitors on any given day is around 250 (weekend days), and normally 2-3x higher than that early in the week.
 		</p>
 
 
@@ -24,7 +28,7 @@ Sponsor
 		<ul>
 			<li>Link to your URL at the end of the nav bar.</li>
 			<li class="mleft-md">The color of your choice, or green if you don't care.</li>
-			<li>Link can be direct or to a Popup / Modal with whatever content you'd like inside.</li>
+			<li>Link can be direct or to a Popup / Modal with whatever content you would like inside.</li>
 			<li>Icon of your choice - either logo or selection from Font Awesome.</li>
 		</ul>
 		<h5>What I get:</h5>
@@ -40,7 +44,7 @@ Sponsor
 		</p>
 		<h5>What you get:</h5>
 		<ul>
-			<li>A banner ad in the menu of one of the apps.</li>
+			<li>A small banner ad in the menu of one of the apps.</li>
 			<li class="mleft-md">Text-based prefered, but I'll accept well-designed banner images too!</li>
 		</ul>
 		<h5>What I get:</h5>

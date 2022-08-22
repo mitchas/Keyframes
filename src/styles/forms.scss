@@ -36,6 +36,10 @@ label,
 		font-size: 0.8em;
 	}
 
+	&.w100{
+		width: 130px;
+	}
+
 }
 
 // Required asterisk
@@ -107,6 +111,7 @@ input[type="password"],
 input[type="number"],
 input[type="search"],
 input[type="tel"],
+input[type="color"],
 input[type="url"],
 .text-input,
 .input-style,
@@ -176,18 +181,30 @@ textarea {
 		margin: 0;
 	}
 }
+input[type="color"]{
+	max-width: 60px;
+	padding: 0 5px;
+	border-radius: 0 !important;
+}
 
 // Textarea
 textarea {
     min-height: 120px;
     width: 100%;
     padding: 18px;
+
+	&.tall{
+		min-height: 200px;
+	}
+
+	&.pre{
+		white-space: pre;
+	}
 }
 // Select needs own height definition
 select {
     -moz-appearance: none;
     padding: 0 10px;
-    text-transform: capitalize;
 }
 // Wrap selects in .aselect for dropdowns
 .aselect {
@@ -336,7 +353,6 @@ a.button,
 .button,
 .cdx-button {
     border-radius: var(--borderRadius);
-    border-radius: calc(var(--borderRadius) * 1.25);
     // box-shadow: var(--shadow);
     font-size: 0.9rem;
     font-weight: 600;
@@ -474,7 +490,7 @@ a.button,
         font-size: 13px;
         padding: 10px 15px;
         border-radius: var(--borderRadius);
-        border-radius: calc(var(--borderRadius) * 1.25);
+        border-radius: calc(var(--borderRadius) / 1.5);
 
         // Spacing
         i {

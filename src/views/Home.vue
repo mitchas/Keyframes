@@ -6,16 +6,12 @@
 	<div>
 
 
-		<div class="max-width margin-auto padded">
+		<div class="max-width-large margin-auto padded">
 
-			<div id="homeLogo">
-				<img src="@/assets/branding/logo-light.png" title="Logo" alt="Logo" v-if="!$store.getters['User/darkMode']"/>
-				<img src="@/assets/branding/logo-dark.png"  title="Logo" alt="Logo" v-else />
-				<h1>Welcome to Camp</h1>
-			</div>
+			<h1 class="mtop-xl mbottom-md">Practical tools for designers & developers</h1>
 
 			<p class="big">
-				Keyframes.app is a collection of easy-to-use mini apps to help keep your life organized.
+				Simple and private mini-apps to help with animations, designs, CSS properties, layouts, and more.
 			</p>
 
 			<p>
@@ -24,7 +20,7 @@
 			<p>
 				<ul>
 					<li><b>It's private.</b> Any data you enter on keyframes.app never leaves your device. Instead, we use your device's own storage - keeping everything private.</li>
-					<li class="ptop-sm"><b>It's free.</b> Plus no ads, no cookies, no accounts, minimal tracking, and no <br/><em><i class="fas fa-sparkles"></i> engaging content <i class="fas fa-sparkles"></i></em></li>
+					<li class="ptop-sm"><b>It's free.</b> Plus no ad networks, no cookies, no accounts, minimal tracking, and no <br/><em><i class="fas fa-sparkles"></i> engaging content <i class="fas fa-sparkles"></i></em></li>
 					<li class="ptop-sm"><b>It's customizable.</b> Hide apps you don't use, choose your own colors, fonts, and other preferences.</li>
 					<li class="ptop-sm"><b>It's open source.</b> Want to create your own app? The source code is on <a href="https://github.com/mitchas/tidycamp" target="_blank">GitHub</a></li>
 				</ul>
@@ -100,44 +96,12 @@
 				<small>Or simply create an issue on the <a href="https://github.com/mitchas/tidycamp" target="_blank" class="ul">GitHub Repo</a> if you know what those words mean.</small>
 			</p>
 
-
-			<!-- Other apps -->
-			<h2 class="center mtop-xl">But wait, there's more</h2>
-			<p class="center">
-				Different tools, just as private & easy to use. 
-			</p>
 		</div>
 
-		<div class="project-display center mtop-md padded">
-
-			<!-- Keyframes -->
-			<a href="https://tidy.camp" target="_blank" class="project">
-				<div><img src="@/assets/projects/tidycamp.png"/></div>
-				<div class="project-info">
-					<h4 class="ul">Tidy.camp</h4>
-					<p class="small">
-						Dead simple visual tools to for web designers & developers. Easily create @keyframe animations, color palettes, box shadows, and more.
-					</p>
-				</div>
-			</a>
-
-			<!-- Ceev -->
-			<a href="https://ceev.io" target="_blank" class="project">
-				<div><img src="@/assets/projects/ceev.png"/></div>
-				<div class="project-info">
-					<h4 class="ul">Ceev.io</h4>
-					<p class="small">
-						An incredibly easy way to create and design a resume in minutes, for free. Export as a PDF, or save it to edit later.
-					</p>
-				</div>
-			</a>
-
-
-		</div>
 
 		<div class="max-width margin-auto mtop-xl padded">
 			<h4>Hey!</h4>
-			<p>These apps are free - but if you find them useful and want to help keep them running, <a href="https://www.buymeacoffee.com/mitchs" target="_blank" class="ul">Buy me a Coffee</a>, or <a href="https://account.venmo.com/u/mitchas" target="_blank" class="ul">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank" class="ul">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank" class="ul">PayPal</a>.</p>
+			<p>These apps are free - but if you find them useful and want to motivate me to keep them updated and add more features,  <a href="https://www.buymeacoffee.com/mitchs" target="_blank" class="ul">Buy me a Coffee</a>, or send a tip on <a href="https://account.venmo.com/u/mitchas" target="_blank" class="ul">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank" class="ul">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank" class="ul">PayPal</a>.</p>
 		</div>
 
 

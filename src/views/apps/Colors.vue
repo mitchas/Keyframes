@@ -11,7 +11,7 @@
 
 			<!-- Add color -->
 			<button @click="addColor()">
-				<i class="fas fa-plus-circle"></i><span class="hint">Add Color &#191;</span>
+				<i class="fas fa-plus-circle"></i><span class="hint">Add Color</span>
 			</button>
 			<label>{{currentPalette.length}} color{{currentPalette.length == 1 ? '' : 's'}}</label>
 
@@ -88,6 +88,7 @@
 							<!-- Edit hex value input -->
 							<div class="cbs_row">
 								<input class="color_transparent_input" type="text" placeholder="HEX Value" :value="RGBToHex(color.r, color.g, color.b, color.a).toUpperCase()" @change="updateRGBValue($event, key)"/>
+								<input class="color_transparent_input_picker" type="color" :value="RGBToHex(color.r, color.g, color.b, color.a).toUpperCase()" @change="updateRGBValue($event, key)"/>
 							</div>
 						</div>
 					</transition>
@@ -201,7 +202,7 @@
 							<!-- Gradient CSS Output -->
 							<div class="mtop-md"></div>
 							<h4>CSS Output</h4>
-							<textarea v-model="gradientStyle" class="text-small code mtop-sm" id="gradientCSS"></textarea>
+							<textarea :value="gradientStyle" class="text-small code mtop-sm" id="gradientCSS"></textarea>
 							<button class="button small mtop-xs mbottom-lg" @click="copyExportToClipboard('gradientCSS')">
 								<i class="fas fa-copy"></i>
 								<span>Copy</span>
@@ -236,7 +237,7 @@
 					<div class="app-sidebar-content" v-if="view_sidebar == 'contrast'" key="contrast">
 						<h3>Contrast</h3>
 						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm padded">
-							<div class="flex mtop-sm margin-auto between">
+							<div class="flex mtop-xxs margin-auto between">
 								<label class="vertical" for="contrastTog">View Contrast</label>
 								<input type="checkbox" id="contrastTog" class="toggle yes-no" v-model="contrast_enabled"/>
 							</div>
@@ -263,7 +264,7 @@
 							</transition>
 
 							<!-- Spacer -->
-							<div class="mtop-md"></div>
+							<div class="mtop-sm pbottom-xxs"></div>
 
 							<!-- Information -->
 							<h4>How does this work?</h4>
@@ -313,8 +314,8 @@
 						<!-- Save Form -->
 						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
 							<div class="button-input small">
-								<input type="text" id="saveNameIn" placeholder="Name" v-model="nameToSave"/>
-								<button class="button" :disabled="!nameToSave.length" :class="{'green' : editing_stored_key != null}">
+								<input type="text" id="saveNameIn" placeholder="Name" v-model="name_to_save"/>
+								<button class="button" :disabled="!name_to_save.length" :class="{'green' : editing_stored_key != null}">
 									<i class="fas fa-floppy-disk"></i>
 									<span>{{editing_stored_key != null ? "Save Changes" : "Save New"}}</span>
 								</button>
@@ -330,16 +331,16 @@
 							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
 								<!-- Stored palettes from local storage, loop to create display -->
 								<transition-group name="list">
-									<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key">
+									<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key" :class="{'active' : editing_stored_key == key}">
 										<!-- Preview -->
 										<div class="palette-preview hoverable" @click="loadPalette(palette, key)">
 											<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
 										</div>
 										<!-- Palette Info & Controls -->
-										<div class="pv_bar">
+										<div class="pv__bar">
 											<button class="pv__i" @click="loadPalette(palette, key)">
 												<b>{{palette.name}}</b>
-												{{$date(palette.saved).format("MMMM D YYYY - h:MMa")}}
+												{{$date(palette.saved).format("MMMM D YYYY - h:mma")}}
 											</button>
 											<!-- Controls -->
 											<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
@@ -415,7 +416,7 @@
 										</div>
 										<!-- Page BG Color -->
 										<div class="input-group max-width-small mtop-sm">
-											<span class="input-group-label small" for="bgcolIn">BG Color</span>
+											<span class="input-group-label small" for="bgcolIn">Background</span>
 											<input type="text" id="bgcolIn" v-model="colorPrefs.stageBackground" placeholder="#FFFFFF"/>
 										</div>
 									</div>
@@ -452,7 +453,7 @@
 				You are about to delete a color. <small class="block">This can <b>not</b> be undone.</small>
 			</p>
 			<p class="no-padding" v-else-if="confirm_modal[0] == 'palette'">
-				You are about to delete your palette <b>{{confirm_modal[1]}}</b>. <small class="block ptop-xs">This can <b>not</b> be undone.</small>
+				You are about to delete your palette <b>{{storedPalettes[confirm_modal[1]].name}}</b>. <small class="block ptop-xs">This can <b>not</b> be undone.</small>
 			</p>
 			<p v-else>Something went wrong. I can't tell what you're trying to do. <small class="block">You're not ever supposed to see this.</small></p>
 		</Confirm>
@@ -558,7 +559,7 @@ export default {
 			confirm_modal: null, // [tpe, key]
 			dragging: null,
 			// Saving
-			nameToSave: "",
+			name_to_save: "",
 			// Exporting
 			export_modal: false,
 			exporting_as: "CSS",
@@ -862,7 +863,7 @@ export default {
 			}
 		},
 
-		// Actiona that need confirming
+		// Actions that need confirming
 		handleConfirmModal: function(){
 			var data = this.confirm_modal;
 			if(data[0] == "color"){
@@ -920,15 +921,13 @@ export default {
 			// let _this = this;
 			// this.$store.dispatch("Hold/LOADING", "data");
 			var dataToSave = {
-				name: this.nameToSave,
-				colors:JSON.parse(JSON.stringify(this.currentPalette)),
-				// colors: {...this.currentPalette},
+				name: this.name_to_save,
 				saved: new Date(),
 				colors:JSON.parse(JSON.stringify(this.currentPalette)),
 				preferences: JSON.parse(JSON.stringify(this.colorPrefs)),
 			};
 
-			this.hello(this.nameToSave + " Saved!", "fas fa-check-circle", "green");
+			this.hello(this.name_to_save + " Saved!", "fas fa-check-circle", "green");
 
 			// Save as new
 			if(this.editing_stored_key == null){
@@ -950,8 +949,8 @@ export default {
 			console.log(key);
 			this.currentPalette = JSON.parse(JSON.stringify(palette.colors));
 			this.colorPrefs = JSON.parse(JSON.stringify(palette.preferences));
-			this.nameToSave = JSON.parse(JSON.stringify(palette.name));
-			this.hello(this.nameToSave + " loaded!", "fas fa-check-circle", "green");
+			this.name_to_save = JSON.parse(JSON.stringify(palette.name));
+			this.hello(this.name_to_save + " loaded!", "fas fa-check-circle", "green");
 			this.editing_stored_key = key;
 		},
 
@@ -1372,7 +1371,8 @@ export default {
 					margin-top: 4px;
 				}
 				// Edit HEX Input
-				.color_transparent_input{
+				.color_transparent_input,
+				.color_transparent_input_picker{
 					background-color: transparent;
 					border: none;
 					max-width: 100%;
@@ -1381,8 +1381,16 @@ export default {
 					font-size: 0.9em;
 					padding: 7px 15px;
 					height: auto;
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
 					background-color: rgba(255,255,255,0.1);
 				} 
+				.color_transparent_input_picker{
+					padding: 0;
+					width: 50px;
+					border-top-right-radius: var(--borderRadius);
+					border-bottom-right-radius: var(--borderRadius);
+				}
 
 			}
 			
@@ -1529,7 +1537,7 @@ export default {
 
 // List of palettes from local storage
 .palette-view{
-	.pv_bar{
+	.pv__bar{
 		width: 100%;
 		background-color: var(--grey);
 		box-sizing: border-box;
@@ -1538,6 +1546,7 @@ export default {
 		padding:  0 7px 0 10px;
 		border-bottom-left-radius: var(--borderRadius);
 		border-bottom-right-radius: var(--borderRadius);
+		color: var(--text);
 	
 		.pv__i{
 			flex-grow: 3;
@@ -1547,11 +1556,15 @@ export default {
 			justify-content: center;
 			text-align: left;
 			padding: 5px 0;
+			color: inherit;
 
 			b{
 				font-size: 0.95rem;
 				font-weight: 500;
 				padding-bottom: 2px;
+			}
+			&:hover b{
+				text-decoration: underline;
 			}
 		}
 		// Palette view Actions
@@ -1561,6 +1574,7 @@ export default {
 			margin: 6px 0;
 			border-radius: var(--borderRadius);
 			opacity: 0;
+			color: inherit;
 			@media (max-width: $screenSM) {opacity: 1;}
 
 			&:hover{
@@ -1573,13 +1587,31 @@ export default {
 		}
 
 		// Show action buttons on hover
+		&:focus-within,
 		&:hover{
 			.pv__a{
 				opacity: 1;
 			}
 		}
-
-
+	}
+	// Actively editing
+	&.active .pv__bar{
+		position: relative;
+		&:after{
+			content: '\f058';
+			font-family: var(--fontAwesome);
+			position: absolute;	
+			right: 4px;
+			width: 18px;
+			height: 18px;
+			text-align: center;
+			font-weight: 600;
+			color: var(--yellow);
+			font-size: 18px;
+			top: -35px;
+			background-color: var(--yellowText);
+			border-radius: 50%;
+		}
 	}
 }
 // Preview for palettes
