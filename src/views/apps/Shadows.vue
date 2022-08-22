@@ -673,8 +673,11 @@ export default {
 			}
 			// Set to shadow
 			// Vertical offset has -30 because of how people naturally hold their devices.
-			_this.working.shadow[_this.activeLayer].x = (-vOffset) + 70;
-			_this.working.shadow[_this.activeLayer].y = -hOffset;
+			// _this.working.shadow[_this.activeLayer].x = (-vOffset) + 70;
+			// _this.working.shadow[_this.activeLayer].y = -hOffset;
+			_this.$set(_this.working.shadow[_this.activeLayer], "x", (-vOffset) + 70);
+			_this.$set(_this.working.shadow[_this.activeLayer], "y", -hOffset);
+
 		},
 
 
