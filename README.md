@@ -1,6 +1,12 @@
 ![Keyframes](/public/img/icons/apple-touch-icon-76x76.png)
-# Keyframes
+# Keyframes v1 (RIP)
 
+This is a branch for the old version of Keyframes.app.
+It's no longer in development and will be archived soon.
+
+
+
+# Here's the original ReadME:
 
 This is a collection of web apps to live preview and generate various CSS styles. It originally started as a tool just for creating CSS animations (hence the name Keyframes), but now has additional tools.
 

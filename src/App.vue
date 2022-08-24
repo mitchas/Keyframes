@@ -38,7 +38,6 @@
 				<!-- Top bar component -->
 				<!-- Logo, account dropdown, etc -->
 				<TopBar></TopBar>
-
 				
 
 				<!-- All page contetnt contained within main -->

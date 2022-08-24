@@ -24,22 +24,31 @@
 
 
 			<!-- Regular Banner -->
-			<!-- <Callout
+			<Callout
 				v-if="$route.path == '/'"
-				icon="far fa-shapes"
+				icon="far fa-exclamation-triangle"
 				class="mbottom-md"
-				color="blue"
+				color="red"
 				size="">
-				<span><b>Welcome to Keyframes.</b> It's pretty new, so there may be some bugs. If you notice any issues, or have other feedback or suggestions, send me a message at hello@hotdi.sh. </span>
-			</Callout> -->
+				<span>
+					<b>There's a new version of Keyframes!</b>
+					<br/>
+					You are currently at v1.keyframes.app. Any of your local storage data from before the update should still be available here.
+					<br/><br/>
+					The new version is not compatible with the local storage data, so this site will stay up here so you can still access them.
+					<br/>
+					<small>I fixed many of the annoying bugs from this version, and added a ton of new features.</small>
+					</span>
+			</Callout>
 
 			<!-- 
 				Hero
 			 -->
 			<div class="home-hero">
-				<h1>Keyframes helps you write better CSS.</h1>
-				<h4>Dead simple visual tools to help you generate CSS for your projects.</h4>
-				<a @click="navigate('/about')">Read More about Keyframes</a>
+				<h1>This is the old Keyframes.</h1>
+				<h4>It'll stay for a while, but the new version is better, imo.</h4>
+				<!-- <a @click="navigate('/about')">Read More about Keyframes</a> -->
+				<a href="https://keyframes.app">Go to the newer Keyframes <i class="fas fa-long-arrow-right"></i></a>
 				<!-- <h4>A straightforward way to create animations, shadows, & colors - instantly get the CSS to use in your projects.</h4> -->
 			</div>
 
