@@ -8,7 +8,7 @@ Tooltip Component
 
 <template>
 	<!-- Tooltip -->
-	<button class="tooltip" v-bind:class="[color && color, position && position, {'show': show}]" @click.prevent="show = !show" tabindex="0" role="tooltip" v-if="tooltipsEnabled">
+	<button class="tooltip" v-bind:class="[color && color, position && position, {'show': show}]" @click="show = !show" tabindex="0" role="tooltip" v-if="tooltipsEnabled">
 
 		<!-- Icon -->
 		<i :class="['tooltip-icon', (!icon && !show) && 'fas fa-question-circle', (icon && !show) && icon, {'far fa-times-circle': show}]"></i>
@@ -165,6 +165,14 @@ export default {
 			flex-direction: column;
 			z-index: 2;
 
+			code{
+				color: var(--background);
+				background-color: var(--text);
+				font-size: 0.85em;
+				line-height: 0.85em;
+				margin-top: 4px;
+			}
+
 
 			// Float below centered on md
 			@media (max-width: $screenSM) {
@@ -186,6 +194,10 @@ export default {
 			b{
 				padding-bottom: 6px;
 				min-width: 120px;
+			}
+
+			em{
+				font-weight: 700;
 			}
 
 			// Right aligned bottom link
@@ -266,6 +278,9 @@ export default {
 		}
 		&.yellow i{
 			color: var(--yellow);
+		}
+		&.grey i{
+			color: var(--border);
 		}
 	}
 

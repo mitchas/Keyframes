@@ -158,7 +158,7 @@
 			<b>TL;DR:</b>
 			This app is as private as it gets. We don't save <b>any</b> of your data anywhere. It's all on your computer. No ad networks, third-party libraries, or cookies.
 			<br/>
-			It does have Analytics, but it's self-hosted and only tracks which pages or apps are viewed and how many times.
+			It does have Analytics, but it's self-hosted and tracks the basics like which pages or apps are viewed and how many times.
 		</p>
 
 		<!-- Privacy Policy -->
@@ -359,7 +359,7 @@ export default {
 				},
 				"tooltips": {
 					title: "Tooltips",
-					icon: "fas fa-feather",
+					icon: "fas fa-info-square",
 					description: "Enable or disable help tooltips throughout the app.",
 				},
 				"notifications": {

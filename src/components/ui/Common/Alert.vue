@@ -132,6 +132,10 @@ export default {
 				background-color: var(--orange);
 				color: var(--orangeText);
 			}
+			&.yellow{
+				background-color: var(--yellow);
+				color: var(--yellowText);
+			}
 			&.green{
 				background-color: var(--green);
 				color: var(--greenText);

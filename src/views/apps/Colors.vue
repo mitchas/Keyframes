@@ -349,7 +349,7 @@
 								</transition-group>
 
 								<!-- No stored palettes -->
-								<div class="padded mtop-sm" v-if="storedPalettes && !Object.keys(storedPalettes).length">
+								<div class="padded mtop-xs" v-if="storedPalettes && !Object.keys(storedPalettes).length">
 									<Callout icon="far fa-empty-set" size="small" color="red">
 										<p class="small">You haven't saved anything yet.</p>
 									</Callout>
@@ -1184,6 +1184,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	max-height: 100vh;	
+	max-height: -webkit-fill-available;
 }
 
 
@@ -1229,6 +1230,7 @@ export default {
 		box-sizing: border-box;
 		page-break-inside: avoid;
 		position: relative;
+		padding: 15px 0 25px 0;
 
 		@media (min-width: $screenSM) {
 			min-height: 300px;
@@ -1272,6 +1274,10 @@ export default {
 				color: inherit;
 				text-align: left;
 				font-family: inherit;
+
+				@media (max-width: $screenSM) {
+					font-size: 0.9em;
+				}
 
 				&:hover{
 					background-color: rgba(0,0,0,0.1);

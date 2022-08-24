@@ -21,6 +21,21 @@ export default {
 				navigator.vibrate(15);
 			}
 		};
+		// Random Greething
+		Vue.prototype.greet = function() {
+			var messages = ["Howdy", "Hello!", "No.", "Boop.", "What's up?", "Why'd you do that?", "*click*", "push it again."];
+			var icons = ["fas fa-hand", "fas fa-alien", "fas fa-fire", "fas fa-poop", "fas fa-worm", "fas fa-cat-space"];
+			var colors = ["green", "blue", "yellow", "grey", "orange", "purple", "pink"];
+
+			var m = messages[Math.floor(Math.random() * messages.length)]
+			var i = icons[Math.floor(Math.random() * icons.length)]
+			var c = colors[Math.floor(Math.random() * colors.length)]
+
+			this.$root.$children[0].$refs.alertComponent.showAlert(m, i, c);
+			if(window.navigator.vibrate ){
+				navigator.vibrate(15);
+			}
+		};
 
 		// Scroll up
 		// Simply scrolls to top of page

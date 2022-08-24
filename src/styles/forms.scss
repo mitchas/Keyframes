@@ -244,12 +244,9 @@ select {
     }
 
     .input-group-label {
-        display: flex;
         position: relative;
-        flex-direction: column;
-        justify-content: center;
         background-color: var(--background);
-        padding: 0 15px 1px 18px;
+        padding: 14px 10px 1px 10px;
         color: var(--text);
         font-size: 0.9rem;
         font-weight: 600;
@@ -259,10 +256,23 @@ select {
         border: 1px solid var(--border);
         white-space: nowrap;
 
+		&.small{
+			font-size: 0.8rem;
+		}
+
         i {
             font-size: 18px;
             text-align: center;
+			width: 18px;
         }
+
+		.tooltip{
+			display: inline;
+			vertical-align: top;
+			margin-top: -3px;
+			margin-left: -4px;
+		}
+
     }
     // input
     .aselect,

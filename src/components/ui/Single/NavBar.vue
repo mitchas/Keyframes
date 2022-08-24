@@ -283,6 +283,7 @@ export default {
 		left: 0;
 		width: 100%;
 		max-height: 100vh;
+		max-height: -webkit-fill-available;
 		overflow-x: auto;
 		box-sizing: border-box;
 		padding: 50px 0 150px 0;

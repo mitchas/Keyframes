@@ -50,7 +50,7 @@
 
 							<!-- Layer count buttons -->
 							<div id="shadowLayers">
-								<button v-for="(shadow, key) in working.shadow" @click="activeLayer = key" :key="key" :class="{'active' : activeLayer == key}">
+								<button v-for="(shadow, key) in working.shadow" @click="active_layer = key" :key="key" :class="{'active' : active_layer == key}">
 									{{key + 1}}
 								</button>
 								<button @click="addLayer()" id="newLayerButton">
@@ -60,54 +60,54 @@
 
 
 							<div class="padded">
-								<h4 class="mtop-sm">Adjust Layer {{activeLayer + 1}}</h4>
+								<h4 class="mtop-sm">Adjust Layer {{active_layer + 1}}</h4>
 
 								<!-- X Position -->
 								<div class="flex mtop-sm">
 									<label for="shadowX" class="vertical text-small pright-xxs w100">Horizontal</label>
-									<input type="range" id="shadowX" min="-200" max="200" v-model="working.shadow[activeLayer].x"/>
-									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[activeLayer].x" max="1000" min="-1000"/></div>
+									<input type="range" id="shadowX" min="-200" max="200" v-model="working.shadow[active_layer].x"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[active_layer].x" max="1000" min="-1000"/></div>
 								</div>
 								<!-- Y Position -->
 								<div class="flex mtop-xs">
 									<label for="shadowY" class="vertical text-small pright-xxs w100">Vertical</label>
-									<input type="range" id="shadowY" min="-200" max="200" v-model="working.shadow[activeLayer].y"/>
-									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[activeLayer].y" max="1000" min="-1000"/></div>
+									<input type="range" id="shadowY" min="-200" max="200" v-model="working.shadow[active_layer].y"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[active_layer].y" max="1000" min="-1000"/></div>
 								</div>
 								<!-- Blur -->
 								<div class="flex mtop-xs">
 									<label for="shadowBlr" class="vertical text-small pright-xxs w100">Blur</label>
-									<input type="range" id="shadowBlr" min="0" max="200" v-model="working.shadow[activeLayer].blur"/>
-									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[activeLayer].blur" max="1000" min="0"/></div>
+									<input type="range" id="shadowBlr" min="0" max="200" v-model="working.shadow[active_layer].blur"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[active_layer].blur" max="1000" min="0"/></div>
 								</div>
 								<!-- Spread -->
 								<div class="flex mtop-xs">
 									<label for="shadowSpr" class="vertical text-small pright-xxs w100">Spread</label>
-									<input type="range" id="shadowSpr" min="-200" max="200" v-model="working.shadow[activeLayer].spread"/>
-									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[activeLayer].spread" max="1000" min="-1000"/></div>
+									<input type="range" id="shadowSpr" min="-200" max="200" v-model="working.shadow[active_layer].spread"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[active_layer].spread" max="1000" min="-1000"/></div>
 								</div>
 
 								<!-- Color -->
 								<div class="mtop-md">
 									<div class="input-group max-width-small mtop-sm">
 										<label for="shadowCol" class="input-group-label">Color:</label>
-										<input id="shadowCol" type="text" placeholder="#1F1F1F" v-model="working.shadow[activeLayer].hex" @change="shadowColorInput($event.target.value)"/>
-										<input type="color" @change="shadowColorPicker($event.target.value)" v-model="working.shadow[activeLayer].hex"/>
+										<input id="shadowCol" type="text" placeholder="#1F1F1F" v-model="working.shadow[active_layer].hex" @change="shadowColorInput($event.target.value)"/>
+										<input type="color" @change="shadowColorPicker($event.target.value)" v-model="working.shadow[active_layer].hex"/>
 									</div>
 								</div>
 								<small class="align-right block text-small text-light">RGB/A or Hex values accepted</small>
 								<!-- Color Opacity -->
 								<div class="flex mtop-xs">
 									<label for="shadowOpac" class="vertical text-small pright-xxs w100">Opacity</label>
-									<input type="range" id="shadowOpac" min="0" max="1" step="0.01" v-model="working.shadow[activeLayer].opacity"/>
-									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[activeLayer].opacity" max="1" min="0" step="0.01"/></div>
+									<input type="range" id="shadowOpac" min="0" max="1" step="0.01" v-model="working.shadow[active_layer].opacity"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="working.shadow[active_layer].opacity" max="1" min="0" step="0.01"/></div>
 								</div>
 
 
 								<div class="flex end">
 									<button class="button small mtop-md red block" @click="deleteLayer()" v-if="working.shadow.length > 1">
 										<i class="fas fa-trash-alt"></i>
-										<span>Delete Layer {{activeLayer + 1}}</span>
+										<span>Delete Layer {{active_layer + 1}}</span>
 									</button>
 								</div>
 
@@ -174,23 +174,23 @@
 						<!-- Scrollable saved list -->
 						<transition name="basicup">
 							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
-								<!-- Stored palettes from local storage, loop to create display -->
+								<!-- Stored shadows from local storage, loop to create display -->
 								<transition-group name="list">
-									<div v-for="(shadow, key) in storedShadows" class="shadow-view mbottom-xs padded" :key="key" :class="{'active' : editing_stored_key == key}">
-										<!-- Palette Info & Controls -->
-										<div class="sv__bar">
-											<button class="sv__i" @click="loadShadow(shadow, key)">
+									<div v-for="(shadow, key) in stored_shadows" class="saved-list mbottom-xs padded" :key="key" :class="{'active' : editing_stored_key == key}">
+										<!-- Shadow Info & Controls -->
+										<div class="sl__bar">
+											<button class="sl__i" @click="loadShadow(shadow, key)">
 												<b>{{shadow.name}}</b>
 												{{$date(shadow.saved).format("MMMM D YYYY - h:mma")}}
 											</button>
 											<!-- Controls -->
-											<button class="sv__a red" title="Delete Shadow" @click="$store.getters['User/preferences'].confirm_action ? confirm_delete_shadow = key : deleteShadow(key)"><i class="fas fa-trash-alt"></i></button>
+											<button class="sl__a red" title="Delete Shadow" @click="$store.getters['User/preferences'].confirm_action ? confirm_delete_shadow = key : deleteShadow(key)"><i class="fas fa-trash-alt"></i></button>
 										</div>
 									</div>
 								</transition-group>
 
-								<!-- No stored palettes -->
-								<div class="padded mtop-sm" v-if="storedShadows && !Object.keys(storedShadows).length">
+								<!-- No stored shadows -->
+								<div class="padded mtop-xs" v-if="stored_shadows && !Object.keys(stored_shadows).length">
 									<Callout icon="far fa-empty-set" size="small" color="red">
 										<p class="small">You haven't saved anything yet.</p>
 									</Callout>
@@ -219,7 +219,7 @@
 							</div>
 						</div>
 
-						<div class="padded mtop-sm">
+						<div class="padded mtop-sm" v-if="$store.getters['Device/hasTouch']">
 							<div class="flex mtop-xxs between">
 								<label class="vertical" for="tiltTog">Tilt Mode</label>
 								<input type="checkbox" id="tiltTog" class="toggle on-off" v-model="tilt_mode" @change="toggleTilt()"/>
@@ -251,7 +251,7 @@
 		<!-- Confirm delete things -->
 		<Confirm v-if="confirm_delete_shadow != null" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" confirmText="Delete Shadow"  confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" v-on:confirmFalse="confirm_delete_shadow = null" v-on:confirmTrue="deleteShadow(confirm_delete_shadow);">
 			<p class="no-padding">
-				You are about to delete your saved shadow <b>{{storedShadows[confirm_delete_shadow].name}}</b>. <small class="block">This can <b>not</b> be undone.</small>
+				You are about to delete your saved shadow <b>{{stored_shadows[confirm_delete_shadow].name}}</b>. <small class="block">This can <b>not</b> be undone.</small>
 			</p>
 		</Confirm>
 
@@ -278,7 +278,7 @@ export default {
 
 	data() {
 		return {
-			activeLayer: 0,
+			active_layer: 0,
 			working: {
 				units: "px",
 				background: "#FFFFFF",
@@ -309,7 +309,7 @@ export default {
 			editing_stored_key: null,
 			confirm_delete_shadow: null, // key of shadow
 			// Stored
-			storedShadows: [],
+			stored_shadows: [],
 
 			secondary_nav: [
 				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
@@ -342,8 +342,7 @@ export default {
 	mounted() {
 		// Get stored shadows from store/localstorage
 		if(this.$store.getters["User/apps"].shadows.data["saved"]){
-			console.log(this.$store.getters["User/apps"].shadows)
-			this.storedShadows = this.$store.getters["User/apps"].shadows.data["saved"];
+			this.stored_shadows = this.$store.getters["User/apps"].shadows.data["saved"];
 		}
 	},
 	created: function () {
@@ -366,24 +365,24 @@ export default {
 		// Add new layer to shadow
 		addLayer: function(){
 			this.working.shadow.push({
-				x: this.working.shadow[this.activeLayer].x,
-				y: this.working.shadow[this.activeLayer].y,
-				blur: this.working.shadow[this.activeLayer].blur,
-				spread: this.working.shadow[this.activeLayer].spread,
-				r: this.working.shadow[this.activeLayer].r,
-				g: this.working.shadow[this.activeLayer].g,
-				b: this.working.shadow[this.activeLayer].b,
-				opacity: this.working.shadow[this.activeLayer].opacity,
-				hex: this.working.shadow[this.activeLayer].hex,
+				x: this.working.shadow[this.active_layer].x,
+				y: this.working.shadow[this.active_layer].y,
+				blur: this.working.shadow[this.active_layer].blur,
+				spread: this.working.shadow[this.active_layer].spread,
+				r: this.working.shadow[this.active_layer].r,
+				g: this.working.shadow[this.active_layer].g,
+				b: this.working.shadow[this.active_layer].b,
+				opacity: this.working.shadow[this.active_layer].opacity,
+				hex: this.working.shadow[this.active_layer].hex,
 			})
-			this.activeLayer = this.working.shadow.length - 1;
+			this.active_layer = this.working.shadow.length - 1;
 		},
 
 		// Delete active layer, switch to previous
 		deleteLayer: function(){
-			this.working.shadow.splice(this.activeLayer, 1);
-			this.activeLayer = this.activeLayer - 1;
-			if(this.activeLayer < 0){this.activeLayer = 0}
+			this.working.shadow.splice(this.active_layer, 1);
+			this.active_layer = this.active_layer - 1;
+			if(this.active_layer < 0){this.active_layer = 0}
 		},
 
 
@@ -433,13 +432,10 @@ export default {
 
 			// Save as new
 			if(this.editing_stored_key == null){
-				this.storedShadows.push(dataToSave);
-				console.log("SAVING");
-				console.log(this.storedShadows);
-				console.log(this.storedShadows.length);
-				this.editing_stored_key = this.storedShadows.length - 1;
+				this.stored_shadows.push(dataToSave);
+				this.editing_stored_key = this.stored_shadows.length - 1;
 			}else{ // Changes
-				this.$set(this.storedShadows, this.editing_stored_key, dataToSave);
+				this.$set(this.stored_shadows, this.editing_stored_key, dataToSave);
 			}
 
 			this.syncStoredShadows();
@@ -454,7 +450,7 @@ export default {
 		},
 		// Load shadow from storage
 		deleteShadow: function(key){
-			this.storedShadows.splice(key, 1);
+			this.stored_shadows.splice(key, 1);
 			this.syncStoredShadows();
 			if(key == this.editing_stored_key){
 				this.editing_stored_key = null;
@@ -464,7 +460,7 @@ export default {
 		},
 		// Sync with local storage
 		syncStoredShadows: function(){
-			this.$store.commit("User/SET_APP_DATA_FIELD", {app: "shadows", key: "saved", value: JSON.parse(JSON.stringify(this.storedShadows)) });
+			this.$store.commit("User/SET_APP_DATA_FIELD", {app: "shadows", key: "saved", value: JSON.parse(JSON.stringify(this.stored_shadows)) });
 			this.$store.dispatch("User/DEBOUNCE_SAVE_APP_DATA");
 		},
 
@@ -487,21 +483,18 @@ export default {
 			} else {
 				// RGB
 				var rgb = a.replace(/[^0-9.,]/g, "").split(",");
-				console.log("RGB???")
-				console.log(rgb)
-
 				if(rgb.length < 3){
 					this.hello("Invalid color. Try again.", "fas fa-frown", "red");
 				}
 				// Valid rgb
 				else{
-					this.working.shadow[this.activeLayer].r = rgb[0];
-					this.working.shadow[this.activeLayer].g = rgb[1];
-					this.working.shadow[this.activeLayer].b = rgb[2];
+					this.working.shadow[this.active_layer].r = rgb[0];
+					this.working.shadow[this.active_layer].g = rgb[1];
+					this.working.shadow[this.active_layer].b = rgb[2];
 
 					// Set opacity if exists
 					if(rgb[3] && parseFloat(rgb[3]) < 1){
-						this.working.shadow[this.activeLayer].opacity = rgb[3];
+						this.working.shadow[this.active_layer].opacity = rgb[3];
 					}
 
 					// Convert back to hex for color picker
@@ -514,7 +507,7 @@ export default {
 						xg = "0" + xg;
 					if (xb.length == 1)
 						xb = "0" + xb;
-					this.working.shadow[this.activeLayer].hex =   "#" + xr + xg + xb;
+					this.working.shadow[this.active_layer].hex =   "#" + xr + xg + xb;
 				}
 
 			}
@@ -523,9 +516,9 @@ export default {
 			let _this = this;
 
 			this.HexToRGB(color).then(function(rgb) {			
-				_this.working.shadow[_this.activeLayer].r = rgb[0];
-				_this.working.shadow[_this.activeLayer].g = rgb[1];
-				_this.working.shadow[_this.activeLayer].b = rgb[2];
+				_this.working.shadow[_this.active_layer].r = rgb[0];
+				_this.working.shadow[_this.active_layer].g = rgb[1];
+				_this.working.shadow[_this.active_layer].b = rgb[2];
 
 			}).catch(function(error) {
 				console.log(error)
@@ -587,7 +580,6 @@ export default {
 
 		// Toggle Tilt Mode
 		toggleTilt: function(){
-			console.log("TOGGLING TILT")
 			let _this = this;
 			// Get sensor type if its available
 			var sensor = "";
@@ -634,6 +626,8 @@ export default {
 		},
 		// Tilt controls
 		tiltShadow:function(event){
+			let _this = this;
+
 			// x/hor y/vert
 			var h, v;
 			// Check for value
@@ -673,10 +667,10 @@ export default {
 			}
 			// Set to shadow
 			// Vertical offset has -30 because of how people naturally hold their devices.
-			// _this.working.shadow[_this.activeLayer].x = (-vOffset) + 70;
-			// _this.working.shadow[_this.activeLayer].y = -hOffset;
-			_this.$set(_this.working.shadow[_this.activeLayer], "x", (-vOffset) + 70);
-			_this.$set(_this.working.shadow[_this.activeLayer], "y", -hOffset);
+			// _this.working.shadow[_this.active_layer].x = (-vOffset) + 70;
+			// _this.working.shadow[_this.active_layer].y = -hOffset;
+			_this.$set(_this.working.shadow[_this.active_layer], "y", (-vOffset) + 120);
+			_this.$set(_this.working.shadow[_this.active_layer], "x", -hOffset);
 
 		},
 
@@ -719,6 +713,7 @@ export default {
 		background-color: var(--background);
 		border: 1px solid var(--border);
 		color: var(--text);
+		padding: 0;
 
 		&.active{
 			background-color: var(--primary);
@@ -730,78 +725,6 @@ export default {
 			text-decoration: underline;
 		}
 
-	}
-}
-
-
-// List of shadows from local storage
-.shadow-view{
-	.sv__bar{
-		width: 100%;
-		background-color: var(--background);
-		border: 1px solid var(--borderFade);
-		box-sizing: border-box;
-		display: flex;
-		justify-content: flex-end;
-		padding:  5px 7px 5px 10px;
-		border-radius: var(--borderRadius);
-		color: var(--text);
-	
-		.sv__i{
-			flex-grow: 3;
-			font-size: 0.65em;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			text-align: left;
-			padding: 5px 0;
-			color: inherit;
-
-			b{
-				font-size: 0.95rem;
-				font-weight: 500;
-				padding-bottom: 2px;
-			}
-			&:hover b{
-				text-decoration: underline;
-			}
-		}
-		// Palette view Actions
-		.sv__a{
-			font-size: 0.9em;
-			padding: 6px;
-			margin: 6px 0;
-			border-radius: var(--borderRadius);
-			color: inherit;
-			opacity: 0;
-			@media (max-width: $screenSM) {opacity: 1;}
-
-			&:hover{
-				overflow: 1;
-				cursor: pointer;
-				background-color: rgba(0,0,0,0.05);
-
-				&.red{color: var(--red);}
-			}
-		}
-
-		// Show action buttons on hover
-		&:focus-within,
-		&:hover{
-			.sv__a{
-				opacity: 1;
-			}
-		}
-	}
-
-	// Actively editing
-	&.active .sv__bar{
-		border-color: var(--primary);
-		color: var(--primary);
-		background-color: var(--primary);
-		*{
-			color: var(--primaryText)
-		}
 	}
 }
 

@@ -8,6 +8,7 @@
 	// backdrop-filter: grayscale(80%) contrast(150%);
 	display: block;
 	height: 100vh;
+	max-height: -webkit-fill-available;
 	width: 100vw;
 	position: fixed;
 	top: 0;
@@ -22,6 +23,7 @@
 	flex-direction: column;
 	justify-content: center;
 	height: 100vh;
+	max-height: -webkit-fill-available;
 	width: 100vw;
 	position: fixed;
 	bottom: 0;

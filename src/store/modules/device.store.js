@@ -88,9 +88,9 @@ const actions = {
 	// Permissions
 	// Check for geolocation permissions
 	CHECK_PERMISSIONS({ commit, dispatch }, value) {
-		navigator.permissions.query({ name: "geolocation" }).then(function(permissionStatus) { 
-			commit("SET_GEOLOCATION_PERMISSIONS", permissionStatus.state);
-		});
+		// navigator.permissions.query({ name: "geolocation" }).then(function(permissionStatus) { 
+		// 	commit("SET_GEOLOCATION_PERMISSIONS", permissionStatus.state);
+		// });
 	},
 };
 

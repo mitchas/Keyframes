@@ -11,9 +11,9 @@ body, html{
 	color: var(--text);
 	overflow-x: hidden;
 	background-color: var(--background);
-	@media (max-width: $screenSM) {
-		overscroll-behavior: contain;
-    }
+	max-height: 100vh;
+	max-height: -webkit-fill-available;
+	overscroll-behavior: contain;
 }
 
 // Disable default browser tap highlighting, smooth text

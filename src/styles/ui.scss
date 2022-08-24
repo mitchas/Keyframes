@@ -1,11 +1,12 @@
 //! UI Elements
 // Styles for misc global UI elements
 // 
-// Badges
+// Tags
 // Breadcrumbs
 // Tooltips
 // Page Footer
 // Notification Dots
+// Keyboard Shortcut Preview
 
 // Tag
 .tag{
@@ -245,5 +246,34 @@
 
 	button{
 		flex-grow: 3;
+	}
+}
+
+
+// Keyboard Shortcut preview
+.keyboard-shortcut{
+	display: flex;
+	gap: 5px;
+
+	b{
+		position: relative;
+		padding: 5px;
+		border: 1px solid var(--borderFade);
+		border-radius: 4px;
+		font-size: 0.75em;
+		box-shadow: 0px 3px 0px 2px rgba(150, 150, 150, 0.24);
+		&:hover{
+			top: 3px;
+			box-shadow: 0px 1px 0px 1px rgba(150, 150, 150, 0.24)
+		}
+	}
+	span,i{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 0.8em;
+	}
+	span{
+		padding-left: 10px;
 	}
 }

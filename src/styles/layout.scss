@@ -10,6 +10,7 @@
 	display: block;
 	width: 100%;
 	height: calc(100vh - var(--topBarHeight));
+	max-height: -webkit-fill-available;
 	overflow: auto;
 }
 
@@ -21,9 +22,14 @@
 	box-sizing: border-box;
 	padding-top: calc(var(--topBarHeight) * 0.75);
 
+	@media (max-width: $screenSM) {
+		padding-top: 0;
+		padding-bottom: calc(var(--topBarHeight) * 0.75);
+	}
+
 	&.stack{
 		@media (max-width: $screenSM) {
-			flex-direction: column-reverse;
+			flex-direction: column;
 			height: 100%;
 			justify-content: flex-start;
 		}
@@ -40,13 +46,14 @@
 		width: 0;
 		height: 100%;
 		transition: var(--transition);
-		background-color: var(--layer);
+		background-color: var(--background);
 		border-left: 1px solid var(--border);
-		box-shadow: var(--shadow);
+
 		@media (max-width: $screenSM) {
 			max-height: 100%;
 			overflow: auto;
 			position: fixed;
+			box-shadow: var(--shadow);
 			right: 0;
 			&.stack{
 				max-height: 50%;
@@ -72,7 +79,8 @@
 					max-width: unset;
 					height: 50%;
 					width: 100%;
-					border-bottom: 1px solid var(--border);
+					border-top: 1px solid var(--border);
+					border-left: none;
 				}
 			}
 		}
@@ -85,6 +93,9 @@
 			overflow: hidden;
 			flex-direction: column;
 			height: 100%;
+			@media (max-width: $screenSM) {
+				padding-bottom: 50px;
+			}
 
 			h3, h4{
 				width: 100%;
@@ -95,8 +106,13 @@
 				font-weight: 600;
 				padding: 16px 0;
 				border-bottom: 1px solid var(--borderFade);
-				background-color: var(--background);
+				background-color: var(--greyFade);
 				border-top: 1px solid var(--borderFade);
+				&.nbb{border-bottom: none;}
+				&.ntb{border-top: none;}
+				&.ts{
+					margin-top: 20px;
+				}
 			}
 			h3{
 				&:first-child{
@@ -140,7 +156,7 @@
 	box-sizing: border-box;
 	width: 100%;
 	display: flex;
-	background-color: var(--layer);
+	background-color: var(--background);
 	border-bottom: 1px solid var(--border);
 	height: var(--topBarHeight);
 	height: calc(var(--topBarHeight) * 0.75);
@@ -150,6 +166,12 @@
 	position: fixed;
 	top: var(--topBarHeight);
 	z-index: 12;
+
+	@media (max-width: $screenSM) {
+		bottom: 0;
+		top: unset;
+		border-top: 1px solid var(--border);
+	}
 	
 	.spacer{
 		flex-grow: 3;
@@ -167,17 +189,28 @@
 		color: var(--text);
 
 		@media (max-width: 450px) {
-			width: 36px;
-			font-size: 1.1em;
+			width: 38px;
+			font-size: 1.3em;
 		}
 
-		i.fa-times{
-			color: var(--red);
-		}
+		i.fa-times{color: var(--red);}
+		i.fa-circle-play{color: var(--green);}
+		i.fa-circle-pause{color: var(--yellow);}
+		i.fa-circle-stop{color: var(--red);}
 
 		&:hover,
 		&:focus{
 			background-color: var(--greyFade);
+		}
+
+		&:disabled{
+			opacity: 0.35;
+			pointer-events: none;
+			i{color: var(--text);}
+
+			&:hover{
+				background-color: transparent;
+			}
 		}
 	}
 
@@ -424,6 +457,77 @@
 	}
 }
 
+
+// Saved List
+.saved-list{
+	.sl__bar{
+		width: 100%;
+		background-color: var(--background);
+		border: 1px solid var(--borderFade);
+		box-sizing: border-box;
+		display: flex;
+		justify-content: flex-end;
+		padding:  5px 7px 5px 10px;
+		border-radius: var(--borderRadius);
+		color: var(--text);
+	
+		.sl__i{
+			flex-grow: 3;
+			font-size: 0.65em;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: left;
+			padding: 5px 0;
+			color: inherit;
+
+			b{
+				font-size: 0.95rem;
+				font-weight: 500;
+				padding-bottom: 2px;
+			}
+			&:hover b{
+				text-decoration: underline;
+			}
+		}
+		// Palette view Actions
+		.sl__a{
+			font-size: 0.9em;
+			padding: 6px;
+			margin: 6px 0;
+			border-radius: var(--borderRadius);
+			color: inherit;
+			opacity: 0;
+			@media (max-width: $screenSM) {opacity: 1;}
+
+			&:hover{
+				overflow: 1;
+				cursor: pointer;
+				background-color: rgba(0,0,0,0.05);
+
+				&.red{color: var(--red);}
+			}
+		}
+
+		// Show action buttons on hover
+		&:focus-within,
+		&:hover{
+			.sl__a{
+				opacity: 1;
+			}
+		}
+	}
+
+	// Actively editing
+	&.active .sl__bar{
+		border-color: var(--primary);
+		color: var(--primary);
+		background-color: var(--primary);
+		*{
+			color: var(--primaryText)
+		}
+	}
+}
 
 // Padding for page content  
 .padded{

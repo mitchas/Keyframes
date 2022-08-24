@@ -185,6 +185,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	max-height: 100vh;	
+	max-height: -webkit-fill-available;
 }
 
 
