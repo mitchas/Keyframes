@@ -27,9 +27,9 @@ export default {
 			var icons = ["fas fa-hand", "fas fa-alien", "fas fa-fire", "fas fa-poop", "fas fa-worm", "fas fa-cat-space"];
 			var colors = ["green", "blue", "yellow", "grey", "orange", "purple", "pink"];
 
-			var m = messages[Math.floor(Math.random() * messages.length)]
-			var i = icons[Math.floor(Math.random() * icons.length)]
-			var c = colors[Math.floor(Math.random() * colors.length)]
+			var m = messages[Math.floor(Math.random() * messages.length)];
+			var i = icons[Math.floor(Math.random() * icons.length)];
+			var c = colors[Math.floor(Math.random() * colors.length)];
 
 			this.$root.$children[0].$refs.alertComponent.showAlert(m, i, c);
 			if(window.navigator.vibrate ){

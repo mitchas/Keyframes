@@ -121,7 +121,7 @@
 								}
 							</v-style>
 							<!-- Step Markers -->
-							<button class="timeline-marker" v-for="step, key in working.steps" :key="key" :style="'left: ' + key + '%'" @click="active_step = key" :class="{'active': active_step == key}">
+							<button class="timeline-marker" v-for="key in working.steps" :key="key" :style="'left: ' + key + '%'" @click="active_step = key" :class="{'active': active_step == key}">
 								<b>{{key}}</b>
 							</button>
 
@@ -153,7 +153,7 @@
 						</div>
 						<!-- Basic Mode -->
 						<div class="app-sidebar-content-scroll padded" v-else>
-							<div v-for="field, prop in css_props" :key="prop">
+							<div v-for="(field, prop) in css_props" :key="prop">
 								<!-- Headers -->
 								<h4 v-if="field.header" :class="{'ts' : prop != 'Transform', 'ntb': prop == 'Transform'}">{{prop}}</h4>
 								<div class="prop__gap" v-if="field.header"></div>
@@ -542,7 +542,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _ from "lodash";
 
 // Components
 import Callout from "@/components/ui/Common/Callout";
@@ -766,8 +766,8 @@ export default {
 		activeStepStyles(){
 			// Advanced Mode
 			if(this.working.advanced_mode){
-				var code = "#target{" + this.working.steps[this.active_step].css +  "}"
-				return  code
+				var code = "#target{" + this.working.steps[this.active_step].css +  "}";
+				return  code;
 			}else{
 				// Basic Mode
 				var code = "#target{";
@@ -779,14 +779,14 @@ export default {
 						var transformProps = ["rotate", "rotate3d", "translate", "translate3d", "scale", "scale3d", "skew"];
 						if(transformProps.includes(property)){
 							if(property == "scale3d"){
-								scale3d = "scale3d(" + value.replace(/[;]+/g, "").trim()+ ")"
+								scale3d = "scale3d(" + value.replace(/[;]+/g, "").trim()+ ")";
 							}else{
 								transform = transform + " " + property + "(" + value.replace(/[;]+/g, "").trim()+ ")";
 							}
 
 						// Regular props
 						}else{
-							code = code + property + ": " + value.replace(/[;]+/g, "").trim() + ";"
+							code = code + property + ": " + value.replace(/[;]+/g, "").trim() + ";";
 						}
 					}
 				}
@@ -800,7 +800,7 @@ export default {
 				code = code + " " + transform + ";\n";
 			}
 			code = code + "}";
-			return code
+			return code;
 		},
 
 		// Generated @keyframe animation
@@ -810,7 +810,7 @@ export default {
 				var code = "@keyframes yourAnimation{\n";
 				for (const [step, properties] of Object.entries(this.working.steps)) {
 					// Open Step Percent Line
-					code = code + "    " + step + "% {\n"
+					code = code + "    " + step + "% {\n";
 					var lines = properties.css.split("\n");
 					for (const line of lines) {
 						code = code + "        " + line + "\n";
@@ -825,11 +825,11 @@ export default {
 				for (const [step, properties] of Object.entries(this.working.steps)) {
 
 					// Special transform line
-					var transform = ""
+					var transform = "";
 					var scale3d = "";
 
 					// Open Step Percent Line
-					code = code + "    " + step + "% {\n"
+					code = code + "    " + step + "% {\n";
 					// Loop for each property
 					for (const [prop, value] of Object.entries(properties.values)) {
 						if(value){
@@ -840,7 +840,7 @@ export default {
 								null;
 							}else if(transformProps.includes(prop)){
 								if(prop == "scale3d"){
-									scale3d = "scale3d(" + value.replace(/[;]+/g, "").trim()+ ")"
+									scale3d = "scale3d(" + value.replace(/[;]+/g, "").trim()+ ")";
 								}else{
 									transform = transform + " " + prop + "(" + value.replace(/[;]+/g, "").trim()+ ")";
 								}
@@ -865,7 +865,7 @@ export default {
 				// Close Keyframe
 				code = code + "}";
 				
-				return code
+				return code;
 			}
 		},
 
@@ -883,7 +883,7 @@ export default {
 			}else{
 				string = string + this.working.iterations + " ";
 			}
-			string = string + this.working.direction + " " + this.working.fill + ";\n"
+			string = string + this.working.direction + " " + this.working.fill + ";\n";
 
 			if(this.working.has_3d){
 				string = string + "\n\n    /* If you used any 3D transforms, include this */\n";
@@ -891,15 +891,15 @@ export default {
 				string = string + "    backface-visibility: " + (this.working.backface ? "visible" : "hidden") + ";\n";
 			}
 
-			string = string + "}"
+			string = string + "}";
 
 			// Parent styles
 			if(this.working.has_3d){
 				string = string + "\n\n/* For 3D transformations, the target's *parent* element needs these properties: */\n";
-				string = string + "#targetParentElement{\n"
+				string = string + "#targetParentElement{\n";
 				string = string + "    perspective: " + this.working.perspective + ";\n";
 				string = string + "    perspective-origin: " + this.working.perspective_origin + ";\n";
-				string = string + "}"
+				string = string + "}";
 			}
 			return string;
 		},
@@ -985,7 +985,7 @@ export default {
 							"css": "",
 						}
 					},
-				}
+				};
 			}else{
 				this.resetting_default = true;
 				setTimeout(function(){
@@ -998,7 +998,7 @@ export default {
 			var newStepData = {
 				"values": {},
 				"css": "",
-			}
+			};
 			this.$set(this.working.steps, newStepPos, newStepData);
 			this.adding_step = false;
 			this.active_step = newStepPos;
@@ -1007,7 +1007,7 @@ export default {
 		deleteStep: function(){
 			// Can't delete step at 0 or 100
 			if(this.active_step == 0 || this.active_step == 100){
-				this.hello("Can't delete that one", "far fa-hand", "yellow")
+				this.hello("Can't delete that one", "far fa-hand", "yellow");
 			}else{
 				delete this.working.steps[this.active_step];
 				this.active_step = 0;

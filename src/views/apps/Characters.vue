@@ -147,8 +147,8 @@ export default {
 	computed: {
 		searched() {
       		return this.characters.filter(char => {
-        		return char.name.toLowerCase().includes(this.searchString.toLowerCase())
-		  	})
+        		return char.name.toLowerCase().includes(this.searchString.toLowerCase());
+		  	});
 		}
 	},
 	watch: {

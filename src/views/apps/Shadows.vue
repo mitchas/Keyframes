@@ -374,7 +374,7 @@ export default {
 				b: this.working.shadow[this.active_layer].b,
 				opacity: this.working.shadow[this.active_layer].opacity,
 				hex: this.working.shadow[this.active_layer].hex,
-			})
+			});
 			this.active_layer = this.working.shadow.length - 1;
 		},
 
@@ -382,7 +382,7 @@ export default {
 		deleteLayer: function(){
 			this.working.shadow.splice(this.active_layer, 1);
 			this.active_layer = this.active_layer - 1;
-			if(this.active_layer < 0){this.active_layer = 0}
+			if(this.active_layer < 0){this.active_layer = 0;}
 		},
 
 
@@ -410,7 +410,7 @@ export default {
 							opacity: "0.24",
 						}
 					]
-				}
+				};
 				this.hello("Poof!", "fas fa-wand-magic-sparkles", "yellow");
 			}else{
 				this.resetting_default = true;
@@ -521,7 +521,7 @@ export default {
 				_this.working.shadow[_this.active_layer].b = rgb[2];
 
 			}).catch(function(error) {
-				console.log(error)
+				console.log(error);
 				_this.hello("Invalid HEX. Try again.", "fas fa-frown", "red");
 			});
 		},
@@ -585,8 +585,8 @@ export default {
 			var sensor = "";
 			var addListener = function(sensor){
 				_this.tilt_mode = true;
-				window.addEventListener(sensor, _this.tiltShadow)
-			}
+				window.addEventListener(sensor, _this.tiltShadow);
+			};
 			
 			// If it's already running, stop it
 			if(!_this.tilt_mode){
@@ -597,14 +597,14 @@ export default {
 			// Else start it
 			else{
 				// iOS requires permission request before
-				if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+				if (typeof DeviceOrientationEvent.requestPermission === "function") {
 					DeviceOrientationEvent.requestPermission()
 					.then(permissionState => {
-						if (permissionState === 'granted') {
+						if (permissionState === "granted") {
 							addListener("deviceorientation");
-							_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt")
+							_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt");
 						}else{
-							_this.hello("Device orientation permission denied.", "far fa-times-circle", "red")
+							_this.hello("Device orientation permission denied.", "far fa-times-circle", "red");
 						}
 					})
 					.catch(console.error);
@@ -613,14 +613,14 @@ export default {
 				else if (window.DeviceOrientationEvent){
 					// Webkit
 					addListener("deviceorientation");
-					_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt")
+					_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt");
 				}else if (window.MozOrientation){
 					// Firefox
 					addListener("MozOrientation");
-					_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt")
+					_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt");
 				}else{
 					// Error 
-					_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle", "red")
+					_this.hello("We can't access your device's sensors right now.", "far fa-exclamation-triangle", "red");
 				}
 			}
 		},

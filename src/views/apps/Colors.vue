@@ -330,23 +330,21 @@
 						<transition name="basicup">
 							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
 								<!-- Stored palettes from local storage, loop to create display -->
-								<transition-group name="list">
-									<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key" :class="{'active' : editing_stored_key == key}">
-										<!-- Preview -->
-										<div class="palette-preview hoverable" @click="loadPalette(palette, key)">
-											<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
-										</div>
-										<!-- Palette Info & Controls -->
-										<div class="pv__bar">
-											<button class="pv__i" @click="loadPalette(palette, key)">
-												<b>{{palette.name}}</b>
-												{{$date(palette.saved).format("MMMM D YYYY - h:mma")}}
-											</button>
-											<!-- Controls -->
-											<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
-										</div>
+								<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key" :class="{'active' : editing_stored_key == key}">
+									<!-- Preview -->
+									<div class="palette-preview hoverable" @click="loadPalette(palette, key)">
+										<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
 									</div>
-								</transition-group>
+									<!-- Palette Info & Controls -->
+									<div class="pv__bar">
+										<button class="pv__i" @click="loadPalette(palette, key)">
+											<b>{{palette.name}}</b>
+											{{$date(palette.saved).format("MMMM D YYYY - h:mma")}}
+										</button>
+										<!-- Controls -->
+										<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
+									</div>
+								</div>
 
 								<!-- No stored palettes -->
 								<div class="padded mtop-xs" v-if="storedPalettes && !Object.keys(storedPalettes).length">
@@ -678,12 +676,12 @@ export default {
 				if(this.gradient_autoblend){
 
 					if(key == 0){
-						background = background + "0%"
+						background = background + "0%";
 					// Last
 					}else if(colors.length -1 == key){
-						background = background + 100 + "%"
+						background = background + 100 + "%";
 					}else{
-						background = background + (100 / (colors.length - 1) * key).toFixed(2) + "%"
+						background = background + (100 / (colors.length - 1) * key).toFixed(2) + "%";
 					}
 					
 				}else{ 
@@ -746,11 +744,11 @@ export default {
 
 				// Add comma
 				if(key != colors.length -1){
-					background = background + ", "
+					background = background + ", ";
 				}
 			}
 			// Close
-			background = background + ");"
+			background = background + ");";
 
 			return background;
 
@@ -993,7 +991,7 @@ export default {
 		// Export functions
 		exportWith: function(key){
 			if(key == "Link"){
-				this.share(window.location.href, "Link")
+				this.share(window.location.href, "Link");
 			}else if(key == "Print"){
 				this.hello("Printing!", "far fa-print", "green");
 				var printContent = document.querySelector("#colorGrid").outerHTML;
@@ -1009,7 +1007,7 @@ export default {
 		// Copy export code to clipboard
 		copyExportToClipboard: function(element){
 			var el = "cssCodeExport";
-			if(this.exporting_as == 'Code'){
+			if(this.exporting_as == "Code"){
 				el = "regularCodeExport";
 			}
 			if(element){

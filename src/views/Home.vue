@@ -39,7 +39,7 @@
 		<div id="homeCarousel">
 			<div id="homeCarouselWrap">
 				<!-- Item Loop -->
-				<div class="carousel-item" v-for="item, key in carousel" :key="key" @click="navigate('/' + key)">
+				<div class="carousel-item" v-for="(item, key) in carousel" :key="key" @click="navigate('/' + key)">
 					<h4 :class="key">
 						<i :class="item.icon"></i>
 						<span>{{item.title}}</span>
@@ -47,16 +47,16 @@
 					<p>{{item.body}}</p>
 				</div>
 				<!-- Item Loop -->
-				<div class="carousel-item" v-for="item, key in carousel" :key="key + 1" @click="navigate('/' + key)">
-					<h4 :class="key">
+				<div class="carousel-item" v-for="(item, key1) in carousel" :key="key1" @click="navigate('/' + key1)">
+					<h4 :class="key1">
 						<i :class="item.icon"></i>
 						<span>{{item.title}}</span>
 					</h4>
 					<p>{{item.body}}</p>
 				</div>
 				<!-- Item Loop -->
-				<button class="carousel-item" v-for="item, key in carousel" :key="key + 2" @click="navigate('/' + key)">
-					<h4 :class="key">
+				<button class="carousel-item" v-for="(item, key2) in carousel" :key="key2" @click="navigate('/' + key2)">
+					<h4 :class="key2">
 						<i :class="item.icon"></i>
 						<span>{{item.title}}</span>
 					</h4>
@@ -319,7 +319,7 @@ export default {
 			this.hello("Data Copied - Hold On...", "fas fa-copy", "green");
 
 			setTimeout(function(){
-				_this.tab('https://v1.keyframes.app/import')
+				_this.tab("https://v1.keyframes.app/import");
 			}, 1000);
 		}
 
