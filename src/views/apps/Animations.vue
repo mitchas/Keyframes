@@ -309,7 +309,7 @@
 						<div class="app-sidebar-content-scroll">
 
 							<div class="padded">
-								<textarea :value="getKeyframeCode" class="pre text-small code mtop-sm" id="keyframeCSS"></textarea>
+								<textarea :value="getKeyframeCode" class="pre text-small code mtop-sm" id="keyframeCSS" readonly></textarea>
 								<button class="button small mtop-xs mbottom-md" @click="copyExportToClipboard('keyframeCSS')">
 									<i class="fas fa-copy"></i>
 									<span>Copy</span>
@@ -319,7 +319,7 @@
 							<h4>Animation Property</h4>
 							
 							<div class="padded">
-								<textarea :value="getAnimationCode" class="pre text-small code mtop-sm" id="animationCSS"></textarea>
+								<textarea :value="getAnimationCode" class="pre text-small code mtop-sm" id="animationCSS" readonly></textarea>
 								<button class="button small mtop-xs" @click="copyExportToClipboard('animationCSS')">
 									<i class="fas fa-copy"></i>
 									<span>Copy</span>

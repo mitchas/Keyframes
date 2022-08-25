@@ -6,7 +6,18 @@
 	<div>
 
 
-		<div class="max-width-large margin-auto padded">
+		<div class="max-width-large margin-auto padded mtop-md">
+
+			<Callout icon="far fa-exclamation-triangle" size="small" color="red" v-if="hasOldLocalStorage">
+				<p class="pbottom-md">Hey there! It looks like you have some data saved in your local storage from the old version of Keyframes.</p>
+				<div class="mtop-xs"></div>
+				<p class="small tight">You can still access your old animations and palettes, you just need to transfer the data to v1.keyframes.app.</p>
+				<button class="button small inline-block fit mtop-sm red" @click="oldLocalStorageModal = true">
+					<i class="fas fa-database"></i>
+					<span>Transfer your old Data</span>
+				</button>
+			</Callout>
+
 
 			<h1 class="mtop-xl mbottom-md">Practical tools for designers & developers</h1>
 
@@ -119,20 +130,44 @@
 		<div class="mtop-xl"></div>
 
 
+		<!-- Export old local storage modal -->
+		<Modal size=""
+			color="blue"
+			:show="oldLocalStorageModal"
+			title="Transfer your saved data"
+			icon="fas fa-database"
+			confirmIcon="fas fa-arrow-up-right-from-square"
+			confirmText="Copy & Go to V1"
+			dismissText="Close"
+			@confirmed="oldLocalStorageModal = false; oldLocalStorageTransfer()"
+			@dismissed="oldLocalStorageModal = false">
+
+			<p class="no-padding">
+				To access your saved animations and palettes from v1, you will need to transfer your data to its new home subdomain at v1.keyframes.app. 
+				<br/>
+				<br/>
+				Copy the text from the textbox below, then click the button to go to v1.keyframes.app/import and paste it there.
+			</p>
+			<textarea class="code mtop-sm" id="oldLocalStorageInput" :value="JSON.stringify(oldLocalStorage)" readonly></textarea>
+		</Modal>
+
+
 	</div>
 </template>
 
 <script>
 // Components
-// import Callout from "@/components/ui/Common/Callout";
+import Callout from "@/components/ui/Common/Callout";
 import _orderBy from "lodash/orderBy";
+import Modal from "@/components/ui/Modals/Modal";
 
 
 export default {
 	name: "home",
 
 	components: {
-		// Callout
+		Callout,
+		Modal,
 	},
 
 	mixins: [
@@ -141,6 +176,10 @@ export default {
 	data() {
 		return {
 			apps: this.$store.getters["Site/apps"],
+
+			hasOldLocalStorage: false,
+			oldLocalStorage: null,
+			oldLocalStorageModal: false,
 		};
 	},
 
@@ -172,6 +211,20 @@ export default {
 	},
 	
 	mounted() {
+
+		// Export local storage
+		var oldLS = {};
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i);
+			if(key.startsWith("animation_") || key.startsWith("palette_")){
+				oldLS[key] = localStorage.getItem(key);
+				this.hasOldLocalStorage = true;
+			}
+			console.log(`${key}: ${localStorage.getItem(key)}`);
+			this.oldLocalStorage = oldLS;
+		}
+
+
 	},
 	created: function () {
 	},
@@ -180,6 +233,23 @@ export default {
 	},
 	
 	methods: {
+
+		// Copy old local storage to clipboard, then open import page in new tab
+		oldLocalStorageTransfer: function(){
+			let _this = this;
+			var el = "oldLocalStorageInput";
+			var range = document.createRange();
+			range.selectNode(document.getElementById(el));
+			window.getSelection().removeAllRanges(); // clear current selection
+			window.getSelection().addRange(range); // to select text
+			document.execCommand("copy");
+			window.getSelection().removeAllRanges();// to deselect
+			this.hello("Data Copied - Hold On...", "fas fa-copy", "green");
+
+			setTimeout(function(){
+				_this.tab('https://v1.keyframes.app/import')
+			}, 1000);
+		}
 
 
 	}
