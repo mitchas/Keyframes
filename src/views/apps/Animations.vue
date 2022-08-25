@@ -351,19 +351,17 @@
 						<transition name="basicup">
 							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
 								<!-- Stored animations from local storage, loop to create display -->
-								<transition-group name="list">
 									<div v-for="(animation, key) in stored_animations" class="saved-list mbottom-xs padded" :key="key" :class="{'active' : editing_stored_key == key}">
-										<!-- Animation Info & Controls -->
-										<div class="sl__bar">
-											<button class="sl__i" @click="loadAnimation(animation, key)">
-												<b>{{animation.name}}</b>
-												{{$date(animation.saved).format("MMMM D YYYY - h:mma")}}
-											</button>
-											<!-- Controls -->
-											<button class="sl__a red" title="Delete Animation" @click="$store.getters['User/preferences'].confirm_action ? confirm_delete_animation = key : deleteAnimation(key)"><i class="fas fa-trash-alt"></i></button>
-										</div>
+									<!-- Animation Info & Controls -->
+									<div class="sl__bar">
+										<button class="sl__i" @click="loadAnimation(animation, key)">
+											<b>{{animation.name}}</b>
+											{{$date(animation.saved).format("MMMM D YYYY - h:mma")}}
+										</button>
+										<!-- Controls -->
+										<button class="sl__a red" title="Delete Animation" @click="$store.getters['User/preferences'].confirm_action ? confirm_delete_animation = key : deleteAnimation(key)"><i class="fas fa-trash-alt"></i></button>
 									</div>
-								</transition-group>
+								</div>
 
 								<!-- No stored animations -->
 								<div class="padded mtop-xs" v-if="stored_animations && !Object.keys(stored_animations).length">

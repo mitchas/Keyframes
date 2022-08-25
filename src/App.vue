@@ -123,7 +123,7 @@ export default {
 		// Send track on each route change
 		$route (to, from){
 			// Log tracking only if different route
-			if(from.path != to.path){
+			if(from.name != to.name){
 				_paq.push(["setCustomUrl", to.path ]);
 				_paq.push(["setDocumentTitle", to.name]);
 				_paq.push(["trackPageView"]);
