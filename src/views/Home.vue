@@ -12,6 +12,12 @@
 			<Callout icon="far fa-hand-wave" size="" color="orange" class="margin-auto">
 				<p><b>Welcome to Keyframes</b> v2!</p>
 				<p class="">A complete rewrite with an improved UI and tons of new features!</p>
+				<div id="phBadge">
+					<p class="small">Join the discussion or share your thoughts -</p>
+					<div id="phembed">
+						<a href="https://www.producthunt.com/posts/keyframes-app-v2?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-keyframes&#0045;app&#0045;v2" target="_blank"><img :src="'https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=357223&theme=' + ($store.getters['User/darkMode'] ? 'dark' : 'light')" alt="Keyframes&#0046;app&#0032;v2 - Simple&#0032;dev&#0032;tools&#0032;for&#0032;&#0064;keyframes&#0044;&#0032;colors&#0044;&#0032;shadows&#0044;&#0032;&#0038;&#0032;more | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+					</div>
+				</div>
 			</Callout>
 
 			<!-- Old Local Storage Callout -->
@@ -346,6 +352,17 @@ export default {
 
 
 <style lang="scss">
+
+#phBadge{
+	display: block;
+	margin-top: 10px;
+	
+	#phembed{
+		transform: scale(0.75);
+		transform-origin: top left;
+		margin-top: 2px;
+	}
+}
 
 #homeHero{
 	text-align: center;
