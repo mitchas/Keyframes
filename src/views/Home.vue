@@ -33,12 +33,10 @@
 				<span>
 					<b>There's a new version of Keyframes!</b>
 					<br/>
-					You are currently at v1.keyframes.app. Any of your local storage data from before the update should still be available here.
+					You are currently at v1.keyframes.app. If you are missing saved animations or palettes, go back to the new Keyframes and you should be prompted with a message to transfer them.
 					<br/><br/>
-					The new version is not compatible with the local storage data, so this site will stay up here so you can still access them.
-					<br/>
-					<small>I fixed many of the annoying bugs from this version, and added a ton of new features.</small>
-					</span>
+					The new version is not compatible with the local storage data, so this site will stay up here so you can continue to access your old saves.
+				</span>
 			</Callout>
 
 			<!-- 

@@ -16,10 +16,10 @@ export default {
 			// If state is true, lock scroll
 			if(state){
 				// Add class to lock scrolling
-				document.getElementsByTagName("body")[0].classList.add("scroll-lock");
+				if(document.getElementById("body")){document.getElementById("body").classList.add("scroll-lock");}
 			}else{
 				// Disable scroll lock
-				document.getElementsByTagName("body")[0].classList.remove("scroll-lock");
+				if(document.getElementById("body")){document.getElementById("body").classList.remove("scroll-lock");}
 			}
 
 		},

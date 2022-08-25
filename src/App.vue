@@ -126,6 +126,9 @@ export default {
 	mounted() {
 		this.pageMounted = true;
 
+
+		
+
 		// Get and set prefs from local storage
 		this.getPrefs();
 	},

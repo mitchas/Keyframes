@@ -49,19 +49,19 @@ export default {
 			if(mode != null){
 				// If true, turn on
 				if(mode){
-					document.getElementsByTagName("body")[0].classList.remove("no-animations");
+					if(document.getElementById("body")){document.getElementById("body").classList.remove("no-animations");}
 				}else{
-					document.getElementsByTagName("body")[0].classList.add("no-animations");
+					if(document.getElementById("body")){document.getElementById("body").classList.add("no-animations");}
 				}
 
 			}else{
 				// Else simply toggle it
 				if(this.$store.getters.userPreferences.animations){
 					// Turn animations back on
-					document.getElementsByTagName("body")[0].classList.remove("no-animations");
+					if(document.getElementById("body")){document.getElementById("body").classList.remove("no-animations");}
 				}else{
 					// Turn animations off with no-animations class on body
-					document.getElementsByTagName("body")[0].classList.add("no-animations");
+					if(document.getElementById("body")){document.getElementById("body").classList.add("no-animations");}
 				}
 			}
 			
@@ -178,9 +178,9 @@ export default {
 	
 			// Animations
 			if(this.$store.getters.userPreferences.animations != null && !this.$store.getters.userPreferences.animations){
-				document.getElementsByTagName("body")[0].classList.add("no-animations");
+				if(document.getElementById("body")){document.getElementById("body").classList.add("no-animations");}
 			}else{
-				document.getElementsByTagName("body")[0].classList.remove("no-animations");
+				if(document.getElementById("body")){document.getElementById("body").classList.remove("no-animations");}
 			}
 	
 			// Set defaults
