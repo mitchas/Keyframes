@@ -5,6 +5,8 @@ Changelog
 <template>
 	<div class="page narrow-page">
 
+		<h2 class="mtop-md mbottom-md">Changelog</h2>
+
 		<div v-for="(change, key) in changes" :key="key" class="changelog-block">
 			<div class="changelog-date">
 				{{change.date}}

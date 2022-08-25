@@ -219,7 +219,7 @@ export default {
 			oldLocalStorageModal: false,
 
 			carousel: {
-				more: {
+				changelog: {
 					title: "+More",
 					body: "Additional features, tools, and bug fixes released somewhat regularly.",
 					icon: "fas fa-sparkles",
