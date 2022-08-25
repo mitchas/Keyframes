@@ -117,11 +117,10 @@
 							<v-style v-if="paused">
 								#scrubber{
 									animation-play-state: paused;
-									<!-- animation-delay: -0.8s; -->
 								}
 							</v-style>
 							<!-- Step Markers -->
-							<button class="timeline-marker" v-for="key in working.steps" :key="key" :style="'left: ' + key + '%'" @click="active_step = key" :class="{'active': active_step == key}">
+							<button class="timeline-marker" v-for="(value, key) in working.steps" :key="key" :style="'left: ' + key + '%'" @click="active_step = key" :class="{'active': active_step == key}">
 								<b>{{key}}</b>
 							</button>
 
@@ -995,13 +994,18 @@ export default {
 		},	
 
 		addStep: function(newStepPos){
-			var newStepData = {
-				"values": {},
-				"css": "",
-			};
-			this.$set(this.working.steps, newStepPos, newStepData);
-			this.adding_step = false;
-			this.active_step = newStepPos;
+			if(!this.working.steps[newStepPos]){
+				var newStepData = {
+					"values": {},
+					"css": "",
+				};
+				this.$set(this.working.steps, newStepPos, newStepData);
+				this.adding_step = false;
+				this.active_step = newStepPos;
+			}else{
+				this.adding_step = false;
+				this.active_step = newStepPos;
+			}
 		},
 		// Remove step at active_step, select previous
 		deleteStep: function(){
