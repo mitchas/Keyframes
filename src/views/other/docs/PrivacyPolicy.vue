@@ -21,7 +21,7 @@ Privacy Policy Document document
 			<ul>
 				<li>Nothing you enter on {{company}} is ever stored on our servers.</li>
 				<li>All of your data is stored locally on your computer - in your browser's "local storage".</li>
-				<li>Nothing you enter here will ever be published on the internet for others to view.</li>
+				<li>No third-party trackers or ad networks are used on this site.</li>
 			</ul>
 		</p>
 		<h3 class="mtop-md">

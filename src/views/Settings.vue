@@ -59,7 +59,7 @@
 		<p>
 			You can turn off any apps you don't use so they don't show in the app list.
 			<br/>
-			The <i class="fas fa-circle-star text-blue"></i> default app is what loads first when you first open Keyframes.app.
+			If you set a <i class="fas fa-circle-star text-blue"></i> default app, it will take you there instead of the homepage when you open keyframes.app.
 		</p>
 
 		<div class="card-grid mtop-md" v-if="sortedApps">
@@ -157,7 +157,6 @@
 		<p class="small mbottom-md">
 			<b>TL;DR:</b>
 			This app is as private as it gets. We don't save <b>any</b> of your data anywhere. It's all on your computer. No ad networks, third-party libraries, or cookies.
-			<br/>
 			It does have Analytics, but it's self-hosted and tracks the basics like which pages or apps are viewed and how many times.
 		</p>
 
@@ -176,8 +175,9 @@
 		<!-- Development -->
 		<h3 class="mtop-xl">Development</h3>
 		<p class="mbottom-xxs">
-			<b>Stack: &nbsp;</b> <a href="https://vuejs.org/" target="_blank">Vue.js</a>, Local Storage, <a href="https://vercel.com" target="_blank">Vercel</a> hosting, <a href="https://matomo.org/" target="_blank">Matomo</a> self-hosted analytics.
-			<small class="block"><b>Third-Party: &nbsp;</b> <a href="https://day.js.org/" target="_blank">Day.js</a> for dates, <a href="http://numeraljs.com/" target="_blank">Numeral.js</a> for numbers, <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> Pro for icons.</small>
+			Stack: <a href="https://vuejs.org/" target="_blank">Vue.js</a>, Local Storage, <a href="https://vercel.com" target="_blank">Vercel</a> hosting, <a href="https://matomo.org/" target="_blank">Matomo</a> self-hosted analytics.
+			<br/>
+			Third-Party: <a href="https://day.js.org/" target="_blank">Day.js</a> for dates, <a href="http://numeraljs.com/" target="_blank">Numeral.js</a> for numbers, <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> Pro for icons.</small>
 		</p>
 		<p class="mbottom-sm">
 			View the changelog for the latest updates & changes. 

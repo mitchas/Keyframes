@@ -36,7 +36,7 @@ Terms of Service
 		</h3>
 		<p>
 		<p>
-			Permission is granted to temporarily use {{company}}'s website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not: 
+			Permission is granted to temporarily use {{company}}'s website for personal and commercial use. This is the grant of a license, not a transfer of title, and under this license you may not: 
 			<ul>
 				<li>Modify or copy the source materials;</li>
 				<li>Attempt to decompile or reverse engineer any software contained on {{company}}'s website; or</li>

@@ -10,7 +10,8 @@ body, html{
 	font-size: var(--baseFontSize);
 	color: var(--text);
 	overflow-x: hidden;
-	background-color: var(--background);
+	background-color: var(--layer);
+	// background-color: var(--background);
 	max-height: 100vh;
 	max-height: -webkit-fill-available;
 	overscroll-behavior: contain;

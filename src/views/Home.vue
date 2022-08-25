@@ -7,112 +7,149 @@
 
 
 		<div class="max-width-large margin-auto padded mtop-md">
-
-			<Callout icon="far fa-exclamation-triangle" size="small" color="red" v-if="hasOldLocalStorage">
-				<p class="pbottom-md">Hey there! It looks like you have some data saved in your local storage from the old version of Keyframes.</p>
+			
+			<!-- Old Local Storage Callout -->
+			<Callout icon="far fa-exclamation-triangle" size="small" color="red" v-if="hasOldLocalStorage" class="margin-auto">
+				<p class="pbottom-md"><b>Hey there!</b> It looks like you have some data saved in your local storage from the old version of Keyframes.</p>
 				<div class="mtop-xs"></div>
-				<p class="small tight">You can still access your old animations and palettes, you just need to transfer the data to v1.keyframes.app.</p>
+				<p class="small">You can still access your old animations and palettes, you just need to transfer the data to v1.keyframes.app.</p>
 				<button class="button small inline-block fit mtop-sm red" @click="oldLocalStorageModal = true">
 					<i class="fas fa-database"></i>
 					<span>Transfer your old Data</span>
 				</button>
 			</Callout>
+			
+			<!-- New Version Callout -->
+			<Callout icon="far fa-hand-wave" size="" color="orange" class="margin-auto">
+				<p><b>Welcome to Keyframes</b> v2!</p>
+				<p class="">A complete rewrite with an improved UI and tons of new features!</p>
+			</Callout>
 
-
-			<h1 class="mtop-xl mbottom-md">Practical tools for designers & developers</h1>
-
-			<p class="big">
-				Simple and private mini-apps to help with animations, designs, CSS properties, layouts, and more.
-			</p>
-
-			<p>
-				Here are a few things you should know:
-			</p>
-			<p>
-				<ul>
-					<li><b>It's private.</b> Any data you enter on keyframes.app never leaves your device. Instead, we use your device's own storage - keeping everything private.</li>
-					<li class="ptop-sm"><b>It's free.</b> Plus no ad networks, no cookies, no accounts, minimal tracking, and no <br/><em><i class="fas fa-sparkles"></i> engaging content <i class="fas fa-sparkles"></i></em></li>
-					<li class="ptop-sm"><b>It's customizable.</b> Hide apps you don't use, choose your own colors, fonts, and other preferences.</li>
-					<li class="ptop-sm"><b>It's open source.</b> Want to create your own app? The source code is on <a href="https://github.com/mitchas/tidycamp" target="_blank">GitHub</a></li>
-				</ul>
-			</p>
-
-
-			<h2 class="mtop-xl mbottom-lg center">Apps</h2>
-		</div>
-
-		<!-- Horizontal app scroll -->
-		<div class="card-grid center mtop-md no-scrollbars padded" v-if="sortedApps">
-
-			<router-link class="card" v-for="(app, key) in sortedApps" :key="key" :class="{'inactive': appData[app.id] && appData[app.id].enabled == false}" :to="app.path">
-				<div class="card-main" v-if="sortedApps[key]">
-					<i :class="'card-icon ' + app.icon"></i>
-					<b class="ul">{{app.title}}</b>
-				</div>
-				<!-- Card Body -->
-				<div class="card-body">
-					<p>{{app.description}}</p>
-				</div>
-				<!-- Footer controls -->
-				<div class="card-footer">
-					<div class="card-tags">
-						<span :class="'tag ' + app.category">{{app.category}}</span>
-					</div>
-				</div>
-			</router-link>
+			<!-- Hero -->
+			<div id="homeHero">
+				<h1 class="mtop-lg mbottom-xs">more tools for devs</h1>
+				<p class="big">
+					Browser-based, mobile-friendly, actually private tools that make CSS a little less bad.
+				</p>
+			</div>
 
 		</div>
 
+		<!-- Carousel -->
+		<div id="homeCarousel">
+			<div id="homeCarouselWrap">
+				<!-- Item Loop -->
+				<div class="carousel-item" v-for="item, key in carousel" :key="key" @click="navigate('/' + key)">
+					<h4 :class="key">
+						<i :class="item.icon"></i>
+						<span>{{item.title}}</span>
+					</h4>
+					<p>{{item.body}}</p>
+				</div>
+				<!-- Item Loop -->
+				<div class="carousel-item" v-for="item, key in carousel" :key="key + 1" @click="navigate('/' + key)">
+					<h4 :class="key">
+						<i :class="item.icon"></i>
+						<span>{{item.title}}</span>
+					</h4>
+					<p>{{item.body}}</p>
+				</div>
+				<!-- Item Loop -->
+				<button class="carousel-item" v-for="item, key in carousel" :key="key + 2" @click="navigate('/' + key)">
+					<h4 :class="key">
+						<i :class="item.icon"></i>
+						<span>{{item.title}}</span>
+					</h4>
+					<p>{{item.body}}</p>
+				</button>
+			</div>
+		</div>
 
 
-		<!-- Q & A -->
-		<div class="max-width margin-auto mtop-xl padded">
-			<h2 class="center">Q & A</h2>
-			<p class="center">Have more questions about what this is and how it works? We've got answers!</p>
+		<div class="max-width-large margin-auto padded mtop-md">
 
-			<h4 class="mtop-lg">How does this handle my data?</h4>
-			<p>
-				Keyframes.app runs off your device's own "local storage" - meaning everything you do here is only stored on your device. What does that mean for you?
+			<h2 class="center">so it's another toolbox app?</h2>
+			<p class="center big margin-auto">Yeah, but I made the tools the way I wanted.</p>
+			<p class="small center margin-auto no-padding">Combining features from all my favorites, and removing all the junk.</p>
+
+			<!-- Spacer -->
+			<div class="mtop-lg"></div>
+
+			<!-- Feature List -->
+			<ul id="featureList">
+
+				<li>
+					<i class="fas fa-computer-classic"></i>
+					<b>Local</b>
+					<p>This runs off local storage. Everything you do stays right on your computer.</p>
+				</li>
+				<li>
+					<i class="fas fa-user-secret"></i>
+					<b>Private</b>
+					<p>No third-party tracking, cookies, ad networks, or other plugins.</p>
+				</li>
+				<li>
+					<i class="fas fa-mobile"></i>
+					<b>Mobile</b>
+					<p>Actually usable on mobile devices, probably.</p>
+				</li>
+				<li>
+					<i class="fas fa-handshake-simple-slash"></i>
+					<b>Anti-Social</b>
+					<p><span>No accounts, and no social features, and no <i class="far fa-sparkles"></i>engaging content<i class="far fa-sparkles"></i>.</span></p>
+				</li>
+				<li>
+					<i class="fas fa-spray-can"></i>
+					<b>Customizable</b>
+					<p>Choose exactly how the app looks & behaves.</p>
+				</li>
+				<li>
+					<i class="fas fa-badge-dollar"></i>
+					<b>Free</b>
+					<p>I mainly made this to use myself, but I like sharing.</p>
+				</li>
+				<li>
+					<i class="fas fa-code"></i>
+					<b>Open Source</b>
+					<p><span>Want to create your own app? The source code is on <a href="https://github.com/mitchas/keyframes" target="_blank">GitHub</a>.</span></p>
+				</li>
+
+			</ul>
+
+
+			<h3 class="center mtop-xl ptop-md">everything else you should know</h3>
+			<p class="center margin-auto">In Q&A format.</p>
+
+
+			<h5 class="mtop-md">How does this handle my data?</h5>
+			<p class="small">
+				Keyframes.app runs off your device's local storage - meaning everything you do here is only stored on your device.
 				<ul>
 					<li>Your data is only on the device you're using</li>
 					<li>Nobody can see your data unless they have your device</li>
 					<li>If you use keyframes.app on another device, your data will not be there</li>
-					<li>You can delete your data any time through the app or by clearing your browser cache/storage.</li>
+					<li>You can delete your data any time through the app or by clearing your browser cache/storage or on the settings page.</li>
 				</ul>
 
-				<small class="mtop-sm block">This site does use very basic analytics tracking - just things like page views and general location using self-hosted analytics. No third-party services or APIs are used on this site.</small>
+				This site does use very basic analytics tracking - just things like page views and general location using self-hosted analytics. No third-party services or APIs are used on this site.
 			</p>
 
-			<h4 class="mtop-lg">Can I backup or move my data to another device?</h4>
-			<p>
+			<h5 class="mtop-md">Can I backup or move my data to another device?</h5>
+			<p class="small">
 				Yes! But it's not automatic. On the <router-link to="/settings">Settings Page</router-link> you can view and download your data and preferences - then simply transfer it to the device you want and upload it.
 				<br/><br/>
-				In the future there <b><i>may</i></b> be ways to automatically backup/sync your data using other services like Google Drive, iCloud, or others.
+				In the future there <b><em>may</em></b> be ways to automatically backup/sync your data using other services like Google Drive, iCloud, or others.
 			</p>
 
-			<h4 class="mtop-lg">Who are you?</h4>
-			<p>
-				My name is Mitch - I make neat websites & apps without all the clutter and tracking you find everywhere else. See what else I'm up to at <a href="https://hotdi.sh/?ref=camp">Hotdi.sh</a>.
-			</p>
-
-			<h4 class="mtop-lg">What's the point of this?</h4>
-			<p>
-				I hate downloading apps that have a single purpose, and most websites that would work as an alternative are so filled with ads they're almost unusable. So I decided to make my own collection of very simple mini-apps I use frequently.
-			</p>
-
-			<h4 class="mtop-lg">Have feedback or suggestions?</h4>
-			<p>
+			<h5 class="mtop-md">Have feedback or suggestions?</h5>
+			<p class="small">
 				Send me an email at <a href="mailto:hello@hotdi.sh" target="_blank" class="ul">hello@hotdi.sh</a>, or bug me on Twitter <a href="https://twitter.com/sleumasm" target="_blank" class="ul">@sleumasm</a>.
 				<br/>
-				<small>Or simply create an issue on the <a href="https://github.com/mitchas/tidycamp" target="_blank" class="ul">GitHub Repo</a> if you know what those words mean.</small>
+				<small>Or simply create an issue on the <a href="https://github.com/mitchas/keyframes" target="_blank" class="ul">GitHub Repo</a> if you know what those words mean.</small>
 			</p>
 
-		</div>
-
-
-		<div class="max-width margin-auto mtop-xl padded">
-			<h4>Hey!</h4>
-			<p>These apps are free - but if you find them useful and want to motivate me to keep them updated and add more features,  <a href="https://www.buymeacoffee.com/mitchs" target="_blank" class="ul">Buy me a Coffee</a>, or send a tip on <a href="https://account.venmo.com/u/mitchas" target="_blank" class="ul">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank" class="ul">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank" class="ul">PayPal</a>.</p>
+			<h3 class="mtop-xl center margin-auto">hey!</h3>
+			<p class="margin-auto small">These apps are free - but if you find them useful and want to motivate me to keep them updated and add more features,  <a href="https://www.buymeacoffee.com/mitchs" target="_blank" class="ul">Buy me a Coffee</a>, or send a tip on <a href="https://account.venmo.com/u/mitchas" target="_blank" class="ul">Venmo</a>, <a href="https://cash.app/$Mitchs" target="_blank" class="ul">CashApp</a>, or <a href="https://www.paypal.com/paypalme/mitchsamuels" target="_blank" class="ul">PayPal</a>. You can also <router-link to="/sponsor">Sponsor Keyframes</router-link> if you have a business or product to promote.</p>
 		</div>
 
 
@@ -121,7 +158,7 @@
 
 
 
-		<h6 class="mtop-xl ptop-xl pleft-md">Happy Camping</h6>
+		<p class="mtop-xl ptop-xl pleft-md small bold text-light">good luck</p>
 
 
 
@@ -180,6 +217,41 @@ export default {
 			hasOldLocalStorage: false,
 			oldLocalStorage: null,
 			oldLocalStorageModal: false,
+
+			carousel: {
+				more: {
+					title: "+More",
+					body: "Additional features, tools, and bug fixes released somewhat regularly.",
+					icon: "fas fa-sparkles",
+				},
+				characters: {
+					title: "Characters",
+					body: "Search special characters to find and copy the HTML and CSS codes.",
+					icon: "fas fa-tilde",
+				},
+				animate: {
+					title: "Animations",
+					body: "Create CSS @keyframe animations with a visual timeline similar to video editors.",
+					icon: "fas fa-clapperboard",
+				},
+				colors: {
+					title: "Colors",
+					body: "Conversions, palettes, gradients, contrast ratios, colorblindness, & many ways to export.",
+					icon: "fas fa-palette",
+				},
+				shadows: {
+					title: "Shadows",
+					body: "Create single or multi-layer box shadows just by moving some sliders.",
+					icon: "fas fa-eclipse",
+				},
+				settings: {
+					title: "Settings",
+					body: "Customize keyframes with themes, data management, and other preferences.",
+					icon: "fas fa-gear",
+				},
+				
+				
+			},
 		};
 	},
 
@@ -260,26 +332,126 @@ export default {
 
 <style lang="scss">
 
-#homeLogo{
-	margin: 0 auto;
+#homeHero{
+	text-align: center;
+	margin: 105px 0;
 
-	img{
-		height: 70px;
-		width: auto;
-		display: block;
-		margin: 85px 0 0 0;
+	h1{
+	}
+	p{
+		max-width: unset;
+		width: 100%;
+	}
 
-		@media (max-width: $screenSM) {
-			height: 80px;
-			margin: 45px auto 0 auto;
+}
+
+
+#homeCarousel{
+	width: 100%;
+	overflow: visible;
+	margin: 85px 0;
+	position: relative;
+	height: 150px;
+	width: 100vw;
+
+	#homeCarouselWrap{
+		width: fit-content;
+		display: flex;
+		gap: 60px;
+		position: absolute;
+		right: 0;
+    	animation: carouselAnimation 150s linear 0s infinite normal none;
+
+		.carousel-item{
+			display: flex;
+			height: fit-content;
+			gap: 15px;
+			flex-grow: 3;
+
+			h4{
+				margin: 0;
+				padding: 0;
+				display: flex;
+
+				&.animate i{color: var(--primary);}
+				&.colors i{color: var(--red);}
+				&.more i{color: var(--yellow);}
+				&.characters i{color: var(--purple);}
+				&.settings i{color: var(--green);}
+				&.shadows i{color: var(--textFade);}
+
+				i{
+					font-size: 1.25em;
+					width: 100%;
+					// text-align: center;
+					margin-top: -3px;
+					margin-right: 5px;
+				}
+			}
+
+			p{
+				min-width: 200px;
+				margin: 0;
+				padding: 0;
+				text-align: left;
+			}
+
+
+			// Hover item
+			&:hover,
+			&:focus{
+				cursor: pointer;
+
+				span{
+					text-decoration: underline;
+				}
+			}
 		}
 	}
-	h1{
-		display: block;
-		@media (max-width: $screenSM) {
+}
+@keyframes carouselAnimation{
+    0% {
+		transform: translateX(0);
+    }
+    100% {
+		transform: translateX(100%);
+		transform: translateX(calc(100% - 100vw));
+    }
+}
+
+
+#featureList{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	width: fit-content;
+	margin: 0 auto;
+
+	li{
+		width: 100%;
+		display: flex;
+		gap: 20px;
+		margin: 10px 0;
+
+		.fas,b,p{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.fas{
+			font-size: 1.5em;
+			width: 30px;
 			text-align: center;
-			width: 100%;
-			font-weight: 800;
+		}
+		b{
+			font-weight: 600;
+			font-size: 1em;
+		}
+		p{
+			margin: 0;
+			padding: 0;
+			font-size: 0.9em;
 		}
 	}
 }

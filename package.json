@@ -1,6 +1,6 @@
 {
-  "name": "tidycamp",
-  "version": "0.5.0",
+  "name": "keyframes",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode test",

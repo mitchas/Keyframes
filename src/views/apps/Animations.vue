@@ -877,7 +877,7 @@ export default {
 			}else{
 				string = string + this.working.timing + " ";
 			}
-			string = string + " " + this.working.delay + this.working.time_unit + " ";
+			string = string + this.working.delay + this.working.time_unit + " ";
 			if(this.working.loop){
 				string = string + "infinite ";
 			}else{
