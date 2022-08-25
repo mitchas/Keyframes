@@ -19,10 +19,16 @@
 				<p class="pbottom-md"><b>Hey there!</b> It looks like you have some data saved in your local storage from the old version of Keyframes.</p>
 				<div class="mtop-xs"></div>
 				<p class="small">You can still access your old animations and palettes, you just need to transfer the data to v1.keyframes.app.</p>
-				<button class="button small inline-block fit mtop-sm red" @click="oldLocalStorageModal = true">
-					<i class="fas fa-database"></i>
-					<span>Transfer your old Data</span>
-				</button>
+				<div class="flex gap">
+					<button class="button small inline-block fit mtop-sm red" @click="oldLocalStorageModal = true">
+						<i class="fas fa-database"></i>
+						<span>Transfer your old Data</span>
+					</button>
+					<button class="button small inline-block fit mtop-sm red invert" @click="clearOldStorage()">
+						<i class="fas fa-trash"></i>
+						<span>Clear It</span>
+					</button>
+				</div>
 			</Callout>
 
 			<!-- Hero -->
@@ -321,6 +327,13 @@ export default {
 			setTimeout(function(){
 				_this.tab("https://v1.keyframes.app/import");
 			}, 1000);
+		},
+		clearOldStorage: function(){
+			localStorage.clear();
+			// Toast
+			this.toast("Local Storage Cleared", "Your data & preferences have been cleared from your browser's local storage.", "", "fas fa-trash-alt");
+			this.hasOldLocalStorage = false;
+			this.oldLocalStorage = null;
 		}
 
 
