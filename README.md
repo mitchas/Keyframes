@@ -1,8 +1,11 @@
-# Keyframes.app #2
+# Keyframes.app v2
 
-## WIP: A collection of small, private web apps for developers.
+A collection of simple tools for frontend development.
+- Visual CSS @keyframe editor.
+- Color palette creator with gradients, conversion, contrast, and color blindness.
+- CSS box-shadow generator
+- Special character search
 
-____
 
 
 # Project Installation & Development

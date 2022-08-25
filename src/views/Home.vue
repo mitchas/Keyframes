@@ -8,8 +8,14 @@
 
 		<div class="max-width-large margin-auto padded mtop-md">
 			
+			<!-- New Version Callout -->
+			<Callout icon="far fa-hand-wave" size="" color="orange" class="margin-auto">
+				<p><b>Welcome to Keyframes</b> v2!</p>
+				<p class="">A complete rewrite with an improved UI and tons of new features!</p>
+			</Callout>
+
 			<!-- Old Local Storage Callout -->
-			<Callout icon="far fa-exclamation-triangle" size="small" color="red" v-if="hasOldLocalStorage" class="margin-auto">
+			<Callout icon="far fa-exclamation-triangle" size="small" color="red" v-if="hasOldLocalStorage" class="margin-auto mtop-md">
 				<p class="pbottom-md"><b>Hey there!</b> It looks like you have some data saved in your local storage from the old version of Keyframes.</p>
 				<div class="mtop-xs"></div>
 				<p class="small">You can still access your old animations and palettes, you just need to transfer the data to v1.keyframes.app.</p>
@@ -17,12 +23,6 @@
 					<i class="fas fa-database"></i>
 					<span>Transfer your old Data</span>
 				</button>
-			</Callout>
-			
-			<!-- New Version Callout -->
-			<Callout icon="far fa-hand-wave" size="" color="orange" class="margin-auto">
-				<p><b>Welcome to Keyframes</b> v2!</p>
-				<p class="">A complete rewrite with an improved UI and tons of new features!</p>
 			</Callout>
 
 			<!-- Hero -->

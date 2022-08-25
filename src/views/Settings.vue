@@ -174,11 +174,11 @@
 
 		<!-- Development -->
 		<h3 class="mtop-xl">Development</h3>
-		<!-- <p class="mbottom-xxs">
+		<p class="mbottom-xxs">
 			Stack: <a href="https://vuejs.org/" target="_blank">Vue.js</a>, Local Storage, <a href="https://vercel.com" target="_blank">Vercel</a> hosting, <a href="https://matomo.org/" target="_blank">Matomo</a> self-hosted analytics.
 			<br/>
 			Third-Party: <a href="https://day.js.org/" target="_blank">Day.js</a> for dates, <a href="http://numeraljs.com/" target="_blank">Numeral.js</a> for numbers, <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> Pro for icons.
-		</p> -->
+		</p>
 		<p class="mbottom-sm">
 			View the changelog for the latest updates & changes. 
 			<br/>
