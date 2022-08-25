@@ -1,0 +1,279 @@
+//! UI Elements
+// Styles for misc global UI elements
+// 
+// Tags
+// Breadcrumbs
+// Tooltips
+// Page Footer
+// Notification Dots
+// Keyboard Shortcut Preview
+
+// Tag
+.tag{
+	background-color: var(--background);
+	color: var(--text);
+	font-size: 0.85rem;
+	padding: 0.3rem 8px;
+	font-weight: 600;
+	border-radius: var(--borderRadius);
+	border-radius: calc(var(--borderRadius) * 2);
+	white-space: nowrap;
+	border: 1px solid var(--text);
+	text-decoration: none !important;
+
+	i:first-child{
+		position: relative;
+		left: -4px;
+	}
+	i:last-child{
+		margin-left: 4px;
+	}
+
+	&.small{
+		font-size: .65em;
+		padding: 0.2rem 6px;
+		font-weight: bold;
+		border-width: 2px;
+	}
+
+	&.red{
+		// background-color: var(--red);
+		// color: var(--redText);
+		border-color: var(--red);
+		background-color: var(--background);
+		color: var(--red);
+	}
+	&.orange{
+		border-color: var(--orange);
+		background-color: var(--background);
+		color: var(--orange);
+	}
+	&.yellow{
+		border-color: var(--yellow);
+		background-color: var(--background);
+		color: var(--yellow);
+	}
+	&.green{
+		border-color: var(--green);
+		background-color: var(--background);
+		color: var(--green);
+	}
+	&.blue{
+		border-color: var(--blue);
+		background-color: var(--background);
+		color: var(--blue);
+	}
+	&.sky{
+		border-color: var(--sky);
+		background-color: var(--background);
+		color: var(--sky);
+	}
+	&.pink{
+		border-color: var(--pink);
+		background-color: var(--background);
+		color: var(--pink);
+	}
+	&.purple{
+		border-color: var(--purple);
+		background-color: var(--background);
+		color: var(--purple);
+	}
+	&.grey{
+		border-color: var(--border);
+		background-color: var(--background);
+		color: var(--border);
+	}
+
+}
+
+
+// Breadcrumbs
+.breadcrumbs{
+	display: flex;
+	width: 100%;
+	box-sizing: border-box;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+
+	@media (max-width: $screenSM) {
+		// flex-wrap: nowrap;
+		// overflow: auto;
+	}
+
+	// Hide scrollbars
+	// Hidden
+	&::-webkit-scrollbar{
+		width: 0px;
+		display: none;
+	}
+	// Scrollbar handle/thumb
+	&::-webkit-scrollbar-thumb{
+		display: none;
+		width: 0px;
+	}
+
+	.crumb{
+		display: flex;
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0.35px;
+		color: var(--textFade);
+		transition: var(--transition);
+		text-transform: capitalize;
+		width: fit-content;
+
+		// Shrink on mobile
+		@media (max-width: $screenSM) {
+			margin-bottom: 6px;
+		}
+		@media (max-width: $screenSM) {
+			font-size: 13px;
+			text-align: center;
+		}
+
+		span{
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			margin-right: 8px;
+			white-space: pre;
+			text-transform: capitalize;
+		}
+
+		// Add arrow before each child
+		&:before{
+			content: '\f30b';
+			font-family: var(--fontAwesome);
+			display: block;
+			padding: 0px 8px 0 0;
+			color: var(--textFadeest);
+			position: relative;
+			top: 1px;
+			font-weight: 500;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		// Remove arrow before first child
+		&:first-child{
+			&:before{
+				display: none;
+			}
+		}
+
+		// Hover
+		&:hover{
+			text-decoration: none;
+			color: var(--textFade);
+			transition: var(--transition);
+			cursor: pointer;
+		}
+
+		// Highlight last (current) crumb
+		&.active{
+			color: var(--text);
+		}
+
+	}
+
+	&.no-hover .crumb:hover{
+		cursor: default;
+	}
+}
+
+
+
+
+// Shadow and hover stuff
+// Shadow and hover stuff
+// Box shadow
+.box-shadow{
+	box-shadow: var(--shadow);
+
+	&.hoverable:hover{
+		box-shadow: var(--shadow-Hover);
+	}
+}
+.hover-shadow{
+	box-shadow: var(--shadow);
+
+	&:hover{
+		cursor: pointer;
+		box-shadow: var(--shadow-Hover);
+		transform: scale(1.015);
+	}
+}
+
+// Thicker shadow normally, hover shrink
+.reverse-hover-shadow{
+	box-shadow: var(--shadow-Hover);
+
+	&:hover{
+		cursor: pointer;
+		box-shadow: var(--shadow);
+		transform: scale(0.98);
+	}
+}
+
+
+// Notification Dot
+// Floats little dot relative top right on element
+.notification-dot{
+	position: relative;
+	&:after{
+		content: "";
+		display: block;
+		height: 6px;
+		width: 6px;
+		position: absolute;
+		bottom: 0px;
+		left: 50%;
+		margin-left: -3px;
+		background-color: var(--red);
+		border-radius: calc(var(--borderRadius) * 4)
+	}
+}
+
+
+// Button Grid
+.button-grid{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	flex-basis: 33%;
+
+	button{
+		flex-grow: 3;
+	}
+}
+
+
+// Keyboard Shortcut preview
+.keyboard-shortcut{
+	display: flex;
+	gap: 5px;
+
+	b{
+		position: relative;
+		padding: 5px;
+		border: 1px solid var(--borderFade);
+		border-radius: 4px;
+		font-size: 0.75em;
+		box-shadow: 0px 3px 0px 2px rgba(150, 150, 150, 0.24);
+		&:hover{
+			top: 3px;
+			box-shadow: 0px 1px 0px 1px rgba(150, 150, 150, 0.24)
+		}
+	}
+	span,i{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 0.8em;
+	}
+	span{
+		padding-left: 10px;
+	}
+}

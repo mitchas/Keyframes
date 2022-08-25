@@ -1,959 +1,1696 @@
 <!--
-// Colors.vue
-// _________________________
-//
-//	Pick colors, convert rgb/hex, make palettes, share URL
-//
-//		Layout
-// 			Large search bar, flex squares below with each character and codes
-//
-//	
-//		Scripts
-//			Computed
-//				searchCharacters - Returns filtered character list matching search - based on name
-//			Methods
-//				setPalette(hexString) takes value as hexString ie ('ff0000,f0ff00,aa0f11') and loads them as a palette. Used for loading local storage or url params
-//				rgbaChange() Whenever a value for r,g,b, or a is changed, change the other formats
-//				hexChange() change to hex input, update rgba values
-//				rgbaTextChange() Change to rgba input, update sliders and hex
-//				invertTextColor(color) returns color value for css - either black or white based on color passed
-// 					How it works: converts passed (color) to hsl, gets the l value (brightness), and if it's > 50%, it's dark text, < is light
-//				deleteColor(index) deletes color at index - cannot delete all colors, one must remain
-//				addColor() adds new color to palette - defaults to black
-//				createPalette() Takes color and generates 5 colors with different hues for a palette.
-//				loadSavedPalettes() Gets palettes from local storage - gets on every tab click so it's up to date
-//				SavePalette() saves palette to local storage
-//				deletePalette() deletes palette from local storage
-//				loadPalette(name) loads palette from local storage based on name, calls setPalette()
-//
-// -->
+	Colors App
+-->
+
 <template>
-	<div class="app-page-split">
-
-		<!--/////////////////////////////
-			Left side of page - top bar, main view
-		/////////////////////////////-->
-		<div class="app-page-split-left">
+	<div class="fixed-page" id="colorApp">
 
 
-			<!--/////////////////////////////
-				Top bar - dropdown buttons - options, output
-			/////////////////////////////-->
-			<div class="app-page-split-left-top" id="colorOptionsBar">
+		<!-- Secondary nav / Toolbar -->
+		<nav class="secondary-nav">
 
-				<div class="option-dropdown">
-					<button class="button small action-btn" @click="controlTab('save')" v-bind:class="{'red': controlToggles.save, 'invert': !controlToggles.save}">
-						<i v-bind:class="{'fas fa-save': !controlToggles.save, 'fas fa-times-circle': controlToggles.save}"></i>
-						<span>Save/Load</span>
-					</button>
-					<button class="button small action-btn" @click="controlTab('options')" v-bind:class="{'red': controlToggles.options, 'transparent': !controlToggles.options}">
-						<i v-bind:class="{'fas fa-edit': !controlToggles.options, 'fas fa-times-circle': controlToggles.options}"></i>
-						<span>Options</span>
-					</button>
+			<!-- Add color -->
+			<button @click="addColor()">
+				<i class="fas fa-plus-circle"></i><span class="hint">Add Color</span>
+			</button>
+			<label>{{currentPalette.length}} color{{currentPalette.length == 1 ? '' : 's'}}</label>
 
-					<!--/////////////////////////////
-						Dropdown Content
-					/////////////////////////////-->
-					<!-- Save/Load -->
-					<transition name="fromtop">
-						<div class="option-dropdown-content" v-if="controlToggles.save">
-							<!-- Save current animation -->
-							<div class="field">
-								<label for="newPaletteSaveName">
-									<small class="block">Save your color palette to come back to later.</small>
-								</label>
-								<!-- animation name -->
-								<input id="newPaletteSaveName" aria-label="Save as Name" type="text" v-model="paletteToSaveName" maxlength="32" placeholder="MyPalette"/>
-								<button aria-label="Save Palette" class="button blue mtop-xs" @click="savePalette()">
-									<i class="far fa-save"></i>
-									<span>Save</span>
-								</button>
-								<transition name="basic">
-									<div class="badge red mleft-xs" v-if="savedPalettes.includes('palette_' + paletteToSaveName)">
-										<i class="far fa-code-branch"></i>
-										<span>Overwriting {{paletteToSaveName}}</span>
-									</div>
-								</transition>
+			<!-- Gap -->
+			<div class="spacer"></div>
+
+			<!-- Loop for other secondary buttons -->
+			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" 
+				:class="{'notification-dot': (button.id == 'colorblind' && colorblind != 'none') || (button.id == 'contrast' && contrast_enabled)}">
+				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<span class="hint left">{{button.title}}</span>
+			</button>
+		</nav>
+
+		
+		<!-- Main stage area -->
+		<div :class="'app-layout colorblind_' + colorblind">
+
+			<!-- Color Grid -->
+			<div id="colorGrid" :style="'background-color: ' + (colorPrefs.stageBackground ? colorPrefs.stageBackground : 'var(--background)') " :class="{'checkered': colorPrefs.enableCheckers, 'padded': colorPrefs.enableOpacity || colorPrefs.colorGap, 'gap': colorPrefs.colorGap}" :data-count="currentPalette.length">
+
+				<!-- Loop for Current Palette -->
+				<div class="color_block" v-for="(color, key) in currentPalette" :key="key" :style="colorStyleProperties(key)" @dragover="dragSwapPosition(key)">
+				<!-- <div class="color_block" v-for="(color, key) in currentPalette" :key="key" :style="colorStyleProperties(key)" @drop.prevent="dragSwapPosition(key)" @dragenter.prevent @dragover.prevent> -->
+
+					<div class="color_block_info">
+						<!-- Name -->
+						<input class="color_name_input hide-print" v-if="colorPrefs.customNames" type="text" v-model="color.name" placeholder="Name" @change="color.name = color.name.replace(/ /g, '')" />
+						<h6 class="print-only" v-if="colorPrefs.customNames">{{color.name}}</h6>
+						<!-- HEX -->
+						<button class="hex_code" @click="copyToClipboard(RGBToHex(color.r, color.g, color.b, color.a).toUpperCase())">
+							{{RGBToHex(color.r, color.g, color.b, color.a)}}
+						</button>
+						<!-- RGB -->
+						<button class="format_code" 
+							@click="
+							colorPrefs.enableOpacity && copyToClipboard('rgba' + '(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + (color.a / 255).toFixed(2) + ')');
+							!colorPrefs.enableOpacity && copyToClipboard('rgb' + '(' + color.r + ', ' + color.g + ', ' + color.b + ')');
+							">
+							rgb{{colorPrefs.enableOpacity ? 'a' : ''}}({{color.r}}, {{color.g}}, {{color.b}}<span v-if="colorPrefs.enableOpacity">, {{(color.a / 255).toFixed(2)}}</span>)
+						</button>
+					</div>
+
+
+					<!-- Color Control Buttons -->
+					<div class="color_block_controls">
+						<!-- Adjust -->
+						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple" title="Adjust RGB"></i></button>
+						<!-- Shades -->
+						<button><i class="fas fa-shutters" @click="color.shades = !color.shades" title="Color Shades"></i></button>
+						<!-- Delete -->
+						<button @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'color', key ] : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button>
+						<!-- Drag -->
+						<button draggable="true" @dragstart="dragging = key" @dragend="dragging = null" v-if="!$store.getters['Device/hasTouch']"><i class="fas fa-grip-dots-vertical"></i></button>
+					</div>
+
+					<!-- Color Editor - Sliders -->
+					<transition name="basic">
+						<div id="color_block_sliders" v-if="color.adjust">
+							<!-- Loop through slider definitions -->
+							<div class="cbs_row" v-for="(option, key) in slider_definitions" :key="key">
+								<input type="range" :id="'slider'+option.id" min="0" max="255" v-model="color[option.id]"/>
+								<!-- class="option.sliderClass -->
+								<label :for="'slider'+option.id" class="vertical">{{option.label}}</label>
+								<input type="number" v-model="color[option.id]" min="0" max="255"/>
 							</div>
-							<!-- Saved animations -->
-							<div class="field mtop-sm">
-								<label>
-									Load a Saved Palette
-									<small v-if="!savedPalettes.length" class="block ptop-xs">You don't have any palettes saved yet</small>
-								</label>
-								<div class="saved-list">
-									<div class="saved-item" v-for="(name, index) in savedPalettes" :key="index">
-										<span @click="loadPalette(name)">{{name.substr(8)}}</span>
-										<i class="delete-saved-item far fa-times" @click.self.prevent="deletePalette(name)"></i>
+							<!-- Opacity Slider -->
+							<div class="cbs_row" v-if="colorPrefs.enableOpacity">
+								<input type="range" class="opacityx" id="colorOpacityInput" min="0" max="255" step="1"  v-model="color.a"/>
+								<label for="colorOpacityInput" class="vertical">Opacity</label>
+								<input type="number" id="colorOpacityInput" :value="(color.a / 255).toFixed(2)" @change="event => color.a = (parseFloat(event.target.value) * 255)" min="0" max="1"/>
+								<!-- <input type="number" id="colorOpacityInput" v-model="color.a" min="0" max="255"/> -->
+							</div>
+							<!-- Edit hex value input -->
+							<div class="cbs_row">
+								<input class="color_transparent_input" type="text" placeholder="HEX Value" :value="RGBToHex(color.r, color.g, color.b, color.a).toUpperCase()" @change="updateRGBValue($event, key)"/>
+								<input class="color_transparent_input_picker" type="color" :value="RGBToHex(color.r, color.g, color.b, color.a).toUpperCase()" @change="updateRGBValue($event, key)"/>
+							</div>
+						</div>
+					</transition>
+
+					<!-- Shades - floats on top -->
+					<div class="color_block_shades" v-if="color.shades" @click="color.shades = false">
+						<button class="shade" v-for="i in 13" :key="i" :style="'background-color: rgb(' + (i * color.r / 6.5) + ', ' + (i *color.g / 6.5) + ', ' + (i *color.b / 6.5) + ');'" @click="color.r = parseInt(i * color.r / 6.5) ; color.g = parseInt(i *color.g / 6.5); color.b = parseInt(i *color.b / 6.5);">
+							<i class="far fa-circle-dot" v-if="i == 7" :class="{'invert': contrast_enabled}"></i>
+						</button>
+					</div>
+
+					<!-- Contrast Text & Info -->
+					<div class="color_block_contrast" v-if="contrast_enabled" :class="{'lage-aa': contrastRatio(color)}">
+						<label class="ratio"><b>{{contrastRatio(color)}}</b>:1</label>
+						<div class="large-text">{{contrast_demo_text ? contrast_demo_text : "Large Text"}}</div>
+						<div class="tags">
+							<span class="wcag-tag mright-xxs" :class="{'green': contrastRatio(color) >= 3.0}">AA</span>
+							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 4.5}">AAA</span>
+						</div>
+						<p>{{contrast_demo_text ? contrast_demo_text : "Normal Text"}}</p>
+						<div class="tags">
+							<span class="wcag-tag mright-xxs " :class="{'green': contrastRatio(color) >= 4.5}">AA</span>
+							<span class="wcag-tag" :class="{'green': contrastRatio(color) >= 7.0}">AAA</span>
+						</div>
+					</div>
+					
+				</div> <!-- End Color Block-->
+			</div><!-- End ColorGrid -->
+
+
+			<!-- Sidebar -->
+			<div class="app-sidebar" :class="{'expanded': view_sidebar != null}">
+
+				<transition-group name="basic">
+
+					<!-- Gradient -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'gradient'" key="gradient">
+						<h3>Gradient</h3>
+						<div class="ptop-xs padded">
+
+							<!-- Gradient View -->
+							<div id="gradientStage" :style="'background: ' + gradientStyle">
+
+								<div id="gradientStageButtons">
+									<!-- Toggle buttons -->
+									<button @click="gradient_shape = 'linear'" :class="{active : gradient_shape == 'linear'}">
+										<span class="hint bottom">Linear</span>
+										<i class="fas fa-dash"></i>
+									</button>
+									<button @click="gradient_shape = 'radial'" :class="{active : gradient_shape == 'radial'}">
+										<span class="hint bottom">Radial</span>
+										<i class="fas fa-bullseye"></i>
+									</button>
+									<button @click="gradient_shape = 'conic'" :class="{active : gradient_shape == 'conic'}">
+										<span class="hint bottom">Conic</span>
+										<i class="fas fa-rotate-right"></i>
+									</button>
+								</div>
+
+							</div>
+
+						</div>
+						<!-- Scroll adjustment area -->
+						<div class="app-sidebar-content-scroll padded">
+							<!-- Angle -->
+							<transition name="basic">
+								<div class="flex" v-if="gradient_shape != 'radial'">
+									<label for="gradDeg" class="vertical pright-xs">Angle</label>
+									<input type="range" id="gradDeg" min="0" max="360" v-model="gradient_degree"/>
+									<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="gradient_degree" min="0" max="360"/></div>
+								</div>
+							</transition>
+							<!-- Radial Position -->
+							<transition name="basic">
+								<div class="aselect mtop-xs" v-if="gradient_shape == 'radial'">
+									<select v-model="gradient_radial_position">
+										<option value="closest-side">Closest Side</option>
+										<option value="closest-corner">Closest Corner</option>
+										<option value="farthest-side">Farthest Side</option>
+										<option value="farthest-corner">Farthest Corner</option>
+									</select>
+								</div>
+							</transition>
+							<!-- Circles Position -->
+							<transition name="basic">
+								<div v-if="gradient_shape != 'linear'">
+									<div class="flex">
+										<label for="gradConic" class="vertical text-small pright-xs">Start&nbsp;X</label>
+										<input type="range" id="gradConic" min="0" :max="100" v-model="gradient_conic_position[0]"/>
+										<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="gradient_conic_position[0]" min="0" max="100"/></div>
+									</div>
+									<div class="flex">
+										<label for="gradConicY" class="vertical text-small pright-xxs">Start&nbsp;Y</label>
+										<input type="range" id="gradConicY" min="0" :max="100" v-model="gradient_conic_position[1]"/>
+										<div class="vertical"><input type="number" class="small no-controls fit mleft-xs" v-model="gradient_conic_position[1]" min="0" max="100"/></div>
 									</div>
 								</div>
+							</transition>
+							<!-- Auto Blend -->
+							<div class="flex mtop-sm margin-auto between">
+								<label class="vertical" for="autoBlendTog">Auto&nbsp;Blend</label>
+								<input type="checkbox" id="autoBlendTog" class="toggle on-off" v-model="gradient_autoblend"/>
 							</div>
+							<!-- Blend -->
+							<transition name="basic">
+								<div class="flex" v-if="!gradient_autoblend">
+									<label for="gradDeg" class="vertical text-small pright-xs">Blend</label>
+									<input type="range" id="gradDeg" min="0" :max="((100/currentPalette.length) / 2).toFixed(0)" v-model="gradient_blend"/>
+								</div>
+							</transition>
+							<!-- Gradient CSS Output -->
+							<div class="mtop-md"></div>
+							<h4>CSS Output</h4>
+							<textarea :value="gradientStyle" class="text-small code mtop-sm" id="gradientCSS"></textarea>
+							<button class="button small mtop-xs mbottom-lg" @click="copyExportToClipboard('gradientCSS')">
+								<i class="fas fa-copy"></i>
+								<span>Copy</span>
+							</button>
+
 						</div>
-					</transition>
-					<!-- Options -->
-					<transition name="fromtop">
-						<div class="option-dropdown-content" v-if="controlToggles.options">
-							<div class="field">
-								<label for="stageBackground">
-									<small class="block">Change the background behind the color stage to see what it looks like layered with opacity.</small>
+					</div>
+
+
+					<!-- Color Blind -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'colorblind'" key="colorblind">
+						<h3>Color Blindness</h3>
+						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm padded">
+							<p class="small">
+								Simulate color blindness with the options below. These filters are approximate.
+								<small class="block ptop-xs">Filters may not display on Safari or iOS browsers.</small>
+							</p>
+
+							<div class="flex mtop-xs" v-for="(type, key) in colorblind_types" :key="key">
+								<input type="radio" class="radio mright-xs" :id="'colorblind_' + key" v-model="colorblind" :value="type.class"/>
+								<label class="vertical text-small" :for="'colorblind_' + key">
+									{{type.name}}
+									<small>{{type.description}}</small>
 								</label>
-								<input type="text" id="stageBackground" v-model="options.stageBackground" placeholder="Orange"/>
 							</div>
-						</div>
-					</transition>
 
-				</div>
-			</div> <!-- End page split left top -->
-
-
-			<!--/////////////////////////////
-				Stage
-			/////////////////////////////-->
-			<div class="app-stage" id="colorEditorStage">
-
-				<div id="colorEditor" class="invert-text">
-
-					<div class="field-row">
-						<!-- HEX -->
-						<div class="field" id="hexField">
-							<label for="horOffset">
-								<span>HEX</span>
-							</label>
-							<input type="text" v-model="palette[selectedColor].hex" @input="hexChange()"/>
-						</div>
-
-						<!-- RGBA -->
-						<div class="field" id="rgbaField">
-							<label for="horOffset">
-								<span>RGBA</span>
-							</label>
-							<input type="text" v-model="palette[selectedColor].rgba" @input="rgbaTextChange()"/>
 						</div>
 					</div>
-					
-					<!-- Red -->
-					<div class="field">
-						<label for="rgbaRed" class="slider-label-value">
-							<span>Red</span>
-							<input type="number" v-model="palette[selectedColor].r" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaRed" v-model="palette[selectedColor].r" min="0" max="255" step="1"  @input="rgbaChange()"/>
-					</div>
-					<!-- Green -->
-					<div class="field">
-						<label for="rgbaGreen" class="slider-label-value">
-							<span>Green</span>
-							<input type="number" v-model="palette[selectedColor].g" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaGreen" v-model="palette[selectedColor].g" min="0" max="255" step="1" @input="rgbaChange()"/>
-					</div>
-					<!-- Blue -->
-					<div class="field">
-						<label for="rgbaBlue" class="slider-label-value">
-							<span>Blue</span>
-							<input type="number" v-model="palette[selectedColor].b" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaBlue" v-model="palette[selectedColor].b" min="0" max="255" step="1" @input="rgbaChange()"/>
-					</div>
-					<!-- Opacity -->
-					<div class="field">
-						<label for="rgbaOpacity" class="slider-label-value">
-							<span>Opacity</span>
-							<input type="number" v-model="palette[selectedColor].a" min="0" max="255" @input="rgbaChange()"/>
-						</label>
-						<input type="range" id="rgbaOpacity" v-model="palette[selectedColor].a" min="0" max="1" step="0.01" @input="rgbaChange()"/>
-					</div>
-
-				</div>
-				
-
-			</div>
-			
-		</div> <!-- End page left -->
 
 
-
-		<!--//////////////////////
-			//////////////////////
-			Right side - value editor
-			//////////////////////
-			//////////////////////-->
-		<div class="app-page-split-right mobile-small">
-			<!-- Fields -->
-			<div class="app-fields mobile-noscroll">
-
-				<h4 class="mbottom-sm" id="colorPaletteHeader">
-					<span>Palette</span>
-					<i class="far fa-swatchbook mleft-xs"></i>
-				</h4>
-
-				<!-- Color palette -->
-				<div id="colorPalette">
-					<!-- Saved color loop -->
-					<transition-group name="basic" class="color-wrapper">
-						<div class="color" v-for="(color, index) in palette" :key="index" @click="selectedColor = index" :class="{'active': selectedColor == index}"
-							:style="'background: ' + color.hex + '; color: ' + invertTextColor(palette[index].hex) + ';'">
-							<div class="color-codes">
-								<!-- Color name -->
-								<div class="name">{{color.name}}</div>
-								<!-- Hex code -->
-								<span class="color-value" @click="selectedColor == index && copyToClipboard(color.hex, color.hex)">
-									{{color.hex}}<i class="far fa-copy"></i>
-								</span>
-								<!-- Rgba value -->
-								<span class="color-value" @click="selectedColor == index && copyToClipboard(color.rgba, 'rgb(' + color.r + ', ' + color.g + ', ' + color.b + ')')">
-									rgb({{color.r}}, {{color.g}}, {{color.b}})<i class="far fa-copy"></i>
-								</span>
+					<!-- Contrast -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'contrast'" key="contrast">
+						<h3>Contrast</h3>
+						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm padded">
+							<div class="flex mtop-xxs margin-auto between">
+								<label class="vertical" for="contrastTog">View Contrast</label>
+								<input type="checkbox" id="contrastTog" class="toggle yes-no" v-model="contrast_enabled"/>
 							</div>
-							<!-- Delete -->
-							<div class="color-actions">
-								<button class="color-delete" aria-label="Delete color from palette" @click.stop="deleteColor(index)" v-if="palette.length > 1 && selectedColor == index">
-									<i class="far fa-times"></i>
+							<transition name="basic">
+								<div v-if="contrast_enabled">
+									<!-- Contrast colors -->
+									<label class="mtop-md">{{contrast_reverse ? "Text" : "Background"}} Color (R, G, B)</label>
+									<div class="flex gap small-number mtop-xxs">
+										<input type="number" min="0" max="255" class="small" v-model="contrast_color_r" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrast_color_g" placeholder="255"/>
+										<input type="number" min="0" max="255" class="small" v-model="contrast_color_b" placeholder="255"/>
+									</div>
+									<!-- Demo Contrast Text -->
+									<div class="input-group mtop-sm">
+										<label class="input-group-label small" for="demoTxt">Demo Text</label>
+										<input type="text" id="demoTxt" v-model="contrast_demo_text" placeholder=""/>
+									</div>
+									<!-- Reverse Colors -->
+									<div class="flex mtop-md margin-auto between">
+										<label class="vertical" for="contrastRev">Reverse Colors</label>
+										<input type="checkbox" id="contrastRev" class="toggle " v-model="contrast_reverse"/>
+									</div>
+								</div>
+							</transition>
+
+							<!-- Spacer -->
+							<div class="mtop-sm pbottom-xxs"></div>
+
+							<!-- Information -->
+							<h4>How does this work?</h4>
+							<p class="small">
+								This tool is based off Web Content Accessibility Guidelines, or WCAG, which are guidelines for making websites accessible.
+							</p>
+							<div class="wcag-tag green mtop-xs">AA</div>
+							<p class="small">
+								<b>AA (Minimum Contrast)</b> requires a contrast ratio of at least 4.5:1 for normal text (14pt / 18.5px), and 3:1 for large (18pt / 24px) or bold text.
+							</p>
+							<div class="wcag-tag green mtop-xs">AAA</div>
+							<p class="small mbottom-md">
+								<b>AAA (Enhanced Contrast)</b> requires a contrast ratio of at least 7:1 for normal text (14pt / 18.5px), and 4.5:1 for large (18pt / 24px) or bold text.
+							</p>
+
+						</div>
+					</div>
+
+
+					<!-- Export -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'export'" key="export">
+						<h3>Export</h3>
+						<div class="app-sidebar-content-scroll pbottom-lg ptop-sm">
+							<!-- Loop export_options to create grid of buttons -->
+							<div class="button-grid padded">
+								<button class="button large-icon grey" v-for="(option, key) in export_options" :key="key" @click="exportWith(key)">
+									<i :class="option.icon"></i>
+									<span>{{option.type}}</span>
 								</button>
 							</div>
+							<!-- Printing tip -->
+							<div class="padded mtop-md">
+								<Callout icon="far fa-info-circle" size="small" color="blue">
+									<p class="small tight">
+										When printing, make sure "Background Graphics" are enabled.
+										<small class="ptop-xxs block">You can also print to PDF.</small>
+									</p>
+								</Callout>
+							</div>
 						</div>
-						<!-- Add color tile - only shows on mobile -->
-						<div class="color color-button" @click="addColor()" key="0123123">
-							<i class="fal fa-plus"></i>
-							<span class="color-button-text">Add Color</span>
+					</div>
+
+
+					<!-- Save / Load -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'save'" key="save">
+						<h3>Save</h3>
+						<!-- Save Form -->
+						<form @submit.prevent="savePalette" class="padded mbottom-md mtop-sm">
+							<div class="button-input small">
+								<input type="text" id="saveNameIn" placeholder="Name" v-model="name_to_save"/>
+								<button class="button" :disabled="!name_to_save.length" :class="{'green' : editing_stored_key != null}">
+									<i class="fas fa-floppy-disk"></i>
+									<span>{{editing_stored_key != null ? "Save Changes" : "Save New"}}</span>
+								</button>
+							</div>
+							<!-- Save as new -->
+							<button type="button" v-if="editing_stored_key != null" @click="editing_stored_key = null" class="text-smaller align-center ptop-xxs text-primary">Or save as new Palette.</button>
+						</form>
+						<!-- Load existing -->
+						<h3>Saved Palettes</h3>
+						<!-- <span class="text-smaller">{{storedPalettes}}</span> -->
+						<!-- Scrollable saved list -->
+						<transition name="basicup">
+							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
+								<!-- Stored palettes from local storage, loop to create display -->
+								<transition-group name="list">
+									<div v-for="(palette, key) in storedPalettes" class="palette-view mbottom-sm padded" :key="key" :class="{'active' : editing_stored_key == key}">
+										<!-- Preview -->
+										<div class="palette-preview hoverable" @click="loadPalette(palette, key)">
+											<div class="palette-preview-color" v-for="(color, key2) in palette.colors" :key="key2" :style="'background-color: ' + RGBToHex(color.r, color.g, color.b, color.a)"></div>
+										</div>
+										<!-- Palette Info & Controls -->
+										<div class="pv__bar">
+											<button class="pv__i" @click="loadPalette(palette, key)">
+												<b>{{palette.name}}</b>
+												{{$date(palette.saved).format("MMMM D YYYY - h:mma")}}
+											</button>
+											<!-- Controls -->
+											<button class="pv__a red" title="Delete Palette" @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'palette', key ] : deletePalette(key)"><i class="fas fa-trash-alt"></i></button>
+										</div>
+									</div>
+								</transition-group>
+
+								<!-- No stored palettes -->
+								<div class="padded mtop-xs" v-if="storedPalettes && !Object.keys(storedPalettes).length">
+									<Callout icon="far fa-empty-set" size="small" color="red">
+										<p class="small">You haven't saved anything yet.</p>
+									</Callout>
+								</div>	
+
+							</div>
+						</transition>
+
+					</div>
+
+
+					<!-- Settings -->
+					<div class="app-sidebar-content" v-if="view_sidebar == 'settings'" key="settings">
+						<h3>Palette Settings</h3>
+						<div class="app-sidebar-content-scroll">
+							<div class="padded">
+
+								<h4>Order</h4>
+
+								<ul id="colorList" class="mtop-sm mbottom-sm">
+									<li v-for="(color, key) in currentPalette" :key="key" draggable="true">
+										<button :disabled="key == 0" @click="shiftPalette(key, key-1)"><i class="fas fa-angle-up"></i></button>
+										<span class="cp" :style="'background-color: rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')'"></span>
+										<button :disabled="key == currentPalette.length - 1" @click="shiftPalette(key, key+1)"><i class="fas fa-angle-down"></i></button>
+									</li>
+								</ul>
+
+								<h4>Preferences</h4>
+
+								<!-- Color Format -->
+								<div class="input-group max-width-small mtop-sm">
+									<span class="input-group-label small" for="colorFormatInput">Format</span>
+									<div class="aselect">
+										<select v-model="active_color_format" id="colorFormatInput">
+											<!-- <option v-for="format in color_formats" :value="format" :key="format">{{format}}</option> -->
+											<option value="RGB/A">RGB/A</option>
+											<option disabled>HSB - Coming Soon</option>
+											<option disabled>HSL - Coming Soon</option>
+											<option disabled>CMYK - Coming Soon</option>
+										</select>
+									</div>
+								</div>
+								<!-- Color Names -->
+								<div class="flex mtop-sm between">
+									<label class="vertical" for="enableColorNames">Name Colors</label>
+									<input type="checkbox" id="enableColorNames" class="toggle yes-no" v-model="colorPrefs.customNames"/>
+								</div>
+								<!-- Separate colors -->
+								<div class="flex mtop-sm between">
+									<label class="vertical" for="colorGapTog">Gap Between Colors</label>
+									<input type="checkbox" id="colorGapTog" class="toggle yes-no" v-model="colorPrefs.colorGap"/>
+								</div>
+								<!-- Enable Opacity -->
+								<div class="flex mtop-sm between">
+									<label class="vertical" for="enableColorOp">Enable Opacity</label>
+									<input type="checkbox" id="enableColorOp" class="toggle yes-no" v-model="colorPrefs.enableOpacity"/>
+								</div>
+								<transition name="basic">
+									<div v-if="colorPrefs.enableOpacity || colorPrefs.colorGap">
+										<!-- Checkered Background -->
+										<div class="flex mtop-sm between">
+											<label class="vertical" for="enableCheckers">Checkered Background</label>
+											<input type="checkbox" id="enableCheckers" class="toggle on-off" v-model="colorPrefs.enableCheckers"/>
+										</div>
+										<!-- Page BG Color -->
+										<div class="input-group max-width-small mtop-sm">
+											<span class="input-group-label small" for="bgcolIn">Background</span>
+											<input type="text" id="bgcolIn" v-model="colorPrefs.stageBackground" placeholder="#FFFFFF"/>
+										</div>
+									</div>
+								</transition>
+
+								<!-- Gap -->
+								<div class="mtop-md"></div>
+
+								<h4>Danger</h4>
+								<!-- Reset Palette -->
+								<button class="button mtop-sm mbottom-lg margin-auto block" @click="clearPalette()" :class="{'red' : resetting_palette, 'grey': !resetting_palette}">
+									<i :class="{'far fa-exclamation-circle' : resetting_palette, 'far fa-eraser' : !resetting_palette}"></i>
+									<span>{{resetting_palette ? "Again to Confirm" : "Reset Palette"}}</span>
+								</button>
+							</div>
+
 						</div>
-						<!-- Add color tile - only shows on mobile -->
-						<div class="color color-button" @click="createPalette()" v-if="palette.length == 1" key="0923123">
-							<i class="fal fa-palette"></i>
-							<span class="color-button-text">Auto Palette</span>
-						</div>
-						<!-- Spacer-only on moible -->
-						<div class="color color-spacer"  key="012373">
-						</div>
+					</div>
+				</transition-group>
 
-					</transition-group>
-				</div>
-
-				<div class="flex flex-between mtop-xs" id="paletteControlButtons">
-					<!-- Add color -->
-					<button class="button small invert mbottom-sm" @click="addColor()">
-						<i class="far fa-plus-circle"></i>
-						<span>Add Color</span>
-					</button>
-					<!-- create Palette -->
-					<button class="button small blue mbottom-sm" @click="createPalette()" v-if="palette.length == 1">
-						<i class="far fa-palette"></i>
-						<span>Auto Palette</span>
-					</button>
-				</div>
-
-				<!-- Flex spacer -->
-				<div class="flex-grow"></div>
-
-				<!-- Share -->
-				<Callout
-					icon="far fa-link"
-					class="mbottom-xs mtop-lg hide-md"
-					color="blue"
-					size="tiny">
-					<span>Easily share your color or palette: the URL automatically updates for every change.</span>
-				</Callout>
-					
 
 			</div>
+
 		</div>
 
 
+		<!-- Modals -->
+		<!-- Confirm delete things -->
+		<Confirm v-if="confirm_modal && confirm_modal[0]" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" 
+			:confirmText="'Delete ' + (confirm_modal[0] == 'color' ? 'Color': 'Palette')" 
+			confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" 
+			v-on:confirmFalse="confirm_modal = null" v-on:confirmTrue="handleConfirmModal()">
+			<p class="no-padding" v-if="confirm_modal[0] == 'color'">
+				You are about to delete a color. <small class="block">This can <b>not</b> be undone.</small>
+			</p>
+			<p class="no-padding" v-else-if="confirm_modal[0] == 'palette'">
+				You are about to delete your palette <b>{{storedPalettes[confirm_modal[1]].name}}</b>. <small class="block ptop-xs">This can <b>not</b> be undone.</small>
+			</p>
+			<p v-else>Something went wrong. I can't tell what you're trying to do. <small class="block">You're not ever supposed to see this.</small></p>
+		</Confirm>
 
-		<!-- Append color styles to preview on page -->
-		<v-style>
-			#colorEditorStage{
-				background: {{palette[selectedColor].rgba}};
-			}
-			.app-page-split-left{
-				background: {{options.stageBackground ? options.stageBackground : 'var(--layer)'}};
-			}
-
-			.invert-text label *, .invert-text span, .invert-text label, .invert-text div, .invert-text a, .invert-text i{
-				color: {{invertTextColor(palette[selectedColor].hex)}};
-			}
-		</v-style>
+		<!-- Code Export Modal -->
+		<Modal size=""
+			:overflow="true"
+			:show="export_modal"
+			:title="'Export as ' + exporting_as"
+			:icon="export_options[exporting_as].icon"
+			confirmText="Copy"
+			dismissText="Close"
+			color="green"
+			confirmIcon="fas fa-copy"
+			:reverseButtons="true"
+			@confirmed="copyExportToClipboard()"
+			@dismissed="export_modal = null">
+			<!-- CSS, SCSS, LESS -->
+			<pre class="code-box large" v-if="exporting_as != 'Code'" id="cssCodeExport">
+				<div class="comment">{{export_options[exporting_as].commentStart}} HEX {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div v-for="(color, key) in currentPalette" :key="key">{{export_options[exporting_as].prefix}}{{colorPrefs.customNames && color.name ? color.name : 'Color-' + (key + 1)}}: {{RGBToHex(color.r, color.g, color.b, color.a)}};</div>
+				<!-- RGB -->
+				<div class="comment">{{export_options[exporting_as].commentStart}} RGB {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div v-for="(color, key) in currentPalette" :key="key">{{export_options[exporting_as].prefix}}{{colorPrefs.customNames && color.name ? color.name : 'Color-' + (key + 1)}}: rgb{{colorPrefs.enableOpacity ? 'a' : ''}}({{color.r}}, {{color.g}}, {{color.b}}{{colorPrefs.enableOpacity ? ', ' + (color.a / 255).toFixed(2) : ''}});</div>
+			</pre>
+			<!-- Code - CSV, XML, Etc. -->
+			<pre class="code-box large" v-else id="regularCodeExport">
+				<div class="comment">{{export_options[exporting_as].commentStart}} HEX CSV {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div><span v-for="(color, key) in currentPalette" :key="key">{{key > 0 ? ', ' : ''}}{{RGBToHex(color.r, color.g, color.b, color.a)}}</span></div>
+				<!-- Hex CSV without # -->
+				<div class="comment">{{export_options[exporting_as].commentStart}} HEX CSV - Without # {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div><span v-for="(color, key) in currentPalette" :key="key">{{key > 0 ? ', ' : ''}}{{RGBToHex(color.r, color.g, color.b, color.a, false)}}</span></div>
+				<!-- Array with # -->
+				<div class="comment">{{export_options[exporting_as].commentStart}} Array {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div>[<span v-for="(color, key) in currentPalette" :key="key">{{key > 0 ? ', ' : ''}}"{{RGBToHex(color.r, color.g, color.b, color.a)}}"</span>]</div>
+				<!-- Array without # -->
+				<div class="comment">{{export_options[exporting_as].commentStart}} Array - Without # {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div>[<span v-for="(color, key) in currentPalette" :key="key">{{key > 0 ? ', ' : ''}}"{{RGBToHex(color.r, color.g, color.b, color.a, false)}}"</span>]</div>
+				<!-- XML-->
+				<div class="comment">{{export_options[exporting_as].commentStart}} XML {{export_options[exporting_as].commentEnd || ""}}</div>
+				<div>&lt;palette&gt;</div>
+				<div v-for="(color, key) in currentPalette" :key="key">&nbsp;&nbsp;&nbsp;&nbsp;&lt;color name="{{colorPrefs.customNames && color.name ? color.name : 'Color-' + (key + 1)}}" hex="{{RGBToHex(color.r, color.g, color.b, color.a, false)}}" r="{{color.r}}" g="{{color.g}}" b="{{color.b}}"{{colorPrefs.enableOpacity ? ' a="' + (color.a / 255).toFixed(2) + '"' : ''}} /&gt;</div>
+				<div>&lt;/palette&gt;</div>
+			</pre>
+		</Modal>
 
 
 	</div>
 </template>
 
 <script>
-// Mixins
-import metaMixin from "@/components/mixins/metaMixin.js";
 // Components
-import Callout from "@/components/ui/Callout";
+import Callout from "@/components/ui/Common/Callout";
+import Confirm from "@/components/ui/Modals/Confirm";
+import Modal from "@/components/ui/Modals/Modal";
+import debounce from "lodash/debounce";
+
 
 export default {
-	name: "ColorApp",
+	name: "Colors",
 
 	components: {
 		Callout,
+		Confirm,
+		Modal,
 	},
 
 	mixins: [
-		metaMixin,
 	],
 
 	data() {
+
 		return {
-			selectedColor: 0,
-			// Save & Load
-			savedPalettes: [],
-			paletteToSaveName: "",
-			hexStringTimer: null,
-			hexString: "",
-			// Palette
-			palette: [
+			// App Settings
+			colorPrefs: {
+				enableOpacity: false,
+				enableCheckers: false,
+				stageBackground: "#FFFFFF",
+				customNames: false,
+				colorGap: false,
+			},
+
+			// Current Palette
+			currentPalette: [
 				{
-					name: "Turquoise",
-					hex: "#4AF9D6",
-					rgba: "rgba(74, 249, 214, 1)",
-					r: 74,
-					g: 249,
-					b: 214,
-					a: 1,
+					r: 0,
+					g: 70,
+					b: 220,
+					a: 255,
+					adjust: true,
+					shades: false,
+					name: "Color-1",
 				},
 			],
-			// App options
-			options: {
-				stageBackground: "",
-				customTarget: "<div id='targetElement' class='shadow-target'><i class='fal fa-hands-wash'></i></div>",
-				customTargetCSS: "#targetElement{\n    display:block;\n    height: 140px;\n    width: 200px;\n    background-color: #ffffff;\n    border:var(--borderWidth) solid #f2f5f9;\n    color: #16023C;\n    border-radius: 3px;\n    margin: 0 auto;\n    font-size: 62px;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    text-align: center;\n}",
+
+			// Saved Palettes
+			storedPalettes: [],
+			editing_stored_key: null,
+
+			// App Functions
+			view_sidebar: null,
+			active_color_format: "RGB/A",
+			confirm_modal: null, // [tpe, key]
+			dragging: null,
+			// Saving
+			name_to_save: "",
+			// Exporting
+			export_modal: false,
+			exporting_as: "CSS",
+			// Deleting
+			deleting_color: null,
+			deleting_palette: null,
+			resetting_palette: false,
+			// Colorblind
+			colorblind: "none",
+			// Contrast
+			contrast_enabled: false,
+			contrast_demo_text: "",
+			contrast_color_r: 255,
+			contrast_color_g: 255,
+			contrast_color_b: 255,
+			contrast_reverse: false,
+			re_enable_opacity: false,
+			// Gradient
+			gradient_shape: "linear",
+			gradient_degree: 90,
+			gradient_autoblend: true,
+			gradient_blend: 0,
+			gradient_radial_position: "closest-side",
+			gradient_repeat: false,
+			gradient_conic_position: [50, 50],
+
+
+			// App Definitions / Loops
+			secondary_nav: [
+				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
+				{title: "Color Blindness", id: "colorblind",  icon: "fas fa-glasses"},
+				{title: "Contrast", id: "contrast",  icon: "fas fa-circle-half-stroke"},
+				{title: "Gradient", id: "gradient",  icon: "fas fa-blender"},
+				{title: "Export", id: "export",  icon: "fas fa-share-nodes"},
+				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
+				{title: "Settings", id: "settings",  icon: "fas fa-bars"},
+			],
+			slider_definitions: [
+				{label: "Red", id: "r", sliderClass: "red"},
+				{label: "Green", id: "g", sliderClass: "green"},
+				{label: "Blue", id: "b", sliderClass: "blue"},
+			],
+			color_formats: [
+				"RGB/A",
+				"HSB",
+				"HSL",
+				"CMYK"
+			],
+			colorblind_types: [
+				{name: "None / Trichromat", class: "none", description: "Regular color vision."},
+				{name: "Protanomaly", class: "protanomaly", description: "Low Red"},
+				{name: "Protanopia", class: "protanopia", description: "No Red"},
+				{name: "Deuteranomaly", class: "deuteranomaly", description: "Low Green"},
+				{name: "Deuteranopia", class: "deuteranopia", description: "No Green"},
+				{name: "Tritanomaly", class: "tritanomaly", description: "Low Blue"},
+				{name: "Tritanopia", class: "tritanopia", description: "No Blue"},
+				{name: "Achromatomaly", class: "achromatomaly", description: "Almost No Color"},
+				{name: "Achromatopsia", class: "achromatopsia", description: "No Color"}
+			],
+			export_options: {
+				"CSS": {type: "CSS", icon: "fab fa-css3-alt", prefix: "--", commentStart: "/*", commentEnd: "*/"},
+				"SCSS" : {type: "SCSS", icon: "fab fa-sass", prefix: "$", commentStart: "//"},
+				"LESS": {type: "LESS", icon: "fab fa-less", prefix: "@", commentStart: "//"},
+				"Code": {type: "Code", icon: "fas fa-code", commentStart: "/*", commentEnd: "*/"},
+				"Print": {type: "Print", icon: "fas fa-print"},
+				"Link": {type: "Link", icon: "fas fa-link"},
 			},
-			// Which controls are visible
-			controlToggles: {
-				options: false,
-				save: false,
-			}
+
+			
 		};
 	},
 
-	mounted() {
-		this.updateMeta("Colors | Keyframes.app", "Keyframes gives you a visual timeline to help you create, view, and run animations without having to go back and forth between your browser and editor.")
-	
-		// Get parms
-		if(this.$route.query.c){
-			this.hexString = this.$route.query.c;
-			this.setPalette();
-		}
+	computed: {
+		// storedPalettes_sort() {
+			// return this.storedPalettes.slice().sort((a, b) => new Date(b.saved)- new Date(a.saved));
+		// },
+		gradientStyle(){
+
+			var colors = this.currentPalette;
+			var shape = this.gradient_shape;
+			var gap = Number(this.gradient_blend);
+
+			// Create Gradient
+			var background = shape + "-gradient(";
+
+			// Degree for linear
+			if(shape == "linear"){
+				 background = background + this.gradient_degree + "deg, ";
+			}else if(shape == "conic"){
+				 background = background + "from " +  this.gradient_degree + "deg ";
+				 background = background + "at " + this.gradient_conic_position[0] + "% " + this.gradient_conic_position[1] + "%, ";
+			}else if(shape == "radial"){
+				 background = background + this.gradient_radial_position + " ";
+				 background = background + "at " + this.gradient_conic_position[0] + "% " + this.gradient_conic_position[1] + "%, ";
+			}
+			
+			// Loop through each color
+			for (var key in colors){
+				key = Number(key);
+
+				// Add Color
+				// Opacity included
+				if(this.colorPrefs.enableOpacity){
+					background = background + "rgba(" + colors[key].r + ", " + colors[key].g + ", " + colors[key].b + ", " + (colors[key].a/255).toFixed(2) + ") ";
+				}else{
+					background = background + "rgb(" + colors[key].r + ", " + colors[key].g + ", " + colors[key].b + ") ";
+				}
+
+				// Single color, repeat same.
+				if(colors.length == 1){
+					background = background + "0%, rgb(" + colors[key].r + ", " + colors[key].g + ", " + colors[key].b + ") 100%";
+				}
+
+				// Blending / Position
+				// Auto Blend
+				if(this.gradient_autoblend){
+
+					if(key == 0){
+						background = background + "0%"
+					// Last
+					}else if(colors.length -1 == key){
+						background = background + 100 + "%"
+					}else{
+						background = background + (100 / (colors.length - 1) * key).toFixed(2) + "%"
+					}
+					
+				}else{ 
+					// Manual Blend
+					var width = (100/colors.length); // 20
+
+					// First
+					if(key == 0){
+						var position = (width - (gap * 2));
+						background = background + "0% " + (position).toFixed(2) + "%";
+					// Last
+					}else if(colors.length -1 == key){
+						var position = 100 - (width - (gap * 2));
+						background = background + (position).toFixed(2) + "%" +  " 100%";
+					}else{
+						// Mid -30%
+						var change = width - (width - gap);
+
+						var first = (width * key);
+						first = (first + change).toFixed(2);
+						var second = (width * key) + width;
+						second = (second - change).toFixed(2);
+						background = background + first + "% " + second + "%";
+					}
+
+				}
+
+				
+				// Position
+				// First color
+				// if(key == 0){
+				// 	if(gap == maxGap){
+				// 		background = background + "0%"
+				// 	}else{
+				// 		background = background + "0% "
+				// 		background = background + ((100/colors.length) - gap).toFixed(2) + "%"
+				// 	}
+				// // Last
+				// }else if(colors.length -1 == key){
+				// 	if(gap == maxGap){
+				// 		background = background + 100 + "%"
+				// 	}else{
+				// 		background = background + (((100/colors.length).toFixed(2) * key) + gap) + "% "
+				// 		background = background + " 100% "
+				// 	}
+				// }else{
+				// 	if(gap == maxGap){
+				// 		background = background + (100 / (colors.length - 1) * key) + "%"
+				// 	}else{
+				// 		console.log("CALC MID")
+				// 		console.log((((100/colors.length)) *  (key + 1)).toFixed(2))
+				// 		console.log(typeof (((100/colors.length)) *  (key + 1)).toFixed(2))
+
+				// 		background = background + (((100/colors.length) + gap).toFixed(2) * key) + "% "
+				// 		background = background + (  Number((100/colors.length) *  (key + 1)) - gap) + "%"
+				// 	}
+				// }
+
+				
+
+				// Add comma
+				if(key != colors.length -1){
+					background = background + ", "
+				}
+			}
+			// Close
+			background = background + ");"
+
+			return background;
+
+		},
+
 	},
 
-	computed: {
-	},
 
 	watch: {
-		
+		// When current palette changes, update URL
+		currentPalette: {
+			handler: function(value) {
+				this.debounceURLParams();
+			},
+			deep: true,
+		},
+	},
+	
+	mounted() {
+		// Load Params if they exist
+		if(this.$route.params.urlColors){
+			this.loadURLColors();
+		}
+		// Get stored palettes from store/localstorage
+		if(this.$store.getters["User/apps"].colors.data["palettes"]){
+			this.storedPalettes = this.$store.getters["User/apps"].colors.data["palettes"];	
+		}
+
+	},
+	created: function () {
+	},
+
+	beforeDestroy(){
 	},
 	
 	methods: {
-		/////////////////////////////
-		// Set palette from load  //
-		///////////////////////////
-		setPalette: function(hexString){
-			var hexs = this.hexString.split(",");
+		
+		// Debounce so URL Params are only updated ever second, max
+		debounceURLParams: debounce(function(){
+			this.updateURLParams();
+		}, 1000),
+		updateURLParams: function(){
+			let _this = this;
+			var urlParams = "";
+			Object.keys(_this.currentPalette).forEach(function(key){
+				var loopParams = _this.currentPalette[key].name + "=" + _this.currentPalette[key].r + "," + _this.currentPalette[key].g + "," + _this.currentPalette[key].b + "," + _this.currentPalette[key].a;
+				if(key == 0){
+					urlParams =  loopParams;
+				}else{
+					urlParams = urlParams + "&" + loopParams;
+				}
+			});
+			if(this.currentPalette.length){
+				this.$router.replace({ name: "colors", params: {urlColors: urlParams} }).catch(()=>{});
+			}
+		},
+		// Load Colors from URL into app
+		loadURLColors: function(){
+			let _this = this;
+			var splitColors = this.$route.params.urlColors.split("&");
 
-			// Set up array to hold palette
-			var paletteArray = [];
+			var loadedPalette = [];
+			splitColors.forEach(function(color) {
+				var colorSplit = color.split("=");
+				var rgbSplit = colorSplit[1].split(",");
 
-			// For each hex in string
-			hexs.forEach(function(hex) {
-
-				// Get formats
-				var rgbArray = convert.hex.rgb(hex);
-				var rgbaString = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
-				var name = convert.hex.keyword(hex);
-
-				var color = {
-					name: name,
-					hex: "#" + hex,
-					rgba: rgbaString,
-					r: rgbArray[0],
-					g: rgbArray[1],
-					b: rgbArray[2],
-					a: 1,
+				// If any colors are opaque, enable opacity
+				if(rgbSplit[3] && rgbSplit[3] < 255){
+					_this.colorPrefs.enableOpacity = true;
 				}
 
-				// Push to palette array
-				paletteArray.push(color);
+				var singleColor = {
+					name: colorSplit[0],
+					r: rgbSplit[0],
+					g: rgbSplit[1],
+					b: rgbSplit[2],
+					a: rgbSplit[3] || 255,
+					adjust: false,
+					shades: false,
+				};
 
+				loadedPalette.push(singleColor);
 			});
 
-			// Set palette
-			this.palette = paletteArray;
+			// Set current palette from load
+			this.currentPalette = loadedPalette;
+
 		},
 
-		//////////////////////////
-		// Switch Control Tab  //
-		////////////////////////
-		controlTab: function(tab){
-			if(tab == 'options' && !this.controlToggles.options){
-				this.controlToggles.options = true;
-				this.controlToggles.save = false;
-			}else if(tab == 'save' && !this.controlToggles.save){
-				// Load palettes from local storage on click
-				this.loadSavedPalettes();
-				this.controlToggles.save = true;
-				this.controlToggles.options = false;
+
+		// Make sidebar visible
+		toggleSidebar: function(name){
+			// // Disable opacity when contrast viewed
+			if(name == "contrast" && this.colorPrefs.enableOpacity){
+				this.hello("Disabling Opacity...", "fas fa-wand-magic-sparkles", "yellow");
+				this.colorPrefs.enableOpacity = false;
+				this.re_enable_opacity = true;
+			}else if(this.re_enable_opacity){
+				this.hello("Opacity is back...", "fas fa-eyes", "yellow");
+				this.colorPrefs.enableOpacity = true;
+				this.re_enable_opacity = false;
+			}
+
+			// Clear if same one clicked
+			if(this.view_sidebar == name){
+				this.view_sidebar = null;
 			}else{
-				this.controlToggles.options = false;
-				this.controlToggles.save = false;
+				// Else set as name
+				this.view_sidebar = name;
 			}
 		},
-		/////////////////////
-		// Color Changes  //
-		////////////////////
-		// Any r g b or a value change, calculate full rgba() and hex
-		rgbaChange: function(){
-			var red = parseInt(this.palette[this.selectedColor].r);
-			var green = parseInt(this.palette[this.selectedColor].g);
-			var blue = parseInt(this.palette[this.selectedColor].b);
-			var opacity = parseFloat(this.palette[this.selectedColor].a);
 
-			this.palette[this.selectedColor].rgba = "rgba(" + red + ", " + green + ", " + blue + ", " + opacity + ")";
-			this.palette[this.selectedColor].hex = "#" + convert.rgb.hex(red, green, blue);
-			this.palette[this.selectedColor].name = convert.hex.keyword(this.palette[this.selectedColor].hex);
-
-			// get new hex string
-			this.makeHexString();
-		},
-		// hex change, calculate rgb values
-		hexChange: function(){
-			var hex = this.palette[this.selectedColor].hex;
-			if(hex[0] == "#"){
-				hex = hex.substring(1);
-			}else{
-				// Add hex to prop
-				this.palette[this.selectedColor].hex = "#" + this.palette[this.selectedColor].hex
+		// Actions that need confirming
+		handleConfirmModal: function(){
+			var data = this.confirm_modal;
+			if(data[0] == "color"){
+				this.removeColor(data[1]);
+			}else if(data[0] == "palette"){
+				this.deletePalette(data[1]);
 			}
-
-			// get rgb numbers
-			var rgbArray = convert.hex.rgb(hex);
-
-			// Set rgb values
-			this.palette[this.selectedColor].rgba = "rgba(" + rgbArray[0] + ", " + rgbArray[1] + ", " + rgbArray[2] + ", 1)";
-			this.palette[this.selectedColor].r = rgbArray[0];
-			this.palette[this.selectedColor].g = rgbArray[1];
-			this.palette[this.selectedColor].b = rgbArray[2];
-			// this.rgbaOpacity = 1;
-
-			this.palette[this.selectedColor].name = convert.hex.keyword(hex);
-
-			// get new hex string
-			this.makeHexString();
-		},
-		// hex change, calculate rgb values
-		rgbaTextChange: function(){
-
-			// Get numbers from string
-			var rgbArray = this.palette[this.selectedColor].rgba.replace(/[^\d,.]/g, '').split(',')
-			// If there are at least 3 numbers, good enough format
-			if(rgbArray[2]){
-				this.palette[this.selectedColor].r = rgbArray[0];
-				this.palette[this.selectedColor].g = rgbArray[1];
-				this.palette[this.selectedColor].b = rgbArray[2];
-
-				// If opacity exists, add it, otherwise default to 1
-				if(rgbArray[3]){
-					this.palette[this.selectedColor].a = rgbArray[3]
-				}else{
-					this.palette[this.selectedColor].a = 1;
-				}
-
-				// Convert and set hex
-				this.palette[this.selectedColor].hex = convert.rgb.hex(rgbArray)
-				this.palette[this.selectedColor].name = convert.hex.keyword(this.palette[this.selectedColor].hex);
-
-				// get new hex string
-				this.makeHexString();
-
-			}else{
-				// this.toast("Bad Color Format", "Please enter your color in either rgb() or #HEX format.", "red", "far fa-tint");
-			}
-		},
-		// Hex String
-		// Used for url params, and saving
-		makeHexString: function(){
-			var _this = this;
-
-			// Clear timeout so it only runs after 500ms delay
-			clearTimeout(_this.hexStringTimer);
-
-			// Timer to prevent many firings
-			_this.hexStringTimer = setTimeout(function() {
-
-				var string = '';
-
-				// Create comma seperated string of hex numbers
-				// used to save palette to local storage
-				// also set as URL params to share
-				_this.palette.forEach(function(color) {
-					string = string + color.hex.substring(1) + ","
-				});
-
-				// Set global var
-				_this.hexString = string.substring(0, string.length - 1);
-
-				// Set route query
-				_this.$router.replace({query: {..._this.$route.query, c: _this.hexString}})
-
-			}, 500);
-			
-
+			this.confirm_modal = null;
 		},
 
-		/////////////////////////
-		//  Palette Controls  //
-		///////////////////////
-		// Delete Palette color
-		deleteColor: function(index){
-
-			// Select prev color unless 0
-			if(index != 0){
-				this.selectedColor = index - 1;
-			}
-			
-			// Delete from pallete
-			this.palette.splice(index, 1);
-		},
-		// Add new color to palette
-		// Random rgb color
+		// Add new (random) color to palette
 		addColor: function(){
-			
-			var r = parseInt(Math.random() * (255 - 0) + 0);
-			var g = parseInt(Math.random() * (255 - 0) + 0);
-			var b = parseInt(Math.random() * (255 - 0) + 0);
-			var rgbStr = "rgba(" + r + ", " + g + ", " + b + ", 1)"
-			var hex = convert.rgb.hex(r, g, b)
-			var keyword = convert.rgb.keyword(r, g, b)
-
-			this.palette.push({
-				name: keyword,
-				hex: "#" + hex,
-				rgba: rgbStr,
-				r: r,
-				g: g,
-				b: b,
-				a: 1,
-			})
-
-			// Set as selected
-			this.selectedColor = this.palette.length - 1;
-
-			// Make new hex string
-			this.makeHexString();
+			var newColor = {
+				r: Math.floor(Math.random() * 255),
+				g: Math.floor(Math.random() * 255),
+				b: Math.floor(Math.random() * 255),
+				a: 255,
+				adjust: false,
+				shades: false,
+				name: "Color-" + (this.currentPalette.length + 1),
+			};
+			this.currentPalette.push(newColor);
 		},
 
-		// Create Palette
-		// Takes current color, adjusts hues and ceates palette with 4 more colors
-		createPalette: function(){
-
-			var start = this.palette[this.selectedColor].hex;
-			var hexes = this.palette[this.selectedColor].hex.substring(1);
-
-			for (var index = 1; index < 5; index++) { 
-				
-				// Change Hue in HSL
-				var hsl = convert.hex.hsl(start)
-
-				// This creates 5 different colors.
-				// So modify the hue by 72 (360/5) in both directions
-				// Make sure it doesn't go over 360
-				var newHsl = hsl[0] + (72 * index);
-				if(newHsl > 360){
-					newHsl = newHsl - 360;
-				}
-
-				hsl[0] = newHsl;
-
-				// // Get HEX from HSL
-				var hex = convert.hsl.hex(hsl);
-				hexes = hexes + "," + hex
-			} 
-
-			// Set palette
-			this.hexString = hexes;
-			this.setPalette(hexes);
-
-			this.rgbaChange()
-
-			
+		// Remove color from current palette
+		removeColor: function(index){
+			this.currentPalette.splice(index, 1);
 		},
 
+		// Reset Palette
+		clearPalette: function(){
+			let _this = this;
 
-		////////////////////
-		//  Save & Load  //
-		//////////////////
-		// Save
-		loadSavedPalettes: function(){
-			// Get all saved palettes
-			// Loop through all local storage, save sttorage names of palettes
-			// Palettes begin with "palette_"
-			var values = [];
-			var keys = Object.keys(localStorage);
-			var i = keys.length;
-			while( i-- ){
-				if(keys[i].startsWith("palette_")){
-					values.push(keys[i]);
-				}
+			if(this.resetting_palette){
+				this.currentPalette = [{
+					r: 0,
+					g: 71,
+					b: 219,
+					a: 255,
+					adjust: false,
+					name: "Color-1",
+				}];
+				this.resetting_palette = false;
+				this.hello("Poof!", "fas fa-wand-magic-sparkles", "yellow");
+			}else{
+				this.resetting_palette = true;
+				setTimeout(function(){
+					_this.resetting_palette = false;
+				}, 5000);
 			}
-			this.savedPalettes = values;
-		},
-		// Save
+		},	
+
+		// Save Palette
 		savePalette: function(){
-			var newPalette = {
-				date: new Date(),
-				hexString: this.hexString
+			// let _this = this;
+			// this.$store.dispatch("Hold/LOADING", "data");
+			var dataToSave = {
+				name: this.name_to_save,
+				saved: new Date(),
+				colors:JSON.parse(JSON.stringify(this.currentPalette)),
+				preferences: JSON.parse(JSON.stringify(this.colorPrefs)),
+			};
+
+			this.hello(this.name_to_save + " Saved!", "fas fa-check-circle", "green");
+
+			// Save as new
+			if(this.editing_stored_key == null){
+				this.storedPalettes.push(dataToSave);
+				console.log("SAVING");
+				console.log(this.storedPalettes);
+				console.log(this.storedPalettes.length);
+				this.editing_stored_key = this.storedPalettes.length - 1;
+			}else{ // Changes
+				this.$set(this.storedPalettes, this.editing_stored_key, dataToSave);
 			}
-			var stringified = JSON.stringify(newPalette)
-			localStorage.setItem('palette_' + this.paletteToSaveName.replace(/\s/g, ''), stringified);
 
-			this.toast("Palette Saved", "Your palette has been saved to your browser's local storage.", "", "fas fa-swatchbook");
-			// Hide tab
-			this.controlToggles.save = false;
+			this.syncStoredPalettes();
 		},
-		// Delete
-		deletePalette: function(name){
-			localStorage.removeItem(name);
-			this.toast("Palette Deleted", "Your palette has been deleted.", "", "fas fa-trash");
-			// Hide tab
-			this.controlToggles.save = false;
-		},
-		// Load
-		loadPalette: function(name){
-			var saved = localStorage.getItem(name);
-			var parsed = JSON.parse(saved)
-			this.hexString = parsed.hexString;
 
-			this.setPalette();
-			// Hide tab
-			this.controlToggles.save = false;
-
-			// Set saved name as save input field name
-			this.paletteToSaveName = name.substr(8);
-			// Generate new hex string
-			this.makeHexString();
+		// Load Palette
+		loadPalette: function(palette, key){
+			console.log("RECEIVED KEY");
+			console.log(key);
+			this.currentPalette = JSON.parse(JSON.stringify(palette.colors));
+			this.colorPrefs = JSON.parse(JSON.stringify(palette.preferences));
+			this.name_to_save = JSON.parse(JSON.stringify(palette.name));
+			this.hello(this.name_to_save + " loaded!", "fas fa-check-circle", "green");
+			this.editing_stored_key = key;
 		},
-		
-		
+
+		// Delete Palette
+		deletePalette: function(key){
+			this.storedPalettes.splice(key, 1);
+			this.syncStoredPalettes();
+			if(key == this.editing_stored_key){
+				this.editing_stored_key = null;
+			}
+		},
+
+		// Sync stored palettes with store / local storage
+		syncStoredPalettes: function(){
+			this.$store.commit("User/SET_APP_DATA_FIELD", {app: "colors", key: "palettes", value: JSON.parse(JSON.stringify(this.storedPalettes)) });
+			this.$store.dispatch("User/DEBOUNCE_SAVE_APP_DATA");
+		},
+
+		// Re-order
+		shiftPalette: function(old_index, new_index){
+			while (old_index < 0) {
+				old_index += this.currentPalette.length;
+			}
+			while (new_index < 0) {
+				new_index += this.currentPalette.length;
+			}
+			if (new_index >= this.currentPalette.length) {
+				var k = new_index - this.currentPalette.length;
+				while ((k--) + 1) {
+					arr.push(undefined);
+				}
+			}
+			this.currentPalette.splice(new_index, 0, this.currentPalette.splice(old_index, 1)[0]);
+		},
+		dragSwapPosition:function(key){
+			this.shiftPalette(this.dragging, key);
+			this.dragging = key;
+		},
+
+		// Export functions
+		exportWith: function(key){
+			if(key == "Link"){
+				this.share(window.location.href, "Link")
+			}else if(key == "Print"){
+				this.hello("Printing!", "far fa-print", "green");
+				var printContent = document.querySelector("#colorGrid").outerHTML;
+				document.querySelector("#printArea").innerHTML = printContent;
+				window.print();
+				document.querySelector("#printArea").innerHTML = "";
+
+			}else{
+				this.export_modal = true;
+				this.exporting_as = key;
+			}
+		},
+		// Copy export code to clipboard
+		copyExportToClipboard: function(element){
+			var el = "cssCodeExport";
+			if(this.exporting_as == 'Code'){
+				el = "regularCodeExport";
+			}
+			if(element){
+				el = element;
+			}
+			var range = document.createRange();
+			range.selectNode(document.getElementById(el));
+			window.getSelection().removeAllRanges(); // clear current selection
+			window.getSelection().addRange(range); // to select text
+			document.execCommand("copy");
+			window.getSelection().removeAllRanges();// to deselect
+			this.hello("Code Copied!", "fas fa-copy", "green");
+		},
+
+		// Gets correct text color based on value passed
+		getTextColor: function(r, g, b){
+			var r = parseInt(r,16);
+			var g = parseInt(g,16);
+			var b = parseInt(b,16);
+			var yiq = ((r*299)+(g*587)+(b*114))/1000;
+			return (yiq >= 128) ? "black" : "white";
+		},
+		colorStyleProperties: function(key){
+			var props = {};
+			var color = this.currentPalette[key];
+			// Viewing Contrast
+			if(this.contrast_enabled){
+				if(this.contrast_reverse){
+					var props = {
+						color: "rgb(" + this.contrast_color_r + "," + this.contrast_color_g + "," + this.contrast_color_b + ")",
+						backgroundColor: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
+					};
+				}else{
+					var props = {
+						color: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
+						backgroundColor: "rgb(" + this.contrast_color_r + "," + this.contrast_color_g + "," + this.contrast_color_b + ")",
+					};
+				}
+
+			}else{
+				// Color background, Automatic black/white text fron getTextColor()
+				var props = {
+					color: this.getTextColor(color.r, color.g, color.b),
+					backgroundColor: "rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + (color.a/255) + ")",
+					// backgroundColor: this.RGBToHex(color.r, color.g, color.b, color.a),
+				};
+			};
+			// Add border if color Gap enabled
+			// if(this.colorPrefs.colorGap){
+			// 	props["border"] = "4px solid "+ this.colorPrefs.stageBackground;
+			// }
+			return props;
+		},
+
+		// Updates RGB value when user enters their own HEX
+		updateRGBValue: function(event, key){
+			let _this = this;
+			this.HexToRGB(event.target.value).then(function(rgb) {			
+				_this.currentPalette[key].r = rgb[0];
+				_this.currentPalette[key].g = rgb[1];
+				_this.currentPalette[key].b = rgb[2];
+				if(rgb[3]){
+					_this.currentPalette[key].a = rgb[3];
+				}else{
+					_this.currentPalette[key].a = 255;
+				}
+			}).catch(function(error) {
+				_this.hello("Invalid HEX. Try again.", "fas fa-frown", "red");
+			});
+
+		},
+
+		// Color Conversion Functions
+		// Takes r/g/b value and returns hex - ie 255 -> FF
+		numberHex: function(val){
+			val = parseInt(val).toString(16);
+			if (val.length == 1)
+				val = "0" + val;
+			return val;
+		},
+		// RGBtoHex
+		RGBToHex: function(r,g,b,a, hash) {
+			r = parseInt(r).toString(16);
+			g = parseInt(g).toString(16);
+			b = parseInt(b).toString(16);
+			a = parseInt(a).toString(16);
+
+			if (r.length == 1)
+				r = "0" + r;
+			if (g.length == 1)
+				g = "0" + g;
+			if (b.length == 1)
+				b = "0" + b;
+			if (a.length == 1)
+				a = "0" + a;
+
+			if(r == "NaN" || g == "NaN" || b == "NaN" || a == "NaN"){
+				return "invalid";
+			}
+			 if(this.colorPrefs.enableOpacity){
+				var string = "";
+				if(hash != false){string = "#";}
+				var string = (string + r + g + b + a).toUpperCase();
+				return string;
+			}else{
+				var string = "";
+				if(hash != false){string = "#";}
+				var string = (string + r + g + b).toUpperCase();
+				return string;
+			}
+		},
+		// Hex(a) to rgb(a)
+		HexToRGB: function(h){
+			return new Promise((resolve, reject) => {
+
+				h = h.replace("#", "");
+				let r = 0, g = 0, b = 0, a = 1;
+
+				// No opacity
+				if (h.length == 6) {
+					r = "0x" + h[0] + h[1];
+					g = "0x" + h[2] + h[3];
+					b = "0x" + h[4] + h[5];
+					var final = [+r, +g, +b];
+					resolve(final);
+				}
+				// With opacity
+				else if (h.length == 8) {
+					r = "0x" + h[0] + h[1];
+					g = "0x" + h[2] + h[3];
+					b = "0x" + h[4] + h[5];
+					a = "0x" + h[6] + h[7];
+					// a = +(a / 255).toFixed(2);
+					var final = [+r, +g, +b, +a];
+					resolve(final);
+				}else{
+					reject();
+				}
+			});
+		},
+
+		// Luminance
+		luminance: function(r, g, b){
+			var a = [r, g, b].map(function (v) {
+				v /= 255;
+				return v <= 0.03928
+					? v / 12.92
+					: Math.pow( (v + 0.055) / 1.055, 2.4 );
+			});
+			return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+		},
+		// Calculate Contrast Ratio
+		contrastRatio: function(color){
+			var color1Lum = this.luminance(color["r"], color["g"], color["b"]);
+			var color2Lum = this.luminance(this.contrast_color_r, this.contrast_color_g, this.contrast_color_b);
+			var ratio = (color2Lum + 0.05) / (color1Lum + 0.05);
+			return ratio.toFixed(2);
+		},
+
+
+
+
 	}
 };
 
 </script>
 
 
-<style lang="less">
+<style lang="scss">
 
-	@import '~@/styles/variables.less';
+#colorApp{
+	display: flex;
+	flex-direction: column;
+	max-height: 100vh;	
+	max-height: -webkit-fill-available;
+}
 
-	// Hide top options bar - not yet needed for colors page
-	#colorOptionsBar{
-		border-bottom: var(--borderWidth) solid var(--border);
-		background-color: var(--background);
+
+
+// Color Grid / Display
+#colorGrid{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	overflow: auto;
+	box-sizing: border-box;
+
+	@media print{
+		min-height: 100vh;
+		height: fit-content;
+		width: 100vw;
 	}
 
-	// Main color picker stage
-	#colorEditorStage{
-		background-color: var(--blue);
-		border-radius: var(--borderRadius);
-		margin: 10px 10px 20px 10px;
-		transition: 0s;
-		overflow: auto;
-		
-		@media (max-width: @screenLG) {
-			margin: 10px;
-		}
-
-		// Color editor body - hex and rgb, r,g,b sliders, opacity slider
-		#colorEditor{
-			display: block;
-			margin: 0 auto;
-			width: 90%;
-			max-width: 350px;
-
-			.field{
-				margin: 0 0 16px 0;
-				label span{
-					// background-color: var(--border);
-					width: fit-content;
-					font-size: 16px;
-					font-weight: 700;
-				}
-				label input{
-					border-radius: var(--borderRadius);
-				}
-				input{
-					background-color: var(--layer);
-					border-top-left-radius: 0;
-					border: var(--borderWidth) solid var(--border);
-					color: var(--text);
-				}
-			}
-
-			// Set widths for hex and rgba fields
-			#hexField{
-				width: 36%;
-				max-width: 36%;
-				min-width: 36%;
-			}
-			#rgbaField{
-				width: 60%;
-				max-width: 60%;
-				min-width: 60%;
-			}
-
-			
-		}
+	&.checkered{
+		background-image:
+			linear-gradient(45deg, #ccc 25%, transparent 25%), 
+			linear-gradient(135deg, #ccc 25%, transparent 25%),
+			linear-gradient(45deg, transparent 75%, #ccc 75%),
+			linear-gradient(135deg, transparent 75%, #ccc 75%);
+		background-size:25px 25px; /* Must be a square */
+		background-position:0 0, 12.5px 0, 12.5px -12.5px, 0px 12.5px; /* Must be half of one side of the square */
 	}
-
-
-
-	// Sidebar color palette list
-	#colorPalette{
-
-		@media (max-width: @screenMD) {
-			overflow: hidden;
-			flex-grow: 3;
-
-			.color-wrapper{
-				display: flex;
-				height: 100%;
-				overflow-y: auto;
-				box-sizing: border-box;
-				padding: 5px 0 0 0;
-			}
-		}
-
-		.color{
-			display: flex;
-			justify-content: space-between;
-			width: 100%;
-			height: auto;
+	&.gap{
+		gap: 15px;
+		.color_block{
 			border-radius: var(--borderRadius);
-			border: var(--borderWidth) solid var(--border);
-			margin: 0 0 15px 0;
+			overflow: hidden;
+		}
+	}
+	&.padded{
+		padding: 12px;
+	}
+
+	.color_block{
+		flex-grow: 3;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		page-break-inside: avoid;
+		position: relative;
+		padding: 15px 0 25px 0;
+
+		@media (min-width: $screenSM) {
+			min-height: 300px;
+		}
+
+		.color_block_info{
 			box-sizing: border-box;
-			letter-spacing: 0.4px;
-			font-weight: 600;
-			color: var(--white);
-			transition: var(--transitionFast);
+			color: inherit;
+			box-sizing: border-box;
+			padding-top: 40px;
 
-			// Fixed width on mobile because it scrolls horizontally
-			@media (max-width: @screenMD) {
-				width: 200px;
-				max-height: 100%;
-				height: 100%;
-				min-width: 200px;
-				margin: 0 10px 0 0;
-				transform: scale(0.875);
-
-				&:first-child{
-					margin-left: 20px;
-				}
+			// Color Name
+			h6{
+				font-size: 0.75em;
+				font-weight: 500;
+				color: inherit;
+				margin: 0;
+				padding :10px 0 0 20px;
+			}
+			.color_name_input{
+				font-size: 0.8em;
+				border: none;
+				padding: 8px 12px;
+				margin: 0 8px 0 8px;
+				color: inherit;
+				background-color: transparent;
+				width: auto;
+				height: auto;
 			}
 
-			// Color buton - shown on mobile
-			// Buttons after the colors - add color, auto palette
-			&.color-button{
-				background: transparent;
-				color: var(--text);
-				flex-direction: column;
-				justify-content: center;
-				display: none;
-				color: var(--textLight);
-				transition: var(--transitionFast);
-				box-sizing: border-box;
-				padding: 8px 0;
-				width: 140px;
-				max-width: 140px;
-				min-width: 140px;
+			.format_code,
+			.hex_code{
+				display: block;
+				font-weight: 600;
+				letter-spacing: 0.05em;
+				font-size: 1em;
+				margin: 0;
+				padding: 6px 18px;
+				border-top-right-radius: var(--borderRadius);
+				border-bottom-right-radius: var(--borderRadius);
+				color: inherit;
+				text-align: left;
+				font-family: inherit;
 
-				@media (max-width: @screenMD) {
-					min-height: 100%;
-					display: flex;
-					flex-grow: 3;
-				}
-
-				i,
-				.color-button-text{
-					text-align: center;
-				}
-
-				i{
-					font-size: 36px;
-					margin: 0 0 5px 0;
-					transition: var(--transitionFast);
+				@media (max-width: $screenSM) {
+					font-size: 0.9em;
 				}
 
 				&:hover{
-					color: var(--text);
-					transition: var(--transitionFast);
-
-					i.fa-plus{
-						margin: 0 0 10px 0;
-						transition: var(--transitionFast);
-					}
+					background-color: rgba(0,0,0,0.1);
 				}
 			}
+			.hex_code{
+				text-transform: uppercase;
+				font-size: 1.65em;
+				font-weight: 700;
+			}
+		}
 
-			// Color Spacer
-			&.color-spacer{
-				max-width: 20px !important;
-				overflow: hidden;
-				min-width: 20px !important;
-				opacity: 0;
+		// Control buttons for colors
+		.color_block_controls{
+			display: flex;
+			color: inherit;
+			opacity: 0;
+			padding-left: 10px;
+			position: absolute;
+			top: 8px;
+			left: 0px;
+
+			@media (max-width: $screenSM) {
+				opacity: 0.8;
+			}
+			@media print{
 				display: none;
-				
-				@media (max-width: @screenMD) {
-					display: block;
-				}
 			}
 
-			.color-codes{
+			button{
+				font-size: 1em;
+				color: inherit;
+				border-radius: var(--borderRadius);
+				height: 32px;
+				width: 32px;
+				text-align: center;
+				border: 1px solid transparent;
+				padding: 0;
+
+
+				&:hover{
+					background-color: rgba(0,0,0,0.1);
+					font-size: 1.1em;
+				}
+			}
+		}
+
+		// Edit / Slider area
+		#color_block_sliders{
+			margin: 20px 20px 0 20px;
+
+			@media print{
+				display: none;
+			}
+
+			.cbs_row{
 				display: flex;
-				flex-direction: column;	
+				// flex-wrap: wrap;
 				justify-content: space-between;
-				height: 100%;
-				box-sizing: border-box;
-				padding: 10px 0 10px 10px;
+				max-width: 240px;
 
-				.name{
-					text-transform: capitalize;
-					flex-grow: 3;
-					font-size: 18px;
-					font-weight: 700;
-					display: block;
-					margin-bottom: 12px;
-
-					// Shrink mobile
-					@media (max-width: @screenSM) {
-						font-size: 15px;
-					}
-				}
-				.color-value{
-					display: block;
-					margin-top: 5px;
-					font-size: 15px;
-					transition: 0.08s;
-					// opacity: 0;
-					font-weight: 600;
-
-					// Shrink mobile
-					@media (max-width: @screenMD) {
-						font-size: 14px;
-					}
-
-					i{
-						padding-left: 5px;
-						opacity: 0;
-					}
-
-					// Hover - click to copy
-					&:hover{
-						opacity: 1;
-						text-decoration: underline;
-					}
-				}
-
-			}
-
-			// Color actions
-			.color-actions{
-				transition: 0.08s;
-
-				// mix-blend-mode: difference;
-				.color-delete{
-					font-size: 20px;
-					border-radius: 50%;
-					height: 40px;
-					width: 40px;
-					box-sizing: border-box;
+				label{
 					color: inherit;
-					opacity: 1;
-					transition: 0.08s;
-					transform: scale(1);
-					opacity: 0.75;
-
-					// Increase size mobile
-					@media (max-width: @screenMD) {
-						width: 38px;
-						height: 38px;
-						font-size: 20px;
+					font-size: 0.7em;
+					height: 20px;
+					width: 80px;
+					padding: 0 0 0 8px;
+					box-sizing: border-box;
+					margin: 0;
+					text-align: right;
+				}
+				input[type=number]{
+					-moz-appearance: textfield;
+					width: fit-content;
+					color: inherit;
+					border: none;
+					height: 20px;
+					width: 50px;
+					overflow: visible;
+					text-align: right;
+					position: relative;
+					left: 0;
+					font-size: 0.8em;
+					background-color: transparent;
+					padding: 0 5px 0 5px;
+					&::-webkit-outer-spin-button,
+					&::-webkit-inner-spin-button {
+						-webkit-appearance: none;
+						margin: 0;
 					}
 
-					&:hover{
-						cursor: pointer;
-						transition: 0.08s;
-						transform: scale(1.2);
-						opacity: 1;
-					}
+				}
+				// Range adjustments
+				input[type=range]{
+					flex-grow: 3;
+					width: 100%;
+					margin-top: 4px;
+				}
+				// Edit HEX Input
+				.color_transparent_input,
+				.color_transparent_input_picker{
+					background-color: transparent;
+					border: none;
+					max-width: 100%;
+					text-align: left;
+					color: inherit;
+					font-size: 0.9em;
+					padding: 7px 15px;
+					height: auto;
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
+					background-color: rgba(255,255,255,0.1);
+				} 
+				.color_transparent_input_picker{
+					padding: 0;
+					width: 50px;
+					border-top-right-radius: var(--borderRadius);
+					border-bottom-right-radius: var(--borderRadius);
+				}
+
+			}
+			
+		}
+
+		// Shades
+		.color_block_shades{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 100;
+			display: flex;
+			flex-direction: column;
+
+			.shade{
+				display: block;
+				width: 100%;
+				flex-grow: 3;
+				color: inherit;
+				font-weight: 600;
+				font-size: 1em;
+
+				i{opacity: 0.8;}
+				i.invert{filter: invert(100%); opacity: 1;}
+
+				&:hover{
+					padding-top: 18px;
+					padding-bottom: 18px;
 				}
 			}
+		}
 
-			// Hover color
-			&:hover{
-				transition: 0.08s;
-				cursor: pointer;
-				// width: calc(~'100% + 30px');
-				
-				.color-actions{
-					opacity: 1;
-					transition: 0.08s;
-				}
-				.color-value{
-					transition: 0.08s;
-				}
-				.name{
-					text-decoration: underline;
+		//  Contrast Area
+		.color_block_contrast{
+			box-sizing: border-box;
+			padding: 20px;
+			color: inherit;
+
+			.ratio{
+				color: inherit;
+				font-size: 1.75em;
+				margin-bottom: 15px;
+
+				b{
+					font-size: 2.5rem;
+					font-weight: 800;
 				}
 			}
+			
+			.tags{
+				margin-top: 4px;
+				margin-bottom: 10px;
+			}
+			.large-text{
+				font-size: 18pt;
+				padding-bottom: 2px;
+			}
+			p{
+				font-size: 14pt;
+				line-height: 1.325em;
+				color: inherit;
+				padding: 0;
+			}
+			
+		}
 
-			// Active is larger,
-			// has padding on bottom codes
+		&:hover,
+		&:focus-within{
+			.color_block_controls{
+				opacity: 0.8;
+			}
+		}
+	}
+	
+}
+
+// Gradient
+#gradientStage{
+	width: 100%;
+	min-height: 180px;
+	border-radius: var(--borderRadius);
+	margin: 15px auto 0 auto;
+	transition: background 0.5s ease;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	box-sizing: border-box;
+	border: 1px solid var(--border);
+	background-size: cover;
+	background-position: center center;
+
+	#gradientStageButtons{
+		display: flex;
+		box-sizing: border-box;
+		padding: 10px;
+		gap: 8px;
+		
+		button{
+			height: 34px;
+			width: 34px;
+			position: relative;
+			border-radius: var(--borderRadius);
+			background-color: rgba(255,255,255,0.25);
+			color: rgba(0,0,0,0.6);
+
 			&.active{
-				transition: var(--transitionFast);
-				height: 140px;
+				background-color: rgba(255,255,255,0.75);
+				color: var(--black);
+			}
 
-				// Change active for mobile
-				@media (max-width: @screenMD) {
-					transform: scale(1);
-				}
-
-				.color-codes{
-
-					.name{
-						opacity: 1;
-					}
-					.color-value{
-						i{
-							opacity: 1;
-						}
-					}
-				}
-
+			&:hover:not(.active){
+				background-color: rgba(255,255,255,0.55);
+				color: rgba(0,0,0,0.8);
 			}
 		}
 	}
+}
+
+// Special wcag tags
+.wcag-tag{
+	opacity: 0.85;
+	background-color: #fbd2d0;
+	color: #5f0d07;
+	border-radius: calc(var(--borderRadius) / 2);
+	box-sizing: border-box;
+	padding: 3px 4px;
+	display: inline-block;
+	font-size: 0.65rem;
+	font-weight: 700;
+	border: 2px solid #5f0d07;
+
+	&:after{content: " Fail";}
+
+	&.green{
+		border-color: #0d5f07;
+		background-color: #c6ffc3;
+		color: #0d5f07;
+		&:after{content: " Pass";}
+	}
+}
 
 
-	// Add color button
-	#paletteControlButtons{
-		// Hide on mobile because tile is used instead
-		@media (max-width: @screenMD) {
-			display: none;
+// List of palettes from local storage
+.palette-view{
+	.pv__bar{
+		width: 100%;
+		background-color: var(--grey);
+		box-sizing: border-box;
+		display: flex;
+		justify-content: flex-end;
+		padding:  0 7px 0 10px;
+		border-bottom-left-radius: var(--borderRadius);
+		border-bottom-right-radius: var(--borderRadius);
+		color: var(--text);
+	
+		.pv__i{
+			flex-grow: 3;
+			font-size: 0.65em;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: left;
+			padding: 5px 0;
+			color: inherit;
+
+			b{
+				font-size: 0.95rem;
+				font-weight: 500;
+				padding-bottom: 2px;
+			}
+			&:hover b{
+				text-decoration: underline;
+			}
+		}
+		// Palette view Actions
+		.pv__a{
+			font-size: 0.9em;
+			padding: 6px;
+			margin: 6px 0;
+			border-radius: var(--borderRadius);
+			opacity: 0;
+			color: inherit;
+			@media (max-width: $screenSM) {opacity: 1;}
+
+			&:hover{
+				overflow: 1;
+				cursor: pointer;
+				background-color: rgba(0,0,0,0.05);
+
+				&.red{color: var(--red);}
+			}
+		}
+
+		// Show action buttons on hover
+		&:focus-within,
+		&:hover{
+			.pv__a{
+				opacity: 1;
+			}
 		}
 	}
-	// Adjust header on mobile
-	#colorPaletteHeader{
-		// Add padding on left because it was removed for hor scroll
-		@media (max-width: @screenMD) {
-			padding-left: 20px;
-			margin: 0 0 8px 0;
+	// Actively editing
+	&.active .pv__bar{
+		position: relative;
+		&:after{
+			content: '\f058';
+			font-family: var(--fontAwesome);
+			position: absolute;	
+			right: 4px;
+			width: 18px;
+			height: 18px;
+			text-align: center;
+			font-weight: 600;
+			color: var(--yellow);
+			font-size: 18px;
+			top: -35px;
+			background-color: var(--yellowText);
+			border-radius: 50%;
 		}
 	}
+}
+// Preview for palettes
+.palette-preview{
+	display: flex;
+	border-radius: var(--borderRadius);
+
+	&.hoverable:hover{
+		cursor :pointer;
+	}
+
+	.palette-preview-color{
+		display: block;
+		height: 42px;
+		flex-grow: 3;
+
+		&:first-child{
+			border-top-left-radius: var(--borderRadius);
+			// border-bottom-left-radius: var(--borderRadius);
+		}
+		&:last-child{
+			border-top-right-radius: var(--borderRadius);
+			// border-bottom-right-radius: var(--borderRadius);
+		}
+	}
+}
 
 
 
+
+
+
+#colorList{
+	list-style-type: none;
+	padding: 0 0 0 0;
+
+	li{
+		height: 30px;
+		width: 100%;
+		border-radius: 0;
+		margin: 5px 0 5px 0;
+		display: flex;
+		justify-content: space-between;
+
+		button{
+			color: var(--textFade);
+
+			i{
+				font-size: 1.15em;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				width: 20px;
+				text-align: center;
+			}
+
+			&:disabled{
+				opacity: 0;
+			}
+			&:hover{
+				color: var(--text);
+			}
+		}
+
+		span.cp{
+			display: block;
+			height: 100%;
+			border-radius: calc(var(--borderRadius) / 2);
+			flex-grow: 3;
+		}
+	}
+}
 
 
 </style>

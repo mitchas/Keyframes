@@ -1,0 +1,193 @@
+//! Helpers 
+// Helper classes for modifying any element
+// Colorblind Filters
+
+
+// Fonts
+// Title case
+.capitalize{text-transform: capitalize;}
+.lowercase{text-transform: lowercase;}
+.sans{font-family: var(--sans);}
+.mono{font-family: var(--monospace);}
+.serif{font-family: var(--serif);}
+// bold
+.bold{font-weight: bold;}
+.bolder{font-weight: 900;}
+.code{font-family: var(--monospace);}
+// Display block
+.block{display: block;}
+.fit{width: fit-content;}
+// Display inline
+.inline{display: inline;}
+// Display inline-block
+.inline-block{display: inline-block;}
+// Break word
+.break-word{word-wrap: break-word;}
+// Position relative
+.relative{position: relative;}
+.center{text-align: center;}
+.align-right{text-align: right;}
+.margin-auto{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Displays
+.vertical{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.flex{
+	display: flex;
+
+	&.column{flex-direction: column;}
+	&.center{justify-content: center;}
+	&.between{justify-content: space-between;}
+	&.end{justify-content: flex-end;}
+	&.flex-wrap{flex-wrap: wrap;}
+	&.grow{flex-grow: 3;}
+	&.gap{gap: 20px;}
+}
+
+
+// Pointer Events
+.no-pointer-events{
+	pointer-events: none;
+}
+
+// Show/hide
+.hidden{
+	display: none !important;
+}
+.show-md{
+	display: none;
+	@media (max-width: $screenSM) {
+		display: inherit;
+	}
+}
+.hide-md{
+	display: inherit;
+	@media (max-width: $screenSM) {
+		display: none !important;
+	}
+}
+.show-sm{
+	display: none;
+	@media (max-width: $screenSM) {
+		display: inherit;
+	}
+}
+.hide-sm{
+	display: inherit;
+	@media (max-width: $screenSM) {
+		display: none !important;
+	}
+}
+
+//  Size Helpers
+.max-width-tiny{
+	max-width: 300px;
+	max-width: calc(var(--maxWidthSmall / 2));
+}
+.max-width-small{max-width: var(--maxWidthSmall);}
+.max-width{max-width: var(--maxWidth);}
+.max-width-large{max-width: var(--maxWidthLarge);}
+.max-width-none{max-width: none;}
+.max-width-fit{max-width: fit-content;}
+
+
+// Colorblind Filters
+// Using SVG From https://github.com/hail2u/color-blindness-emulation
+// Protanopia
+.colorblind_protanopia{filter: url('~@/assets/color_blind_filters.svg#protanopia');}
+// Protanomaly
+.colorblind_protanomaly{filter: url('~@/assets/color_blind_filters.svg#protanomaly');}
+// Deuteranopia
+.colorblind_deuteranopia{filter: url('~@/assets/color_blind_filters.svg#deuteranopia');}
+// Deuteranomaly
+.colorblind_deuteranomaly{filter: url('~@/assets/color_blind_filters.svg#deuteranomaly');}
+// Tritanopia
+.colorblind_tritanopia{filter: url('~@/assets/color_blind_filters.svg#tritanopia');}
+// Tritanomaly
+.colorblind_tritanomaly{filter: url('~@/assets/color_blind_filters.svg#tritanomaly');}
+// Achromatopsia
+.colorblind_achromatopsia{filter: url('~@/assets/color_blind_filters.svg#achromatopsia');}
+// Achromatomaly
+.colorblind_achromatomaly{
+	filter: url('~@/assets/color_blind_filters.svg#achromatomaly');
+}
+
+
+// Spacing helpers
+// Initially writtten in LESS - commented out code below is less
+// Too lazy to convert to SASS. It works minified. Convert if you need to change something.
+.mtop-none{margin-top:0}.mright-none{margin-right:0}.mbottom-none{margin-bottom:0}.mleft-none{margin-left:0}.margin-none{margin:0}.ptop-none{box-sizing:border-box;padding-top:0}.pright-none{box-sizing:border-box;padding-right:0}.pbottom-none{box-sizing:border-box;padding-bottom:0}.pleft-none{box-sizing:border-box;padding-left:0}.padding-none{box-sizing:border-box;padding:0}.mtop-xxs{margin-top:6px}.mright-xxs{margin-right:6px}.mbottom-xxs{margin-bottom:6px}.mleft-xxs{margin-left:6px}.margin-xxs{margin:6px}.ptop-xxs{box-sizing:border-box;padding-top:6px}.pright-xxs{box-sizing:border-box;padding-right:6px}.pbottom-xxs{box-sizing:border-box;padding-bottom:6px}.pleft-xxs{box-sizing:border-box;padding-left:6px}.padding-xxs{box-sizing:border-box;padding:6px}.mtop-xs{margin-top:10px}.mright-xs{margin-right:10px}.mbottom-xs{margin-bottom:10px}.mleft-xs{margin-left:10px}.margin-xs{margin:10px}.ptop-xs{padding-top:10px}.pright-xs,.ptop-xs{box-sizing:border-box}.pright-xs{padding-right:10px}.pbottom-xs{box-sizing:border-box;padding-bottom:10px}.pleft-xs{box-sizing:border-box;padding-left:10px}.padding-xs{box-sizing:border-box;padding:10px}.mtop-sm{margin-top:20px}.mright-sm{margin-right:20px}.mbottom-sm{margin-bottom:20px}.mleft-sm{margin-left:20px}.margin-sm{margin:20px}.ptop-sm{padding-top:20px}.pright-sm,.ptop-sm{box-sizing:border-box}.pright-sm{padding-right:20px}.pbottom-sm{box-sizing:border-box;padding-bottom:20px}.pleft-sm{box-sizing:border-box;padding-left:20px}.padding-sm{box-sizing:border-box;padding:20px}.mtop-md{margin-top:35px}.mright-md{margin-right:35px}.mbottom-md{margin-bottom:35px}.mleft-md{margin-left:35px}.margin-md{margin:35px}.ptop-md{padding-top:35px}.pright-md,.ptop-md{box-sizing:border-box}.pright-md{padding-right:35px}.pbottom-md{box-sizing:border-box;padding-bottom:35px}.pleft-md{box-sizing:border-box;padding-left:35px}.padding-md{box-sizing:border-box;padding:35px}.mtop-lg{margin-top:60px}.mright-lg{margin-right:60px}.mbottom-lg{margin-bottom:60px}.mleft-lg{margin-left:60px}.margin-lg{margin:60px}.ptop-lg{padding-top:60px}.pright-lg,.ptop-lg{box-sizing:border-box}.pright-lg{padding-right:60px}.pbottom-lg{box-sizing:border-box;padding-bottom:60px}.pleft-lg{box-sizing:border-box;padding-left:60px}.padding-lg{box-sizing:border-box;padding:60px}.mtop-xl{margin-top:100px}.mright-xl{margin-right:100px}.mbottom-xl{margin-bottom:100px}.mleft-xl{margin-left:100px}.margin-xl{margin:100px}.ptop-xl{padding-top:100px}.pright-xl,.ptop-xl{box-sizing:border-box}.pright-xl{padding-right:100px}.pbottom-xl{box-sizing:border-box;padding-bottom:100px}.pleft-xl{box-sizing:border-box;padding-left:100px}.padding-xl{box-sizing:border-box;padding:100px}.mtop-xxl{margin-top:180px}.mright-xxl{margin-right:180px}.mbottom-xxl{margin-bottom:180px}.mleft-xxl{margin-left:180px}.margin-xxl{margin:180px}.ptop-xxl{box-sizing:border-box;padding-top:180px}.pright-xxl{box-sizing:border-box;padding-right:180px}.pbottom-xxl{box-sizing:border-box;padding-bottom:180px}.pleft-xxl{box-sizing:border-box;padding-left:180px}.padding-xxl{box-sizing:border-box;padding:180px}@media (max-width:780px){.mtop-none{margin-top:0}.mright-none{margin-right:0}.mbottom-none{margin-bottom:0}.mleft-none{margin-left:0}.margin-none{margin:0}.ptop-none{box-sizing:border-box;padding-top:0}.pright-none{box-sizing:border-box;padding-right:0}.pbottom-none{box-sizing:border-box;padding-bottom:0}.pleft-none{box-sizing:border-box;padding-left:0}.padding-none{box-sizing:border-box;padding:0}.mtop-xxs{margin-top:4px}.mright-xxs{margin-right:4px}.mbottom-xxs{margin-bottom:4px}.mleft-xxs{margin-left:4px}.margin-xxs{margin:4px}.ptop-xxs{box-sizing:border-box;padding-top:4px}.pright-xxs{box-sizing:border-box;padding-right:4px}.pbottom-xxs{box-sizing:border-box;padding-bottom:4px}.pleft-xxs{box-sizing:border-box;padding-left:4px}.padding-xxs{box-sizing:border-box;padding:4px}.mtop-xs{margin-top:8px}.mright-xs{margin-right:8px}.mbottom-xs{margin-bottom:8px}.mleft-xs{margin-left:8px}.margin-xs{margin:8px}.ptop-xs{padding-top:8px}.pright-xs,.ptop-xs{box-sizing:border-box}.pright-xs{padding-right:8px}.pbottom-xs{box-sizing:border-box;padding-bottom:8px}.pleft-xs{box-sizing:border-box;padding-left:8px}.padding-xs{box-sizing:border-box;padding:8px}.mtop-sm{margin-top:16px}.mright-sm{margin-right:16px}.mbottom-sm{margin-bottom:16px}.mleft-sm{margin-left:16px}.margin-sm{margin:16px}.ptop-sm{padding-top:16px}.pright-sm,.ptop-sm{box-sizing:border-box}.pright-sm{padding-right:16px}.pbottom-sm{box-sizing:border-box;padding-bottom:16px}.pleft-sm{box-sizing:border-box;padding-left:16px}.padding-sm{box-sizing:border-box;padding:16px}.mtop-md{margin-top:30px}.mright-md{margin-right:30px}.mbottom-md{margin-bottom:30px}.mleft-md{margin-left:30px}.margin-md{margin:30px}.ptop-md{padding-top:30px}.pright-md,.ptop-md{box-sizing:border-box}.pright-md{padding-right:30px}.pbottom-md{box-sizing:border-box;padding-bottom:30px}.pleft-md{box-sizing:border-box;padding-left:30px}.padding-md{box-sizing:border-box;padding:30px}.mtop-lg{margin-top:50px}.mright-lg{margin-right:50px}.mbottom-lg{margin-bottom:50px}.mleft-lg{margin-left:50px}.margin-lg{margin:50px}.ptop-lg{padding-top:50px}.pright-lg,.ptop-lg{box-sizing:border-box}.pright-lg{padding-right:50px}.pbottom-lg{box-sizing:border-box;padding-bottom:50px}.pleft-lg{box-sizing:border-box;padding-left:50px}.padding-lg{box-sizing:border-box;padding:50px}.mtop-xl{margin-top:80px}.mright-xl{margin-right:80px}.mbottom-xl{margin-bottom:80px}.mleft-xl{margin-left:80px}.margin-xl{margin:80px}.ptop-xl{padding-top:80px}.pright-xl,.ptop-xl{box-sizing:border-box}.pright-xl{padding-right:80px}.pbottom-xl{box-sizing:border-box;padding-bottom:80px}.pleft-xl{box-sizing:border-box;padding-left:80px}.padding-xl{box-sizing:border-box;padding:80px}.mtop-xxl{margin-top:140px}.mright-xxl{margin-right:140px}.mbottom-xxl{margin-bottom:140px}.mleft-xxl{margin-left:140px}.margin-xxl{margin:140px}.ptop-xxl{box-sizing:border-box;padding-top:140px}.pright-xxl{box-sizing:border-box;padding-right:140px}.pbottom-xxl{box-sizing:border-box;padding-bottom:140px}.pleft-xxl{box-sizing:border-box;padding-left:140px}.padding-xxl{box-sizing:border-box;padding:140px}}
+
+// LESS
+//  Spacing Helpers 
+// Global
+// .make-space(@suffix: none; @value:0;);
+// .make-space(@suffix: xxs; @value:6;);
+// .make-space(@suffix: xs; @value:10;);
+// .make-space(@suffix: sm; @value:20;);
+// .make-space(@suffix: md; @value:35;);
+// .make-space(@suffix: lg; @value:60;);
+// .make-space(@suffix: xl; @value:100;);
+// .make-space(@suffix: xxl; @value:180;);
+
+// // Make smaller on mobile
+// @media (max-width: $screenSM) {
+// 	.make-space(@suffix: none; @value:0;);
+// 	.make-space(@suffix: xxs; @value:4;);
+// 	.make-space(@suffix: xs; @value:8;);
+// 	.make-space(@suffix: sm; @value:16;);
+// 	.make-space(@suffix: md; @value:30;);
+// 	.make-space(@suffix: lg; @value:50;);
+// 	.make-space(@suffix: xl; @value:80;);
+// 	.make-space(@suffix: xxl; @value:140;);
+// }
+
+// // Create responsive classes to use spacing
+// // Ex mtop-xs, mbottom-lg, pleft-xl, etc...
+// .make-space(@suffix; @value) {
+
+// 	// Margin
+// 	.mtop-@{suffix} {
+// 		margin-top: ~"@{value}px";
+// 	}
+// 	.mright-@{suffix} {
+// 		margin-right: ~"@{value}px";
+// 	}
+// 	.mbottom-@{suffix} {
+// 		margin-bottom: ~"@{value}px";
+// 	}
+// 	.mleft-@{suffix} {
+// 		margin-left: ~"@{value}px";
+// 	}
+// 	.margin-@{suffix}{
+// 		margin: ~"@{value}px"
+// 	}
+
+// 	// Padding
+// 	.ptop-@{suffix} {
+// 		box-sizing: border-box;
+// 		padding-top: ~"@{value}px";
+// 	}
+// 	.pright-@{suffix} {
+// 		box-sizing: border-box;
+// 		padding-right: ~"@{value}px";
+// 	}
+// 	.pbottom-@{suffix} {
+// 		box-sizing: border-box;
+// 		padding-bottom: ~"@{value}px";
+// 	}
+// 	.pleft-@{suffix} {
+// 		box-sizing: border-box;
+// 		padding-left: ~"@{value}px";
+// 	}
+// 	.padding-@{suffix}{
+// 		box-sizing: border-box;
+// 		padding: ~"@{value}px";
+// 	}
+// }

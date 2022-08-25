@@ -1,0 +1,85 @@
+// Primary Colors Theme
+
+[data-theme="greys"] {
+	--background: rgba(255,255,255,1);
+	--layer: rgba(255,255,255,1);
+	--backdrop: rgba(0,0,0,0.25);
+	--outline: var(--text);
+
+	--primary: var(--blue);
+		--primaryText: var(--blueText);
+	--blue: rgba(0,0,0,1);
+		--blueText: rgba(255,255,255,1);
+	--orange: rgba(30,30,30,1);;
+		--orangeText: rgba(255,255,255,1);
+	--yellow: rgba(60,60,60,1);
+		--yellowText: rgba(255,255,255,1);
+	--green: rgba(90,90,90,1);
+		--greenText: rgba(255,255,255,1);
+	--red: rgba(120,120,120,1);
+		--redText: rgba(0,0,0,1);
+	--sky: rgba(150,150,150,1);
+		--skyText: rgba(0,0,0,1);
+	--purple: rgba(180,180,180,1);
+		--purpleText: rgba(0,0,0,1);
+	--pink: rgba(210,210,210,1);
+		--pinkText: rgba(0,0,0,1);
+
+	--black: rgba(0,0,0,1);
+	--white: rgba(255,255,255,1);
+	--grey: rgba(200,200,200,1);
+		--greyFade: rgba(127,127,127,0.25);
+		--greyText: rgba(0,0,0,1);
+	--border: rgba(0,0,0,1);
+		--borderFade: rgba(0,0,0,0.25);
+		--borderText: rgba(255,255,255,1);
+
+	--text: rgba(0,0,0,1);
+		--textFade: rgba(0,0,0,0.75);
+
+	--shadow: rgba(0, 0, 50, 0.08) 0px 4px 12px;
+	--shadow-Hover: 0px 2px 20px -5px rgba(30, 30, 60, 0.15);
+}
+
+
+
+[data-theme="greys_dark"] {
+	--background: rgba(0,0,0,1);
+	--layer: rgba(14,14,14,1);
+	--backdrop: rgba(140,140,140,0.35);
+	--outline: var(--text);
+
+	--primary: var(--blue);
+		--primaryText: var(--blueText);
+	--blue: rgba(255,255,255,1);
+		--blueText: rgba(0,0,0,1);
+	--orange: rgba(220,220,220,1);;
+		--orangeText: rgba(0,0,0,1);
+	--yellow: rgba(190,190,190,1);
+		--yellowText: rgba(0,0,0,1);
+	--green: rgba(160,160,160,1);
+		--greenText: rgba(0,0,0,1);
+	--red: rgba(130,130,130,1);
+		--redText: rgba(0,0,0,1);
+	--sky: rgba(100,100,100,1);
+		--skyText: rgba(255,255,255,1);
+	--purple: rgba(70,70,70,1);
+		--purpleText: rgba(255,255,255,1);
+	--pink: rgba(40,40,40,1);
+		--pinkText: rgba(255,255,255,1);
+
+	--black: rgba(0,0,0,1);
+	--white: rgba(255,255,255,1);
+	--grey: rgba(127,127,127,1);
+		--greyFade: rgba(127,127,127,0.25);
+		--greyText: rgba(0,0,0,1);
+	--border: rgba(255,255,255,1);
+		--borderFade: rgba(255,255,255,0.25);
+		--borderText: rgba(0,0,0,1);
+
+	--text: #FFFFFF;
+		--textFade: rgba(255,255,255,0.75);
+
+	--shadow: rgba(0, 0, 50, 0.08) 0px 4px 12px;
+	--shadow-Hover: 0px 2px 20px -5px rgba(30, 30, 60, 0.15);
+}

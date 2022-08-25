@@ -1,0 +1,85 @@
+// Muted Theme
+
+
+[data-theme="muted"] {
+	--background: #ffffff;
+	--layer: #FFFFFF;
+	--backdrop: rgba(0,0,65,0.25);
+	--outline: var(--primary);
+
+	--primary: var(--blue);
+		--primaryText: var(--blueText);
+	--red: #FF8088;
+		--redText: #420004;
+	--orange: #FFA480;
+		--orangeText: #571900;
+	--yellow: #ffd84f;
+		--yellowText: #523F00;
+	--green: #0DF4CD;
+		--greenText: #064B38;
+	--blue: #85B0F9;
+		--blueText: #062151;
+	--sky: #6BE9FF;
+		--skyText: #004857;
+	--purple: #D399FA;
+		--purpleText: #330651;
+	--pink: #FEC8C8;
+		--pinkText: #5E0303;
+
+	--black: #07071A;
+	--white: #FFFFFF;
+	--grey: #ECEDFD;
+		--greyFade: rgba(236, 237, 247, 0.7);
+		--greyText: var(--text);
+	--border: #183062;
+		--borderFade: rgba(3, 3, 51, 0.2);
+		--borderText: var(--background);
+
+	--text: #030932;
+		--textFade: rgba(3, 9, 50, 0.5);
+	
+	--shadow: rgba(0, 0, 50, 0.08) 0px 4px 12px;
+	--shadow-Hover: 0px 2px 20px -5px rgba(30, 30, 60, 0.15);
+}
+
+// Dark Theme
+[data-theme="muted_dark"] {
+	--background: var(--black);
+	--layer: #121220;
+	--backdrop: rgba(135,135,150,0.3);
+	--outline: var(--yellow);
+
+	--primary: var(--blue);
+		--primaryText: var(--blueText);
+	--red: #b45a5f;
+		--redText: #420004;
+	--orange: #b37359;
+		--orangeText: #571900;
+	--yellow: #b39838;
+		--yellowText: #523F00;
+	--green: #13ac90;
+		--greenText: #064B38;
+	--blue: #5e7caf;
+		--blueText: #062151;
+	--sky: #4ca4b3;
+		--skyText: #004857;
+	--purple: #946baf;
+		--purpleText: #330651;
+	--pink: #b28d8c;
+		--pinkText: #5E0303;
+
+	--black: #000000;
+	--white: #FFFFFF;
+	--text: #FFFFFF;
+		--textFade: rgba(255,255,255, 0.5);
+	--grey: #242535;
+		--greyFade: rgba(36, 37, 53, 0.7);
+		--greyText: var(--white);
+	--border: #4a5876;
+		--borderText: var(--background);
+		--borderFade: rgba(124, 148, 198, 0.2);
+
+	--shadow: rgba(0,0,0, .25) 0px 4px 12px;
+	--shadow-Hover: 0px 2px 20px -5px rgba(30, 30, 60, 0.1);
+
+}

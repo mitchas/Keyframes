@@ -1,0 +1,102 @@
+// CSS Print Styles
+
+#printArea{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+// Footer / Branding for print
+#printFooter{
+	display: none;
+	justify-content: flex-end;
+	position: fixed;
+	bottom: 0;
+	margin: 0 auto;
+	box-sizing: border-box;
+	padding: 18px;
+	font-size: 0.6em;
+	font-weight: 600;
+	color: rgba(0,0,0,0.8);
+	font-family: var(--monospace);
+	width: 100%;
+	
+	span{
+		display: inline-block;
+		border-radius: 20px;
+		padding: 6px 11px 4px 11px;
+		background-color: rgba(255,255,255,1);
+	}
+
+	img{
+		height: 16px;
+		margin-left: 2px;
+		opacity: 0.8;
+		width: auto;
+		position: relative;
+		top: -2px;
+	}
+}
+
+// Only show on print
+.print-only{
+	display: none;
+}
+
+@media print{
+    body, html{
+        display: block;
+        height: fit-content;
+        width: 100%;
+        min-height: 100%;
+    }
+    #app{
+        display: none;
+    }
+
+	.print-only{
+		display: block;
+	}
+	.hide-print{
+		display: none !important;
+	}
+
+	// Footer, show when print
+	#printFooter{
+		display: flex;
+	}
+}
+
+
+// Color Page print styles
+// Sizing has to be off colors.vue so it is picked up by print area
+#colorGrid{
+	// Color block sizing based on count
+	.color_block{flex-basis: 33%;}
+	&[data-count="1"] .color_block {flex-basis: 100%;}
+	&[data-count="2"] .color_block {flex-basis: calc(50% - 8px);}
+	&[data-count="3"] .color_block {flex-basis: calc(33.33% - 16px);}
+	&[data-count="4"] .color_block {flex-basis: calc(25% - 24px);}
+	&[data-count="5"] .color_block {flex-basis: 20%;}
+	&[data-count="6"] .color_block {flex-basis: 33.33%;}
+	&[data-count="7"] .color_block {flex-basis: 14.28%;}
+	&[data-count="8"] .color_block {flex-basis: 25%;}
+	&[data-count="9"] .color_block {flex-basis: 33%;}
+	&[data-count="10"] .color_block {flex-basis: 20%;}
+
+	@media print{
+		&[data-count="1"] .color_block {flex-basis: 100%;}
+		&[data-count="2"] .color_block {flex-basis: 50%;}
+		&[data-count="3"] .color_block {flex-basis: 33%;}
+		&[data-count="4"] .color_block {flex-basis: 50%;}
+		&[data-count="5"] .color_block {flex-basis: 50%;}
+		&[data-count="6"] .color_block {flex-basis: 33%;}
+		&[data-count="7"] .color_block {flex-basis: 33%;}
+		&[data-count="8"] .color_block {flex-basis: 50%;}
+		&[data-count="9"] .color_block {flex-basis: 33%;}
+		&[data-count="10"] .color_block {flex-basis: 50%;}
+
+		.color_block_info{
+			padding-top: 15px !important;
+		}
+	}
+}
