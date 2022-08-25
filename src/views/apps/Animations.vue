@@ -1190,6 +1190,14 @@ export default {
 			font-family: var(--monospace);
 			width: 50px;
 		}
+
+		button{
+			@media (max-width: $screenSM) {
+				padding-left: 8px;
+				padding-right: 8px;
+				font-size: 0.8em;
+			}
+		}
 	}
 
 	#timelineWrapper{

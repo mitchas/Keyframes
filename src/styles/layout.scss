@@ -55,6 +55,7 @@
 			position: fixed;
 			box-shadow: var(--shadow);
 			right: 0;
+			z-index: 100;
 			&.stack{
 				max-height: 50%;
 				overflow: auto;
@@ -93,9 +94,6 @@
 			overflow: hidden;
 			flex-direction: column;
 			height: 100%;
-			@media (max-width: $screenSM) {
-				padding-bottom: 50px;
-			}
 
 			h3, h4{
 				width: 100%;
@@ -171,6 +169,7 @@
 		bottom: 0;
 		top: unset;
 		border-top: 1px solid var(--border);
+		z-index: 101;
 	}
 	
 	.spacer{

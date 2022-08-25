@@ -14,7 +14,8 @@ body, html{
 	// background-color: var(--background);
 	max-height: 100vh;
 	max-height: -webkit-fill-available;
-	overscroll-behavior: contain;
+	overscroll-behavior: none;
+	touch-action: pan-x pan-y;
 }
 
 // Disable default browser tap highlighting, smooth text

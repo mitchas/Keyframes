@@ -72,11 +72,13 @@
 		</div>
 
 
-		<div class="max-width-large margin-auto padded mtop-md">
+		<div class="max-width-large margin-auto padded">
 
-			<h2 class="center">so it's another toolbox app?</h2>
-			<p class="center big margin-auto">Yeah, but I made the tools the way I wanted.</p>
-			<p class="small center margin-auto no-padding">Combining features from all my favorites, and removing all the junk.</p>
+			<div id="subHero">
+				<h2 class="center">so it's another toolbox app?</h2>
+				<p class="center big margin-auto">Yeah, but I made the tools the way I wanted.</p>
+				<p class="small center margin-auto no-padding text-light">Combining features from all my favorites, and removing all the junk.</p>
+			</div>
 
 			<!-- Spacer -->
 			<div class="mtop-lg"></div>
@@ -134,7 +136,7 @@
 					<li>Your data is only on the device you're using</li>
 					<li>Nobody can see your data unless they have your device</li>
 					<li>If you use keyframes.app on another device, your data will not be there</li>
-					<li>You can delete your data any time through the app or by clearing your browser cache/storage or on the settings page.</li>
+					<li>You can delete your data any time on the settings page or by clearing your browser cache/storage.</li>
 				</ul>
 
 				This site does use very basic analytics tracking - just things like page views and general location using self-hosted analytics. No third-party services or APIs are used on this site.
@@ -348,12 +350,40 @@ export default {
 #homeHero{
 	text-align: center;
 	margin: 105px 0;
+	@media (max-width: $screenSM) {
+		margin: 35px 0;
+	}
 
 	h1{
+		@media (max-width: $screenSM) {
+			font-size: 3.5em;
+			line-height: 0.95em;
+		}
 	}
 	p{
 		max-width: unset;
 		width: 100%;
+		@media (max-width: $screenSM) {
+			font-size: 1em;
+		}
+	}
+
+}
+
+// Secondary Hero
+#subHero{
+
+	@media (max-width: $screenSM) {
+		h2{
+			font-size: 3em;
+			line-height: 1em;
+		}
+		p{
+			font-size: 1em;
+			&.small{
+				font-size: 0.88em;
+			}
+		}
 	}
 
 }
@@ -375,11 +405,19 @@ export default {
 		right: 0;
     	animation: carouselAnimation 150s linear 0s infinite normal none;
 
+		@media (max-width: $screenSM) {
+			gap: 15px;
+		}
+
 		.carousel-item{
 			display: flex;
 			height: fit-content;
 			gap: 15px;
 			flex-grow: 3;
+
+			@media (max-width: $screenSM) {
+				flex-wrap: wrap;
+			}
 
 			h4{
 				margin: 0;
@@ -407,6 +445,9 @@ export default {
 				margin: 0;
 				padding: 0;
 				text-align: left;
+				@media (max-width: $screenSM) {
+					padding-left: 34px;
+				}
 			}
 
 
@@ -446,6 +487,13 @@ export default {
 		gap: 20px;
 		margin: 10px 0;
 
+		@media (max-width: $screenSM) {
+			flex-wrap: wrap;
+			padding: 0 15px;
+			gap: 0;
+			box-sizing: border-box;
+		}
+
 		.fas,b,p{
 			display: flex;
 			flex-direction: column;
@@ -460,11 +508,17 @@ export default {
 		b{
 			font-weight: 600;
 			font-size: 1em;
+			@media (max-width: $screenSM) {
+				padding-left: 10px;
+			}
 		}
 		p{
 			margin: 0;
 			padding: 0;
 			font-size: 0.9em;
+			@media (max-width: $screenSM) {
+				padding: 5px 0 20px 42px;
+			}
 		}
 	}
 }

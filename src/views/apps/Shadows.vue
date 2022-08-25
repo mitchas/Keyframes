@@ -154,50 +154,52 @@
 					
 					<!-- Save -->
 					<div class="app-sidebar-content" v-if="view_sidebar == 'save'" key="save">
-						<h3>Save</h3>
+						<div class="app-sidebar-content-scroll">
+							<h3>Save</h3>
 
-						<!-- Save Form -->
-						<form @submit.prevent="saveShadow" class="padded mbottom-md mtop-sm">
-							<div class="button-input small">
-								<input type="text" id="saveNameIn" placeholder="Name" v-model="name_to_save"/>
-								<button class="button" :disabled="!name_to_save.length" :class="{'green' : editing_stored_key != null}">
-									<i class="fas fa-floppy-disk"></i>
-									<span>{{editing_stored_key != null ? "Save Changes" : "Save New"}}</span>
-								</button>
-							</div>
-							<!-- Save as new -->
-							<button type="button" v-if="editing_stored_key != null" @click="editing_stored_key = null" class="text-smaller align-center ptop-xxs text-primary">Or save as new Shadow.</button>
-						</form>
+							<!-- Save Form -->
+							<form @submit.prevent="saveShadow" class="padded mbottom-md mtop-sm">
+								<div class="button-input small">
+									<input type="text" id="saveNameIn" placeholder="Name" v-model="name_to_save"/>
+									<button class="button" :disabled="!name_to_save.length" :class="{'green' : editing_stored_key != null}">
+										<i class="fas fa-floppy-disk"></i>
+										<span>{{editing_stored_key != null ? "Save Changes" : "Save New"}}</span>
+									</button>
+								</div>
+								<!-- Save as new -->
+								<button type="button" v-if="editing_stored_key != null" @click="editing_stored_key = null" class="text-smaller align-center ptop-xxs text-primary">Or save as new Shadow.</button>
+							</form>
 
-						<!-- Load existing -->
-						<h3>Saved Shadows</h3>
-						<!-- Scrollable saved list -->
-						<transition name="basicup">
-							<div class="app-sidebar-content-scroll pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
-								<!-- Stored shadows from local storage, loop to create display -->
-								<transition-group name="list">
-									<div v-for="(shadow, key) in stored_shadows" class="saved-list mbottom-xs padded" :key="key" :class="{'active' : editing_stored_key == key}">
-										<!-- Shadow Info & Controls -->
-										<div class="sl__bar">
-											<button class="sl__i" @click="loadShadow(shadow, key)">
-												<b>{{shadow.name}}</b>
-												{{$date(shadow.saved).format("MMMM D YYYY - h:mma")}}
-											</button>
-											<!-- Controls -->
-											<button class="sl__a red" title="Delete Shadow" @click="$store.getters['User/preferences'].confirm_action ? confirm_delete_shadow = key : deleteShadow(key)"><i class="fas fa-trash-alt"></i></button>
+							<!-- Load existing -->
+							<h3>Saved Shadows</h3>
+							<!-- Scrollable saved list -->
+							<transition name="basicup">
+								<div class="pbottom-lg ptop-sm" v-if="!$store.getters['Hold/isLoading']">
+									<!-- Stored shadows from local storage, loop to create display -->
+									<transition-group name="list">
+										<div v-for="(shadow, key) in stored_shadows" class="saved-list mbottom-xs padded" :key="key" :class="{'active' : editing_stored_key == key}">
+											<!-- Shadow Info & Controls -->
+											<div class="sl__bar">
+												<button class="sl__i" @click="loadShadow(shadow, key)">
+													<b>{{shadow.name}}</b>
+													{{$date(shadow.saved).format("MMMM D YYYY - h:mma")}}
+												</button>
+												<!-- Controls -->
+												<button class="sl__a red" title="Delete Shadow" @click="$store.getters['User/preferences'].confirm_action ? confirm_delete_shadow = key : deleteShadow(key)"><i class="fas fa-trash-alt"></i></button>
+											</div>
 										</div>
-									</div>
-								</transition-group>
+									</transition-group>
 
-								<!-- No stored shadows -->
-								<div class="padded mtop-xs" v-if="stored_shadows && !Object.keys(stored_shadows).length">
-									<Callout icon="far fa-empty-set" size="small" color="red">
-										<p class="small">You haven't saved anything yet.</p>
-									</Callout>
-								</div>	
+									<!-- No stored shadows -->
+									<div class="padded mtop-xs" v-if="stored_shadows && !Object.keys(stored_shadows).length">
+										<Callout icon="far fa-empty-set" size="small" color="red">
+											<p class="small">You haven't saved anything yet.</p>
+										</Callout>
+									</div>	
 
-							</div>
-						</transition>
+								</div>
+							</transition>
+						</div>
 
 					</div>
 
