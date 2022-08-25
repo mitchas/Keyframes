@@ -33,6 +33,7 @@ import Home from './views/Home.vue';
 import Animate from './views/apps/Animate.vue';
 import Shadows from './views/apps/Shadows.vue';
 import Colors from './views/apps/Colors.vue';
+import Import from './views/apps/Import.vue';
 import CharacterCodes from './views/apps/CharacterCodes.vue';
 
 // Everything else
@@ -72,6 +73,14 @@ const router = new Router({
 			path: '/about/',
 			name: 'About',
 			component: About,
+		},
+		////////////
+		// Import //
+		//////////
+		{
+			path: '/import/',
+			name: 'Import',
+			component: Import,
 		},
 		////////////////
 		// Changelog //

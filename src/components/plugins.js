@@ -105,7 +105,7 @@ export default {
 			this.$root.$children[0].$refs.toastComponent.showToast(title, body, color, icon);
 		}
 		Vue.prototype.hello = function(message, icon, color) {
-			this.$root.$children[0].$refs.c.showAlert(message, icon, color);
+			this.$root.$children[0].$refs.alertComponent.showAlert(message, icon, color);
 		}
 	}
  }

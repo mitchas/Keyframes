@@ -31,11 +31,12 @@
 				color="red"
 				size="">
 				<span>
-					<b>There's a new version of Keyframes!</b>
+					<h3>There's a new version of Keyframes!</h3>
 					<br/>
 					You are currently at v1.keyframes.app. If you are missing saved animations or palettes, go back to the new Keyframes and you should be prompted with a message to transfer them.
 					<br/><br/>
-					The new version is not compatible with the local storage data, so this site will stay up here so you can continue to access your old saves.
+					The new version is not compatible with the local storage data, so this site will stay up here so you can continue to access your old saves for the time being. 
+					<small>I would recommend recreating them in the new version - it's much better <i class="far fa-smile"></i></small>
 				</span>
 			</Callout>
 
