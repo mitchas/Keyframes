@@ -59,9 +59,9 @@
 					<!-- Color Control Buttons -->
 					<div class="color_block_controls">
 						<!-- Adjust -->
-						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders-simple" title="Adjust RGB"></i></button>
+						<button @click="color.adjust = !color.adjust"><i class="fas fa-sliders" title="Adjust RGB"></i></button>
 						<!-- Shades -->
-						<button><i class="fas fa-shutters" @click="color.shades = !color.shades" title="Color Shades"></i></button>
+						<button><i class="fas fa-bars" @click="color.shades = !color.shades" title="Color Shades"></i></button>
 						<!-- Delete -->
 						<button @click="$store.getters['User/preferences'].confirm_action ? confirm_modal = [ 'color', key ] : removeColor(key)" title="Delete Color"><i class="fas fa-trash-alt"></i></button>
 						<!-- Drag -->
