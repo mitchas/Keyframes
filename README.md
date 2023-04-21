@@ -15,7 +15,7 @@ A collection of simple tools for frontend development.
 ### Third-party packages:
  * [DayJS](https://day.js.org/) for Dates
  * [Numeral.js](http://numeraljs.com/) for Number stuff
- * [Font Awesome Pro](https://fontawesome.com/) icons
+ * [Font Awesome](https://fontawesome.com/) icons
 
 &nbsp;
 

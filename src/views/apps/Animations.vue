@@ -14,7 +14,7 @@
 			<!-- Loop for other secondary buttons -->
 			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" 
 				:class="{'notification-dot': false}">
-				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<i :class="view_sidebar == button.id ? 'fas fa-circle-xmark' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
 		</nav>
@@ -86,7 +86,7 @@
 						</button>
 						<!-- Add Step -->
 						<button class="button small" @click="adding_step = !adding_step" :class="{'invert': !adding_step, 'red': adding_step}">
-							<i :class="{'fas fa-plus-circle': !adding_step, 'fas fa-times-circle': adding_step}"></i>
+							<i :class="{'fas fa-plus-circle': !adding_step, 'fas fa-circle-xmark-circle': adding_step}"></i>
 							<span>{{adding_step ? "Cancel" : "Add Step"}}</span>
 						</button>
 					</div>
@@ -159,7 +159,7 @@
 								<!-- Fields -->
 								<div v-else class="input-group max-width-small mbottom-xs mtop-xxs" :class="{'hidden': field.type == '3d' && !working.has_3d || field.type == '2d' && working.has_3d}">
 									<span class="input-group-label small" :for="'anEdt' + prop">
-										<Tooltip :link="field.link" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square" v-if="field.tooltip">
+										<Tooltip :link="field.link" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info" v-if="field.tooltip">
 											<div>{{field.tooltip}}</div>
 											<code v-if="field.example">{{field.example}}</code>
 										</Tooltip>
@@ -184,7 +184,7 @@
 							<div class="input-group max-width-small mtop-sm">
 								<span class="input-group-label small" for="anDuration">
 									Duration
-									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration'" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration'" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 										<div>How long the animation will take from start to finish. (In {{working.time_unit == 's' ? "seconds" : "milliseconds"}})</div>
 									</Tooltip>
 								</span>
@@ -194,7 +194,7 @@
 							<div class="input-group max-width-small mtop-sm">
 								<span class="input-group-label small" for="anTiming">
 									Timing
-									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function'" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function'" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 										How an animation progresses through the duration of each cycle
 									</Tooltip>
 								</span>
@@ -219,7 +219,7 @@
 							<div class="input-group max-width-small mtop-sm">
 								<span class="input-group-label small" for="anDelay">
 									Delay
-									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay'" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay'" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 										<div>Delay before the animation. (In {{working.time_unit == 's' ? "seconds" : "milliseconds"}})</div>
 									</Tooltip>
 								</span>
@@ -229,7 +229,7 @@
 							<div class="input-group max-width-small mtop-sm">
 								<span class="input-group-label small" for="anInterations">
 									Iterations
-									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-iteration-count'" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-iteration-count'" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 										Number of times the animation will run.
 									</Tooltip>
 								</span>
@@ -245,7 +245,7 @@
 							<div class="input-group max-width-small mtop-sm">
 								<span class="input-group-label small" for="anDirection">
 									Direction
-									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction'" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction'" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 										The direction the animation runs.
 									</Tooltip>
 								</span>
@@ -262,7 +262,7 @@
 							<div class="input-group max-width-small mtop-sm mbottom-xl">
 								<span class="input-group-label small" for="anFill">
 									Fill Mode
-									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-fill-mode'" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+									<Tooltip :link="'https://developer.mozilla.org/en-US/docs/Web/CSS/animation-fill-mode'" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 										Sets how a CSS animation applies styles to its target before and after its execution.
 									</Tooltip>
 								</span>
@@ -365,7 +365,7 @@
 
 								<!-- No stored animations -->
 								<div class="padded mtop-xs" v-if="stored_animations && !Object.keys(stored_animations).length">
-									<Callout icon="far fa-empty-set" size="small" color="red">
+									<Callout icon="far fa-circle-xmark" size="small" color="red">
 										<p class="small">You haven't saved anything yet.</p>
 									</Callout>
 								</div>	
@@ -413,7 +413,7 @@
 										<!-- Perspective -->
 										<div class="input-group max-width-small mtop-xs">
 											<span class="input-group-label small" for="3dpers">
-												<Tooltip link="https://developer.mozilla.org/en-US/docs/Web/CSS/perspective" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+												<Tooltip link="https://developer.mozilla.org/en-US/docs/Web/CSS/perspective" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 													<div>When using 3d transformations, the perspective sets the distance between the z=0 plane and the user.</div>
 												</Tooltip>
 												Perspective
@@ -423,7 +423,7 @@
 										<!-- Origin -->
 										<div class="input-group max-width-small mtop-xs">
 											<span class="input-group-label small" for="3dpersOr">
-												<Tooltip link="https://developer.mozilla.org/en-US/docs/Web/CSS/perspective-origin" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+												<Tooltip link="https://developer.mozilla.org/en-US/docs/Web/CSS/perspective-origin" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 													<div>Determines the position at which the viewer is looking.</div>
 												</Tooltip>
 												Origin
@@ -434,7 +434,7 @@
 										<div class="flex mtop-sm between">
 											<label class="vertical" for="backfacetog">
 												<div class="flex">
-													<Tooltip link="https://developer.mozilla.org/en-US/docs/Web/CSS/backface-visibility" position="right" linkText="View on MDN" color="grey" icon="fas fa-info-square">
+													<Tooltip link="https://developer.mozilla.org/en-US/docs/Web/CSS/backface-visibility" position="right" linkText="View on MDN" color="grey" icon="fas fa-circle-info">
 														<div>Sets whether the back face of an element is visible when turned towards the user.</div>
 													</Tooltip>
 													<div class="mleft-xs pleft-xxs">Backface Visibility</div>
@@ -458,7 +458,7 @@
 										<label>Pulse</label>
 									</button>
 									<button class="demo-preview" @click="loadDemo('bounce')">
-										<div class="demo-stage"><i class="fas fa-balloon demo-bounce"></i></div>
+										<div class="demo-stage"><i class="fas fa-bowling-ball demo-bounce"></i></div>
 										<label>Bounce</label>
 									</button>
 									<button class="demo-preview" @click="loadDemo('spooky')">
@@ -480,7 +480,7 @@
 							<h4>Danger</h4>
 							<!-- Reset Animation -->
 							<button class="button mtop-sm mbottom-md margin-auto block" @click="resetDefault()" :class="{'red' : resetting_default, 'grey': !resetting_default}">
-								<i :class="{'far fa-exclamation-circle' : resetting_default, 'far fa-eraser' : !resetting_default}"></i>
+								<i class="far fa-circle-xmark"></i>
 								<span>{{resetting_default ? "Again to Confirm" : "Reset Animation"}}</span>
 							</button>
 
@@ -507,7 +507,7 @@
 								For example, if you set the <code>color</code> to <code>red</code> at the 0% step, and change it to <code>blue</code> at the 100% step, the animation target will transition smoothly from red to blue when the animation runs.
 							</p>
 							<p class="small padded mtop-sm">
-								You can control the animation speed and other properties in the Animation Control <i class="fas fa-dial"></i> tab.
+								You can control the animation speed and other properties in the Animation Control <i class="fas fa-sliders"></i> tab.
 							</p>
 							<p class="small padded mtop-sm">
 								Customize the target (element being animated) in the Target Element <i class="fas fa-bullseye"></i> tab. Keep in mind that @keyframe animations can be used on any (or multiple) elements - so editing the target is really just to preview it here.
@@ -529,7 +529,7 @@
 		</div>
 
 		<!-- Confirm delete things -->
-		<Confirm v-if="confirm_delete_animation != null" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" confirmText="Delete It"  confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" v-on:confirmFalse="confirm_delete_animation = null" v-on:confirmTrue="deleteAnimation(confirm_delete_animation);">
+		<Confirm v-if="confirm_delete_animation != null" title="Are you sure?" icon="fas fa-circle-exclamation" color="red" confirmText="Delete It"  confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" v-on:confirmFalse="confirm_delete_animation = null" v-on:confirmTrue="deleteAnimation(confirm_delete_animation);">
 			<p class="no-padding">
 				You are about to delete your saved animation <b>{{stored_animations[confirm_delete_animation].name}}</b>. <small class="block">This can <b>not</b> be undone.</small>
 			</p>
@@ -628,7 +628,7 @@ export default {
 			// Secondary nav buttons
 			secondary_nav: [
 				{title: "Edit Properties", id: "edit",  icon: "fas fa-pen-to-square"},
-				{title: "Animation Control", id: "control",  icon: "fas fa-dial"},
+				{title: "Animation Control", id: "control",  icon: "fas fa-sliders"},
 				{title: "Target Element", id: "target",  icon: "fas fa-bullseye"},
 				{title: "Get CSS", id: "code",  icon: "fas fa-code"},
 				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
@@ -638,7 +638,7 @@ export default {
 			css_props: {
 				"Transform":{
 					header: true,
-					icon: "fas fa-times",
+					icon: "fas fa-circle-xmark",
 				},
 				"transform-origin": {
 					placeholder: "center 15%",
@@ -697,7 +697,7 @@ export default {
 				},
 				"Design":{
 					header: true,
-					icon: "fas fa-times",
+					icon: "fas fa-circle-xmark",
 				},
 				"color": {
 					placeholder: "red",
@@ -726,7 +726,7 @@ export default {
 				// Size and position
 				"Size, Shape, & Position":{
 					header: true,
-					icon: "fas fa-times",
+					icon: "fas fa-circle-xmark",
 				},
 				"width": {
 					placeholder: "100px",
@@ -1092,7 +1092,7 @@ export default {
 			if(name == "pulse"){
 				demo = {"background":"#FFFFFF","targetHTML":"<div id=\"target\">\n    <i class=\"fas fa-bullseye\">\n</div>","targetCSS":"#target{\n    display: block; \n    color: #0047DB; \n    font-size: 2em;\n}","time_unit":"s","has_3d":false,"perspective":"500px","backface":true,"perspective_origin":"center","duration":"0.75","timing":"ease-in-out","custom_timing":"","delay":"0","iterations":1,"loop":true,"direction":"alternate","fill":"none","steps":{"0":{"values":{"scale":"1"},"css":""},"100":{"values":{"scale":"2"},"css":""}}};
 			}else if(name == "bounce"){
-				demo = {"background":"#FFFFFF","targetHTML":"<div id=\"target\">\n    <i class=\"fas fa-balloon\">\n</div>","targetCSS":"#target{\n    display: block; \n    color: #FF6168; \n    font-size: 2em;\n}","time_unit":"s","has_3d":false,"perspective":"500px","backface":true,"perspective_origin":"center","duration":"3","timing":"ease-in-out","custom_timing":"","delay":"0","iterations":1,"loop":true,"direction":"normal","fill":"none","steps":{"0":{"values":{"translate":"0,0"},"css":""},"25":{"values":{"translate":"0,-20px","rotate":"5deg","transform-origin":"center center"},"css":""},"50":{"values":{"translate":"0,-5px"},"css":""},"75":{"values":{"translate":"0,-15px","rotate":"-5deg"},"css":""},"100":{"values":{"translate":"0,0"},"css":""}}};
+				demo = {"background":"#FFFFFF","targetHTML":"<div id=\"target\">\n    <i class=\"fas fa-bowling-ball\">\n</div>","targetCSS":"#target{\n    display: block; \n    color: #FF6168; \n    font-size: 2em;\n}","time_unit":"s","has_3d":false,"perspective":"500px","backface":true,"perspective_origin":"center","duration":"3","timing":"ease-in-out","custom_timing":"","delay":"0","iterations":1,"loop":true,"direction":"normal","fill":"none","steps":{"0":{"values":{"translate":"0,0"},"css":""},"25":{"values":{"translate":"0,-20px","rotate":"5deg","transform-origin":"center center"},"css":""},"50":{"values":{"translate":"0,-5px"},"css":""},"75":{"values":{"translate":"0,-15px","rotate":"-5deg"},"css":""},"100":{"values":{"translate":"0,0"},"css":""}}};
 			}else if(name == "spooky"){
 				demo = {"background":"#FFFFFF","targetHTML":"<div id=\"target\">\n    <i class=\"fas fa-ghost\">\n</div>","targetCSS":"#target{\n    display: block; \n    color: #FF6A3E; \n    font-size: 2em;\n}","time_unit":"s","has_3d":false,"perspective":"500px","backface":true,"perspective_origin":"center","duration":"6","timing":"ease-in-out","custom_timing":"","delay":"0","iterations":1,"loop":true,"direction":"normal","fill":"none","steps":{"0":{"values":{},"css":""},"2":{"values":{"skew":"-6deg, -6deg","rotate":"6deg"},"css":""},"28":{"values":{"translate":"50px, 0","skew":"-6deg, -6deg","rotate":"6deg"},"css":""},"29":{"values":{"rotate":"-6deg","skew":"6deg, 6deg","translate":"30px, 0"},"css":""},"70":{"values":{"translate":"-40px, 0","rotate":"-6deg","skew":"6deg, 6deg"},"css":""},"71":{"values":{"rotate":"6deg","skew":"-6deg, -6deg","translate":"-20px, 0"},"css":""},"96":{"values":{"skew":"-6deg, -6deg","rotate":"6deg","translate":"0,0"},"css":""},"100":{"values":{},"css":""}}};
 			}else if(name == "spin"){

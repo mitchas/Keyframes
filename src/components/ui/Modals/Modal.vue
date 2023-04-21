@@ -40,7 +40,7 @@ Modal Component
 					<div class="modal-footer" v-bind:class="{'right': !dismissText, 'reverse': reverseButtons}">
 						<!-- Dismiss -->
 						<button class="button invert" @click="closeModal()" aria-label="Dismiss" v-if="dismissText">
-							<i class="far fa-times"></i>
+							<i class="far fa-circle-xmark"></i>
 							<span>{{dismissText}}</span>
 						</button>
 						<!-- Confirm -->

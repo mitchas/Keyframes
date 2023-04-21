@@ -1,7 +1,7 @@
 <!-- 
 Confirm Component
 Example: 
-<Confirm v-if="show" icon="far fa-times" title="Title" color="red" confirmText="Yes" cancelText="No, Cancel" v-on:confirmFalse="show = false" v-on:confirmTrue="doSomething()"></Confirm>
+<Confirm v-if="show" icon="far fa-circle-xmark" title="Title" color="red" confirmText="Yes" cancelText="No, Cancel" v-on:confirmFalse="show = false" v-on:confirmTrue="doSomething()"></Confirm>
 -->
 <template>
 	<div>
@@ -30,7 +30,7 @@ Example:
 					<div class="modal-footer">
 						<!-- Dismiss -->
 						<button class="button invert" @click="cancel()" :aria-label="cancelText" ref="cancel">
-							<i class="far fa-times"></i>
+							<i class="far fa-circle-xmark"></i>
 							<span>{{cancelText}}</span>
 						</button>
 						<!-- Leave -->

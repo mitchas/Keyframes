@@ -16,7 +16,7 @@
 			<!-- Loop for other secondary buttons -->
 			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" 
 				:class="{'notification-dot': (button.id == 'settings' && tilt_mode)}">
-				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<i :class="view_sidebar == button.id ? 'fas fa-circle-xmark' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
 		</nav>
@@ -192,7 +192,7 @@
 
 									<!-- No stored shadows -->
 									<div class="padded mtop-xs" v-if="stored_shadows && !Object.keys(stored_shadows).length">
-										<Callout icon="far fa-empty-set" size="small" color="red">
+										<Callout icon="far fa-circle-xmark" size="small" color="red">
 											<p class="small">You haven't saved anything yet.</p>
 										</Callout>
 									</div>	
@@ -237,7 +237,7 @@
 						<h4>Danger</h4>
 						<!-- Reset Shadow -->
 						<button class="button mtop-sm mbottom-lg margin-auto block" @click="resetDefault()" :class="{'red' : resetting_default, 'grey': !resetting_default}">
-							<i :class="{'far fa-exclamation-circle' : resetting_default, 'far fa-eraser' : !resetting_default}"></i>
+							<i class="far fa-circle-xmark"></i>
 							<span>{{resetting_default ? "Again to Confirm" : "Reset Shadow"}}</span>
 						</button>
 					</div>
@@ -251,7 +251,7 @@
 
 		<!-- Modals -->
 		<!-- Confirm delete things -->
-		<Confirm v-if="confirm_delete_shadow != null" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" confirmText="Delete Shadow"  confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" v-on:confirmFalse="confirm_delete_shadow = null" v-on:confirmTrue="deleteShadow(confirm_delete_shadow);">
+		<Confirm v-if="confirm_delete_shadow != null" title="Are you sure?" icon="fas fa-circle-exclamation" color="red" confirmText="Delete Shadow"  confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" v-on:confirmFalse="confirm_delete_shadow = null" v-on:confirmTrue="deleteShadow(confirm_delete_shadow);">
 			<p class="no-padding">
 				You are about to delete your saved shadow <b>{{stored_shadows[confirm_delete_shadow].name}}</b>. <small class="block">This can <b>not</b> be undone.</small>
 			</p>
@@ -314,7 +314,7 @@ export default {
 			stored_shadows: [],
 
 			secondary_nav: [
-				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
+				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-sliders"},
 				{title: "Shadow Layers", id: "layers",  icon: "fas fa-layer-group"},
 				{title: "Target Element", id: "target",  icon: "fas fa-bullseye"},
 				{title: "Save / Load", id: "save",  icon: "fas fa-floppy-disk"},
@@ -606,7 +606,7 @@ export default {
 							addListener("deviceorientation");
 							_this.hello("Tilt your device to adjust the shadow.", "far fa-sync-alt");
 						}else{
-							_this.hello("Device orientation permission denied.", "far fa-times-circle", "red");
+							_this.hello("Device orientation permission denied.", "far fa-circle-xmark-circle", "red");
 						}
 					})
 					.catch(console.error);

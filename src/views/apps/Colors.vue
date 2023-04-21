@@ -21,7 +21,7 @@
 			<!-- Loop for other secondary buttons -->
 			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" 
 				:class="{'notification-dot': (button.id == 'colorblind' && colorblind != 'none') || (button.id == 'contrast' && contrast_enabled)}">
-				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<i :class="view_sidebar == button.id ? 'fas fa-circle-xmark' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
 		</nav>
@@ -136,7 +136,7 @@
 									<!-- Toggle buttons -->
 									<button @click="gradient_shape = 'linear'" :class="{active : gradient_shape == 'linear'}">
 										<span class="hint bottom">Linear</span>
-										<i class="fas fa-dash"></i>
+										<i class="fas fa-minus"></i>
 									</button>
 									<button @click="gradient_shape = 'radial'" :class="{active : gradient_shape == 'radial'}">
 										<span class="hint bottom">Radial</span>
@@ -348,7 +348,7 @@
 
 								<!-- No stored palettes -->
 								<div class="padded mtop-xs" v-if="storedPalettes && !Object.keys(storedPalettes).length">
-									<Callout icon="far fa-empty-set" size="small" color="red">
+									<Callout icon="far fa-circle-xmark" size="small" color="red">
 										<p class="small">You haven't saved anything yet.</p>
 									</Callout>
 								</div>	
@@ -426,7 +426,7 @@
 								<h4>Danger</h4>
 								<!-- Reset Palette -->
 								<button class="button mtop-sm mbottom-lg margin-auto block" @click="clearPalette()" :class="{'red' : resetting_palette, 'grey': !resetting_palette}">
-									<i :class="{'far fa-exclamation-circle' : resetting_palette, 'far fa-eraser' : !resetting_palette}"></i>
+									<i :class="{'far fa-circle-exclamation' : resetting_palette, 'far fa-eraser' : !resetting_palette}"></i>
 									<span>{{resetting_palette ? "Again to Confirm" : "Reset Palette"}}</span>
 								</button>
 							</div>
@@ -443,7 +443,7 @@
 
 		<!-- Modals -->
 		<!-- Confirm delete things -->
-		<Confirm v-if="confirm_modal && confirm_modal[0]" title="Are you sure?" icon="fas fa-exclamation-circle" color="red" 
+		<Confirm v-if="confirm_modal && confirm_modal[0]" title="Are you sure?" icon="fas fa-circle-exclamation" color="red" 
 			:confirmText="'Delete ' + (confirm_modal[0] == 'color' ? 'Color': 'Palette')" 
 			confirmIcon="fas fa-trash-alt" cancelText="No, Cancel" 
 			v-on:confirmFalse="confirm_modal = null" v-on:confirmTrue="handleConfirmModal()">
@@ -587,7 +587,7 @@ export default {
 
 			// App Definitions / Loops
 			secondary_nav: [
-				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
+				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-sliders"},
 				{title: "Color Blindness", id: "colorblind",  icon: "fas fa-glasses"},
 				{title: "Contrast", id: "contrast",  icon: "fas fa-circle-half-stroke"},
 				{title: "Gradient", id: "gradient",  icon: "fas fa-blender"},

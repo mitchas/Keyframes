@@ -11,7 +11,7 @@ Tooltip Component
 	<button class="tooltip" v-bind:class="[color && color, position && position, {'show': show}]" @click="show = !show" tabindex="0" role="tooltip" v-if="tooltipsEnabled">
 
 		<!-- Icon -->
-		<i :class="['tooltip-icon', (!icon && !show) && 'fas fa-question-circle', (icon && !show) && icon, {'far fa-times-circle': show}]"></i>
+		<i :class="['tooltip-icon', (!icon && !show) && 'fas fa-circle-question', (icon && !show) && icon, {'far fa-circle-xmark-circle': show}]"></i>
 		
 		<!-- Body -->
 		<span class="tooltip-text" @mouseleave="show = false" :class="{'nolink': !link}">
@@ -45,7 +45,7 @@ export default {
 		icon: {
 			type: String,
 			required: false,
-   			default: "far fa-question-circle",
+   			default: "far fa-circle-question",
 		},
 		// Optional link - shown at bottom right of tooltip
 		link: {

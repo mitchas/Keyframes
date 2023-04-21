@@ -20,7 +20,7 @@
 
 			<!-- Loop for other secondary buttons -->
 			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" >
-				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<i :class="view_sidebar == button.id ? 'fas fa-circle-xmark' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
 		</nav>

@@ -20,7 +20,7 @@
 			<!-- Loop for other secondary buttons -->
 			<button v-for="(button, key) in secondary_nav" :key="key" @click="toggleSidebar(button.id)" 
 				:class="{'notification-dot': false}">
-				<i :class="view_sidebar == button.id ? 'fas fa-times' : button.icon"></i>
+				<i :class="view_sidebar == button.id ? 'fas fa-circle-xmark' : button.icon"></i>
 				<span class="hint left">{{button.title}}</span>
 			</button>
 		</nav>
@@ -58,7 +58,7 @@
 						<h4>Danger</h4>
 						<!-- Reset Shadow -->
 						<button class="button mtop-sm mbottom-lg margin-auto block" @click="resetDefault()" :class="{'red' : resetting_default, 'grey': !resetting_default}">
-							<i :class="{'far fa-exclamation-circle' : resetting_default, 'far fa-eraser' : !resetting_default}"></i>
+							<i :class="{'far fa-circle-exclamation' : resetting_default, 'far fa-circle-times' : !resetting_default}"></i>
 							<span>{{resetting_default ? "Again to Confirm" : "Reset Shadow"}}</span>
 						</button>
 					</div>
@@ -91,7 +91,7 @@ export default {
 			resetting_default: false,
 
 			secondary_nav: [
-				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-dial"},
+				// {title: "Adjust / View", id: "adjust",  icon: "fas fa-sliders"},
 				{title: "Shadow Layers", id: "layers",  icon: "fas fa-layer-group"},
 				{title: "Target Element", id: "target",  icon: "fas fa-bullseye"},
 				{title: "Export", id: "export",  icon: "fas fa-share-nodes"},

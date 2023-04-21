@@ -57,7 +57,7 @@ Selection popout with suggestions and optional text box for searching.
 					<input type="text" :placeholder="'Type to filter'" :value='inputValue' @input='evt=>inputValue=evt.target.value' autocomplete="off" spellcheck="false" :maxlength="maxLength"/>
 					<!-- Clear Button -->
 					<button id="clearTextSuggestion" @click="clearInput()" v-if="inputValue">
-						<i class="fas fa-times"></i>
+						<i class="fas fa-circle-xmark"></i>
 					</button>
 				</div>
 
@@ -76,7 +76,7 @@ Selection popout with suggestions and optional text box for searching.
 
 					<!-- No Results -->
 					<button type="button" class="selections-empty" v-if="!filteredSuggestions.length && !customText">
-						<i class="fas fa-empty-set"></i>
+						<i class="fas fa-circle-xmark"></i>
 						No Results
 					</button>
 
@@ -97,7 +97,7 @@ Selection popout with suggestions and optional text box for searching.
 				<!-- No results (custom disabled) -->
 				<div class="end-of-selections">
 					<a @click="selectItem(false)" v-if="showReset && (multiSelection.length || selection)">
-						<i class="far fa-empty-set"></i> 
+						<i class="far fa-circle-xmark"></i> 
 						Clear / Reset
 					</a>
 					<span v-else>
@@ -230,7 +230,7 @@ export default {
 				}else if(item == false){
 					this.multiSelection = [];
 				}else if(current >= limit){
-					this.hello("You've selected " + current + "/" + limit, "far fa-times", "red");
+					this.hello("You've selected " + current + "/" + limit, "far fa-circle-xmark", "red");
 				}
 
 			}else{

@@ -27,7 +27,7 @@ Top nav bar - fixed
 			
 				<!-- Featured Link -->
 				<button class="featured" @click="sponsorModal = true;">
-					<i class="fas fa-stars"></i>
+					<i class="fas fa-star"></i>
 					<b>Your Project</b>
 				</button>
 

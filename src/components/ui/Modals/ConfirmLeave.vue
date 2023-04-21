@@ -31,7 +31,7 @@ Confirm Leave component
 					<div class="modal-footer">
 						<!-- Dismiss -->
 						<button class="button invert" @click="show = false" aria-label="Dismiss">
-							<i class="far fa-times"></i>
+							<i class="far fa-circle-xmark"></i>
 							<span>Stay</span>
 						</button>
 						<!-- Leave -->

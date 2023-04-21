@@ -103,7 +103,7 @@
 		<!-- Tooltip -->
 		<label class="flex">
 			<span>Tooltip</span>
-			<Tooltip :link="'https://hotdi.sh'" position="right" linkText="Links Too" color="blue" icon="fas fa-info-square">
+			<Tooltip :link="'https://hotdi.sh'" position="right" linkText="Links Too" color="blue" icon="fas fa-circle-info">
 				This is a tooltip. You can put whatever in here and change the icons and links.
 			</Tooltip>
 		</label>

@@ -136,7 +136,7 @@
 
 		<!-- Data Controls -->
 		<button class="button grey mright-xs mbottom-xs" @click="exportModal = true">
-			<i class="fas fa-laptop-arrow-down"></i>
+			<i class="fas fa-arrow-down"></i>
 			<span>View Data</span>
 		</button>
 		<!-- Import Data -->
@@ -162,12 +162,12 @@
 
 		<!-- Privacy Policy -->
 		<router-link to="/privacy" class="button grey mright-xs mbottom-xs">
-			<i class="fas fa-blinds"></i>
+			<i class="fas fa-file"></i>
 			<span>Privacy Policy</span>
 		</router-link>
 		<!-- Terms of Service -->
 		<router-link to="/terms" class="button grey mbottom-xs">
-			<i class="fas fa-file-check"></i>
+			<i class="fas fa-file"></i>
 			<span>Terms of Service</span>
 		</router-link>
 
@@ -192,7 +192,7 @@
 		</router-link>
 		<!-- Design -->
 		<router-link to="/design" class="button grey mbottom-xs">
-			<i class="fas fa-browser"></i>
+			<i class="fas fa-eye"></i>
 			<span>Design</span>
 		</router-link>
 
@@ -205,7 +205,7 @@
 			<h3>Have a project to promote?</h3>
 			<p class="mbottom-sm">Sponsor Keyframes and get your project in front of hundreds of developers each day.</p>
 			<router-link to="/sponsor" class="button grey mbottom-xs">
-				<i class="fas fa-heart-circle"></i>
+				<i class="fas fa-heart"></i>
 				<span>Become a Sponsor</span>
 			</router-link>
 
@@ -240,7 +240,7 @@
 			title="Import Data"
 			icon="fas fa-file-import"
 			confirmText="Done"
-			confirmIcon="fas fa-times"
+			confirmIcon="fas fa-circle-xmark"
 			@confirmed="importModal = false"
 			@dismissed="importModal = false">
 
@@ -334,7 +334,7 @@ export default {
 			preferences: {
 				"dark_mode": {
 					title: "Dark Mode",
-					icon: "fas fa-moon-stars",
+					icon: "fas fa-moon",
 					description: "Turn off the lights. Dark background with darker colors.",
 				},
 				"animations": {
@@ -344,12 +344,12 @@ export default {
 				},
 				"outlines": {
 					title: "Outlines",
-					icon: "fas fa-border-bottom-right",
+					icon: "fas fa-border-none",
 					description: "Dashed accessibility outline that appears when you click buttons or forms.",
 				},
 				"app_launcher": {
 					title: "App Launcher",
-					icon: "fas fa-grid",
+					icon: "fas fa-table-cells",
 					description: "Use the logo in the top left to toggle the app launcher instead of home page.",
 				},
 				"confirm_action": {
@@ -359,12 +359,12 @@ export default {
 				},
 				"tooltips": {
 					title: "Tooltips",
-					icon: "fas fa-info-square",
+					icon: "fas fa-circle-info",
 					description: "Enable or disable help tooltips throughout the app.",
 				},
 				"notifications": {
 					title: "Notifications",
-					icon: "fas fa-bell-on",
+					icon: "fas fa-bell",
 					description: "Check back in a bit. Notifications aren't quite ready yet.",
 					// description: "Grant permissions to send push notifications on this device.",
 					disabled: true,
